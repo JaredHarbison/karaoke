@@ -117,3 +117,16 @@ input[ type = text ], input[ type = email ], input[ type = password ] {
     }
   }
 }
+
+#toggle-instructions {        
+  align-items: center;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  gap: 0.25rem;
+  font-size: 1rem;
+  padding: 0.25rem .75rem;
+  background-color: transparent;
+  border: 1px solid #F81B84;
+  color: #F81B84;
+}

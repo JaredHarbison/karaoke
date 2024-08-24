@@ -1,6 +1,14 @@
 %h1 KARAOKE QUEUE
 .container-home
   .container-songs
+    %button{ id: "toggle-instructions" } Show/Hide Instructions
+    .instructions{ id: "instructions" }
+      %p Refresh the page for the most up-to-date list.
+      %p Add your name to "Performer", skip "Category".
+      %p Find a YouTube KARAOKE link, paste it into "URL".
+      %p Click "Queue Song" to finish.
+      %p Use the QR Code to navigate.
+      %p Log in with "jared.harbison@gmail.com" and "Franklin523".
     %h2 Queue A New Song
     = render 'form', song: @song, index_page: true
     %br/
@@ -24,3 +32,23 @@
     %br/
   .container-code
     = image_tag 'Untitled.png'
+
+:javascript 
+  document.addEventListener('DOMContentLoaded', function () {
+    const toggleButton = document.getElementById('toggle-instructions');
+    const instructions = document.getElementById('instructions');
+
+    toggleButton.addEventListener('click', function () {
+      if (instructions.style.display === 'none' || instructions.style.display === '') {
+        instructions.style.display = 'block';
+        toggleButton.textContent = 'Hide Instructions';
+      } else {
+        instructions.style.display = 'none';
+        toggleButton.textContent = 'Show Instructions';
+      }
+    });
+
+    // Initially hide instructions if needed
+    instructions.style.display = 'none';
+    toggleButton.textContent = 'Show Instructions';
+  });
