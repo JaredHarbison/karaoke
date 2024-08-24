@@ -1,22 +1,26 @@
 %h1 KARAOKE QUEUE
-%h2 Queue A New Song
-= render 'form', song: @song, index_page: true
-%br/
-%br/
-%h2 Upcoming Performers
-%table
-  %tbody
-    - if @upcoming[ 0 ]
-      = render 'index_form', song: @upcoming[ 0 ], upcoming: true
-    - if @upcoming[ 1.. ]
-      - @upcoming[ 1.. ].each do | song |
-        = render 'index_form', song: song, upcoming: false
-    - @skipped.each do | song |
-      = render 'index_form', song: song, upcoming: false
-%br/
-%h2 Finished Performers
-%table
-  %tbody
-    - @finished.each do |song|
-      = render 'index_form', song: song, upcoming: false
-%br/
+.container-home
+  .container-songs
+    %h2 Queue A New Song
+    = render 'form', song: @song, index_page: true
+    %br/
+    %br/
+    %h2 Upcoming Performers
+    %table
+      %tbody
+        - if @upcoming[ 0 ]
+          = render 'index_form', song: @upcoming[ 0 ], upcoming: true
+        - if @upcoming[ 1.. ]
+          - @upcoming[ 1.. ].each do | song |
+            = render 'index_form', song: song, upcoming: false
+        - @skipped.each do | song |
+          = render 'index_form', song: song, upcoming: false
+    %br/
+    %h2 Finished Performers
+    %table
+      %tbody
+        - @finished.each do |song|
+          = render 'index_form', song: song, upcoming: false
+    %br/
+  .container-code
+    = image_tag 'Untitled.png'

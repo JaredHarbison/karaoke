@@ -87,3 +87,30 @@ input[ type = text ], input[ type = email ], input[ type = password ] {
     outline: none;
   }
 }
+
+.container-home {
+  display:flex; 
+  flex-direction:row; 
+  flex-wrap: wrap;
+  justify-content: center;
+  gap:2.5rem;
+}
+
+.container-songs {
+  max-width: 400px;
+  width: 50%; 
+  @media (max-width: 400px) {
+    width: unset;
+  }
+}
+
+.container-code {
+  max-width: 400px;
+  width: 50%;
+  img {
+    max-width: 400px;
+  }
+  @media (max-width: 400px) {
+    width: unset;
+  }
+}
