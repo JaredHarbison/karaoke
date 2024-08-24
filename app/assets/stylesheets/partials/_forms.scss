@@ -112,5 +112,8 @@ input[ type = text ], input[ type = email ], input[ type = password ] {
   }
   @media (max-width: 400px) {
     width: unset;
+    img {
+      max-width: 250px;
+    }
   }
 }
