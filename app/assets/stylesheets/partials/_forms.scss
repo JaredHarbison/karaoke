@@ -99,7 +99,7 @@ input[ type = text ], input[ type = email ], input[ type = password ] {
 .container-songs {
   max-width: 400px;
   width: 50%; 
-  @media (max-width: 400px) {
+  @media (max-width: 450px) {
     width: unset;
   }
 }
@@ -110,7 +110,7 @@ input[ type = text ], input[ type = email ], input[ type = password ] {
   img {
     max-width: 400px;
   }
-  @media (max-width: 400px) {
+  @media (max-width: 450px) {
     width: unset;
     img {
       max-width: 250px;
