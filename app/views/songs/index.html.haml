@@ -38,8 +38,12 @@
     const toggleButton = document.getElementById('toggle-instructions');
     const instructions = document.getElementById('instructions');
 
+    // Initially hide instructions
+    instructions.style.display = 'none';
+    toggleButton.textContent = 'Show Instructions';
+
     toggleButton.addEventListener('click', function () {
-      if (instructions.style.display === 'none' || instructions.style.display === '') {
+      if (instructions.style.display === 'none') {
         instructions.style.display = 'block';
         toggleButton.textContent = 'Hide Instructions';
       } else {
@@ -47,8 +51,4 @@
         toggleButton.textContent = 'Show Instructions';
       }
     });
-
-    // Initially hide instructions if needed
-    instructions.style.display = 'none';
-    toggleButton.textContent = 'Show Instructions';
   });
