@@ -1,6 +1,6 @@
 class VenuesController < ApplicationController
   before_action :authenticate_user!, except: [:discover, :join]
-  before_action :set_venue, only: [:settings, :update_settings]
+  before_action :set_venue, only: [:settings, :update_settings, :create_admin, :destroy_admin]
   before_action :require_owner!, only: [:settings, :update_settings, :create_admin, :destroy_admin]
   
   # GET /discover - Browse and search venues

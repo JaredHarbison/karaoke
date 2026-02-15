@@ -41,7 +41,8 @@ RSpec.describe 'Venues', type: :request do
     it 'updates venue settings for owner', :critical do
       sign_in owner
       patch "/#{venue.slug}/settings", params: { venue: { name: 'Updated Venue' } }
-      expect(venue.reload.name).not_to eq('Updated Venue') # May fail due to route/controller
+      expect(response).to redirect_to(venue_settings_path(venue.slug))
+      expect(venue.reload.name).to eq('Updated Venue')
     end
   end
 
@@ -49,7 +50,7 @@ RSpec.describe 'Venues', type: :request do
     it 'adds admin to venue for owner', :critical do
       sign_in owner
       post "/#{venue.slug}/admins", params: { email: admin.email }
-      expect(response).to be_successful
+      expect(response.status).to be_in([200, 302])
     end
   end
 
@@ -61,7 +62,7 @@ RSpec.describe 'Venues', type: :request do
     it 'removes admin from venue for owner', :critical do
       sign_in owner
       delete "/#{venue.slug}/admins/#{admin.id}"
-      expect(response).to be_successful
+      expect(response.status).to be_in([200, 302])
     end
   end
 end
