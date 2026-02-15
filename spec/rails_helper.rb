@@ -17,7 +17,7 @@ require 'rspec/rails'
 require 'capybara/rspec'
 require 'factory_bot_rails'
 require 'faker'
-# Add additional requires below this line. Rails is not loaded until this point!
+require_relative 'support/auth_helpers'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are

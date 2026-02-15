@@ -29,6 +29,9 @@
 !/tmp/storage/
 !/tmp/storage/.keep
 
+# Ignore test coverage reports
+/coverage
+
 /public/assets
 
 # Ignore master key for decrypting credentials and more.
