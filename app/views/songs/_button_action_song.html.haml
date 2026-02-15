@@ -1,9 +1,9 @@
 - if action == "finish"
-  = link_to song.url, onclick: "takeActionOnSong(this)", class: "btn discreet", data:{ action: action, id: song.id }, title: action, target: "_blank" do
+  = link_to song.url, class: "btn discreet", title: action, target: "_blank", data: { controller: "song-action", song_action_action_value: action, song_action_id_value: song.id, action: "click->song-action#perform" } do
     %span 
       = render "components/icons/play"
 - elsif action == "skip"
-  %button{onClick: "takeActionOnSong(this)", class: "btn discreet", data:{ action: action, id: song.id }, title: song.skipped ? "resume" : "skip"}
+  %button{ class: "btn discreet", title: song.skipped ? "resume" : "skip", data: { controller: "song-action", song_action_action_value: action, song_action_id_value: song.id, action: "click->song-action#perform" } }
     - if song.skipped 
       %span 
         = render "components/icons/add"

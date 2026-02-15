@@ -13,9 +13,25 @@
   = label_tag do
     Category
     \#{form.text_field :category}
-  = label_tag do
-    URL
-    \#{form.text_field :url}
+  
+  %div{ data: { controller: "youtube-search" } }
+    %details
+      %summary
+        %strong Search YouTube for Karaoke Videos
+      .youtube-search
+        = label_tag do
+          Search for a song:
+          %input{ type: "text", data: { youtube_search_target: "query" }, placeholder: "Enter song name or artist" }
+        %button{ type: "button", data: { action: "click->youtube-search#search" } } Search
+        %div{ data: { youtube_search_target: "results" }, class: "youtube-results" }
+    
+    = label_tag do
+      URL
+      \#{form.text_field :url, data: { youtube_search_target: "urlField", action: "input->youtube-search#urlChanged" }}
+    
+    %div{ data: { youtube_search_target: "validationMessage" }, class: "validation-message" }
+    %div{ data: { youtube_search_target: "embedPreview" }, class: "embed-preview" }
+  
   - unless index_page
     = label_tag do
       Skipped
