@@ -1,0 +1,107 @@
+// YouTube Search and Results
+.youtube-search {
+  margin: 1rem 0;
+  
+  input[type="text"] {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  button {
+    margin-top: 0.5rem;
+  }
+}
+
+.youtube-results {
+  margin-top: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.youtube-result {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid $beige;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  background-color: rgba($beige, 0.5);
+  
+  img {
+    width: 120px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  
+  .youtube-result-info {
+    flex: 1;
+    
+    h4 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1rem;
+      color: $magenta;
+    }
+    
+    .channel {
+      font-size: 0.875rem;
+      color: $magenta;
+      opacity: 0.7;
+      margin-bottom: 0.5rem;
+    }
+    
+    button {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.validation-message {
+  margin: 1rem 0;
+  
+  .success {
+    color: #28a745;
+    font-weight: 500;
+  }
+  
+  .warning {
+    color: #ffc107;
+    font-weight: 500;
+  }
+  
+  .error {
+    color: #dc3545;
+    font-weight: 500;
+  }
+}
+
+.embed-preview {
+  margin: 1rem 0;
+  
+  .youtube-embed {
+    position: relative;
+    padding-bottom: 56.25%; // 16:9 aspect ratio
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .youtube-result {
+    flex-direction: column;
+    
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+}
