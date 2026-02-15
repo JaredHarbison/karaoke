@@ -1,6 +1,11 @@
 class User < ApplicationRecord
   belongs_to :venue, optional: true
   has_many :songs, dependent: :nullify
+  has_many :owned_venues, class_name: 'Venue', foreign_key: 'owner_id', dependent: :nullify
+  has_many :admin_for_venues, class_name: 'VenueAdmin', dependent: :destroy
+  has_many :venues_as_admin, through: :admin_for_venues, source: :venue
+
+  enum role: { owner: 0, admin: 1, performer: 2 }
   
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -13,5 +18,13 @@ class User < ApplicationRecord
       user.email = auth.info.email
       user.password = Devise.friendly_token[0, 20]
     end
+  end
+  
+  def owner_of?(venue)
+    venue.owner_id == id
+  end
+  
+  def admin_of?(venue)
+    owner_of?(venue) || admin_for_venues.include?(venue)
   end
 end
