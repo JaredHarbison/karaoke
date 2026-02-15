@@ -2,6 +2,7 @@ class Song < ApplicationRecord
     belongs_to :venue, optional: true
     belongs_to :user, optional: true
     
+    scope :queued, -> { where( finished: false, skipped: false, postponed: false ) }
     scope :finished, -> { where( finished: true ) }
     scope :upcoming, -> { where( finished: false, skipped: false ) }
     scope :postponed, -> { where( finished: false, postponed: true ) }

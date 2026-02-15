@@ -25,6 +25,6 @@ class User < ApplicationRecord
   end
   
   def admin_of?(venue)
-    owner_of?(venue) || admin_for_venues.include?(venue)
+    owner_of?(venue) || venues_as_admin.include?(venue)
   end
 end

@@ -1,7 +1,7 @@
 class Venue < ApplicationRecord
+  belongs_to :owner, class_name: 'User', optional: true
   has_many :songs, dependent: :destroy
   has_many :users, dependent: :nullify
-  belongs_to :owner, class_name: 'User', optional: true
   has_many :admin_assignments, class_name: 'VenueAdmin', dependent: :destroy
   has_many :admins, through: :admin_assignments, source: :user
   
