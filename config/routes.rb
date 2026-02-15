@@ -10,17 +10,36 @@ Rails.application.routes.draw do
     get 'users/edit' => 'devise/registrations#edit', :as => 'edit_user_registration'
     put 'users' => 'devise/registrations#update', :as => 'user_registration'
   end
+  
   root 'welcome#index'
-  resources :songs do
-    collection do
-      get :youtube_search
-      get :validate_video
+  
+  # Venue discovery
+  get '/discover', to: 'venues#discover', as: 'discover_venues'
+  post '/venues/join/:slug', to: 'venues#join', as: 'join_venue'
+  
+  # Venue-scoped routes by slug
+  scope '/:venue_slug', as: 'venue' do
+    # Songs (queue management)
+    resources :songs do
+      collection do
+        get :youtube_search
+        get :validate_video
+      end
+      member do
+        patch :finish_song
+        patch :skip_song
+      end
     end
+    
+    # Venue settings (owner only)
+    get '/settings', to: 'venues#settings', as: 'settings'
+    patch '/settings', to: 'venues#update_settings'
+    
+    # Admin management (owner only)
+    post '/admins', to: 'venues#create_admin', as: 'admins'
+    delete '/admins/:id', to: 'venues#destroy_admin', as: 'admin'
   end
-  get '/finish_song', to: 'songs#finish_song', as: 'finish_song'
-  get '/skip_song', to: 'songs#skip_song', as: 'skip_song'
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
+  
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
