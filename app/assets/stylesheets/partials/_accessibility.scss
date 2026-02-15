@@ -1,0 +1,139 @@
+// Accessibility-focused styles
+@import 'colors';
+@import 'tokens';
+
+// Skip link - allow users to skip to main content
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: $status-success;
+  color: white;
+  padding: $space-sm $space-md;
+  z-index: $z-tooltip;
+  text-decoration: none;
+  border-radius: $radius-md;
+  
+  &:focus {
+    top: 0;
+  }
+}
+
+// Focus visible styles for keyboard navigation
+:focus-visible {
+  outline: 2px solid $cyan;
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid $cyan;
+  outline-offset: 2px;
+}
+
+// Reduce motion for users who prefer it
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: more) {
+  body {
+    --text-primary: #000;
+    --text-secondary: #333;
+  }
+  
+  .badge,
+  .btn,
+  .alert {
+    border-width: 2px;
+  }
+}
+
+// Dark mode support (optional, respects system preference)
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: $bg-dark;
+    color: $text-inverted;
+  }
+  
+  .card {
+    background-color: lighten($bg-dark, 10%);
+    color: $text-inverted;
+  }
+}
+
+// Screen reader only content
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+// Visible focus indicator for form fields
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  box-shadow: $shadow-focus;
+  border-color: $cyan;
+}
+
+// Disabled state clarity
+button:disabled,
+input:disabled,
+select:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+// Touch target sizing (minimum 48x48px for mobile)
+@media (max-width: $breakpoint-md) {
+  button,
+  a[href],
+  input[type="button"],
+  input[type="submit"],
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-width: 48px;
+    min-height: 48px;
+  }
+}
+
+// Loading state indicator
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+  
+  &::after {
+    content: '';
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin-left: $space-xs;
+    border: 2px solid $status-info;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 600ms linear infinite;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

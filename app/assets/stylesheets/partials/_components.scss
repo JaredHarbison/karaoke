@@ -1,0 +1,247 @@
+// Component-specific styles
+@import 'colors';
+@import 'tokens';
+
+// Cards
+.card {
+  background-color: $bg-light;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  padding: $space-md;
+  
+  &--elevated {
+    box-shadow: $shadow-lg;
+  }
+  
+  &--dark {
+    background-color: darken($bg-light, 5%);
+  }
+}
+
+// Badges - for status indicators
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+  padding: $space-xs $space-sm;
+  border-radius: $radius-full;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  
+  &--status-next {
+    background-color: $status-next;
+    color: $bg-dark;
+  }
+  
+  &--status-queued {
+    background-color: $status-queued;
+    color: $bg-light;
+  }
+  
+  &--status-skipped {
+    background-color: $status-skipped;
+    color: $bg-dark;
+  }
+  
+  &--status-finished {
+    background-color: $status-finished;
+    color: $text-primary;
+  }
+  
+  &--success {
+    background-color: $status-success;
+    color: white;
+  }
+  
+  &--error {
+    background-color: $status-error;
+    color: white;
+  }
+  
+  &--role-owner {
+    background-color: $magenta;
+    color: white;
+  }
+  
+  &--role-admin {
+    background-color: $cyan;
+    color: $bg-dark;
+  }
+}
+
+// Button styles
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+  padding: $space-sm $space-md;
+  border: none;
+  border-radius: $radius-lg;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all $transition-base;
+  text-decoration: none;
+  
+  &:focus-visible {
+    outline: 2px solid $cyan;
+    outline-offset: 2px;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  &--primary {
+    background-color: $cyan;
+    color: $bg-dark;
+    
+    &:hover:not(:disabled) {
+      background-color: darken($cyan, 10%);
+      box-shadow: $shadow-lg;
+    }
+  }
+  
+  &--secondary {
+    background-color: $bg-light;
+    color: $text-primary;
+    border: 1px solid $ink;
+    
+    &:hover:not(:disabled) {
+      background-color: darken($bg-light, 5%);
+    }
+  }
+  
+  &--success {
+    background-color: $status-success;
+    color: white;
+    
+    &:hover:not(:disabled) {
+      background-color: darken($status-success, 10%);
+    }
+  }
+  
+  &--danger {
+    background-color: $status-error;
+    color: white;
+    
+    &:hover:not(:disabled) {
+      background-color: darken($status-error, 10%);
+    }
+  }
+  
+  &--small {
+    padding: $space-xs $space-sm;
+    font-size: 0.875rem;
+  }
+  
+  &--large {
+    padding: $space-md $space-lg;
+    font-size: 1.125rem;
+  }
+}
+
+// Alert and notice messages
+.alert,
+.notice,
+.message {
+  padding: $space-md;
+  border-radius: $radius-lg;
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
+  animation: slideInDown $duration-enter ease-out;
+  
+  &:not(:empty) {
+    margin-bottom: $space-md;
+  }
+  
+  &--success {
+    background-color: $status-success;
+    border: 1px solid darken($status-success, 10%);
+    color: white;
+  }
+  
+  &--error {
+    background-color: $status-error;
+    border: 1px solid darken($status-error, 10%);
+    color: white;
+  }
+  
+  &--info {
+    background-color: $status-info;
+    border: 1px solid darken($status-info, 10%);
+    color: $bg-dark;
+  }
+  
+  &--warning {
+    background-color: $status-skipped;
+    border: 1px solid darken($status-skipped, 10%);
+    color: $bg-dark;
+  }
+}
+
+// Song cards for queue display
+.song-card {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  padding: $space-md;
+  background-color: white;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  transition: all $transition-base;
+  
+  &:hover {
+    box-shadow: $shadow-lg;
+    transform: translateY(-2px);
+  }
+  
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: $space-sm;
+  }
+  
+  &__performer {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $text-primary;
+  }
+  
+  &__status {
+    flex-shrink: 0;
+  }
+  
+  &__position {
+    font-size: 0.875rem;
+    color: $text-secondary;
+    margin-top: $space-sm;
+  }
+  
+  &__actions {
+    display: flex;
+    gap: $space-xs;
+    margin-top: $space-sm;
+    justify-content: flex-end;
+  }
+  
+  &--next {
+    border-left: 4px solid $status-next;
+    background: linear-gradient(135deg, white 0%, #{rgba($cyan, 0.05)} 100%);
+  }
+  
+  &--finished {
+    opacity: 0.7;
+    border-left: 4px solid $status-finished;
+  }
+  
+  &--skipped {
+    border-left: 4px solid $status-skipped;
+    background: linear-gradient(135deg, white 0%, #{rgba($yellow, 0.05)} 100%);
+  }
+}

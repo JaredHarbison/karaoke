@@ -1,6 +1,25 @@
+// ============================================================================
+// Karaoke Queue - Main Stylesheet
+// ============================================================================
+// Import order matters: tokens and colors first, then components, then utilities
 
- @import 'partials/colors';
- @import 'partials/forms';
- @import 'partials/layout';
- @import 'partials/typography';
- @import 'partials/youtube';
+// 1. Design System
+@import 'partials/colors';
+@import 'partials/tokens';
+
+// 2. Base styles (typography, forms, layout)
+@import 'partials/typography';
+@import 'partials/forms';
+@import 'partials/layout';
+
+// 3. Components
+@import 'partials/components';
+@import 'partials/youtube';
+
+// 4. Features
+@import 'partials/animations';
+@import 'partials/accessibility';
+@import 'partials/roles';
+
+// 5. Utilities (lowest specificity)
+@import 'partials/utilities';

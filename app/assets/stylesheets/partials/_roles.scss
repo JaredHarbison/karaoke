@@ -1,0 +1,100 @@
+// Role-based visibility classes
+// Use in templates with conditional rendering or data attributes
+
+// Owner-only elements
+.owner-only {
+  &:not([data-user-role="owner"]) {
+    display: none !important;
+  }
+}
+
+// Admin-only elements (includes owner)
+.admin-only {
+  &:not([data-user-role="owner"]):not([data-user-role="admin"]) {
+    display: none !important;
+  }
+}
+
+// Performer elements (visible to all roles)
+.performer-only {
+  display: block;
+}
+
+// Show/hide based on data attribute
+[data-visible-to="owner-only"] {
+  display: none;
+}
+
+[data-visible-to="admin-only"] {
+  display: none;
+}
+
+[data-visible-to="all"] {
+  display: block;
+}
+
+// When viewing as specific role
+[data-user-role="owner"] {
+  [data-visible-to="owner-only"],
+  [data-visible-to="admin-only"],
+  [data-visible-to="all"] {
+    display: block;
+  }
+}
+
+[data-user-role="admin"] {
+  [data-visible-to="admin-only"],
+  [data-visible-to="all"] {
+    display: block;
+  }
+  
+  [data-visible-to="owner-only"] {
+    display: none;
+  }
+}
+
+[data-user-role="performer"] {
+  [data-visible-to="all"] {
+    display: block;
+  }
+  
+  [data-visible-to="owner-only"],
+  [data-visible-to="admin-only"] {
+    display: none;
+  }
+}
+
+// Button visibility
+.btn--admin-action {
+  display: none;
+  
+  [data-user-role="owner"] &,
+  [data-user-role="admin"] & {
+    display: inline-flex;
+  }
+}
+
+.btn--owner-action {
+  display: none;
+  
+  [data-user-role="owner"] & {
+    display: inline-flex;
+  }
+}
+
+// Disabled state for non-admins
+.queue-action {
+  &[data-requires-admin="true"] {
+    [data-user-role="performer"] & {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+      
+      &::after {
+        content: ' (Admins only)';
+        font-size: 0.75rem;
+        color: rgba(0, 0, 0, 0.5);
+      }
+    }
+  }
+}

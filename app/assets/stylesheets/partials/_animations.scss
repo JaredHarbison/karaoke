@@ -1,0 +1,174 @@
+// Animations for Turbo Frames and UI interactions
+@import 'tokens';
+
+// Slide down animation for alerts/toasts
+@keyframes slideInDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Slide up animation for exits
+@keyframes slideOutUp {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+// Fade in animation for content
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Fade out animation
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+// Bounce animation for attention
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+// Pulse animation for loading states
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+// Scale animation for interactions
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// Turbo Frame entrance animation
+[data-turbo-temporary] {
+  animation: fadeIn $duration-enter ease-out;
+}
+
+// Turbo removing animation
+turbo-frame[disabled],
+[data-turbo-removing] {
+  animation: fadeOut $duration-exit ease-out;
+}
+
+// Loading skeleton animation
+@keyframes skeleton-loading {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 1000px 100%;
+  animation: skeleton-loading 2s infinite;
+}
+
+// Button state transitions
+.btn {
+  &:active {
+    transform: scale(0.98);
+    transition-duration: 50ms;
+  }
+}
+
+// Form input animations
+input:focus,
+textarea:focus,
+select:focus {
+  animation: none; // Don't animate focus, it's jarring
+}
+
+// Song card entrance
+.song-card {
+  animation: slideInDown $duration-enter ease-out;
+}
+
+// Song card removal
+[data-song-removing] {
+  animation: slideOutUp $duration-exit ease-out forwards;
+}
+
+// Flash message animations
+.alert,
+.notice,
+.message {
+  animation: slideInDown $duration-enter ease-out;
+  
+  &.hide {
+    animation: slideOutUp $duration-exit ease-out;
+  }
+}
+
+// Turbo Frame loading state
+turbo-frame[busy] {
+  position: relative;
+  opacity: 0.6;
+}
+
+// Content swap transition
+.turbo-loading {
+  animation: pulse $transition-base ease-in-out infinite;
+}
+
+// Queue position highlight
+@keyframes highlight {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: rgba(67, 192, 246, 0.2);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.song-added {
+  animation: highlight $transition-slow ease-out;
+}

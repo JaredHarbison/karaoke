@@ -1,17 +1,43 @@
+// Primary brand colors
 $beige: #f2EEE2; 
 $beige-light: rgba(242, 238, 226, .5);
 
-$cyan: #43C0F6;
-$cyan-light: rgba(67, 192, 246, .5);
-
-$ink: #333333;
-$ink-light: rgba(51, 51, 51, .5);
-
 $midnight: #020035; 
 $midnight-light: rgba(2, 0, 53, .5);
+
+// Secondary colors
+$cyan: #43C0F6;
+$cyan-light: rgba(67, 192, 246, .5);
 
 $yellow: #F5CE28; 
 $yellow-light: rgba(245, 206, 40, .5);
 
 $magenta: #F81B84;  
 $magenta-light: rgba(248, 27, 132, .5);
+
+$green: #2ECC71; // Success state (new)
+$green-light: rgba(46, 204, 113, .5);
+
+$ink: #333333;
+$ink-light: rgba(51, 51, 51, .5);
+
+// Semantic color mapping
+$status-next: $cyan;        // Next performer (prominent)
+$status-queued: $ink;       // Queued performers
+$status-skipped: $yellow;   // Postponed/Skipped performers
+$status-finished: $beige;   // Completed performances
+$status-success: $green;    // Successful actions
+$status-error: $magenta;    // Errors and alerts
+$status-info: $cyan;        // Informational messages
+
+// Text colors
+$text-primary: $ink;
+$text-secondary: $ink-light;
+$text-inverted: $beige;
+
+// Background colors
+$bg-dark: $midnight;
+$bg-light: $beige;
+$bg-light-transparent: $beige-light;
+$bg-dark-transparent: $midnight-light;
+
