@@ -11,10 +11,10 @@
       %span 
         = render "components/icons/skip"
 - elsif action == "edit"
-  = link_to edit_song_path(song), class: "btn discreet", title: action do
+  = link_to edit_venue_song_path(Current.venue.slug, song), class: "btn discreet", title: action do
     %span
       = render "components/icons/edit"
 - else 
-  = button_to song, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn discreet", title: action do
+  = button_to venue_song_path(Current.venue.slug, song), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn discreet", title: action do
     %span 
       = render "components/icons/destroy"

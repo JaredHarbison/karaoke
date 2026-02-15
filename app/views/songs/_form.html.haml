@@ -1,4 +1,4 @@
-= form_with(model: song, local: true) do |form|
+= form_with(model: song, local: true, url: venue_songs_path(Current.venue.slug)) do |form|
   - if song.errors.any?
     #error_explanation
       %h2

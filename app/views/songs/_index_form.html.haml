@@ -1,6 +1,6 @@
-= form_for( song ) do |s|
+= form_for( song, url: venue_song_path(Current.venue.slug, song) ) do |s|
   %tr
-    %td= link_to song.performer, song
+    %td= link_to song.performer, venue_song_path(Current.venue.slug, song)
     - if upcoming
       %td
         = render "button_action_song", action: "finish", song: @upcoming[ 0 ]

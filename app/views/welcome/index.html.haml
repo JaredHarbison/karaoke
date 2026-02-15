@@ -1,7 +1,11 @@
 %h1 KARAOKE QUEUE
 %div{ style: "margin-top: 1rem; "}
 - if user_signed_in?
-  = link_to "Go To Songs", songs_path
-  = button_to "Sign out", destroy_user_session_path, method: :delete, class: "btn discreet", style: "margin-top: 1rem;"
+  - if session[:venue_slug].present? && Venue.find_by(slug: session[:venue_slug]).present?
+    = link_to "Go To Queue", venue_songs_path(session[:venue_slug]), class: "btn btn--primary"
+  - else
+    = link_to "Select a Venue", discover_venues_path, class: "btn btn--primary"
+  %br
+  = button_to "Sign out", destroy_user_session_path, method: :delete, class: "btn btn--secondary", style: "margin-top: 1rem;"
 - else
-  = button_to "Sign in", new_user_session_path, class: "btn discreet"
+  = button_to "Sign in", new_user_session_path, class: "btn btn--secondary"

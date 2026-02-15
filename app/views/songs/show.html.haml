@@ -1,6 +1,6 @@
 = @song.performer
 = @song.url
 = @song.skipped
-= link_to 'Edit', edit_song_path(@song)
+= link_to 'Edit', edit_venue_song_path(Current.venue.slug, @song)
 |
-= link_to 'Back', songs_path
+= link_to 'Back', venue_songs_path(Current.venue.slug)
