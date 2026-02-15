@@ -1,10 +1,15 @@
 class SongsController < ApplicationController
+  before_action :authenticate_user!
   protect_from_forgery with: :exception
   before_action :set_song, only: %i[ destroy edit finish_song show skip_song update ]
+  before_action :authorize_song_owner, only: %i[ destroy edit update ]
 
   # POST /songs or /songs.json
   def create
     @song = Song.new(song_params)
+    @song.user = current_user
+    @song.venue = Current.venue if Current.venue
+    
     respond_to do |format|
       if @song.save
         format.html { redirect_to songs_url, notice: "A song was created for #{ @song.performer }." }
@@ -74,6 +79,32 @@ class SongsController < ApplicationController
   # GET /songs/1 
   def show
   end
+  
+  # GET /songs/youtube_search
+  def youtube_search
+    query = params[:query]
+    
+    if query.blank?
+      render json: { error: 'Query parameter is required' }, status: :bad_request
+      return
+    end
+    
+    results = YoutubeService.search(query)
+    render json: results
+  end
+  
+  # GET /songs/validate_video
+  def validate_video
+    url = params[:url]
+    
+    if url.blank?
+      render json: { valid: false, error: 'URL parameter is required' }, status: :bad_request
+      return
+    end
+    
+    validation = YoutubeService.validate_karaoke_video(url)
+    render json: validation
+  end
 
   private
 
@@ -90,6 +121,12 @@ class SongsController < ApplicationController
       :url, 
       :skipped
     )
+  end
+  
+  def authorize_song_owner
+    unless @song.user == current_user
+      redirect_to songs_url, alert: "You can only edit or delete your own songs."
+    end
   end
 
 end
