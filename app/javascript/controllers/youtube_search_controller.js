@@ -1,151 +1,164 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["query", "results", "urlField", "embedPreview", "validationMessage"]
+  static targets = ["query", "results", "urlField", "searchBtn"]
+  
+  connect() {
+    // Initialize abort controller for fetch requests
+    this._abortController = new AbortController()
+    
+    // Remove any previously attached listener to prevent duplicates
+    if (this._boundClickHandler) {
+      this.element.removeEventListener('click', this._boundClickHandler)
+    }
+    
+    // Create and store the bound handler so we can reference it later
+    this._boundClickHandler = this.handleResultClick.bind(this)
+    this.element.addEventListener('click', this._boundClickHandler)
+  }
+  
+  disconnect() {
+    // Abort any pending fetch requests
+    if (this._abortController) {
+      this._abortController.abort()
+      this._abortController = null
+    }
+    
+    // Clean up the listener when the controller is removed
+    if (this._boundClickHandler) {
+      this.element.removeEventListener('click', this._boundClickHandler)
+      this._boundClickHandler = null
+    }
+  }
+  
+  handleResultClick(event) {
+    // Use event delegation on dynamically created buttons
+    const button = event.target.closest('.result-select-btn')
+    if (button) {
+      this.selectVideo(button)
+    }
+  }
+  
+  getVenueSlug() {
+    return this.element.dataset.youtubeSearchVenueSlug
+  }
+  
+  getCsrfToken() {
+    return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+  }
   
   async search(event) {
     event.preventDefault()
     
+    // Abort any previous search requests
+    if (this._abortController) {
+      this._abortController.abort()
+    }
+    // Create a new abort controller for this search
+    this._abortController = new AbortController()
+    
     const query = this.queryTarget.value.trim()
     if (!query) {
-      this.resultsTarget.innerHTML = '<p>Please enter a search term</p>'
+      this.resultsTarget.innerHTML = '<p class="text-muted">Please enter a search term</p>'
       return
     }
     
-    this.resultsTarget.innerHTML = '<p>Searching YouTube...</p>'
+    const venueSlug = this.getVenueSlug()
+    if (!venueSlug) {
+      this.resultsTarget.innerHTML = '<p class="error-message">❌ Venue not found</p>'
+      return
+    }
+    
+    // Disable search button to prevent multiple submissions
+    if (this.hasSearchBtnTarget) {
+      this.searchBtnTarget.disabled = true
+      this.searchBtnTarget.textContent = 'Searching...'
+    }
+    
+    this.resultsTarget.innerHTML = '<p class="text-muted">🔍 Searching YouTube...</p>'
     
     try {
-      const response = await fetch(`/songs/youtube_search?query=${encodeURIComponent(query)}`, {
+      const response = await fetch(`/${venueSlug}/songs/youtube_search?query=${encodeURIComponent(query)}`, {
         headers: {
-          'Accept': 'application/json'
-        }
+          'Accept': 'application/json',
+          'X-CSRF-Token': this.getCsrfToken()
+        },
+        signal: this._abortController.signal
       })
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
       
       const data = await response.json()
       
       if (data.error) {
-        this.resultsTarget.innerHTML = `<p class="error">Error: ${data.error}</p>`
+        this.resultsTarget.innerHTML = `<p class="error-message">❌ Error: ${data.error}</p>`
         return
       }
       
       this.displayResults(data.items)
     } catch (error) {
-      console.error('Search error:', error)
-      this.resultsTarget.innerHTML = '<p class="error">Failed to search YouTube</p>'
+      // Don't show error if the request was aborted (user started a new search)
+      if (error.name !== 'AbortError') {
+        console.error('Search error:', error)
+        this.resultsTarget.innerHTML = `<p class="error-message">❌ Failed to search YouTube</p>`
+      }
+    } finally {
+      // Re-enable search button
+      if (this.hasSearchBtnTarget) {
+        this.searchBtnTarget.disabled = false
+        this.searchBtnTarget.textContent = 'Search'
+      }
     }
   }
   
   displayResults(items) {
     if (!items || items.length === 0) {
-      this.resultsTarget.innerHTML = '<p>No results found</p>'
+      this.resultsTarget.innerHTML = '<p class="text-muted">📭 No results found. Try a different search.</p>'
       return
     }
     
-    const html = items.map(item => `
-      <div class="youtube-result" data-url="${item.url}">
-        <img src="${item.thumbnail}" alt="${item.title}" />
-        <div class="youtube-result-info">
-          <h4>${item.title}</h4>
-          <p class="channel">${item.channel}</p>
-          <button type="button" class="btn" data-action="click->youtube-search#selectVideo" data-url="${item.url}">
-            Select This Video
+    const resultsHtml = items.map(item => `
+      <div class="youtube-result-item">
+        <div class="result-thumbnail">
+          <img src="${this.escapeHtml(item.thumbnail)}" alt="Video thumbnail" loading="lazy" />
+        </div>
+        <div class="result-details">
+          <h5 class="result-title">${this.escapeHtml(item.title)}</h5>
+          <p class="result-channel">${this.escapeHtml(item.channel)}</p>
+          <button type="button" class="btn-small result-select-btn" data-video-url="${this.escapeHtml(item.url)}">
+            ▶️ Select
           </button>
         </div>
       </div>
     `).join('')
     
-    this.resultsTarget.innerHTML = html
+    this.resultsTarget.innerHTML = resultsHtml
   }
   
-  async selectVideo(event) {
-    event.preventDefault()
-    const url = event.currentTarget.dataset.url
+  selectVideo(button) {
+    const url = button.dataset.videoUrl
+    if (!url) return
+    
+    // Abort any pending search requests since we're clearing results
+    if (this._abortController) {
+      this._abortController.abort()
+    }
     
     this.urlFieldTarget.value = url
     this.resultsTarget.innerHTML = ''
-    
-    // Validate the selected video
-    await this.validateVideo()
+    this.queryTarget.value = ''
   }
   
-  async validateVideo() {
-    const url = this.urlFieldTarget.value.trim()
-    
-    if (!url) {
-      this.clearValidation()
-      return
+  escapeHtml(text) {
+    const map = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
     }
-    
-    this.validationMessageTarget.innerHTML = '<p>Validating video...</p>'
-    
-    try {
-      const response = await fetch(`/songs/validate_video?url=${encodeURIComponent(url)}`, {
-        headers: {
-          'Accept': 'application/json'
-        }
-      })
-      
-      const data = await response.json()
-      
-      if (data.valid) {
-        let message = '✓ Valid karaoke video'
-        if (data.has_karaoke && data.has_lyrics) {
-          message += ' (has karaoke & lyrics)'
-        } else if (data.has_karaoke) {
-          message += ' (has karaoke)'
-        } else if (data.has_lyrics) {
-          message += ' (has lyrics)'
-        }
-        
-        this.validationMessageTarget.innerHTML = `<p class="success">${message}</p>`
-        this.showEmbed(data.video_id)
-      } else {
-        this.validationMessageTarget.innerHTML = `
-          <p class="warning">
-            ⚠ This video may not be a karaoke video. 
-            Please make sure "karaoke" or "lyrics" is in the title or description.
-          </p>
-        `
-        this.showEmbed(data.video_id)
-      }
-    } catch (error) {
-      console.error('Validation error:', error)
-      this.validationMessageTarget.innerHTML = '<p class="error">Failed to validate video</p>'
-    }
-  }
-  
-  showEmbed(videoId) {
-    if (!videoId) return
-    
-    this.embedPreviewTarget.innerHTML = `
-      <div class="youtube-embed">
-        <iframe 
-          width="560" 
-          height="315" 
-          src="https://www.youtube.com/embed/${videoId}" 
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
-      </div>
-    `
-  }
-  
-  clearValidation() {
-    if (this.hasValidationMessageTarget) {
-      this.validationMessageTarget.innerHTML = ''
-    }
-    if (this.hasEmbedPreviewTarget) {
-      this.embedPreviewTarget.innerHTML = ''
-    }
-  }
-  
-  // Trigger validation when URL field changes
-  urlChanged() {
-    // Debounce the validation
-    clearTimeout(this.validationTimeout)
-    this.validationTimeout = setTimeout(() => {
-      this.validateVideo()
-    }, 500)
+    return String(text).replace(/[&<>"']/g, m => map[m])
   }
 }
