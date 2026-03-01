@@ -19,9 +19,25 @@ All documentation and markdown files must:
 7. **Use consistent indentation for lists (2 spaces recommended)**
 8. **Do not commit files with unresolved markdownlint errors**
 
+## Commit Message Format
+
+All commits must use the `type(domain): message` format:
+
+- `feat(songs): add drag-to-reorder queue`
+- `fix(auth): redirect to venue after sign in`
+- `docs(models): update venue model documentation`
+- `refactor(controllers): extract venue scope concern`
+- `test(songs): add RSpec coverage for skip action`
+- `chore(deps): update gem lockfile`
+
+Common types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `style`
+
+Common domains: `auth`, `songs`, `venues`, `ui`, `models`, `controllers`, `routes`, `docs`, `deps`
+
 ## Enforcement
 
 - PRs with markdownlint errors will be rejected.
+- Commits not following the `type(domain): message` format will be rejected.
 - Use pre-commit hooks or CI to automatically lint markdown files.
 
 ---
