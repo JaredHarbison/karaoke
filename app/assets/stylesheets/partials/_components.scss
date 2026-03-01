@@ -245,3 +245,479 @@
     background: linear-gradient(135deg, white 0%, #{rgba($yellow, 0.05)} 100%);
   }
 }
+
+// Action buttons
+.action-button {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+  padding: $space-xs $space-sm;
+  background-color: transparent;
+  border: 1px solid $ink-light;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  transition: all $transition-base;
+  color: $text-primary;
+  font-size: 0.875rem;
+
+  &:hover:not(:disabled) {
+    border-color: $cyan;
+    color: $cyan;
+    background-color: rgba($cyan, 0.05);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $cyan;
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .button-icon {
+    font-size: 1rem;
+  }
+
+  .button-label {
+    display: none;
+
+    @media (min-width: 768px) {
+      display: inline;
+    }
+  }
+
+  &--play {
+    &:hover:not(:disabled) {
+      border-color: $status-success;
+      color: $status-success;
+      background-color: rgba($status-success, 0.05);
+    }
+  }
+
+  &--skip {
+    &:hover:not(:disabled) {
+      border-color: $status-skipped;
+      color: $status-skipped;
+      background-color: rgba($status-skipped, 0.05);
+    }
+  }
+
+  &--delete {
+    &:hover:not(:disabled) {
+      border-color: $status-error;
+      color: $status-error;
+      background-color: rgba($status-error, 0.05);
+    }
+  }
+}
+
+// User context dropdown
+.user-context-dropdown {
+  position: relative;
+}
+
+.user-trigger {
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+
+  &:focus-visible {
+    outline: 2px solid $cyan;
+    outline-offset: 2px;
+    border-radius: $radius-sm;
+  }
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: $cyan;
+  color: $bg-dark;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.user-info {
+  text-align: left;
+
+  .user-name {
+    margin: 0;
+    font-weight: 600;
+    color: $text-inverted;
+  }
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: $bg-dark;
+  border: 1px solid $ink-light;
+  border-radius: $radius-md;
+  box-shadow: $shadow-lg;
+  z-index: 1000;
+  min-width: 250px;
+  margin-top: $space-sm;
+  overflow: hidden;
+
+  &[data-hidden="true"] {
+    display: none;
+  }
+
+  .menu-header {
+    padding: $space-md;
+    border-bottom: 1px solid $ink-light;
+
+    .menu-label {
+      margin: 0 0 $space-xs 0;
+      color: $text-secondary;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+
+    .menu-value {
+      margin: 0;
+      color: $text-inverted;
+      font-weight: 600;
+    }
+  }
+
+  .dropdown-link {
+    display: block;
+    padding: $space-md;
+    color: $text-secondary;
+    text-decoration: none;
+    transition: all $transition-base;
+
+    &:hover {
+      background-color: rgba($cyan, 0.1);
+      color: $cyan;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $cyan;
+      outline-offset: -2px;
+    }
+  }
+
+  hr {
+    margin: 0;
+    border: none;
+    border-top: 1px solid $ink-light;
+  }
+}
+
+// Role badges
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+  font-size: 0.85rem;
+  color: $text-secondary;
+
+  .badge-icon {
+    font-size: 1.1rem;
+  }
+
+  .badge-label {
+    text-transform: capitalize;
+  }
+
+  &--owner {
+    color: $magenta;
+
+    .badge-icon {
+      animation: pulse 2s infinite;
+    }
+  }
+
+  &--admin {
+    color: $cyan;
+  }
+
+  &--performer {
+    color: $green;
+  }
+}
+
+// Status badges
+.badge--queued {
+  background-color: $status-queued;
+  color: $bg-light;
+}
+
+.badge--playing {
+  background-color: $status-next;
+  color: $bg-dark;
+  animation: pulse 1.5s infinite;
+}
+
+.badge--finished {
+  background-color: $status-finished;
+  color: $text-primary;
+}
+
+.badge--skipped {
+  background-color: $status-skipped;
+  color: $bg-dark;
+}
+
+// YouTube Search Components
+.youtube-search-container {
+  background-color: $bg-light;
+  padding: $space-lg;
+  border-radius: $radius-lg;
+  margin-bottom: $space-lg;
+
+  .search-header {
+    margin-bottom: $space-md;
+
+    h3 {
+      margin: 0;
+      color: $text-primary;
+      font-size: 1.25rem;
+    }
+  }
+}
+
+.search-input-group {
+  margin-bottom: $space-md;
+
+  label {
+    display: block;
+    margin-bottom: $space-sm;
+    font-weight: 500;
+    color: $text-primary;
+  }
+
+  .input-row {
+    display: flex;
+    gap: $space-sm;
+    align-items: center;
+
+    input {
+      flex: 1;
+      padding: $space-sm;
+      border: 1px solid $ink-light;
+      border-radius: $radius-md;
+      font-size: 1rem;
+      
+      &:focus {
+        outline: 2px solid $cyan;
+        outline-offset: 2px;
+      }
+    }
+
+    .search-btn {
+      padding: $space-sm $space-md;
+      background-color: $cyan;
+      color: $bg-dark;
+      border: none;
+      border-radius: $radius-md;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all $transition-base;
+
+      &:hover {
+        background-color: darken($cyan, 10%);
+        box-shadow: $shadow-md;
+      }
+
+      &:focus-visible {
+        outline: 2px solid $text-primary;
+        outline-offset: 2px;
+      }
+    }
+  }
+}
+
+.youtube-results-container {
+  min-height: 2rem;
+  margin-bottom: $space-md;
+
+  p {
+    margin: $space-sm 0;
+    color: $text-secondary;
+    font-style: italic;
+
+    &.error-message {
+      color: $status-error;
+      font-weight: 500;
+    }
+
+    &.text-muted {
+      color: $text-secondary;
+    }
+  }
+}
+
+.youtube-result-item {
+  display: flex;
+  gap: $space-md;
+  padding: $space-md;
+  background-color: white;
+  border: 1px solid $ink-light;
+  border-radius: $radius-md;
+  margin-bottom: $space-sm;
+  transition: all $transition-base;
+
+  &:hover {
+    box-shadow: $shadow-md;
+    border-color: $cyan;
+  }
+
+  .result-thumbnail {
+    flex-shrink: 0;
+
+    img {
+      width: 120px;
+      height: 68px;
+      object-fit: cover;
+      border-radius: $radius-sm;
+    }
+  }
+
+  .result-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .result-title {
+      margin: 0 0 $space-xs 0;
+      font-size: 1rem;
+      font-weight: 600;
+      color: $text-primary;
+      line-height: 1.4;
+    }
+
+    .result-channel {
+      margin: 0 0 $space-sm 0;
+      font-size: 0.875rem;
+      color: $text-secondary;
+    }
+
+    .btn-small {
+      align-self: flex-start;
+      padding: $space-xs $space-sm;
+      background-color: $status-success;
+      color: white;
+      border: none;
+      border-radius: $radius-sm;
+      font-weight: 500;
+      cursor: pointer;
+
+      &:hover {
+        background-color: darken($status-success, 10%);
+      }
+
+      &:focus-visible {
+        outline: 2px solid $text-primary;
+        outline-offset: 2px;
+      }
+    }
+  }
+}
+
+.video-selection {
+  border-top: 1px solid $ink-light;
+  padding-top: $space-md;
+  margin-top: $space-md;
+
+  label {
+    display: block;
+    margin-bottom: $space-sm;
+    font-weight: 500;
+    color: $text-primary;
+  }
+
+  input {
+    width: 100%;
+    padding: $space-sm;
+    border: 1px solid $ink-light;
+    border-radius: $radius-md;
+    background-color: #f9f9f9;
+    font-size: 0.875rem;
+    color: $text-secondary;
+    
+    &:focus {
+      outline: 2px solid $cyan;
+      outline-offset: 2px;
+      background-color: white;
+    }
+  }
+}
+
+.validation-message {
+  margin-top: $space-md;
+  padding: $space-sm;
+  border-radius: $radius-sm;
+
+  p {
+    margin: 0;
+    font-size: 0.875rem;
+
+    &.success {
+      color: $status-success;
+      font-weight: 500;
+    }
+
+    &.warning {
+      color: $status-skipped;
+      font-weight: 500;
+    }
+
+    &.error {
+      color: $status-error;
+      font-weight: 500;
+    }
+  }
+}
+
+.embed-preview {
+  margin-top: $space-md;
+
+  .youtube-embed {
+    position: relative;
+    padding-bottom: 56.25%; // 16:9 aspect ratio
+    height: 0;
+    overflow: hidden;
+    border-radius: $radius-md;
+
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: $radius-md;
+    }
+  }
+}
+
+.form-actions {
+  margin-top: $space-lg;
+  padding-top: $space-md;
+  border-top: 1px solid $ink-light;
+
+  .btn-primary {
+    &.btn-large {
+      width: 100%;
+      padding: $space-md $space-lg;
+      font-size: 1.1rem;
+    }
+  }
+}
