@@ -1,4 +1,5 @@
-= form_with(model: song, local: true, url: venue_songs_path(Current.venue.slug)) do |form|
+- venue_slug = @current_venue&.slug || Current.venue&.slug || params[:venue_slug]
+= form_with(model: song, local: true, url: venue_songs_path(venue_slug)) do |form|
   - if song.errors.any?
     #error_explanation
       %h2
@@ -7,38 +8,25 @@
       %ul
         - song.errors.full_messages.each do |message|
           %li= message
-  = label_tag do
-    Performer
-    \#{form.text_field :performer}
-  = label_tag do
-    Category
-    \#{form.text_field :category}
   
-  %div{ data: { controller: "youtube-search" } }
-    %details
-      %summary
-        %strong Search YouTube for Karaoke Videos
-      .youtube-search
-        = label_tag do
-          Search for a song:
-          %input{ type: "text", data: { youtube_search_target: "query" }, placeholder: "Enter song name or artist" }
-        %button{ type: "button", data: { action: "click->youtube-search#search" } } Search
-        %div{ data: { youtube_search_target: "results" }, class: "youtube-results" }
+  .youtube-search-container{ data: { controller: "youtube-search", youtube_search_venue_slug: venue_slug } }
+    .search-header
+      %h3 Add a Karaoke Song
     
-    = label_tag do
-      URL
-      \#{form.text_field :url, data: { youtube_search_target: "urlField", action: "input->youtube-search#urlChanged" }}
+    .search-input-group
+      %label{ for: "song-search" } Search for a song:
+      .input-row
+        %div#song-query-wrapper
+          %input#song-search{ type: "text", data: { youtube_search_target: "query" }, placeholder: "Enter song name or artist", autocomplete: "off" }
+        %button.search-btn{ type: "button", data: { action: "click->youtube-search#search", youtube_search_target: "searchBtn" } } Search
     
-    %div{ data: { youtube_search_target: "validationMessage" }, class: "validation-message" }
-    %div{ data: { youtube_search_target: "embedPreview" }, class: "embed-preview" }
+    %div#song-results{ data: { youtube_search_target: "results" }, class: "youtube-results-container" }
+    
+    .video-selection
+      = label_tag do
+        %strong 📎 Selected Video URL:
+        %div#song-url-wrapper
+          \#{form.text_field :url, data: { youtube_search_target: "urlField" }, placeholder: "URL will appear here or paste manually", readonly: true}
   
-  - unless index_page
-    = label_tag do
-      Skipped
-      \#{form.check_box :skipped}
-  - unless index_page
-    = label_tag do
-      Finished
-      \#{form.check_box :finished}
-  .actions
-    = form.submit "Queue Song"
+  .form-actions
+    = form.submit "Queue Song", class: "btn btn-primary btn-large", data: { disable_with: "Queueing..." }
