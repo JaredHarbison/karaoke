@@ -1,0 +1,17 @@
+= turbo_stream.append "upcoming-songs" do
+  = render "index_form", song: @song, upcoming: false
+
+= turbo_stream.execute_script do
+  // Clear the search results and reset form fields
+  if (document.getElementById('song-results')) {
+    document.getElementById('song-results').innerHTML = '';
+  }
+  if (document.getElementById('song-search')) {
+    document.getElementById('song-search').value = '';
+  }
+  if (document.getElementById('song_url')) {
+    document.getElementById('song_url').value = '';
+  }
+
+
+
