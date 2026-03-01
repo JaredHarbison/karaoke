@@ -6,15 +6,6 @@ export default class extends Controller {
   connect() {
     // Initialize abort controller for fetch requests
     this._abortController = new AbortController()
-    
-    // Remove any previously attached listener to prevent duplicates
-    if (this._boundClickHandler) {
-      this.element.removeEventListener('click', this._boundClickHandler)
-    }
-    
-    // Create and store the bound handler so we can reference it later
-    this._boundClickHandler = this.handleResultClick.bind(this)
-    this.element.addEventListener('click', this._boundClickHandler)
   }
   
   disconnect() {
@@ -25,18 +16,31 @@ export default class extends Controller {
     }
     
     // Clean up the listener when the controller is removed
-    if (this._boundClickHandler) {
-      this.element.removeEventListener('click', this._boundClickHandler)
-      this._boundClickHandler = null
+    this.removeResultsListener()
+  }
+  
+  removeResultsListener() {
+    if (this._resultsListener && this.hasResultsTarget) {
+      this.resultsTarget.removeEventListener('click', this._resultsListener)
+      this._resultsListener = null
     }
   }
   
-  handleResultClick(event) {
-    // Use event delegation on dynamically created buttons
-    const button = event.target.closest('.result-select-btn')
-    if (button) {
-      this.selectVideo(button)
+  attachResultsListener() {
+    // Remove any existing listener first
+    this.removeResultsListener()
+    
+    if (!this.hasResultsTarget) return
+    
+    // Create click handler scoped to this instance
+    this._resultsListener = (event) => {
+      const button = event.target.closest('.result-select-btn')
+      if (button) {
+        this.selectVideo(button)
+      }
     }
+    
+    this.resultsTarget.addEventListener('click', this._resultsListener)
   }
   
   getVenueSlug() {
@@ -119,36 +123,55 @@ export default class extends Controller {
       return
     }
     
-    const resultsHtml = items.map(item => `
-      <div class="youtube-result-item">
-        <div class="result-thumbnail">
-          <img src="${this.escapeHtml(item.thumbnail)}" alt="Video thumbnail" loading="lazy" />
-        </div>
-        <div class="result-details">
-          <h5 class="result-title">${this.escapeHtml(item.title)}</h5>
-          <p class="result-channel">${this.escapeHtml(item.channel)}</p>
-          <button type="button" class="btn-small result-select-btn" data-video-url="${this.escapeHtml(item.url)}">
-            ▶️ Select
-          </button>
-        </div>
-      </div>
-    `).join('')
-    
-    this.resultsTarget.innerHTML = resultsHtml
+    try {
+      // Build a single HTML string
+      let html = ''
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i]
+        
+        // Safety checks on item properties
+        if (!item.title || !item.url) continue
+        
+        const title = String(item.title).substring(0, 100)  // Limit title length
+        const channel = String(item.channel || 'Unknown').substring(0, 50)
+        const url = String(item.url)
+        const thumb = item.thumbnail ? String(item.thumbnail) : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+        
+        html += '<div class="youtube-result-item"><div class="result-thumbnail"><img src="' + this.escapeHtml(thumb) + '" alt="thumbnail" loading="lazy" /></div>'
+        html += '<div class="result-details"><h5 class="result-title">' + this.escapeHtml(title) + '</h5>'
+        html += '<p class="result-channel">' + this.escapeHtml(channel) + '</p>'
+        html += '<button type="button" class="btn-small result-select-btn" data-video-url="' + this.escapeHtml(url) + '">▶️ Select</button>'
+        html += '</div></div>'
+      }
+      
+      // Set content once
+      if (this.hasResultsTarget) {
+        this.resultsTarget.innerHTML = html
+        this.attachResultsListener()
+      }
+    } catch (error) {
+      console.error('Error displaying results:', error)
+      this.resultsTarget.innerHTML = '<p class="error-message">Error displaying results</p>'
+    }
   }
   
   selectVideo(button) {
     const url = button.dataset.videoUrl
     if (!url) return
     
-    // Abort any pending search requests since we're clearing results
-    if (this._abortController) {
-      this._abortController.abort()
+    // Set the URL field
+    const urlInput = document.getElementById('song_url')
+    if (urlInput) {
+      urlInput.value = url
+      
+      // Auto-submit the form after a brief delay to ensure value is set
+      setTimeout(() => {
+        const form = urlInput.closest('form')
+        if (form) {
+          form.submit()
+        }
+      }, 50)
     }
-    
-    this.urlFieldTarget.value = url
-    this.resultsTarget.innerHTML = ''
-    this.queryTarget.value = ''
   }
   
   escapeHtml(text) {

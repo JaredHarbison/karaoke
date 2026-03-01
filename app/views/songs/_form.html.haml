@@ -1,5 +1,5 @@
 - venue_slug = @current_venue&.slug || Current.venue&.slug || params[:venue_slug]
-= form_with(model: song, local: true, url: venue_songs_path(venue_slug)) do |form|
+= form_with(model: song, local: true, url: venue_songs_path(venue_slug), data: { turbo: false }) do |form|
   - if song.errors.any?
     #error_explanation
       %h2
