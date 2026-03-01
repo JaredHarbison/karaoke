@@ -5,6 +5,7 @@ This document outlines security best practices and vulnerability prevention stra
 ## Security Standards
 
 ### OWASP Top 10 (2023)
+
 1. Broken Access Control
 2. Cryptographic Failures
 3. Injection
@@ -21,6 +22,7 @@ This document outlines security best practices and vulnerability prevention stra
 ### 1. Authentication & Authorization
 
 #### Password Security
+
 ```ruby
 # ✅ Good: Using Devise with bcrypt
 devise :database_authenticatable, :validatable
@@ -38,6 +40,7 @@ BCrypt::Password.create("password", cost: 4)  # Cost too low
 ```
 
 #### OAuth & Social Login
+
 ```ruby
 # ✅ Good: Validate and scope OAuth tokens
 config.omniauth :google_oauth2,
@@ -62,6 +65,7 @@ scope: 'email,profile,drive'  # Only request what you need
 ```
 
 #### Authorization Checks
+
 ```ruby
 # ✅ Good: Explicit authorization checks
 def require_owner!
@@ -118,6 +122,7 @@ Never output user input without sanitization:
 ```
 
 Content Security Policy (CSP):
+
 ```ruby
 # config/initializers/content_security_policy.rb
 Rails.application.configure do
@@ -415,6 +420,7 @@ git diff --cached | grep -E "binding\.pry|debugger|byebug"
 ## Testing Security
 
 ### Unit Tests
+
 ```ruby
 describe User do
   it 'encrypts sensitive attributes' do
@@ -430,6 +436,7 @@ end
 ```
 
 ### Integration Tests
+
 ```ruby
 describe 'Authorization', type: :request do
   it 'prevents unauthorized access' do
@@ -443,6 +450,7 @@ end
 ```
 
 ### Security Scanning
+
 ```bash
 # Brakeman: Rails security analyzer
 gem 'brakeman', require: false
@@ -473,7 +481,8 @@ curl https://www.zaproxy.org/download/ # Docker available
 ### Responsible Disclosure
 
 For external vulnerabilities:
-1. Report privately to security@yourdomain.com
+
+1. Report privately to <security@yourdomain.com>
 2. Allow 90 days for patch
 3. Coordinate public disclosure
 4. Credit reporter (if desired)
@@ -481,28 +490,33 @@ For external vulnerabilities:
 ## Security Resources
 
 ### OWASP
-- https://owasp.org/www-project-top-ten/ - Top 10 vulnerabilities
-- https://owasp.org/www-project-dependency-check/ - Dependency checker
-- https://cheatsheetseries.owasp.org/ - Cheat sheets
+
+- <https://owasp.org/www-project-top-ten/> - Top 10 vulnerabilities
+- <https://owasp.org/www-project-dependency-check/> - Dependency checker
+- <https://cheatsheetseries.owasp.org/> - Cheat sheets
 
 ### Ruby/Rails Security
-- https://brakemanscanner.org/ - Brakeman static analyzer
-- https://bundler.io/man/bundle-audit.1.html - Bundler audit
-- https://api.rubyonrails.org/v7.0/classes/Rails/Application/Configuration.html#attribute-c-force_ssl - Force SSL
+
+- <https://brakemanscanner.org/> - Brakeman static analyzer
+- <https://bundler.io/man/bundle-audit.1.html> - Bundler audit
+- <https://api.rubyonrails.org/v7.0/classes/Rails/Application/Configuration.html#attribute-c-force_ssl> - Force SSL
 
 ### Tools & Scanning
-- https://www.zaproxy.org/ - OWASP ZAP penetration testing
-- https://securityheaders.com/ - Check security headers
-- https://csp-evaluator.appspot.com/ - CSP validator
+
+- <https://www.zaproxy.org/> - OWASP ZAP penetration testing
+- <https://securityheaders.com/> - Check security headers
+- <https://csp-evaluator.appspot.com/> - CSP validator
 
 ### Learning
-- https://portswigger.net/web-security - Web Security Academy
-- https://www.hacksplaining.com/ - Security lessons
-- https://snyk.io/learn/ - Security learning platform
+
+- <https://portswigger.net/web-security> - Web Security Academy
+- <https://www.hacksplaining.com/> - Security lessons
+- <https://snyk.io/learn/> - Security learning platform
 
 ## Team Responsibilities
 
 ### All Developers
+
 - Follow security guidelines
 - Validate & sanitize input
 - Use parameterized queries
@@ -510,18 +524,21 @@ For external vulnerabilities:
 - Report security issues
 
 ### Security Lead
+
 - Review security code
 - Conduct security reviews quarterly
 - Manage vulnerability response
 - Keep team trained
 
 ### DevOps/Infra
+
 - Configure security headers
 - Manage environment secrets
 - Monitor for intrusions
 - Update production systems
 
 ### QA/Testing
+
 - Test security features
 - Run vulnerability scans
 - Test with malicious input

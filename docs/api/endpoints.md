@@ -4,14 +4,16 @@
 
 ### Search YouTube
 
-```
+```http
 GET /songs/youtube_search
 ```
 
 Query Parameters:
+
 - `query` (required) - Search term for karaoke videos
 
 Response:
+
 ```json
 {
   "items": [
@@ -28,6 +30,7 @@ Response:
 ```
 
 Errors:
+
 - `{ "error": "YouTube API key not configured" }`
 - `{ "error": "Failed to fetch YouTube results" }`
 
@@ -35,14 +38,16 @@ Errors:
 
 ### Validate Video
 
-```
+```http
 GET /songs/validate_video
 ```
 
 Query Parameters:
+
 - `url` (required) - YouTube URL or video ID
 
 Response (Valid):
+
 ```json
 {
   "valid": true,
@@ -55,6 +60,7 @@ Response (Valid):
 ```
 
 Response (Invalid):
+
 ```json
 {
   "valid": false,
@@ -70,7 +76,7 @@ Response (Invalid):
 
 ### Index Songs
 
-```
+```http
 GET /songs
 ```
 
@@ -82,11 +88,12 @@ Queries songs scoped to current venue and organizes by status.
 
 ### Create Song
 
-```
+```http
 POST /songs
 ```
 
 Parameters:
+
 ```ruby
 {
   song: {
@@ -101,6 +108,7 @@ Parameters:
 ```
 
 Auto-set:
+
 - `user_id` - Current user
 - `venue_id` - Current venue
 
@@ -108,11 +116,12 @@ Auto-set:
 
 ### Finish Song
 
-```
+```http
 GET /finish_song
 ```
 
 Query Parameters:
+
 - `id` - Song ID
 
 Sets `finished: true` on song and redirects to songs index.
@@ -121,11 +130,12 @@ Sets `finished: true` on song and redirects to songs index.
 
 ### Skip Song
 
-```
+```http
 GET /skip_song
 ```
 
 Query Parameters:
+
 - `id` - Song ID
 
 Toggles `skipped` boolean and redirects to songs index.
@@ -134,7 +144,7 @@ Toggles `skipped` boolean and redirects to songs index.
 
 ### Update Song
 
-```
+```http
 PATCH/PUT /songs/:id
 ```
 
@@ -144,7 +154,7 @@ Authorization: User must own the song
 
 ### Delete Song
 
-```
+```http
 DELETE /songs/:id
 ```
 

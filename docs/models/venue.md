@@ -35,6 +35,7 @@ before_validation :generate_slug, if: -> { slug.blank? && name.present? }
 ## Multi-tenancy
 
 Venues enable multi-tenant functionality:
+
 - Each venue is a separate karaoke location
 - Songs and users are scoped to venues
 - Access via slug in URL: `?venue_slug=venue-name`
@@ -42,6 +43,7 @@ Venues enable multi-tenant functionality:
 ## Slug Generation
 
 Slugs are auto-generated from the venue name and parameterized:
+
 ```ruby
 Venue.create!(name: "Joe's Bar")
 # slug automatically becomes "joes-bar"
@@ -50,11 +52,13 @@ Venue.create!(name: "Joe's Bar")
 ## Accessing a Venue
 
 **URL parameter approach:**
-```
+
+```text
 http://localhost:3000?venue_slug=joes-bar
 ```
 
 **Console:**
+
 ```ruby
 Venue.find_by(slug: "joes-bar")
 ```

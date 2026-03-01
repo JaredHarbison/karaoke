@@ -54,11 +54,11 @@ validates :url, presence: true, format: { with: URI::DEFAULT_PARSER.make_regexp(
 
 ## Status Flags
 
-| Flag | Meaning | Usage |
-|------|---------|-------|
-| `finished` | Song has been performed | Set when "Finish" button clicked |
-| `skipped` | Song temporarily postponed | Toggled by "Skip" button |
-| `postponed` | User unavailable to perform | Not actively used yet |
+| Flag        | Meaning                      | Usage                            |
+| ----------- | ---------------------------- | -------------------------------- |
+| `finished`  | Song has been performed      | Set when "Finish" button clicked |
+| `skipped`   | Song temporarily postponed   | Toggled by "Skip" button         |
+| `postponed` | User unavailable to perform  | Not actively used yet            |
 
 ## States
 

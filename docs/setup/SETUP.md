@@ -10,6 +10,7 @@
 ## Initial Setup
 
 1. Clone the repository and install dependencies:
+
 ```bash
 git clone <your-repo-url>
 cd karaoke
@@ -17,7 +18,8 @@ bundle install
 rails db:create db:migrate
 ```
 
-2. Create a `.env` file in the root directory (copy from `.env.example`):
+1. Create a `.env` file in the root directory (copy from `.env.example`):
+
 ```bash
 cp .env.example .env
 ```
@@ -67,6 +69,7 @@ cp .env.example .env
 6. Click "Create"
 7. Copy the **Client ID** and **Client Secret**
 8. Add them to your `.env` file:
+
 ```bash
 GOOGLE_OAUTH_CLIENT_ID=your_client_id_here
 GOOGLE_OAUTH_CLIENT_SECRET=your_client_secret_here
@@ -90,6 +93,7 @@ GOOGLE_OAUTH_CLIENT_SECRET=your_client_secret_here
    - Set API restrictions to "YouTube Data API v3" only
 5. Click "Save"
 6. Add it to your `.env` file:
+
 ```bash
 YOUTUBE_API_KEY=your_youtube_api_key_here
 ```
@@ -118,13 +122,15 @@ Visit `http://localhost:3000` and sign in.
 ### Production (Heroku)
 
 1. Add environment variables to Heroku:
+
 ```bash
 heroku config:set GOOGLE_OAUTH_CLIENT_ID=your_client_id
 heroku config:set GOOGLE_OAUTH_CLIENT_SECRET=your_client_secret
 heroku config:set YOUTUBE_API_KEY=your_youtube_api_key
 ```
 
-2. Deploy:
+1. Deploy:
+
 ```bash
 git push heroku main
 heroku run rails db:migrate
@@ -140,6 +146,7 @@ Venue.create!(name: "Joe's Bar", slug: "joes-bar", location: "123 Main St")
 ```
 
 Access the venue by visiting:
+
 - Development: `http://localhost:3000?venue_slug=joes-bar`
 - Production: `https://yourdomain.com?venue_slug=joes-bar`
 

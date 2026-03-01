@@ -46,6 +46,7 @@ has_many :songs, dependent: :nullify
 ## Key Methods
 
 ### `from_omniauth(auth)`
+
 Creates or finds a user from OAuth credentials.
 
 ```ruby

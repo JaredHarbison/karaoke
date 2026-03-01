@@ -5,6 +5,7 @@ This document outlines accessibility standards and best practices for the Karaok
 ## Standards & Compliance
 
 ### WCAG 2.1 Level AA
+
 - Target compliance level for all features
 - Ensures usability for people with disabilities
 - Legal requirement in many jurisdictions
@@ -89,11 +90,13 @@ All interactive elements must be keyboard accessible:
 ### 4. Color Contrast
 
 Minimum contrast ratios (WCAG AA):
+
 - Normal text: 4.5:1 (black on white, or equivalent)
 - Large text (18pt+): 3:1
 - UI components: 3:1
 
 Use tools to verify:
+
 ```bash
 # Check contrast in your CSS
 # Use WebAIM Color Contrast Checker
@@ -196,6 +199,7 @@ Provide captions and transcripts:
 ### 9. Testing & Validation
 
 #### Automated Tools
+
 ```bash
 # Install accessibility testing gems
 bundle add axe-core-rails erblint-accessibility
@@ -208,6 +212,7 @@ npm install -g pa11y-ci
 ```
 
 #### Manual Testing
+
 1. **Keyboard Navigation**: Navigate entire site with Tab, Shift+Tab, Enter, Space, Escape
 2. **Screen Reader**: Test with NVDA (Windows) or VoiceOver (Mac)
 3. **Zoom**: Test at 200% zoom level
@@ -215,6 +220,7 @@ npm install -g pa11y-ci
 5. **Contrast**: Use WebAIM Color Contrast Checker
 
 #### Browser Extensions
+
 - WAVE: Web Accessibility Evaluation Tool
 - Lighthouse (Chrome DevTools)
 - Axe DevTools
@@ -223,7 +229,7 @@ npm install -g pa11y-ci
 ### 10. Common Issues & Fixes
 
 | Issue | Fix | WCAG Criterion |
-|-------|-----|-----------------|
+| ------- | ----- | ----------------- |
 | No alt text on images | Add descriptive alt text or `alt=""` | 1.1.1 Non-text Content |
 | Poor color contrast | Increase contrast ratio to 4.5:1+ | 1.4.3 Contrast (Minimum) |
 | No focus indicator | Add visible `outline` or `box-shadow` | 2.4.7 Focus Visible |
@@ -261,23 +267,27 @@ pa11y-ci --config .pa11y-ci-config.json
 ## Resources
 
 ### WCAG 2.1 Documentation
-- https://www.w3.org/WAI/WCAG21/quickref/ - Quick reference guide
-- https://www.w3.org/WAI/WCAG21/Understanding/ - Technical details
+
+- <https://www.w3.org/WAI/WCAG21/quickref/> - Quick reference guide
+- <https://www.w3.org/WAI/WCAG21/Understanding/> - Technical details
 
 ### Tools & Testing
-- https://webaim.org/ - Web Accessibility In Mind
-- https://www.chromevox.com/ - ChromeVox screen reader
-- https://wave.webaim.org/ - WAVE evaluation tool
-- https://www.tpgi.com/color-contrast-checker/ - Color contrast checker
+
+- <https://webaim.org/> - Web Accessibility In Mind
+- <https://www.chromevox.com/> - ChromeVox screen reader
+- <https://wave.webaim.org/> - WAVE evaluation tool
+- <https://www.tpgi.com/color-contrast-checker/> - Color contrast checker
 
 ### Learning Resources
-- https://www.a11y-101.com/ - Accessibility 101
-- https://www.deque.com/blog/ - Deque accessibility blog
-- https://accessible-components.com/ - Accessible component patterns
+
+- <https://www.a11y-101.com/> - Accessibility 101
+- <https://www.deque.com/blog/> - Deque accessibility blog
+- <https://accessible-components.com/> - Accessible component patterns
 
 ## Team Responsibilities
 
 ### All Developers
+
 - Write semantic HTML
 - Test features with keyboard
 - Ensure color has sufficient contrast
@@ -285,18 +295,21 @@ pa11y-ci --config .pa11y-ci-config.json
 - Never remove focus indicators
 
 ### Design Team
+
 - Design with accessibility from the start
 - Test color palettes for contrast
 - Ensure icons have labels
 - Provide captions for videos
 
 ### QA
+
 - Test with assistive technologies
 - Verify keyboard navigation
 - Check at multiple zoom levels
 - Validate against WCAG criteria
 
 ### Accessibility Champion
+
 - Review accessibility in code reviews
 - Keep team trained on standards
 - Research new tools and techniques

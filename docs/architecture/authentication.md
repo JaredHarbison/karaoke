@@ -4,26 +4,31 @@
 
 ### Modules Enabled
 
-```ruby
 devise :database_authenticatable, :registerable,
        :recoverable, :rememberable, :validatable,
        :omniauthable, omniauth_providers: [:google_oauth2]
+
+```ruby
+devise :database_authenticatable, :registerable,
+   :recoverable, :rememberable, :validatable,
+   :omniauthable, omniauth_providers: [:google_oauth2]
 ```
 
-| Module | Purpose |
-|--------|---------|
-| database_authenticatable | Password-based authentication |
-| registerable | User signup (currently disabled via routes) |
-| recoverable | Password reset |
-| rememberable | "Remember me" functionality |
-| validatable | Email/password validation |
-| omniauthable | OAuth provider support |
+| Module                   | Purpose                                      |
+|--------------------------|----------------------------------------------|
+| database_authenticatable | Password-based authentication                |
+| registerable             | User signup (currently disabled via routes)  |
+| recoverable              | Password reset                               |
+| rememberable             | "Remember me" functionality                  |
+| validatable              | Email/password validation                    |
+| omniauthable             | OAuth provider support                       |
 
 ### OAuth Providers
 
 Currently supports Google OAuth 2.0 via OmniAuth.
 
 Configuration:
+
 ```ruby
 # config/initializers/devise.rb
 config.omniauth :google_oauth2,
@@ -40,11 +45,14 @@ config.omniauth :google_oauth2,
 1. **User clicks**: "Sign in with Google" button
 2. **Redirects to**: `/users/auth/google_oauth2`
 3. **Google redirects back**: `/users/auth/google_oauth2/callback`
+
 4. **OmniAuthCallbacksController**:
-   - Calls `User.from_omniauth(auth)`
-   - Creates or finds user
-   - Signs in user
-5. **Redirect**: To song queue or error page
+
+- Calls `User.from_omniauth(auth)`
+- Creates or finds user
+- Signs in user
+
+1. **Redirect**: To song queue or error page
 
 ### Password Authentication
 
@@ -76,6 +84,7 @@ Via Devise form (signup currently disabled but password auth works).
 ## Routes
 
 Protected routes require authentication:
+
 - `/songs` - Songs index
 - `/welcome` - Welcome page
 

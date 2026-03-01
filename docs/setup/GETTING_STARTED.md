@@ -52,6 +52,7 @@ cp .env.example .env
 ```
 
 Then follow [SETUP.md](SETUP.md) to get your:
+
 - Google OAuth credentials
 - YouTube API key
 
@@ -84,34 +85,41 @@ Sign in with Google OAuth or create a password account.
 ## Key Files Changed
 
 ### Models
+
 - [app/models/venue.rb](app/models/venue.rb) - NEW: Venue model
 - [app/models/current.rb](app/models/current.rb) - NEW: Current context
 - [app/models/song.rb](app/models/song.rb) - Added venue/user associations, validations, scoping
 - [app/models/user.rb](app/models/user.rb) - Added OAuth, venue/songs associations
 
 ### Controllers
+
 - [app/controllers/application_controller.rb](app/controllers/application_controller.rb) - Venue/user context setting
 - [app/controllers/songs_controller.rb](app/controllers/songs_controller.rb) - Auth, ownership, YouTube endpoints
 - [app/controllers/users/omniauth_callbacks_controller.rb](app/controllers/users/omniauth_callbacks_controller.rb) - NEW: OAuth handling
 
 ### Services
+
 - [app/services/youtube_service.rb](app/services/youtube_service.rb) - NEW: YouTube API integration
 
 ### Views
+
 - [app/views/songs/index.html.haml](app/views/songs/index.html.haml) - Removed credentials, added Stimulus
 - [app/views/songs/_form.html.haml](app/views/songs/_form.html.haml) - YouTube search integration
 - [app/views/devise/sessions/new.html.haml](app/views/devise/sessions/new.html.haml) - Google OAuth button
 
 ### JavaScript (Stimulus)
+
 - [app/javascript/controllers/instructions_controller.js](app/javascript/controllers/instructions_controller.js) - NEW
 - [app/javascript/controllers/song_action_controller.js](app/javascript/controllers/song_action_controller.js) - NEW
 - [app/javascript/controllers/youtube_search_controller.js](app/javascript/controllers/youtube_search_controller.js) - NEW
 
 ### Styles
+
 - [app/assets/stylesheets/partials/_youtube.scss](app/assets/stylesheets/partials/_youtube.scss) - NEW
 - [app/assets/stylesheets/partials/_forms.scss](app/assets/stylesheets/partials/_forms.scss) - OAuth button styles
 
 ### Migrations
+
 - `20260213210716_add_omniauth_to_users.rb` - OAuth fields
 - `20260213210950_create_venues.rb` - Venues table
 - `20260213211007_add_venue_to_songs.rb` - Venue association
@@ -125,6 +133,7 @@ Sign in with Google OAuth or create a password account.
    - YouTube Data API Key
 
 2. **Run Migrations**
+
    ```bash
    rails db:migrate
    ```

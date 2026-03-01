@@ -12,6 +12,7 @@ Phase 1 established the foundational architecture for the redesigned karaoke app
 ## Completed Tasks
 
 ### 1.1 ✓ Database Migrations
+
 - **AddRoleToUsers**: Added `role` enum to users (owner: 0, admin: 1, performer: 2) with default "performer"
 - **AddOwnerToVenues**: Added `owner_id` foreign key to venues table for venue ownership
 - **AddPublicToVenues**: Added `public` boolean to venues (default: true) for discoverability
@@ -20,24 +21,27 @@ Phase 1 established the foundational architecture for the redesigned karaoke app
 All migrations applied successfully. Database schema updated.
 
 ### 1.2 ✓ Models & Associations
+
 - **User Model Updates**:
   - Added enum: `role` (owner, admin, performer)
   - Added associations: `owned_venues`, `admin_for_venues`, `venues_as_admin`
   - Added helper methods: `owner_of?(venue)`, `admin_of?(venue)`
-  
+
 - **Venue Model Updates**:
   - Added `belongs_to :owner` relationship
   - Added admin management through `venue_admins` join table
   - Added methods: `add_admin(user)`, `remove_admin(user)`, `is_admin?(user)`
-  
+
 - **VenueAdmin Model**: New model for managing admin assignments with validations
 
 ### 1.3 ✓ Route Changes
+
 - **From**: Query parameter-based (`?venue_slug=joes-bar`)
 - **To**: Slug-based nested routes (`/:venue_slug/songs`)
 
 **New route structure:**
-```
+
+```text
 GET  /                           # Welcome page
 GET  /discover                   # Venue discovery/search
 POST /venues/join/:slug          # Join venue
@@ -53,6 +57,7 @@ DELETE/:venue_slug/admins/:id    # Remove admin (owner only)
 ```
 
 ### 1.4 ✓ SCSS System Reorganization
+
 **New organized structure** (5 files → 10 files):
 
 1. **_colors.scss** - Enhanced with semantic mapping + green success color
@@ -68,12 +73,14 @@ DELETE/:venue_slug/admins/:id    # Remove admin (owner only)
 11. **_utilities.scss** - NEW: Utility classes (spacing, text, layout, etc.)
 
 **Color system enhanced:**
+
 - Existing colors: beige, midnight, cyan, yellow, magenta, ink
 - **NEW**: $green (#2ECC71) for success states
 - Semantic mapping: `$status-next`, `$status-queued`, `$status-skipped`, `$status-finished`, `$status-success`, `$status-error`
 - Text and background color variables for consistency
 
 ### 1.5 ✓ Authorization Middleware
+
 - **ApplicationController updates**:
   - `set_current_venue` - Extracts venue from URL path
   - `set_current_user` - Devise integration
@@ -104,11 +111,13 @@ DELETE/:venue_slug/admins/:id    # Remove admin (owner only)
 ## Data Migration Notes
 
 **Existing users and venues:**
+
 - All existing users default to `role = 2` (performer)
 - All existing venues have `owner_id = NULL` (will need manual assignment or migration task)
 - All venues default to `public = true`
 
 **Next steps will require:**
+
 - Create a management console or migration script for admins setup
 - Allow owners to assign admins after joining
 
@@ -117,18 +126,22 @@ DELETE/:venue_slug/admins/:id    # Remove admin (owner only)
 ## Files Modified
 
 ### Controllers
+
 - `/app/controllers/application_controller.rb` - Route-based venue handling, authorization
 - `/app/controllers/songs_controller.rb` - Role checks, URL updates, Turbo preparation
 
 ### Models
+
 - `/app/models/user.rb` - Role enum, associations
 - `/app/models/venue.rb` - Owner/admin associations
 - `/app/models/venue_admin.rb` - NEW
 
 ### Routes
+
 - `/config/routes.rb` - Nested slug-based structure
 
 ### Stylesheets
+
 - `/app/assets/stylesheets/application.scss` - Reorganized import order
 - `/app/assets/stylesheets/partials/_colors.scss` - Enhanced with semantic mapping + green
 - `/app/assets/stylesheets/partials/_tokens.scss` - NEW
@@ -139,6 +152,7 @@ DELETE/:venue_slug/admins/:id    # Remove admin (owner only)
 - `/app/assets/stylesheets/partials/_utilities.scss` - NEW
 
 ### Database
+
 - `/db/migrate/20260215171336_add_role_to_users.rb` - NEW
 - `/db/migrate/20260215171339_add_owner_to_venues.rb` - NEW
 - `/db/migrate/20260215171342_add_public_to_venues.rb` - NEW
@@ -195,6 +209,7 @@ See [UI_IMPLEMENTATION_PHASES.md](./UI_IMPLEMENTATION_PHASES.md#phase-2-ui--comp
 ## Quick Reference
 
 ### Role Checks in Views
+
 ```haml
 - if Current.venue.owner_id == current_user.id
   / Owner only
@@ -205,6 +220,7 @@ See [UI_IMPLEMENTATION_PHASES.md](./UI_IMPLEMENTATION_PHASES.md#phase-2-ui--comp
 ```
 
 ### Authorization in Controllers
+
 ```ruby
 require_owner!      # Only venue owner
 require_admin!      # Owner or admin
@@ -212,6 +228,7 @@ authorize_song_owner  # Own song or admin (already in place)
 ```
 
 ### New URL Patterns
+
 ```ruby
 venue_songs_path(venue.slug)        # /joes-bar/songs
 venue_songs_path(venue_slug)        # Using string directly
@@ -219,6 +236,7 @@ edit_venue_song_path(venue_slug, song)  # /joes-bar/songs/:id/edit
 ```
 
 ### SCSS Utilities
+
 ```scss
 // Spacing
 .m-md, .p-lg, .gap-sm
@@ -235,4 +253,3 @@ edit_venue_song_path(venue_slug, song)  # /joes-bar/songs/:id/edit
 // Layout
 .container, .flex, .grid-cols-2, .hidden
 ```
-
