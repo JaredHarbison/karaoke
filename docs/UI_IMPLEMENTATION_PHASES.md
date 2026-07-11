@@ -10,12 +10,27 @@ This document outlines the phased approach to modernizing the UI with role-based
 - Security and clarity highlighted throughout
 - Custom SCSS system (no frameworks)
 - Real-time updates via Turbo Frames
-- Three user roles: Owner, Admin, Performer
+- Three user roles: Owner, Host, Performer
 - Venue discovery via QR code, location-based, or search
+
+## Terminology
+
+| User-facing term | Code term | Notes |
+|---|---|---|
+| Owner | `owner` | Venue creator; full access |
+| Host | `host` | KJ / karaoke runner; queue management |
+| Performer | `performer` | General user; default role |
+
+> **Note:** Early Phase 1 code used "Admin" for what is now called "Host." Phase 2 covers the rename migration. The flowchart (design reference) uses User / Admin / Host — these map to Performer / Owner / Host respectively.
 
 ---
 
-## Phase 1: Foundational Architecture (CURRENT)
+---
+
+## Phase 1: Foundational Architecture ✅ COMPLETED
+
+> All Phase 1 work is complete. See [PHASE_1_COMPLETION.md](./PHASE_1_COMPLETION.md) for full details.
+> **Note:** Phase 1 established roles/models/routes using "Admin" terminology and a `venue_admins` table. Phase 2 renames these to "Host" across the codebase.
 
 ### Phase 1 Objectives
 
@@ -95,12 +110,12 @@ _utilities.scss       # New: common utility classes
 
 ### Phase 1 Deliverables
 
-- [ ] Migrations created and tested
-- [ ] Model associations updated
-- [ ] Routes refactored to slug-based paths
-- [ ] SCSS structure reorganized
-- [ ] Authorization middleware implemented
-- [ ] Tests passing
+- [x] Migrations created and tested
+- [x] Model associations updated
+- [x] Routes refactored to slug-based paths
+- [x] SCSS structure reorganized
+- [x] Authorization middleware implemented
+- [x] Tests passing
 
 ---
 
