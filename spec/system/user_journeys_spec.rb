@@ -7,6 +7,7 @@ RSpec.describe 'User Journeys', type: :system, tag: :critical do
   let(:performer) { create(:user, :performer, venue: venue) }
 
   before do
+    driven_by :rack_test
     venue.add_admin(admin)
   end
 
