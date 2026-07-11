@@ -1,20 +1,111 @@
-## KARAOKE QUEUE
+# Karaoke Queue
 
-This karaoke web app can run on a laptop computer casting video to a screen via chromecast and audio to a karaoke speaker using bluetooth. Users can login from their mobile devices with the karaoke host's login information to add songs to the queue.
+Karaoke Queue is a multi-venue Rails application for running a collaborative
+karaoke night. Performers join a venue and add songs from their phones, while a
+venue owner or host manages the shared queue.
 
-## Description
+The project started as a small single-host queue and is being expanded into a
+venue-scoped product. That evolution is visible in the domain model, slug-based
+routes, role-aware authorization, and the migration notes under `docs/`.
 
-A user can access the web app to login with the karaoke host's login information and then click the link to navigate to the /songs index page. The /songs index page contains a form at the top to queue a new song object containing a URL to a video karaoke version of a song, likely from YouTube. Upon submit of the form the song is added to the bottom of the queue on the /songs index page. The next song has a play icon that will open the URL in a new browser tab and mark the song object as finished, then it will move to the finished list at the bottom of the page. In the event a performer is not available to perform their song, the song can  be postponed by clicking the skip button until the performer is ready to click the button again and add themselves back into the queue. 
+## What it does
 
-## Getting Started
+- Keeps upcoming, skipped, postponed, and completed songs in a shared queue
+- Scopes queue data and URLs to a venue
+- Lets performers manage their own song requests
+- Lets owners and venue hosts advance or reorder the queue
+- Supports venue discovery and joining
+- Searches for karaoke videos and validates selected YouTube URLs
+- Uses Turbo Streams for queue updates without a frontend framework
+- Supports password and Google OAuth authentication through Devise
 
-Identified in the gemfile, this app uses Ruby 3.2.2, Rails ~> 7.1.2, PG ~> 1.1 for use on Heroku, Devise, Haml Rails, Sassc Rails, and RSPec Rails. Initial setup of the app is very standard for a Ruby on Rails app. Simply clone, run "bundle install" and "rails db:migrate" and start it up with "rails s". Because I have removed the ability to sign up with devise, in hopes of soon implementing an admin invite feature using devise invitable, you will need to create your first user through the rails console using "rails c" and a command like "User.create!({:email => "guy@gmail.com", :password => "111111", :password_confirmation => "111111" })"
+## Roles
 
-### Dependencies
+- **Owner** creates and configures a venue and can appoint hosts.
+- **Host** runs the karaoke queue for a venue.
+- **Performer** joins a venue and submits or updates their own songs.
 
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
+Some current code still calls the host role `admin`. The planned rename and its
+data migration are documented in
+[`docs/UI_IMPLEMENTATION_PHASES.md`](docs/UI_IMPLEMENTATION_PHASES.md).
+
+## Tech stack
+
+- Ruby 3.3.0 and Rails 7.1
+- PostgreSQL
+- Hotwire (Turbo and Stimulus) with import maps
+- ERB, Haml, and a custom Sass component system
+- Devise and Google OAuth
+- RSpec, Factory Bot, Capybara, and SimpleCov
+
+## Architecture
+
+Venue slugs form the application's tenancy boundary. `ApplicationController`
+resolves the active venue into `Current`, and song lookups are performed through
+that venue. Authorization then combines venue ownership, host membership, and
+song ownership.
+
+```text
+/:venue_slug request
+    -> resolve Current.venue
+    -> authenticate Current.user
+    -> authorize owner / host / performer action
+    -> query Current.venue.songs
+    -> render HTML or Turbo Stream response
+```
+
+`VenueAdmin` is the join model between users and venues for the role currently
+shown to users as Host. `YoutubeService` keeps external video search and
+validation logic outside the controllers.
+
+## Running locally
+
+Prerequisites:
+
+- Ruby 3.3.0
+- PostgreSQL
+- A Google OAuth client if Google sign-in is required
+- A YouTube Data API key if video search is required
+
+Install and prepare the application:
+
+```sh
+bundle install
+bin/rails db:prepare
+bin/rails server
+```
+
+Open `http://localhost:3000`.
+
+Copy `.env.example` to `.env` and fill in only the integrations you intend to
+exercise. Never commit `.env`; it is ignored by Git.
+
+## Quality checks
+
+```sh
+bundle exec rspec
+bundle exec rspec --tag critical
+```
+
+The suite includes model, request, workflow, and system coverage. Request specs
+exercise venue isolation and role-based queue permissions; the critical tag
+provides a faster check of the main user paths.
+
+## Project documentation
+
+- [`docs/UI_IMPLEMENTATION_PHASES.md`](docs/UI_IMPLEMENTATION_PHASES.md) tracks
+  the staged product and terminology migration.
+- [`docs/PHASE_1_COMPLETION.md`](docs/PHASE_1_COMPLETION.md) records the
+  foundational venue and authorization work.
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) explains the development and commit
+  conventions.
+
+## Current direction
+
+The next major phase completes the user-facing Host terminology migration,
+continues the role-specific interface work, and deepens the end-to-end coverage
+of sign-in, venue discovery, and live queue management.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE.md file for details
+Karaoke Queue is available under the [MIT License](LICENSE).
