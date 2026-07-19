@@ -166,9 +166,9 @@
   }
   
   &--error {
-    background-color: $status-error;
-    border: 1px solid darken($status-error, 10%);
-    color: white;
+    background-color: transparent;
+    border: 0;
+    color: $status-error;
   }
   
   &--info {
@@ -178,9 +178,9 @@
   }
   
   &--warning {
-    background-color: $status-skipped;
-    border: 1px solid darken($status-skipped, 10%);
-    color: $bg-dark;
+    background-color: transparent;
+    border: 0;
+    color: $status-error;
   }
 }
 

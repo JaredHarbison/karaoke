@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+
+root = File.expand_path('..', __dir__)
+stylesheets = File.join(root, 'app', 'assets', 'stylesheets')
+entrypoint = File.join(stylesheets, 'application.scss')
+
+last_seen = nil
+
+loop do
+  newest = Dir[File.join(stylesheets, '**', '*.scss')].map { |path| File.mtime(path).to_f }.max
+
+  if last_seen && newest > last_seen
+    # Sprockets can cache the dependency graph during a long-lived dev server.
+    # Touching the entrypoint forces a fresh digest without restarting Rails.
+    FileUtils.touch(entrypoint)
+  end
+
+  last_seen = newest
+  sleep 0.5
+end

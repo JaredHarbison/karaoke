@@ -12,11 +12,14 @@ $cyan-light: rgba(67, 192, 246, .5);
 $yellow: #F5CE28; 
 $yellow-light: rgba(245, 206, 40, .5);
 
+$orange: #FF5A36;
+$orange-light: rgba(255, 90, 54, .5);
+
 $magenta: #F81B84;  
 $magenta-light: rgba(248, 27, 132, .5);
 
-$green: #2ECC71; // Success state (new)
-$green-light: rgba(46, 204, 113, .5);
+$green: #39FF88; // Neon success and active state
+$green-light: rgba(57, 255, 136, .5);
 
 $ink: #333333;
 $ink-light: rgba(51, 51, 51, .5);
@@ -25,9 +28,10 @@ $ink-light: rgba(51, 51, 51, .5);
 $status-next: $cyan;        // Next performer (prominent)
 $status-queued: $ink;       // Queued performers
 $status-skipped: $yellow;   // Postponed/Skipped performers
+$status-warning: $orange;   // In-progress or caution state
 $status-finished: $beige;   // Completed performances
 $status-success: $green;    // Successful actions
-$status-error: $magenta;    // Errors and alerts
+$status-error: $orange;     // Errors and alerts
 $status-info: $cyan;        // Informational messages
 
 // Text colors
@@ -40,4 +44,3 @@ $bg-dark: $midnight;
 $bg-light: $beige;
 $bg-light-transparent: $beige-light;
 $bg-dark-transparent: $midnight-light;
-

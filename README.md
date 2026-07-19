@@ -72,10 +72,22 @@ Install and prepare the application:
 ```sh
 bundle install
 bin/rails db:prepare
-bin/rails server
+bin/dev
 ```
 
 Open `http://localhost:3000`.
+
+`bin/dev` starts Rails together with a small Sass watcher. View and Ruby
+changes reload normally; changes to any Sass partial automatically invalidate
+the application stylesheet while the server keeps running. It also runs
+Rails' asset cleanup task on startup, retaining the two newest compiled asset
+versions.
+
+To clean generated assets manually:
+
+```sh
+bin/rails 'assets:clean[2]'
+```
 
 Copy `.env.example` to `.env` and fill in only the integrations you intend to
 exercise. Never commit `.env`; it is ignored by Git.

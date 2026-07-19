@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+unless system('./bin/rails', 'assets:clean[2]')
+  warn 'Asset cleanup failed; continuing with the development server.'
+end
+
+server_pid = Process.spawn({ 'RAILS_ENV' => 'development' }, './bin/rails', 'server', '--pid', 'tmp/pids/karaoke-dev.pid')
+watcher_pid = Process.spawn('./bin/watch_assets')
+
+trap('INT') do
+  [server_pid, watcher_pid].each { |pid| Process.kill('TERM', pid) rescue nil }
+  exit
+end
+
+Process.wait(server_pid)
+Process.kill('TERM', watcher_pid) rescue nil

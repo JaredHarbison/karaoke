@@ -112,6 +112,19 @@ select:disabled {
     min-width: 48px;
     min-height: 48px;
   }
+
+  // Keep the visual checkbox compact; the associated label remains the
+  // comfortable touch target for auth forms.
+  .auth-card input[type="checkbox"] {
+    min-width: 1.125rem;
+    min-height: 1.125rem;
+  }
+
+  // Inline auth links should not become 48px-tall blocks on small screens.
+  .auth-card .auth-inline-link {
+    min-width: auto;
+    min-height: auto;
+  }
 }
 
 // Loading state indicator

@@ -12,21 +12,32 @@ body {
     }
   }
   .alert:not(:empty) {
-    background-color: $magenta;
-    border: 1px solid $magenta;
-    border-radius: 5px;
-    color: $beige;
+    background-color: transparent;
+    border: 0;
+    color: $status-error;
     flex-grow: 1;
     font-size: 1rem;
-    padding: 0.25rem;
+    padding: $space-xs 0;
   }
   .notice:not(:empty) {
-    background-color: $beige;
-    border: 1px solid $beige;
+    background-color: transparent;
+    border: 0;
     border-radius: 5px;
-    color: $magenta;
+    color: $green;
     flex-grow: 1;
     font-size: 1rem;
-    padding: 0.25rem;
+    padding: $space-xs 0;
   }
+}
+
+#error_explanation {
+  background-color: rgba($status-error, 0.12);
+  border: 1px solid $status-error;
+  border-radius: $radius-md;
+  color: $beige;
+  margin-bottom: $space-md;
+  padding: $space-sm $space-md;
+
+  h2 { color: $status-error; font-size: 1rem; margin: 0 0 $space-xs; }
+  ul { margin: 0; padding-left: $space-lg; }
 }

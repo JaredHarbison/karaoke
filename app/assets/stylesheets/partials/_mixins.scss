@@ -1,0 +1,14 @@
+// Shared interaction patterns. Components can opt into the brand interaction
+// language without duplicating focus, hover, and transition rules.
+@mixin pink-interaction($radius: $radius-md) {
+  border-radius: $radius;
+  transition: border-color $transition-fast, box-shadow $transition-fast, background-color $transition-fast;
+
+  &:hover,
+  &:focus,
+  &:focus-visible {
+    border-color: $magenta;
+    box-shadow: 0 0 0 3px $magenta-light;
+    outline: none;
+  }
+}
