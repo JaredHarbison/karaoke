@@ -1,13 +1,18 @@
 Rails.application.routes.draw do
   #devise_for :users
   devise_scope :user do
-    get "/sign_in" => "devise/sessions#new" # custom path to login/sign_in
-    get "/sign_up" => "devise/registrations#new", as: "new_user_registration" # custom path to sign_up/registration
+    get "/sign_in" => "users/sessions#new" # custom path to login/sign_in
+    get "/sign_up" => "users/registrations#new", as: "new_user_registration" # custom path to sign_up/registration
   end
   devise_for :users, :skip => [:registrations], 
-                     controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
-    as :user do
+                     controllers: {
+                       sessions: 'users/sessions',
+                       registrations: 'users/registrations',
+                       omniauth_callbacks: 'users/omniauth_callbacks'
+                     }
+  as :user do
     get 'users/edit' => 'devise/registrations#edit', :as => 'edit_user_registration'
+    post 'users' => 'users/registrations#create', :as => 'create_user_registration'
     put 'users' => 'devise/registrations#update', :as => 'user_registration'
   end
   
@@ -16,6 +21,7 @@ Rails.application.routes.draw do
   # Venue discovery
   get '/discover', to: 'venues#discover', as: 'discover_venues'
   post '/venues/join/:slug', to: 'venues#join', as: 'join_venue'
+  get '/host-invitations/:token', to: 'venue_invitations#show', as: 'venue_invitation'
   
   # Venue-scoped routes by slug
   scope '/:venue_slug', as: 'venue' do

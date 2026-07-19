@@ -16,7 +16,19 @@ RSpec.describe User, type: :model do
   describe 'validations' do
     it { is_expected.to validate_presence_of(:email) }
     it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
-    # Password validation is handled by Devise
+
+    it 'requires a longer mixed-case password with a number' do
+      user = build(:user, password: 'alllowercase', password_confirmation: 'alllowercase')
+
+      expect(user).not_to be_valid
+      expect(user.errors[:password]).to include('must include uppercase, lowercase, and a number')
+    end
+
+    it 'accepts a password meeting the complexity requirements' do
+      user = build(:user, password: 'SecurePassword123', password_confirmation: 'SecurePassword123')
+
+      expect(user).to be_valid
+    end
   end
 
   describe '#owner_of?' do

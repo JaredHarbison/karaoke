@@ -1,21 +1,37 @@
-%h2 Sign up
-= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
-  = render "devise/shared/error_messages", resource: resource
-  .field
-    = f.label :email
-    %br/
-    = f.email_field :email, autofocus: true, autocomplete: "email"
-  .field
-    = f.label :password
-    - if @minimum_password_length
-      %em
-        (#{@minimum_password_length} characters minimum)
-    %br/
-    = f.password_field :password, autocomplete: "new-password"
-  .field
-    = f.label :password_confirmation
-    %br/
-    = f.password_field :password_confirmation, autocomplete: "new-password"
-  .actions
-    = f.submit "Sign up"
-= render "devise/shared/links"
+.auth-page
+  .auth-card
+    %h1 create your account
+    %p.auth-support Continue as a performer, venue owner, or invited host.
+
+    = render 'devise/shared/google_button'
+
+    .auth-divider
+      %span or
+
+    = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: 'auth-form', data: { controller: 'password-strength' } }) do |f|
+      = render 'devise/shared/error_messages', resource: resource
+      = hidden_field_tag :return_to, auth_return_to if auth_return_to.present?
+      = text_field_tag :website, nil, class: 'auth-honeypot', autocomplete: 'off', tabindex: -1, aria: { hidden: true }
+      .field
+        = f.label :email, 'email address'
+        = f.email_field :email, autofocus: true, autocomplete: 'email'
+      .field
+        = f.label :password do
+          password
+          %small (#{Devise.password_length.min} characters minimum)
+        = f.password_field :password, autocomplete: 'new-password', data: { password_strength_target: 'password', action: 'input->password-strength#update' }
+        .password-strength{ aria: { live: 'polite' }, data: { password_strength_target: 'strength' } }
+          .password-strength__bars
+            - 4.times do
+              %span{ data: { password_strength_target: 'bar' } }
+          %small{ data: { password_strength_target: 'message' } } use 12+ characters with uppercase, lowercase, and a number
+      .field
+        = f.label :password_confirmation, 'confirm password'
+        = f.password_field :password_confirmation, autocomplete: 'new-password', data: { password_strength_target: 'confirmation', action: 'input->password-strength#update' }
+        %small.password-match{ data: { password_strength_target: 'match' }, aria: { live: 'polite' } }
+      .actions
+        = f.submit 'Create account', class: 'auth-submit'
+
+    .auth-footer
+      %span Already have an account?
+      = link_to 'Sign in', new_user_session_path(auth_link_options), class: 'auth-link'

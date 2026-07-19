@@ -9,7 +9,11 @@
     = csp_meta_tag
     = stylesheet_link_tag "application", "data-turbo-track": "reload"
     = javascript_importmap_tags
-  %body
-    %p.notice= notice
-    %p.alert= alert
+  %body{ class: ('auth-screen' if controller_path.start_with?('devise/')) }
+    %header.app-header
+      = render 'shared/brand_lockup'
+    - if notice.present?
+      %p.notice{ role: 'status', data: { controller: 'flash' } }= notice
+    - if alert.present?
+      %p.alert{ role: 'alert' }= alert
     = yield

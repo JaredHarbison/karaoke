@@ -4,6 +4,7 @@ class User < ApplicationRecord
   has_many :owned_venues, class_name: 'Venue', foreign_key: 'owner_id', dependent: :nullify
   has_many :admin_for_venues, class_name: 'VenueAdmin', dependent: :destroy
   has_many :venues_as_admin, through: :admin_for_venues, source: :venue
+  has_many :sent_venue_invitations, class_name: 'VenueInvitation', foreign_key: :invited_by_id, dependent: :destroy
 
   enum role: { owner: 0, admin: 1, performer: 2 }
   
@@ -12,6 +13,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: [:google_oauth2]
+
+  validate :password_complexity, if: :password_required?
 
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
@@ -26,5 +29,13 @@ class User < ApplicationRecord
   
   def admin_of?(venue)
     owner_of?(venue) || venues_as_admin.include?(venue)
+  end
+
+  private
+
+  def password_complexity
+    return if password.blank? || (password.match?(/[a-z]/) && password.match?(/[A-Z]/) && password.match?(/[0-9]/))
+
+    errors.add(:password, 'must include uppercase, lowercase, and a number')
   end
 end

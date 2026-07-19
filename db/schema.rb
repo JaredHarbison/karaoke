@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_02_15_171853) do
+ActiveRecord::Schema[7.1].define(version: 2026_07_19_150000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -60,6 +60,21 @@ ActiveRecord::Schema[7.1].define(version: 2026_02_15_171853) do
     t.index ["venue_id"], name: "index_venue_admins_on_venue_id"
   end
 
+  create_table "venue_invitations", force: :cascade do |t|
+    t.bigint "venue_id", null: false
+    t.bigint "invited_by_id", null: false
+    t.string "email", null: false
+    t.string "token", null: false
+    t.datetime "accepted_at"
+    t.datetime "expires_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invited_by_id"], name: "index_venue_invitations_on_invited_by_id"
+    t.index ["token"], name: "index_venue_invitations_on_token", unique: true
+    t.index ["venue_id", "email"], name: "index_venue_invitations_on_venue_id_and_email"
+    t.index ["venue_id"], name: "index_venue_invitations_on_venue_id"
+  end
+
   create_table "venues", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
@@ -79,5 +94,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_02_15_171853) do
   add_foreign_key "users", "venues"
   add_foreign_key "venue_admins", "users"
   add_foreign_key "venue_admins", "venues"
+  add_foreign_key "venue_invitations", "users", column: "invited_by_id"
+  add_foreign_key "venue_invitations", "venues"
   add_foreign_key "venues", "users", column: "owner_id"
 end
