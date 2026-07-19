@@ -1,0 +1,374 @@
+@import 'colors';
+@import 'tokens';
+
+.welcome-page {
+  min-height: 100vh;
+  --welcome-cta-width: 180px;
+  box-sizing: border-box;
+  background: $midnight;
+  color: $beige;
+}
+
+.welcome-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  align-items: flex-end;
+  width: calc(100% - 2rem);
+  max-width: 1120px;
+  margin: 0 auto;
+  gap: $space-xl;
+  padding: $space-xl 0;
+  color: $beige;
+  background: $midnight;
+  border-bottom: 1px solid rgba($cyan, 0.45);
+}
+
+.welcome-header__copy {
+  max-width: 820px;
+
+  h1 {
+    margin: $space-sm 0;
+    color: $yellow;
+    font-size: clamp(2.2rem, 4.2vw, 3.6rem);
+    line-height: 1;
+    text-align: left;
+    letter-spacing: -0.05em;
+  }
+
+  > p:last-child {
+    max-width: 560px;
+    margin: 0;
+    color: $beige;
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+}
+
+.welcome-eyebrow {
+  margin: 0;
+  color: $cyan;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.resume-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: $space-xs;
+  padding: $space-md;
+  border: 1px solid rgba($cyan, 0.5);
+  border-radius: $radius-xl;
+  background: rgba($cyan, 0.1);
+
+  strong {
+    color: $beige;
+    font-size: 1.2rem;
+  }
+
+  .welcome-button {
+    align-self: center;
+  }
+}
+
+.resume-card__label {
+  color: rgba(242, 238, 226, 0.68);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.welcome-main {
+  width: calc(100% - 2rem);
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: $space-2xl 0;
+}
+
+.welcome-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: $space-lg;
+  margin-bottom: $space-lg;
+}
+
+.venue-search {
+  display: flex;
+  flex-direction: row;
+  gap: $space-sm;
+
+  input[type="search"] {
+    width: 320px;
+    max-width: 40vw;
+    padding: $space-sm $space-md;
+    border: 1px solid #d6dbe5;
+    border-radius: $radius-md;
+    color: $ink;
+    background: $beige;
+    @include pink-interaction($radius-md);
+  }
+
+  .welcome-button { min-width: 0; }
+}
+
+.venue-search__submit {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  min-width: 3rem !important;
+  padding: $space-sm;
+  width: 3rem;
+}
+.search-icon { fill: none; height: 1.25rem; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; width: 1.25rem; }
+
+.welcome-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $space-sm $space-md;
+  border: 1px solid transparent;
+  border-radius: $radius-md;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  min-width: var(--welcome-cta-width);
+  text-transform: uppercase;
+
+  &--primary {
+    color: $beige;
+    background: $magenta;
+    @include pink-interaction($radius-md);
+
+    &:hover,
+    &:focus-visible {
+      color: $beige;
+      background: darken($magenta, 8%);
+      text-decoration: none;
+    }
+  }
+
+  &--secondary {
+    color: $magenta;
+    border-color: $magenta;
+    background: rgba($magenta, 0.1);
+    @include pink-interaction($radius-md);
+
+    &:hover,
+    &:focus-visible {
+      color: $magenta;
+      background: rgba($magenta, 0.2);
+      text-decoration: none;
+    }
+  }
+}
+
+.welcome-page input,
+.welcome-page button {
+  color: $beige;
+}
+
+.welcome-page input[type="search"] {
+  color: $ink;
+  background: $beige;
+}
+
+.welcome-page input[type="search"]::placeholder {
+  color: rgba($ink, 0.66);
+}
+
+.venue-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $space-md;
+}
+
+.venue-card {
+  display: flex;
+  min-height: 200px;
+  flex-direction: column;
+  padding: $space-lg;
+  border: 1px solid rgba($cyan, 0.32);
+  border-radius: $radius-xl;
+  background: $midnight;
+  box-shadow: none;
+  transition: box-shadow $transition-base, transform $transition-base;
+
+  &:hover {
+    box-shadow: $shadow-lg;
+    transform: translateY(-2px);
+  }
+
+  h3 {
+    margin: 0 0 $space-xs;
+    color: $yellow;
+    font-size: 1.25rem;
+    text-align: left;
+  }
+}
+
+.venue-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-sm;
+}
+
+.venue-card__status {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+  color: $green;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.venue-card__status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: $green;
+}
+
+.venue-card__location {
+  color: $beige;
+  font-size: 0.82rem;
+}
+
+.venue-card__location,
+.venue-card__host {
+  margin: 0;
+}
+
+.venue-card__host {
+  margin-top: $space-sm;
+  padding-top: $space-sm;
+  border-top: 1px solid rgba($cyan, 0.22);
+  color: $yellow;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.venue-card__queue { color: $beige; font-size: 0.82rem; margin: $space-xs 0 0; }
+
+.venue-card__footer {
+  margin-top: $space-lg;
+  padding-top: $space-md;
+  border-top: 1px solid rgba($cyan, 0.22);
+  align-items: flex-end;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: $space-sm;
+}
+.venue-card__footer .welcome-button { width: 100%; }
+
+.venue-empty {
+  padding: $space-3xl $space-lg;
+  border: 1px dashed rgba($cyan, 0.42);
+  border-radius: $radius-xl;
+  text-align: center;
+
+  h3 {
+    margin: $space-sm 0;
+    color: $yellow;
+  }
+
+  p {
+    margin: 0 0 $space-lg;
+    color: rgba(242, 238, 226, 0.64);
+  }
+}
+
+.venue-empty__icon {
+  font-size: 2.5rem;
+}
+
+.welcome-footer {
+  display: flex;
+  justify-content: space-between;
+  width: calc(100% - 2rem);
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: $space-lg 0;
+  border-top: 1px solid rgba($cyan, 0.24);
+  color: rgba(242, 238, 226, 0.58);
+  font-size: 0.78rem;
+}
+
+.welcome-footer__signout {
+  padding: 0;
+  border: 0;
+  color: $magenta;
+  background: none;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media (max-width: $breakpoint-md) {
+  .welcome-header {
+    align-items: flex-start;
+    grid-template-columns: 1fr;
+    gap: $space-lg;
+  }
+
+  .venue-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .welcome-header {
+    width: calc(100% - 1rem);
+    padding: $space-lg 0;
+  }
+
+  .resume-card {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .resume-card__label,
+    strong { width: calc(100% - 180px); }
+
+    .welcome-button { margin-left: auto; }
+  }
+
+  .welcome-main,
+  .welcome-footer {
+    width: calc(100% - 1rem);
+  }
+
+  .welcome-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .venue-search {
+    align-items: stretch;
+    flex-direction: row;
+
+    input[type="search"] {
+      width: 100%;
+      box-sizing: border-box;
+      max-width: none;
+    }
+
+    .welcome-button { align-self: stretch; min-width: 0; }
+  }
+
+  .venue-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .welcome-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: $space-sm;
+  }
+}

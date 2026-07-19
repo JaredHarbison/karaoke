@@ -1,11 +1,50 @@
-%h1 KARAOKE QUEUE
-%div{ style: "margin-top: 1rem; "}
-- if user_signed_in?
-  - if session[:venue_slug].present? && Venue.find_by(slug: session[:venue_slug]).present?
-    = link_to "Go To Queue", venue_songs_path(session[:venue_slug]), class: "btn btn--primary"
-  - else
-    = link_to "Select a Venue", discover_venues_path, class: "btn btn--primary"
-  %br
-  = button_to "Sign out", destroy_user_session_path, method: :delete, class: "btn btn--secondary", style: "margin-top: 1rem;"
-- else
-  = button_to "Sign in", new_user_session_path, class: "btn btn--secondary"
+.welcome-page{ data: { controller: "cta-size" } }
+  %header.welcome-header
+    .welcome-header__copy
+      %p.welcome-eyebrow find your venue
+      %h1 where are you singing tonight?
+      %p Browse public karaoke venues, join a queue, and come back to your last spot whenever you need to.
+    - if @last_venue
+      .resume-card
+        %span.resume-card__label Continue where you left off
+        %strong= @last_venue.name
+        = link_to "Go to #{@last_venue.name}", venue_songs_path(@last_venue.slug), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
+
+  %main.welcome-main
+    .welcome-toolbar
+      = form_with url: root_path, method: :get, local: true, class: "venue-search" do |form|
+        = form.search_field :search, value: params[:search], placeholder: "search venues or locations", aria: { label: "Search public venues" }
+        %button.welcome-button.welcome-button--primary.venue-search__submit{ type: "submit", aria: { label: "Search venues" }, data: { cta_size_target: "button" } }
+          %svg.search-icon{ viewBox: "0 0 24 24", aria: { hidden: "true" } }
+            %circle{ cx: "11", cy: "11", r: "6.5" }
+            %path{ d: "m16 16 5 5" }
+
+    - if @venues.any?
+      .venue-card-grid
+        - @venues.each do |venue|
+          - featured_host = venue.admins.first || venue.owner
+          %article.venue-card
+            %h3= venue.name
+            %p.venue-card__location= venue.location.presence || "Location not listed"
+            %p.venue-card__host= "#{featured_host&.email&.split("@")&.first || "Venue team"} is hosting!"
+            - queue_count = @queue_counts[venue.id] || 0
+            %p.venue-card__queue
+              - if queue_count.zero?
+                No wait — jump in
+              - else
+                #{queue_count} #{queue_count == 1 ? 'song' : 'songs'} in queue · about #{queue_count * 5} min wait
+            .venue-card__footer
+              .venue-card__status
+                %span.venue-card__status-dot{ aria: { hidden: "true" } }
+                %span open for signups
+              = button_to "Join venue", join_venue_path(slug: venue.slug), method: :post, class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
+    - else
+      .venue-empty
+        %span.venue-empty__icon 🎤
+        %h3 No public venues found
+        %p Try a different search, or ask the venue owner for a direct link.
+        = link_to "Clear search", root_path, class: "welcome-button welcome-button--secondary" if params[:search].present?
+
+  %footer.welcome-footer
+    %span More venue discovery options are coming soon.
+    = button_to "Sign out", destroy_user_session_path, method: :delete, class: "welcome-footer__signout"

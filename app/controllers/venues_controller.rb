@@ -29,7 +29,7 @@ class VenuesController < ApplicationController
   
   # GET /:venue_slug/settings - Venue settings (owner only)
   def settings
-    @admins = @venue.admins
+    @admins = @venue.admins.where.not(id: @venue.owner_id)
     @admin_search_results = []
   end
   
@@ -52,15 +52,29 @@ class VenuesController < ApplicationController
     @user = User.find_by(email: params[:email])
     
     unless @user
-      head :not_found
+      invitation = @venue.invitations.create!(invited_by: current_user, email: params[:email])
+      respond_to do |format|
+        message = "Invite created: #{venue_invitation_url(invitation.token)}"
+        format.html { redirect_to venue_settings_path(@venue.slug), notice: message }
+        format.turbo_stream { redirect_to venue_settings_path(@venue.slug), status: :see_other, notice: message }
+      end
+      return
+    end
+
+    if @user == @venue.owner
+      respond_to do |format|
+        format.html { redirect_to venue_settings_path(@venue.slug), alert: 'The venue owner already has full queue access.' }
+        format.turbo_stream { redirect_to venue_settings_path(@venue.slug), status: :see_other, alert: 'The venue owner already has full queue access.' }
+      end
       return
     end
     
     @venue.add_admin(@user)
+    message = "#{@user.email} added as host."
     
     respond_to do |format|
-      format.html { redirect_to venue_settings_path(@venue.slug), notice: "#{@user.email} added as admin." }
-      format.turbo_stream
+      format.html { redirect_to venue_settings_path(@venue.slug), notice: message }
+      format.turbo_stream { redirect_to venue_settings_path(@venue.slug), status: :see_other, notice: message }
     end
   end
   
@@ -68,10 +82,11 @@ class VenuesController < ApplicationController
   def destroy_admin
     @user = User.find(params[:id])
     @venue.remove_admin(@user)
+    message = "#{@user.email} removed as host."
     
     respond_to do |format|
-      format.html { redirect_to venue_settings_path(@venue.slug), notice: "#{@user.email} removed as admin." }
-      format.turbo_stream
+      format.html { redirect_to venue_settings_path(@venue.slug), notice: message }
+      format.turbo_stream { redirect_to venue_settings_path(@venue.slug), status: :see_other, notice: message }
     end
   end
   
@@ -83,6 +98,6 @@ class VenuesController < ApplicationController
   end
   
   def venue_params
-    params.require(:venue).permit(:name, :public)
+    params.require(:venue).permit(:name, :location, :public)
   end
 end
