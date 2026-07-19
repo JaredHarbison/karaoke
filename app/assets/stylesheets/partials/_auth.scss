@@ -1,0 +1,163 @@
+.auth-page {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2xl;
+  justify-content: center;
+  min-height: calc(100vh - 2rem);
+  padding: $space-2xl $space-md;
+}
+
+.auth-screen > .alert,
+.auth-screen > .notice {
+  box-sizing: border-box;
+  margin: 0 auto;
+  max-width: 480px;
+}
+
+.auth-card {
+  background-color: $midnight;
+  border: 1px solid rgba($yellow, 0.72);
+  border-radius: $radius-xl;
+  box-sizing: border-box;
+  color: $beige;
+  margin: 0 auto;
+  max-width: 480px;
+  padding: $space-2xl;
+  width: 100%;
+}
+
+.brand-lockup {
+  align-items: center;
+  color: $magenta;
+  display: flex;
+  font-size: 1.3rem;
+  font-weight: 800;
+  gap: $space-md;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  max-width: 480px;
+  text-transform: uppercase;
+  width: 100%;
+}
+.brand-lockup__icon { height: 2.15rem; width: auto; }
+.brand-lockup__name { display: flex; gap: 0.42em; }
+
+.app-header {
+  box-sizing: border-box;
+  margin: 0 auto;
+  max-width: 1120px;
+  padding: $space-lg 0;
+}
+.app-header .brand-lockup { max-width: none; }
+
+.auth-card h1 {
+  color: $yellow;
+  font-size: clamp(1.8rem, 4vw, 2.35rem);
+  margin: $space-xs 0 $space-sm;
+  text-align: center;
+}
+
+.auth-support { color: $beige; font-size: 0.9rem; line-height: 1.45; margin: $space-xs 0 $space-lg; }
+
+.auth-card .oauth-buttons { display: block; margin: $space-lg 0; max-width: none; }
+.auth-card .google-signin-button {
+  align-items: center;
+  color: $ink;
+  display: flex;
+  gap: $space-sm;
+  justify-content: center;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  width: 100%;
+  @include pink-interaction($radius-md);
+}
+.auth-card .google-signin-button:hover,
+.auth-card .google-signin-button:focus,
+.auth-card .google-signin-button:focus-visible {
+  background-color: #fff;
+}
+.google-icon { flex: 0 0 1.25rem; height: 1.25rem; width: 1.25rem; }
+
+.auth-divider {
+  align-items: center;
+  color: $beige-light;
+  display: flex;
+  gap: $space-sm;
+  margin: $space-lg 0;
+}
+.auth-divider::before,
+.auth-divider::after { background: rgba($beige, 0.22); content: ''; flex: 1; height: 1px; }
+
+.auth-card .auth-form { display: flex; flex-direction: column; gap: $space-lg; }
+.auth-form .field { display: flex; flex-direction: column; gap: $space-xs; }
+.auth-form label { color: $beige; font-weight: 700; justify-content: space-between; max-width: none; }
+.auth-honeypot { height: 1px !important; left: -10000px; opacity: 0; position: absolute; top: auto; width: 1px !important; }
+.auth-form input[type='email'],
+.auth-form input[type='password'] {
+  background-color: $beige;
+  border: 1px solid rgba($beige, 0.7);
+  box-sizing: border-box;
+  color: $ink;
+  display: block;
+  padding: 0.7rem 0.8rem;
+  width: 100%;
+  @include pink-interaction($radius-md);
+}
+.auth-inline-link,
+.auth-link { color: $magenta; font-size: 1rem; font-weight: 700; }
+.auth-form .field > .auth-inline-link { align-self: flex-end; margin-top: $space-xs; }
+.auth-form .checkbox-field { align-items: center; display: flex; gap: $space-sm; }
+.auth-form .checkbox-field input[type='checkbox'] {
+  accent-color: $magenta;
+  height: 1.125rem !important;
+  margin: 0;
+  min-height: 1.125rem;
+  min-width: 1.125rem;
+  width: 1.125rem;
+  @include pink-interaction($radius-sm);
+}
+.auth-form .checkbox-field label { color: $beige; font-size: 1rem; font-weight: 700; }
+.auth-form .actions { display: block; max-width: none; }
+.auth-submit {
+  background-color: $magenta;
+  border: 1px solid $magenta;
+  color: $beige;
+  display: block;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  text-transform: uppercase;
+  width: 100%;
+}
+.auth-submit:hover,
+.auth-submit:focus-visible { background-color: $cyan; border-color: $cyan; box-shadow: 0 0 0 3px $cyan-light; }
+.auth-form small { font-size: 0.8rem; font-weight: 400; }
+.password-strength { color: $beige-light; display: flex; flex-direction: column; gap: $space-xs; }
+.password-strength__bars { display: flex; gap: $space-xs; }
+.password-strength__bars span { background: rgba($beige, 0.22); border-radius: $radius-sm; height: 0.25rem; transition: background-color $transition-fast; width: 25%; }
+.password-strength.strength-1 .password-strength__bars span:nth-child(1),
+.password-strength.strength-2 .password-strength__bars span:nth-child(1),
+.password-strength.strength-3 .password-strength__bars span:nth-child(1),
+.password-strength.strength-4 .password-strength__bars span:nth-child(1) { background: $orange; }
+.password-strength.strength-2 .password-strength__bars span:nth-child(2),
+.password-strength.strength-3 .password-strength__bars span:nth-child(2),
+.password-strength.strength-4 .password-strength__bars span:nth-child(2),
+.password-strength.strength-3 .password-strength__bars span:nth-child(3),
+.password-strength.strength-4 .password-strength__bars span:nth-child(3) { background: $yellow; }
+.password-strength.strength-4 .password-strength__bars span:nth-child(4) { background: $green; }
+.password-strength > small { align-self: flex-end; text-align: right; }
+.password-strength small.is-valid { color: $green; }
+.password-match { color: $magenta; display: block; text-align: right; }
+.password-match.is-valid { color: $green; }
+.password-match.is-invalid { color: $magenta; }
+
+.auth-footer { border-top: 1px solid rgba($beige, 0.16); margin-top: $space-lg; padding-top: $space-lg; text-align: center; }
+.auth-footer span { color: $beige-light; font-size: 0.9rem; }
+
+@media (max-width: 520px) {
+  .auth-page { padding: $space-md $space-xs; }
+  .auth-card { padding: $space-lg; }
+}
