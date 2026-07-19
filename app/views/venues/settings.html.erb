@@ -1,68 +1,126 @@
-<div class="container mt-5">
-  <div class="row">
-    <div class="col-md-8">
-      <h1><%= @venue.name %> Settings</h1>
-      
-      <div class="card mb-4">
-        <div class="card-header">
-          <h5>Venue Information</h5>
-        </div>
-        <div class="card-body">
-          <%= form_with(model: @venue, local: true, url: venue_settings_path(@venue.slug), method: :patch) do %>
-            <div class="mb-3">
-              <label for="venue_name" class="form-label">Venue Name</label>
-              <input type="text" class="form-control" name="venue[name]" id="venue_name" value="<%= @venue.name %>" required>
-            </div>
-            
-            <div class="mb-3 form-check">
-              <input type="checkbox" class="form-check-input" name="venue[public]" id="venue_public" <%= 'checked' if @venue.public %>>
-              <label class="form-check-label" for="venue_public">Public Venue</label>
-            </div>
-            
-            <button type="submit" class="btn btn-primary">Save Settings</button>
-          <% end %>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <h5>Administrators</h5>
-        </div>
-        <div class="card-body">
-          <% if @admins.any? %>
-            <table class="table table-sm">
-              <thead>
-                <tr>
-                  <th>Email</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @admins.each do |admin| %>
-                  <tr>
-                    <td><%= admin.email %></td>
-                    <td>
-                      <%= button_to "Remove", venue_admin_path(@venue.slug, admin.id), method: :delete, class: "btn btn-sm btn-danger", data: { confirm: "Are you sure?" } %>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          <% else %>
-            <p class="text-muted">No admins yet.</p>
-          <% end %>
-
-          <hr>
-
-          <h6>Add Administrator</h6>
-          <%= form_with(local: true, url: venue_admins_path(@venue.slug), method: :post) do %>
-            <div class="input-group">
-              <input type="email" name="email" class="form-control" placeholder="Enter admin email" required>
-              <button class="btn btn-primary" type="submit">Add Admin</button>
-            </div>
-          <% end %>
-        </div>
-      </div>
+<div class="venue-settings">
+  <header class="settings-header">
+    <div>
+      <%= link_to "← Back to queue", venue_songs_path(@venue.slug), class: "settings-back-link" %>
+      <p class="settings-eyebrow">Owner console</p>
+      <h1>Manage <%= @venue.name %></h1>
+      <p class="settings-header__copy">Keep your venue details current and decide who can run the queue with you.</p>
     </div>
-  </div>
+    <div class="settings-header__badge">
+      <span class="settings-header__badge-dot"></span>
+      Owner access
+    </div>
+  </header>
+
+  <main class="settings-main">
+    <section class="settings-stats" aria-label="Venue summary">
+      <div class="settings-stat">
+        <span class="settings-stat__label">Visibility</span>
+        <strong><%= @venue.public? ? "Public" : "Private" %></strong>
+        <span><%= @venue.public? ? "Discoverable by performers" : "Invite or share the venue link" %></span>
+      </div>
+      <div class="settings-stat">
+        <span class="settings-stat__label">Hosts</span>
+        <strong><%= @admins.size %></strong>
+        <span><%= @admins.size == 1 ? "person" : "people" %> can manage the queue</span>
+      </div>
+      <div class="settings-stat settings-stat--highlight">
+        <span class="settings-stat__label">Venue link</span>
+        <strong>/<%= @venue.slug %></strong>
+        <span>Share this with performers</span>
+      </div>
+    </section>
+
+    <div class="settings-grid">
+      <section class="settings-card settings-card--details">
+        <div class="settings-card__heading">
+          <div>
+            <p class="settings-eyebrow">Venue profile</p>
+            <h2>Venue details</h2>
+          </div>
+          <span class="settings-card__icon">✦</span>
+        </div>
+        <p class="settings-card__intro">This is what performers see when they discover or join your venue.</p>
+
+        <%= form_with(model: @venue, local: true, url: venue_settings_path(@venue.slug), method: :patch, class: "settings-form") do |form| %>
+          <div class="settings-field">
+            <%= form.label :name, "Venue name" %>
+            <%= form.text_field :name, required: true, autocomplete: "organization" %>
+          </div>
+
+          <div class="settings-field">
+            <%= form.label :location, "Location", class: "settings-field__label-with-hint" do %>
+              <span>Location</span>
+              <span>Optional</span>
+            <% end %>
+            <%= form.text_field :location, placeholder: "e.g. 523 Franklin St", autocomplete: "street-address" %>
+          </div>
+
+          <label class="visibility-toggle" for="venue_public">
+            <span class="visibility-toggle__switch">
+              <%= form.check_box :public, id: "venue_public" %>
+              <span class="visibility-toggle__track"></span>
+            </span>
+            <span>
+              <strong>Public venue</strong>
+              <small>Allow people to find this venue on the Discover page.</small>
+            </span>
+          </label>
+
+          <div class="settings-form__actions">
+            <%= form.submit "Save venue details", class: "settings-button settings-button--primary" %>
+          </div>
+        <% end %>
+      </section>
+
+      <section class="settings-card settings-card--hosts">
+        <div class="settings-card__heading">
+          <div>
+            <p class="settings-eyebrow">Queue access</p>
+            <h2>Your hosts</h2>
+          </div>
+          <span class="settings-card__icon">♢</span>
+        </div>
+        <p class="settings-card__intro">Hosts can play, skip, and finish songs. They cannot change venue settings.</p>
+
+        <div class="host-list">
+          <% if @admins.any? %>
+            <% @admins.each do |admin| %>
+              <div class="host-row">
+                <span class="host-avatar"><%= admin.email.first.upcase %></span>
+                <span class="host-row__identity">
+                  <strong><%= admin.email %></strong>
+                  <small>Queue host</small>
+                </span>
+                <%= button_to "Remove", venue_admin_path(@venue.slug, admin.id), method: :delete, class: "settings-button settings-button--quiet-danger", data: { turbo_confirm: "Remove #{admin.email} as a host?" } %>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="host-empty">
+              <span class="host-empty__icon">＋</span>
+              <strong>You’re the only person managing this venue.</strong>
+              <span>Add a host below when you’re ready to share queue duties.</span>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="add-host">
+          <h3>Add a host</h3>
+          <p>Enter the email address of an existing Karaoke user.</p>
+          <%= form_with(local: true, url: venue_admins_path(@venue.slug), method: :post, class: "add-host__form") do %>
+            <%= email_field_tag :email, nil, placeholder: "host@example.com", required: true, autocomplete: "email" %>
+            <%= submit_tag "Add host", class: "settings-button settings-button--secondary" %>
+          <% end %>
+        </div>
+      </section>
+    </div>
+
+    <section class="settings-owner-note">
+      <span class="settings-owner-note__icon">✓</span>
+      <div>
+        <strong>You’re in control of this venue</strong>
+        <p>Only you can access these settings or add and remove hosts.</p>
+      </div>
+    </section>
+  </main>
 </div>

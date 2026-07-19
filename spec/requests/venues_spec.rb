@@ -27,12 +27,22 @@ RSpec.describe 'Venues', type: :request do
       sign_in owner
       get "/#{venue.slug}/settings"
       expect(response).to be_successful
+      expect(response.body).to include('Owner console', 'Venue details', 'Your hosts', 'Add a host')
     end
 
     it 'redirects if not owner or admin' do
       user = create(:user)
       sign_in user
       get "/#{venue.slug}/settings"
+      expect(response).to redirect_to("/#{venue.slug}/songs")
+    end
+
+    it 'does not allow a host to access settings' do
+      venue.add_host(admin)
+      sign_in admin
+
+      get "/#{venue.slug}/settings"
+
       expect(response).to redirect_to("/#{venue.slug}/songs")
     end
   end
@@ -51,6 +61,23 @@ RSpec.describe 'Venues', type: :request do
       sign_in owner
       post "/#{venue.slug}/admins", params: { email: admin.email }
       expect(response.status).to be_in([200, 302])
+    end
+
+    it 'redirects Turbo host additions back to settings with a notice' do
+      sign_in owner
+      post "/#{venue.slug}/admins", params: { email: admin.email }, headers: { 'Accept' => 'text/vnd.turbo-stream.html' }
+
+      expect(response).to have_http_status(:see_other)
+      expect(response).to redirect_to(venue_settings_path(venue.slug))
+      expect(response.headers['location']).to end_with("/#{venue.slug}/settings")
+    end
+
+    it 'does not add the owner as a host' do
+      sign_in owner
+      post "/#{venue.slug}/admins", params: { email: owner.email }
+
+      expect(venue.reload.admins).not_to include(owner)
+      expect(response).to redirect_to(venue_settings_path(venue.slug))
     end
   end
 
