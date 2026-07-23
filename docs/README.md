@@ -24,6 +24,7 @@ Complete documentation for the Karaoke Queue application covering setup, archite
 - **[Architecture Overview](./architecture/authentication.md)** - OAuth, authentication flow, session management
 - **[Multi-Tenancy](./architecture/multi_tenancy.md)** - Venue-based isolation, Current context, routing
 - **[Current Context](./models/current.md)** - Request-scoped venue and user storage
+- **[Product Roadmap](./ROADMAP.md)** - Planned event, presentation, joining, theme, and optional queue features
 
 ### Reference
 
