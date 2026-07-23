@@ -119,6 +119,47 @@ _utilities.scss       # New: common utility classes
 
 ---
 
+## Phase 1 Integration Hardening
+
+The foundational architecture is complete, with these integration items addressed before the broader UI work:
+
+- [x] Add repeatable development seed data for owner, host, performer, venue, and songs
+- [x] Enforce role-aware visibility for queue actions
+- [x] Add regression coverage for performer and host authorization boundaries
+- [x] Add Host terminology aliases while preserving the existing Admin routes and schema
+- [ ] Decide how existing production venues with no `owner_id` will be assigned an owner
+
+The remaining ownership assignment is a deployment/data decision and should be completed before relying on owner-only settings for existing venues.
+
+## Page-Specific Follow-Ups
+
+These items came out of the manual UI review and should remain visible when prioritizing future work.
+
+### Root Discovery
+
+- [x] Show public venues as searchable cards
+- [x] Resume the user’s last venue with a named `Go to [Venue]` action
+- [ ] Add real geolocation and sort venues by distance, with permission and fallback states
+- [ ] Add a clear “use current location” interaction when location services are available
+
+### Venue Queue (`/:venue_slug/songs`)
+
+- [x] Refresh the queue page with responsive navy/neon layout
+- [x] Keep QR joining visible and show the destination URL beside it
+- [x] Replace the long instruction block with a concise three-step guide
+- [ ] Generate a unique QR code for each venue and point it to that venue’s queue URL
+- [ ] Add real-time queue updates and notifications through the Phase 3 Turbo/ActionCable work
+- [ ] Clarify performer identity and song metadata in the add-song flow
+
+### Owner / Host Settings (`/:venue_slug/settings`)
+
+- [x] Provide venue details, public visibility, host management, and queue navigation
+- [x] Return visible feedback for Turbo host add/remove actions
+- [x] Prevent the owner from being redundantly added as their own host
+- [ ] Invite non-existent email addresses through a Devise invitation flow
+- [ ] Complete the user-facing Admin → Host terminology migration across schema, routes, and code
+- [ ] Add ownership transfer and other destructive-action safeguards before production use
+
 ## Phase 2: UI & Component Architecture
 
 ### Phase 2 Objectives

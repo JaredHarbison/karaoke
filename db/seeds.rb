@@ -1,9 +1,55 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
+# This file creates local development records for manual feature testing.
+# It is intentionally a no-op in test and production environments.
 #
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+return unless Rails.env.development?
+
+password = 'KaraokeDemo123!'
+
+owner = User.find_or_create_by!(email: 'owner@karaoke.test') do |user|
+  user.password = password
+  user.password_confirmation = password
+  user.role = :owner
+end
+owner.update!(role: :owner)
+owner.update!(password: password, password_confirmation: password)
+
+host = User.find_or_create_by!(email: 'host@karaoke.test') do |user|
+  user.password = password
+  user.password_confirmation = password
+  user.role = :admin
+end
+host.update!(role: :admin)
+host.update!(password: password, password_confirmation: password)
+
+performer = User.find_or_create_by!(email: 'performer@karaoke.test') do |user|
+  user.password = password
+  user.password_confirmation = password
+  user.role = :performer
+end
+performer.update!(role: :performer)
+performer.update!(password: password, password_confirmation: password)
+
+venue = Venue.find_or_create_by!(slug: 'demo-karaoke') do |record|
+  record.name = 'Demo Karaoke'
+  record.public = true
+end
+venue.update!(name: 'Demo Karaoke', public: true, owner: owner)
+venue.add_host(host)
+
+[
+  ['Alex', 'https://www.youtube.com/watch?v=demo-alex', performer],
+  ['Jamie', 'https://www.youtube.com/watch?v=demo-jamie', performer]
+].each do |performer_name, url, user|
+  venue.songs.find_or_create_by!(performer: performer_name, url: url) do |song|
+    song.user = user
+    song.category = 'pop'
+  end
+end
+
+puts <<~MESSAGE
+  Seeded manual-test data:
+    Venue:     Demo Karaoke (/demo-karaoke/songs)
+    Owner:     owner@karaoke.test / #{password}
+    Host:      host@karaoke.test / #{password}
+    Performer: performer@karaoke.test / #{password}
+MESSAGE

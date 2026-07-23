@@ -1,34 +1,97 @@
-%h1 KARAOKE QUEUE
-.container-home
-  .container-songs
-    %div{ data: { controller: "instructions" } }
-      %button{ data: { action: "click->instructions#toggle" } } Show Instructions
-      .instructions{ data: { instructions_target: "content" } }
-        %p Refresh the page for the most up-to-date list.
-        %p Add your name to "Performer", skip "Category".
-        %p Find a YouTube KARAOKE link, paste it into "URL".
-        %p Click "Queue Song" to finish.
-        %p Use the QR Code to navigate.
-    %h2 Queue A New Song
-    = render 'form', song: @song, index_page: true
-    %br/
-    %br/
-    %h2 Upcoming Performers
-    %table
-      %tbody
-        - if @upcoming[ 0 ]
-          = render 'index_form', song: @upcoming[ 0 ], upcoming: true
-        - if @upcoming[ 1.. ]
-          - @upcoming[ 1.. ].each do | song |
-            = render 'index_form', song: song, upcoming: false
-        - @skipped.each do | song |
-          = render 'index_form', song: song, upcoming: false
-    %br/
-    %h2 Finished Performers
-    %table
-      %tbody
-        - @finished.each do |song|
-          = render 'index_form', song: song, upcoming: false
-    %br/
-  .container-code
-    = image_tag 'Untitled.png'
+- can_manage_queue = Current.venue.is_admin?(current_user)
+- is_owner = Current.venue.owner == current_user
+- role_label = is_owner ? "Owner" : (can_manage_queue ? "Host" : "Performer")
+- queue_url = venue_songs_url(Current.venue.slug)
+
+.songs-page
+  %header.songs-header
+    .songs-header__identity
+      = link_to "← Venues", root_path, class: "songs-back-link"
+      %p.songs-eyebrow Live karaoke queue
+      %h1= Current.venue.name
+      %p.songs-header__subtitle= Current.venue.location.presence || "Everyone’s lineup for tonight"
+    .songs-header__actions
+      %span.songs-role-pill{ class: "songs-role-pill--#{role_label.downcase}" }
+        %span.songs-role-pill__dot
+        = role_label
+      - if is_owner
+        = link_to "Venue settings", venue_settings_path(Current.venue.slug), class: "songs-header__link"
+
+  %main.songs-main
+    .songs-hero
+      .songs-hero__copy
+        %p.songs-eyebrow Tonight at the venue
+        %h2 Your next song is closer than you think.
+        %p Search for a karaoke track, choose a result, and it will appear in the lineup below.
+    .songs-layout
+      .songs-primary
+        %section.songs-panel.songs-panel--queue{ aria: { labelledby: "upcoming-heading" } }
+          .songs-panel__heading
+            %div
+              %p.songs-eyebrow In line
+              %h2#upcoming-heading Upcoming performers
+            %span.songs-count= @upcoming.count
+
+          - if @upcoming.any?
+            .song-card-list
+              - @upcoming.each_with_index do |song, index|
+                = render "queue_song_card", song: song, position: index + 1, next_song: index.zero?, can_manage_queue: can_manage_queue
+          - else
+            .songs-empty
+              %span.songs-empty__icon 🎤
+              %h3 The queue is open
+              %p Add the first song and get tonight started.
+
+          - if @skipped.any?
+            .songs-subsection
+              .songs-subsection__heading
+                %h3 On hold
+                %span.songs-count.songs-count--muted= @skipped.count
+              .song-card-list
+                - @skipped.each do |song|
+                  = render "queue_song_card", song: song, position: nil, next_song: false, can_manage_queue: can_manage_queue
+
+        %section.songs-panel.songs-panel--finished{ aria: { labelledby: "finished-heading" } }
+          .songs-panel__heading
+            %div
+              %p.songs-eyebrow Archive
+              %h2#finished-heading Finished performers
+            %span.songs-count.songs-count--muted= @finished.count
+          - if @finished.any?
+            .song-card-list.song-card-list--finished
+              - @finished.each do |song|
+                = render "queue_song_card", song: song, position: nil, next_song: false, can_manage_queue: can_manage_queue
+          - else
+            %p.songs-muted No finished songs yet. They’ll appear here after performances.
+
+      %aside.songs-sidebar
+        %section.songs-panel.songs-panel--add
+          .songs-panel__heading
+            %div
+              %p.songs-eyebrow Join the lineup
+              %h2 Queue a song
+          %p.songs-panel__intro Search for a karaoke track, select the right video, and you’re ready.
+          = render 'form', song: @song, index_page: true
+
+        %section.songs-panel.songs-panel--qr
+          .songs-panel__heading
+            %div
+              %p.songs-eyebrow Quick join
+              %h2 Scan to join
+          .songs-qr
+            = image_tag 'Untitled.png', alt: "QR code for the #{Current.venue.name} queue"
+          %p.songs-qr__copy Scan this code from your phone to open this venue’s queue.
+          %code.songs-qr__url= queue_url
+
+        %details.songs-panel.songs-panel--guide{ open: true }
+          %summary How to queue a song
+          .songs-guide
+            .songs-guide__step
+              %span 1
+              %p Search by song title or artist.
+            .songs-guide__step
+              %span 2
+              %p Select a karaoke video from the results.
+            .songs-guide__step
+              %span 3
+              %p Your name joins the lineup. Hosts manage the order.

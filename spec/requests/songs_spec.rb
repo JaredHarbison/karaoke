@@ -56,6 +56,13 @@ RSpec.describe 'Songs', type: :request do
       expect(response.status).to be_in([200, 302])
       expect(song.reload.finished).to be_truthy
     end
+
+    it 'does not allow a performer to finish a song' do
+      patch "/#{venue.slug}/songs/#{song.id}/finish_song"
+
+      expect(response).to redirect_to("/#{venue.slug}/songs")
+      expect(song.reload.finished).to be_falsey
+    end
   end
 
   describe 'PATCH /venues/:venue_slug/songs/:id/skip_song' do
@@ -67,6 +74,13 @@ RSpec.describe 'Songs', type: :request do
       patch "/#{venue.slug}/songs/#{song.id}/skip_song"
       expect(response.status).to be_in([200, 302])
       expect(song.reload.skipped).to be_truthy
+    end
+
+    it 'does not allow a performer to skip a song' do
+      patch "/#{venue.slug}/songs/#{song.id}/skip_song"
+
+      expect(response).to redirect_to("/#{venue.slug}/songs")
+      expect(song.reload.skipped).to be_falsey
     end
   end
 

@@ -2,13 +2,13 @@
 
 ## Overview
 
-This project uses RSpec for comprehensive test coverage with 103 tests across models, requests, and system tests. All tests pass with 50.14% code coverage.
+This project uses RSpec for comprehensive test coverage with 106 tests across models, requests, and system tests. All examples pass with 50.82% code coverage.
 
 **Current Status:**
 
-- ✅ 103 tests passing
+- ✅ 106 examples passing
 - ✅ 0 failures
-- ✅ 50.14% coverage (181/361 lines)
+- ✅ 50.82% coverage (185/364 lines)
 - ✅ All critical tests passing (35 critical tests)
 
 ## Test Structure
@@ -41,11 +41,11 @@ This project uses RSpec for comprehensive test coverage with 103 tests across mo
 
 ## Running Tests
 
-### All Tests (103 tests)
+### All Tests (106 examples)
 
 ```bash
 bundle exec rspec
-# Output: 103 examples, 0 failures
+# Output: 106 examples, 0 failures
 ```
 
 ### Model Tests Only
@@ -76,7 +76,7 @@ bundle exec rspec spec/models/user_spec.rb
 bundle exec rspec spec/requests/songs_spec.rb:39
 ```
 
-### Critical Tests Only (35 critical tests)
+### Critical Tests Only
 
 ```bash
 bundle exec rspec --tag critical
@@ -159,6 +159,26 @@ Filters out:
 - `/bin/` - Executable files
 - `/db/` -Database files
 - `/spec/` - Test files themselves
+
+The examples themselves pass, but the current suite exits nonzero until coverage reaches the configured 90% threshold. The latest run is approximately 51%, so coverage expansion remains a separate quality-gate task.
+
+## Manual Development Data
+
+Run this after setting up the development database:
+
+```bash
+bin/rails db:seed
+```
+
+The seed is idempotent and creates a `Demo Karaoke` venue with two queued songs and three test accounts. All accounts use the password `KaraokeDemo123!`:
+
+| Role | Email |
+| --- | --- |
+| Owner | `owner@karaoke.test` |
+| Host | `host@karaoke.test` |
+| Performer | `performer@karaoke.test` |
+
+Open `/demo-karaoke/songs` after signing in. The owner can manage venue settings and hosts, the host can manage the queue, and the performer can add and manage their own songs.
 
 ## Best Practices
 
