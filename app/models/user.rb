@@ -31,6 +31,10 @@ class User < ApplicationRecord
     owner_of?(venue) || venues_as_admin.include?(venue)
   end
 
+  def display_name
+    email.to_s.split('@').first.tr('._-', ' ').titleize
+  end
+
   private
 
   def password_complexity

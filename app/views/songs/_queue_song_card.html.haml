@@ -18,19 +18,25 @@
         Added by #{song.user&.email || "a performer"}
   .song-queue-card__actions
     - if can_manage_queue && !song.finished
-      = link_to song.url, target: "_blank", rel: "noopener", class: "song-action song-action--play", title: "Play song" do
-        %span.song-action__icon ▶
-        %span Play
-      = button_to finish_song_venue_song_path(Current.venue.slug, song), method: :patch, class: "song-action song-action--finish", title: "Finish song" do
+      - if next_song
+        %button.song-action.song-action--play{ type: "button", title: "Play next song fullscreen", data: { action: "youtube-player#play", youtube_player_url_param: song.url, youtube_player_finish_url_param: finish_song_venue_song_path(Current.venue.slug, song), youtube_player_performer_param: song.performer } }
+          %span.song-action__icon ▶
+          %span Play
+      = button_to finish_song_venue_song_path(Current.venue.slug, song), method: :patch, class: "song-action song-action--finish", title: "Finish song", form: { data: { turbo: false } } do
         %span.song-action__icon ✓
         %span Finish
-      = button_to skip_song_venue_song_path(Current.venue.slug, song), method: :patch, class: "song-action song-action--skip", title: (song.skipped? ? "Return song" : "Skip song") do
+      = button_to skip_song_venue_song_path(Current.venue.slug, song), method: :patch, class: "song-action song-action--skip", title: (song.skipped? ? "Return song" : "Skip song"), form: { data: { turbo: false } } do
         %span.song-action__icon= song.skipped? ? "↩" : "Ⅱ"
         %span= song.skipped? ? "Return" : "Skip"
     - if can_manage_song && !song.finished
-      = link_to edit_venue_song_path(Current.venue.slug, song), class: "song-action song-action--edit", title: "Edit song" do
-        %span.song-action__icon ✎
-        %span Edit
-      = button_to venue_song_path(Current.venue.slug, song), method: :delete, class: "song-action song-action--remove", title: "Remove song", data: { turbo_confirm: "Remove #{song.performer}'s song from the queue?" } do
-        %span.song-action__icon ×
-        %span Remove
+      %details.song-actions-secondary{ data: { controller: "disclosure", action: "click@window->disclosure#closeOnOutside keydown@window->disclosure#closeOnEscape" } }
+        %summary.song-action.song-action--more
+          %span.song-action__icon ⋯
+          %span More
+        .song-actions-menu
+          = link_to edit_venue_song_path(Current.venue.slug, song), class: "song-action song-action--edit", title: "Edit song" do
+            %span.song-action__icon ✎
+            %span Edit
+          = button_to venue_song_path(Current.venue.slug, song), method: :delete, class: "song-action song-action--remove", title: "Remove song", data: { turbo_confirm: "Remove #{song.performer}'s song from the queue?" } do
+            %span.song-action__icon ×
+            %span Remove

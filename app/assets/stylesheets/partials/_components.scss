@@ -565,11 +565,12 @@
 
 .youtube-result-item {
   display: flex;
+  flex-direction: column;
   gap: $space-md;
   padding: $space-md;
-  background-color: white;
-  border: 1px solid $ink-light;
-  border-radius: $radius-md;
+  background-color: rgba($beige, 0.06);
+  border: 1px solid rgba($cyan, 0.48);
+  border-radius: $radius-lg;
   margin-bottom: $space-sm;
   transition: all $transition-base;
 
@@ -579,13 +580,14 @@
   }
 
   .result-thumbnail {
-    flex-shrink: 0;
+    width: 100%;
 
     img {
-      width: 120px;
-      height: 68px;
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
       object-fit: cover;
-      border-radius: $radius-sm;
+      border-radius: $radius-md;
     }
   }
 
@@ -598,33 +600,37 @@
     .result-title {
       margin: 0 0 $space-xs 0;
       font-size: 1rem;
-      font-weight: 600;
-      color: $text-primary;
+      font-weight: 700;
+      color: $beige;
       line-height: 1.4;
     }
 
     .result-channel {
       margin: 0 0 $space-sm 0;
       font-size: 0.875rem;
-      color: $text-secondary;
+      color: rgba($beige, 0.62);
     }
 
-    .btn-small {
+    .result-select-btn {
+      display: inline-flex;
+      align-items: center;
       align-self: flex-start;
-      padding: $space-xs $space-sm;
-      background-color: $status-success;
-      color: white;
-      border: none;
-      border-radius: $radius-sm;
-      font-weight: 500;
+      gap: $space-sm;
+      padding: $space-sm $space-md;
+      background-color: $cyan;
+      color: $midnight;
+      border: 1px solid $cyan;
+      border-radius: $radius-md;
+      font-weight: 800;
       cursor: pointer;
 
       &:hover {
-        background-color: darken($status-success, 10%);
+        background-color: $yellow;
+        border-color: $yellow;
       }
 
       &:focus-visible {
-        outline: 2px solid $text-primary;
+        outline: 2px solid $yellow;
         outline-offset: 2px;
       }
     }

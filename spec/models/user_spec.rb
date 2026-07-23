@@ -77,6 +77,14 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#display_name' do
+    it 'derives a readable name from the email address' do
+      user = build(:user, email: 'jared.harbison@example.com')
+
+      expect(user.display_name).to eq('Jared Harbison')
+    end
+  end
+
   describe 'devise modules' do
     it 'responds to password=' do
       user = build(:user)

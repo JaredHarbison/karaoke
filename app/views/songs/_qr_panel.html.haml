@@ -1,0 +1,9 @@
+%section.songs-panel.songs-panel--qr
+  .songs-panel__heading
+    %div
+      %p.songs-eyebrow Quick join
+      %h2 Scan to join
+  .songs-qr
+    = image_tag "Untitled.png", alt: "QR code for the #{Current.venue.name} queue"
+  %p.songs-qr__copy Scan this code from your phone to open this venue’s queue.
+  %code.songs-qr__url= queue_url

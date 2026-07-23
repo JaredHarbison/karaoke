@@ -19,3 +19,17 @@ body {
     color: beige
   }
 }
+
+// Contextual navigation such as back links and related-resource links.
+.context-link {
+  color: $cyan;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    color: $yellow;
+    text-decoration: none;
+  }
+}

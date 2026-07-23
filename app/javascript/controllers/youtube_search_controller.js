@@ -132,15 +132,15 @@ export default class extends Controller {
         // Safety checks on item properties
         if (!item.title || !item.url) continue
         
-        const title = String(item.title).substring(0, 100)  // Limit title length
-        const channel = String(item.channel || 'Unknown').substring(0, 50)
+        const title = this.decodeHtml(String(item.title)).substring(0, 100)
+        const channel = this.decodeHtml(String(item.channel || 'Unknown')).substring(0, 50)
         const url = String(item.url)
         const thumb = item.thumbnail ? String(item.thumbnail) : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
         
-        html += '<div class="youtube-result-item"><div class="result-thumbnail"><img src="' + this.escapeHtml(thumb) + '" alt="thumbnail" loading="lazy" /></div>'
+        html += '<div class="youtube-result-item"><div class="result-thumbnail"><img src="' + this.escapeHtml(thumb) + '" alt="" loading="lazy" /></div>'
         html += '<div class="result-details"><h5 class="result-title">' + this.escapeHtml(title) + '</h5>'
-        html += '<p class="result-channel">' + this.escapeHtml(channel) + '</p>'
-        html += '<button type="button" class="btn-small result-select-btn" data-video-url="' + this.escapeHtml(url) + '">▶️ Select</button>'
+        html += '<p class="result-channel">YouTube · ' + this.escapeHtml(channel) + '</p>'
+        html += '<button type="button" class="result-select-btn" data-video-url="' + this.escapeHtml(url) + '"><span aria-hidden="true">▶</span><span>Select video</span></button>'
         html += '</div></div>'
       }
       
@@ -183,5 +183,11 @@ export default class extends Controller {
       "'": '&#039;'
     }
     return String(text).replace(/[&<>"']/g, m => map[m])
+  }
+
+  decodeHtml(text) {
+    const textarea = document.createElement('textarea')
+    textarea.innerHTML = text
+    return textarea.value
   }
 }

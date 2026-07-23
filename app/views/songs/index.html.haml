@@ -2,20 +2,26 @@
 - is_owner = Current.venue.owner == current_user
 - role_label = is_owner ? "Owner" : (can_manage_queue ? "Host" : "Performer")
 - queue_url = venue_songs_url(Current.venue.slug)
+- next_performer = @upcoming.first&.performer
 
-.songs-page
+.songs-page{ class: ("songs-page--manager" if can_manage_queue), data: ({ controller: "youtube-player" } if can_manage_queue) }
   %header.songs-header
-    .songs-header__identity
-      = link_to "← Venues", root_path, class: "songs-back-link"
-      %p.songs-eyebrow Live karaoke queue
-      %h1= Current.venue.name
-      %p.songs-header__subtitle= Current.venue.location.presence || "Everyone’s lineup for tonight"
-    .songs-header__actions
-      %span.songs-role-pill{ class: "songs-role-pill--#{role_label.downcase}" }
-        %span.songs-role-pill__dot
-        = role_label
-      - if is_owner
-        = link_to "Venue settings", venue_settings_path(Current.venue.slug), class: "songs-header__link"
+    .songs-header__inner
+      .songs-header__identity
+        %p.songs-eyebrow Live karaoke queue
+        %h1= Current.venue.name
+        %p.songs-header__subtitle= Current.venue.location.presence || "Everyone’s lineup for tonight"
+        = link_to "← Back to venues", root_path, class: "context-link songs-back-link"
+      .songs-header__actions
+        %span.songs-role-pill{ class: "songs-role-pill--#{role_label.downcase}" }
+          %span.songs-role-pill__dot
+          = role_label
+        - if next_performer
+          %span.songs-queue-summary
+            %strong= "#{next_performer} is next"
+            %span= "· #{@upcoming.count} #{@upcoming.one? ? 'song' : 'songs'} in line"
+        - if is_owner
+          = link_to "Venue settings", venue_settings_path(Current.venue.slug), class: "songs-header__link"
 
   %main.songs-main
     .songs-hero
@@ -27,10 +33,11 @@
       .songs-primary
         %section.songs-panel.songs-panel--queue{ aria: { labelledby: "upcoming-heading" } }
           .songs-panel__heading
-            %div
-              %p.songs-eyebrow In line
+            .songs-panel__queue-title
               %h2#upcoming-heading Upcoming performers
-            %span.songs-count= @upcoming.count
+              .songs-panel__queue-meta
+                %p.songs-eyebrow In line
+                %span.songs-count= @upcoming.count
 
           - if @upcoming.any?
             .song-card-list
@@ -51,47 +58,41 @@
                 - @skipped.each do |song|
                   = render "queue_song_card", song: song, position: nil, next_song: false, can_manage_queue: can_manage_queue
 
-        %section.songs-panel.songs-panel--finished{ aria: { labelledby: "finished-heading" } }
-          .songs-panel__heading
-            %div
+        %details.songs-panel.songs-panel--finished
+          %summary.songs-panel__summary
+            %span
               %p.songs-eyebrow Archive
               %h2#finished-heading Finished performers
-            %span.songs-count.songs-count--muted= @finished.count
-          - if @finished.any?
-            .song-card-list.song-card-list--finished
-              - @finished.each do |song|
-                = render "queue_song_card", song: song, position: nil, next_song: false, can_manage_queue: can_manage_queue
-          - else
-            %p.songs-muted No finished songs yet. They’ll appear here after performances.
+              %span.songs-panel__summary-copy
+                = @finished.any? ? "Review tonight’s completed performances." : "Completed performances will appear here."
+            %span.songs-panel__summary-action
+              %span.songs-count.songs-count--muted= @finished.count
+              %span.songs-panel__summary-label Show
+          .songs-panel__collapsible
+            - if @finished.any?
+              .song-card-list.song-card-list--finished
+                - @finished.each do |song|
+                  = render "queue_song_card", song: song, position: nil, next_song: false, can_manage_queue: can_manage_queue
+            - else
+              %p.songs-muted No finished songs yet. They’ll appear here after performances.
 
       %aside.songs-sidebar
-        %section.songs-panel.songs-panel--add
-          .songs-panel__heading
-            %div
-              %p.songs-eyebrow Join the lineup
-              %h2 Queue a song
-          %p.songs-panel__intro Search for a karaoke track, select the right video, and you’re ready.
-          = render 'form', song: @song, index_page: true
+        - if can_manage_queue
+          = render "qr_panel", queue_url: queue_url
+          = render "add_song_panel", song: @song
+        - else
+          = render "add_song_panel", song: @song
+          = render "qr_panel", queue_url: queue_url
 
-        %section.songs-panel.songs-panel--qr
-          .songs-panel__heading
-            %div
-              %p.songs-eyebrow Quick join
-              %h2 Scan to join
-          .songs-qr
-            = image_tag 'Untitled.png', alt: "QR code for the #{Current.venue.name} queue"
-          %p.songs-qr__copy Scan this code from your phone to open this venue’s queue.
-          %code.songs-qr__url= queue_url
-
-        %details.songs-panel.songs-panel--guide{ open: true }
-          %summary How to queue a song
-          .songs-guide
-            .songs-guide__step
-              %span 1
-              %p Search by song title or artist.
-            .songs-guide__step
-              %span 2
-              %p Select a karaoke video from the results.
-            .songs-guide__step
-              %span 3
-              %p Your name joins the lineup. Hosts manage the order.
+  - if can_manage_queue
+    .song-player{ hidden: true, role: "dialog", aria: { modal: "true", label: "Now playing" }, data: { youtube_player_target: "overlay", action: "fullscreenchange@document->youtube-player#fullscreenChanged" } }
+      .song-player__toolbar
+        %div
+          %p.songs-eyebrow Now playing
+          %h2{ data: { youtube_player_target: "title" } }
+        %button.song-player__close{ type: "button", data: { action: "youtube-player#close", youtube_player_target: "closeButton" } }
+          %span{ aria: { hidden: "true" } } ×
+          %span End playback
+      .song-player__viewport
+        %div.song-player__mount{ data: { youtube_player_target: "mount" } }
+      %p.song-player__status{ role: "status", aria: { live: "polite" }, data: { youtube_player_target: "status" } }

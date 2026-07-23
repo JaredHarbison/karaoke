@@ -39,17 +39,37 @@
   max-width: 480px;
   text-transform: uppercase;
   width: 100%;
+
+  &:hover,
+  &:focus {
+    color: $magenta;
+    text-decoration: none;
+  }
 }
 .brand-lockup__icon { height: 2.15rem; width: auto; }
 .brand-lockup__name { display: flex; gap: 0.42em; }
 
 .app-header {
+  align-items: flex-start;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
   margin: 0 auto;
-  max-width: 1120px;
+  max-width: 1180px;
   padding: $space-lg 0;
+  width: 100%;
 }
-.app-header .brand-lockup { max-width: none; }
+.app-header .brand-lockup {
+  flex: 0 0 auto;
+  max-width: none;
+  width: auto;
+}
+.app-header .alert,
+.app-header .notice {
+  margin: 0;
+  text-align: left;
+}
 
 .auth-card h1 {
   color: $yellow;

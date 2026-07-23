@@ -10,6 +10,7 @@ class SongsController < ApplicationController
     @song = Song.new(song_params)
     @song.user = current_user
     @song.venue = Current.venue if Current.venue
+    @song.performer = current_user.display_name if @song.performer.blank?
     
     respond_to do |format|
       if @song.save
@@ -17,7 +18,10 @@ class SongsController < ApplicationController
         format.turbo_stream
         format.json { render :show, status: :created, location: @song }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html do
+          load_queue
+          render :index, status: :unprocessable_entity
+        end
         format.json { render json: @song.errors, status: :unprocessable_entity }
       end
     end
@@ -44,25 +48,23 @@ class SongsController < ApplicationController
       respond_to do |format|
         format.html { redirect_to venue_songs_path(Current.venue.slug), notice: "#{ @song.performer } just finished a song." }
         format.turbo_stream
+        format.json { head :no_content }
       end
     else 
       respond_to do |format|
         format.html { redirect_to venue_songs_path(Current.venue.slug), alert: "#{ @song.performer }'s song was not finished." }
         format.turbo_stream
+        format.json { render json: @song.errors, status: :unprocessable_entity }
       end
     end
   end
 
   # GET /:venue_slug/songs
   def index
-    @finished = Song.finished.order(updated_at: :desc)
-    @skipped = Song.skipped
     @song = Song.new
-    @songs = Song.all
-    @upcoming = Song.upcoming
-    @user_role = determine_user_role
+    load_queue
   end
-  
+
   # PATCH /:venue_slug/songs/1/skip_song
   def skip_song 
     skipped = !@song.skipped 
@@ -123,6 +125,14 @@ class SongsController < ApplicationController
   end
 
   private
+
+  def load_queue
+    @finished = Song.finished.order(updated_at: :desc)
+    @skipped = Song.skipped
+    @songs = Song.all
+    @upcoming = Song.upcoming
+    @user_role = determine_user_role
+  end
 
   def set_song
     @song = Current.venue.songs.find(params[:id])

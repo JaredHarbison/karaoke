@@ -1,0 +1,20 @@
+%section.songs-panel.songs-panel--add
+  .songs-panel__heading
+    %div
+      %p.songs-eyebrow Join the lineup
+      %h2 Queue a song
+  %p.songs-panel__intro Search for a karaoke track, select the right video, and you’re ready.
+  = render "form", song: song, index_page: true
+
+  %details.songs-instructions
+    %summary How to queue a song
+    .songs-guide
+      .songs-guide__step
+        %span 1
+        %p Search by song title or artist.
+      .songs-guide__step
+        %span 2
+        %p Select a karaoke video from the results.
+      .songs-guide__step
+        %span 3
+        %p Your name joins the lineup. Hosts manage the order.
