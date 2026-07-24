@@ -17,10 +17,17 @@ class User < ApplicationRecord
   validate :password_complexity, if: :password_required?
 
   def self.from_omniauth(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.email = auth.info.email
-      user.password = Devise.friendly_token[0, 20]
-    end
+    email = auth.info.email.to_s.downcase
+    user = find_by(provider: auth.provider, uid: auth.uid)
+    return user if user
+
+    user = find_or_initialize_by(email: email)
+    user.provider = auth.provider if user.provider.blank?
+    user.uid = auth.uid if user.uid.blank?
+    user.password = Devise.friendly_token[0, 20] if user.new_record?
+    user.save!
+
+    user
   end
   
   def owner_of?(venue)

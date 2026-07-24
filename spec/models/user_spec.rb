@@ -161,4 +161,22 @@ RSpec.describe User, type: :model do
       expect(user.reload.role).to eq('performer')
     end
   end
+
+  describe '.from_omniauth' do
+    it 'links an existing email/password account to Google OAuth' do
+      existing_user = create(:user, email: 'jared@example.com')
+      auth = OpenStruct.new(
+        provider: 'google_oauth2',
+        uid: '1234567890',
+        info: OpenStruct.new(email: 'jared@example.com')
+      )
+
+      linked_user = described_class.from_omniauth(auth)
+
+      expect(linked_user.id).to eq(existing_user.id)
+      expect(linked_user.provider).to eq('google_oauth2')
+      expect(linked_user.uid).to eq('1234567890')
+      expect(described_class.count).to eq(1)
+    end
+  end
 end

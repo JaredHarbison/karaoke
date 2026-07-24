@@ -8,6 +8,7 @@ This roadmap captures planned product work beyond the current owner/host queue i
 - Add a first-class performer display name to the user profile; keep the song-level performer value as a historical snapshot.
 - Add a dedicated performer relation on songs so performer permissions do not depend on matching display names.
 - Define event lifecycle states, start/end times, timezone handling, and archival behavior.
+- Create a proper product/logo asset that can be used in Google Auth Platform branding and across the site header, favicon, and other user-facing surfaces.
 
 ## Venue Presentation Screen
 
