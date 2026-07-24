@@ -31,28 +31,31 @@
   letter-spacing: 0.5px;
   
   &--status-next {
-    background-color: $status-next;
+    background-color: $green;
     color: $bg-dark;
   }
   
   &--status-queued {
-    background-color: $status-queued;
-    color: $bg-light;
+    border: 1px solid $green;
+    background-color: transparent;
+    color: $green;
   }
   
   &--status-skipped {
-    background-color: $status-skipped;
-    color: $bg-dark;
+    border: 1px solid $green;
+    background-color: transparent;
+    color: $green;
   }
   
   &--status-finished {
-    background-color: $status-finished;
-    color: $text-primary;
+    border: 1px solid $green;
+    background-color: transparent;
+    color: $green;
   }
   
   &--success {
-    background-color: $status-success;
-    color: white;
+    background-color: $green;
+    color: $bg-dark;
   }
   
   &--error {
@@ -61,13 +64,14 @@
   }
   
   &--role-owner {
-    background-color: $magenta;
-    color: white;
+    background-color: $green;
+    color: $bg-dark;
   }
   
   &--role-admin {
-    background-color: $cyan;
-    color: $bg-dark;
+    border: 1px solid $green;
+    background-color: transparent;
+    color: $green;
   }
 }
 
@@ -116,11 +120,11 @@
   }
   
   &--success {
-    background-color: $status-success;
-    color: white;
+    background-color: $cyan;
+    color: $bg-dark;
     
     &:hover:not(:disabled) {
-      background-color: darken($status-success, 10%);
+      background-color: darken($cyan, 10%);
     }
   }
   
@@ -424,8 +428,11 @@
   display: inline-flex;
   align-items: center;
   gap: $space-xs;
+  padding: $space-xs $space-sm;
+  border: 1px solid $green;
+  border-radius: $radius-full;
   font-size: 0.85rem;
-  color: $text-secondary;
+  color: $green;
 
   .badge-icon {
     font-size: 1.1rem;
@@ -436,7 +443,8 @@
   }
 
   &--owner {
-    color: $magenta;
+    color: $bg-dark;
+    background: $green;
 
     .badge-icon {
       animation: pulse 2s infinite;
@@ -444,7 +452,7 @@
   }
 
   &--admin {
-    color: $cyan;
+    color: $green;
   }
 
   &--performer {
@@ -454,24 +462,27 @@
 
 // Status badges
 .badge--queued {
-  background-color: $status-queued;
-  color: $bg-light;
+  border: 1px solid $green;
+  background-color: transparent;
+  color: $green;
 }
 
 .badge--playing {
-  background-color: $status-next;
+  background-color: $green;
   color: $bg-dark;
   animation: pulse 1.5s infinite;
 }
 
 .badge--finished {
-  background-color: $status-finished;
-  color: $text-primary;
+  border: 1px solid $green;
+  background-color: transparent;
+  color: $green;
 }
 
 .badge--skipped {
-  background-color: $status-skipped;
-  color: $bg-dark;
+  border: 1px solid $green;
+  background-color: transparent;
+  color: $green;
 }
 
 // YouTube Search Components
@@ -564,8 +575,8 @@
 }
 
 .youtube-result-item {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: $space-md;
   padding: $space-md;
   background-color: rgba($beige, 0.06);
@@ -580,6 +591,7 @@
   }
 
   .result-thumbnail {
+    grid-column: 1 / -1;
     width: 100%;
 
     img {
@@ -610,29 +622,64 @@
       font-size: 0.875rem;
       color: rgba($beige, 0.62);
     }
+  }
+
+  .result-select-btn {
+    display: inline-flex;
+    align-items: center;
+    align-self: center;
+    justify-self: end;
+    gap: $space-sm;
+    padding: $space-sm $space-md;
+    background-color: $cyan;
+    color: $midnight;
+    border: 1px solid $cyan;
+    border-radius: $radius-md;
+    font-weight: 800;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $yellow;
+      border-color: $yellow;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $yellow;
+      outline-offset: 2px;
+    }
+  }
+
+}
+
+@media (max-width: 1200px) {
+  .youtube-result-item {
+    gap: $space-sm $space-md;
+    padding: $space-sm;
+
+    .result-details {
+      justify-content: center;
+    }
+
+    .result-title {
+      overflow-wrap: anywhere;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .youtube-result-item {
+    grid-template-columns: 1fr;
+
+    .result-thumbnail,
+    .result-details,
+    .result-select-btn {
+      grid-column: 1;
+    }
 
     .result-select-btn {
-      display: inline-flex;
-      align-items: center;
-      align-self: flex-start;
-      gap: $space-sm;
-      padding: $space-sm $space-md;
-      background-color: $cyan;
-      color: $midnight;
-      border: 1px solid $cyan;
-      border-radius: $radius-md;
-      font-weight: 800;
-      cursor: pointer;
-
-      &:hover {
-        background-color: $yellow;
-        border-color: $yellow;
-      }
-
-      &:focus-visible {
-        outline: 2px solid $yellow;
-        outline-offset: 2px;
-      }
+      justify-self: stretch;
+      justify-content: center;
+      width: 100%;
     }
   }
 }

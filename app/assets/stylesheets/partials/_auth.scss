@@ -65,10 +65,30 @@
   max-width: none;
   width: auto;
 }
+.app-header__bar {
+  align-items: center;
+  display: flex;
+  width: 100%;
+}
+.app-header__actions {
+  align-items: center;
+  display: flex;
+  margin-left: auto;
+}
 .app-header .alert,
 .app-header .notice {
   margin: 0;
   text-align: left;
+}
+
+@media (max-width: 1200px) {
+  .app-header {
+    padding: $space-sm 0;
+  }
+
+  .brand-lockup {
+    gap: $space-sm;
+  }
 }
 
 .auth-card h1 {

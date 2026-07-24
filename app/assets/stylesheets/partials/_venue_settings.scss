@@ -23,7 +23,7 @@
   padding: $space-xl $space-lg $space-2xl;
   color: $beige;
   background: $midnight;
-  border-bottom: 4px solid $magenta;
+  border-bottom: 4px solid $yellow;
 
   h1 {
     margin: $space-sm 0;
@@ -49,15 +49,6 @@
   }
 }
 
-.settings-eyebrow {
-  margin: 0;
-  color: $yellow;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
 .settings-header__copy {
   max-width: 560px;
   margin: 0;
@@ -71,10 +62,10 @@
   gap: $space-sm;
   flex-shrink: 0;
   padding: $space-sm $space-md;
-  border: 1px solid rgba($magenta, 0.6);
+  border: 1px solid $green;
   border-radius: $radius-full;
   color: white;
-  background: rgba($magenta, 0.14);
+  background: rgba($green, 0.14);
   font-size: 0.8rem;
   font-weight: 800;
 }
@@ -83,8 +74,8 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: $magenta;
-  box-shadow: 0 0 0 4px rgba($magenta, 0.18);
+  background: $green;
+  box-shadow: 0 0 0 4px rgba($green, 0.18);
 }
 
 .settings-main {

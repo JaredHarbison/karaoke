@@ -27,7 +27,7 @@ RSpec.describe 'Venues', type: :request do
       sign_in owner
       get "/#{venue.slug}/settings"
       expect(response).to be_successful
-      expect(response.body).to include('Owner console', 'Venue details', 'Your hosts', 'Add a host')
+      expect(response.body).to include('Venue Details', 'Your Hosts', 'Add a Host')
     end
 
     it 'redirects if not owner or admin' do

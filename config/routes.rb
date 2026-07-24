@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       end
       member do
         patch :finish_song
+        patch :requeue_song
         patch :skip_song
       end
     end

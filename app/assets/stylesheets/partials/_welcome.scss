@@ -20,7 +20,7 @@
   padding: $space-xl 0;
   color: $beige;
   background: $midnight;
-  border-bottom: 1px solid rgba($cyan, 0.45);
+  border-bottom: 4px solid $yellow;
 }
 
 .welcome-header__copy {
@@ -42,15 +42,6 @@
     font-size: 1rem;
     line-height: 1.55;
   }
-}
-
-.welcome-eyebrow {
-  margin: 0;
-  color: $cyan;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
 }
 
 .resume-card {
