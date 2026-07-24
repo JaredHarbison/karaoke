@@ -1,9 +1,9 @@
 class SongsController < ApplicationController
   before_action :authenticate_user!
   protect_from_forgery with: :exception
-  before_action :set_song, only: %i[ destroy edit finish_song show skip_song update ]
+  before_action :set_song, only: %i[ destroy edit finish_song requeue_song show skip_song update ]
   before_action :authorize_song_owner, only: %i[ destroy edit update ]
-  before_action :authorize_admin_for_queue_actions, only: %i[ finish_song skip_song ]
+  before_action :authorize_admin_for_queue_actions, only: %i[ finish_song requeue_song skip_song ]
 
   # POST /:venue_slug/songs or /:venue_slug/songs.json
   def create
@@ -63,6 +63,15 @@ class SongsController < ApplicationController
   def index
     @song = Song.new
     load_queue
+  end
+
+  # PATCH /:venue_slug/songs/1/requeue_song
+  def requeue_song
+    if @song.update(finished: false, skipped: false, postponed: false)
+      redirect_to venue_songs_path(Current.venue.slug), notice: "#{@song.performer} was returned to the queue."
+    else
+      redirect_to venue_songs_path(Current.venue.slug), alert: "#{@song.performer}'s song could not be requeued."
+    end
   end
 
   # PATCH /:venue_slug/songs/1/skip_song
@@ -130,7 +139,7 @@ class SongsController < ApplicationController
     @finished = Song.finished.order(updated_at: :desc)
     @skipped = Song.skipped
     @songs = Song.all
-    @upcoming = Song.upcoming
+    @upcoming = Song.upcoming.order(:updated_at)
     @user_role = determine_user_role
   end
 
@@ -144,6 +153,7 @@ class SongsController < ApplicationController
       :finished, 
       :performer, 
       :postponed, 
+      :title,
       :url, 
       :skipped
     )

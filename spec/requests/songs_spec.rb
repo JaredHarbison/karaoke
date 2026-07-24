@@ -17,17 +17,19 @@ RSpec.describe 'Songs', type: :request do
       expect(response).to be_successful
     end
 
-    it 'prioritizes the QR panel before add-song controls for owners' do
+    it 'provides responsive queue, add-song, and QR tabs for owners' do
       sign_out user
       sign_in venue.owner
 
       get "/#{venue.slug}/songs"
 
+      page = Nokogiri::HTML(response.body)
       expect(response.body).to include('songs-page--manager')
-      expect(response.body.index('songs-panel--qr')).to be < response.body.index('songs-panel--add')
+      expect(page.css('[role="tab"]').map(&:text).map(&:strip)).to eq(['Queue', 'Add Song', 'QR Code'])
+      expect(page.css('[role="tabpanel"]').map { |panel| panel['id'] }).to eq(['queue-panel', 'add-panel', 'qr-panel'])
       expect(response.body).to include('songs-instructions')
       expect(response.body).to include('songs-panel--finished')
-      expect(Nokogiri::HTML(response.body).at_css('.songs-page')['data-controller']).to eq('youtube-player')
+      expect(page.at_css('.songs-page')['data-controller']).to eq('youtube-player')
       expect(response.body).to include('song-player__viewport')
     end
 
@@ -45,6 +47,50 @@ RSpec.describe 'Songs', type: :request do
       get "/#{venue.slug}/songs"
 
       expect(Nokogiri::HTML(response.body).css('.song-action--play').count).to eq(1)
+    end
+
+    it 'offers a direct video link for queue managers' do
+      sign_out user
+      sign_in venue.owner
+      create(:song, venue: venue)
+
+      get "/#{venue.slug}/songs"
+
+      page = Nokogiri::HTML(response.body)
+      expect(page.css('.song-action--open').count).to eq(1)
+      expect(page.at_css('.song-action--open')['target']).to eq('_blank')
+    end
+
+    it 'shows the song title to queue managers' do
+      sign_out user
+      sign_in venue.owner
+      create(:song, venue: venue, title: 'Black Velvet')
+
+      get "/#{venue.slug}/songs"
+
+      page = Nokogiri::HTML(response.body)
+      expect(page.css('.song-queue-card__meta').text).to include('Black Velvet')
+    end
+
+    it 'shows archive management actions to owners' do
+      sign_out user
+      sign_in venue.owner
+      create(:song, :finished, venue: venue)
+
+      get "/#{venue.slug}/songs"
+
+      page = Nokogiri::HTML(response.body)
+      expect(page.css('.song-action--requeue').count).to eq(1)
+      expect(page.css('.songs-panel--finished .song-action--remove').count).to eq(1)
+    end
+
+    it 'does not show archive management actions to performers' do
+      create(:song, :finished, venue: venue)
+
+      get "/#{venue.slug}/songs"
+
+      page = Nokogiri::HTML(response.body)
+      expect(page.css('.songs-panel--finished .song-queue-card__actions').text.strip).to be_empty
     end
 
     it 'requires authentication' do
@@ -130,6 +176,26 @@ RSpec.describe 'Songs', type: :request do
 
       expect(response).to redirect_to("/#{venue.slug}/songs")
       expect(song.reload.skipped).to be_falsey
+    end
+  end
+
+  describe 'PATCH /venues/:venue_slug/songs/:id/requeue_song' do
+    let(:song) { create(:song, :finished, venue: venue, user: user, skipped: true, postponed: true) }
+
+    it 'returns an archived song to the active queue for a host' do
+      venue.add_host(user)
+
+      patch "/#{venue.slug}/songs/#{song.id}/requeue_song"
+
+      expect(response).to redirect_to("/#{venue.slug}/songs")
+      expect(song.reload).to have_attributes(finished: false, skipped: false, postponed: false)
+    end
+
+    it 'does not allow a performer to requeue an archived song' do
+      patch "/#{venue.slug}/songs/#{song.id}/requeue_song"
+
+      expect(response).to redirect_to("/#{venue.slug}/songs")
+      expect(song.reload.finished).to be(true)
     end
   end
 

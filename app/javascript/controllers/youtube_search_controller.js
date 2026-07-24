@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["query", "results", "urlField", "searchBtn"]
+  static targets = ["query", "results", "urlField", "titleField", "searchBtn"]
   
   connect() {
     // Initialize abort controller for fetch requests
@@ -140,8 +140,9 @@ export default class extends Controller {
         html += '<div class="youtube-result-item"><div class="result-thumbnail"><img src="' + this.escapeHtml(thumb) + '" alt="" loading="lazy" /></div>'
         html += '<div class="result-details"><h5 class="result-title">' + this.escapeHtml(title) + '</h5>'
         html += '<p class="result-channel">YouTube · ' + this.escapeHtml(channel) + '</p>'
-        html += '<button type="button" class="result-select-btn" data-video-url="' + this.escapeHtml(url) + '"><span aria-hidden="true">▶</span><span>Select video</span></button>'
-        html += '</div></div>'
+        html += '</div>'
+        html += '<button type="button" class="result-select-btn" data-video-url="' + this.escapeHtml(url) + '" data-video-title="' + this.escapeHtml(title) + '"><span aria-hidden="true">▶</span><span>Select video</span></button>'
+        html += '</div>'
       }
       
       // Set content once
@@ -158,12 +159,17 @@ export default class extends Controller {
   selectVideo(button) {
     const url = button.dataset.videoUrl
     if (!url) return
-    
+
     // Set the URL field
     const urlInput = document.getElementById('song_url')
     if (urlInput) {
       urlInput.value = url
-      
+
+      const titleInput = this.hasTitleFieldTarget ? this.titleFieldTarget : document.getElementById('song_title')
+      if (titleInput) {
+        titleInput.value = button.dataset.videoTitle || ''
+      }
+
       // Auto-submit the form after a brief delay to ensure value is set
       setTimeout(() => {
         const form = urlInput.closest('form')
