@@ -1,9 +1,10 @@
 class SongsController < ApplicationController
   before_action :authenticate_user!
+  before_action :require_admin!, only: %i[ presentation ]
   protect_from_forgery with: :exception
   before_action :set_song, only: %i[ destroy edit finish_song requeue_song show skip_song update ]
-  before_action :authorize_song_owner, only: %i[ destroy edit update ]
-  before_action :authorize_admin_for_queue_actions, only: %i[ finish_song requeue_song skip_song ]
+  before_action :authorize_manageable_song!, only: %i[ destroy edit skip_song update ]
+  before_action :authorize_admin_for_queue_actions, only: %i[ finish_song requeue_song ]
 
   # POST /:venue_slug/songs or /:venue_slug/songs.json
   def create
@@ -63,6 +64,15 @@ class SongsController < ApplicationController
   def index
     @song = Song.new
     load_queue
+  end
+
+  # GET /:venue_slug/songs/presentation
+  def presentation
+    load_queue
+    @presentation_time = Time.zone.now
+    @presentation_next_song = @upcoming.first
+    @presentation_event_name = Current.venue.name
+    @presentation_theme = Current.venue.try(:theme).presence
   end
 
   # PATCH /:venue_slug/songs/1/requeue_song
@@ -159,21 +169,28 @@ class SongsController < ApplicationController
     )
   end
   
-  def authorize_song_owner
-    unless @song.user == current_user || Current.venue.is_admin?(current_user)
-      redirect_to venue_songs_path(Current.venue.slug), alert: "You can only edit or delete your own songs."
-    end
-  end
-  
   def authorize_admin_for_queue_actions
     unless Current.venue.is_admin?(current_user)
       redirect_to venue_songs_path(Current.venue.slug), alert: "Only admins can manage the queue."
     end
+  end
+
+  def authorize_manageable_song!
+    return if Current.venue.is_admin?(current_user)
+    return if manageable_by_current_user?(@song)
+
+    redirect_to venue_songs_path(Current.venue.slug), alert: "You can only manage songs you added or songs added for you."
   end
   
   def determine_user_role
     return :owner if Current.venue.owner_id == current_user.id
     return :admin if Current.venue.admins.include?(current_user)
     :performer
+  end
+
+  def manageable_by_current_user?(song)
+    return false unless current_user.present?
+
+    song.user == current_user || song.performer.to_s.casecmp(current_user.display_name.to_s).zero?
   end
 end

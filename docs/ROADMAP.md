@@ -6,6 +6,7 @@ This roadmap captures planned product work beyond the current owner/host queue i
 
 - Add an `Event` or karaoke-session model so queue behavior, QR codes, themes, and optional rules belong to a specific night rather than permanently to a venue.
 - Add a first-class performer display name to the user profile; keep the song-level performer value as a historical snapshot.
+- Add a dedicated performer relation on songs so performer permissions do not depend on matching display names.
 - Define event lifecycle states, start/end times, timezone handling, and archival behavior.
 
 ## Venue Presentation Screen
@@ -26,6 +27,7 @@ This roadmap captures planned product work beyond the current owner/host queue i
 
 - Support permanent, printable venue QR codes that open a stable venue landing page; venues should not need to reprint signage for every event.
 - Treat the printed QR as navigation, not proof that a performer is physically present and not as a permanent queue-join credential.
+- Require an active venue presence session before a performer can load the venue queue or submit songs, with location check, QR scan, or host approval as the launch-ready entry paths.
 - When an event is active, exchange an on-site presence check for an event-scoped, expiring join session.
 - Offer several owner/host-selectable presence policies:
   - One-time, coarse location check with explicit consent and no retained precise coordinates.

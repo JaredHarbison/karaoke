@@ -1,16 +1,17 @@
 - can_manage_queue = Current.venue.is_admin?(current_user)
+- performer_view = !can_manage_queue
 - is_owner = Current.venue.owner == current_user
 - role_label = is_owner ? "Owner" : (can_manage_queue ? "Host" : "Performer")
 - queue_url = venue_songs_url(Current.venue.slug)
 - next_performer = @upcoming.first&.performer
-- active_tab = @song.errors.any? ? "add" : "queue"
+- active_tab = performer_view ? "add" : (@song.errors.any? ? "add" : "queue")
 
 - content_for :app_header_actions do
   %span.songs-role-pill.songs-role-pill--app-header{ class: "songs-role-pill--#{role_label.downcase}" }
     %span.songs-role-pill__dot
     = role_label
 
-.songs-page{ class: ("songs-page--manager" if can_manage_queue), data: ({ controller: "youtube-player" } if can_manage_queue) }
+.songs-page{ class: [("songs-page--manager" if can_manage_queue), ("songs-page--performer" if performer_view)], data: ({ controller: "youtube-player" } if can_manage_queue) }
   %header.songs-header
     .songs-header__inner
       .songs-header__identity
@@ -26,73 +27,144 @@
               %strong= "#{next_performer} is next!"
               %span= "· #{@upcoming.count} #{@upcoming.one? ? 'song' : 'songs'} in line"
           %nav.songs-header__nav{ aria: { label: "Venue navigation" } }
-            = link_to "← Back to Venues", root_path, class: "context-link songs-back-link"
+            = link_to root_path, class: "context-link songs-back-link songs-header__nav-link" do
+              %span.songs-header__nav-icon ←
+              %span.songs-header__nav-label.songs-header__nav-label--full Back to Venues
+              %span.songs-header__nav-label.songs-header__nav-label--short Venues
+            - if can_manage_queue
+              %span.songs-header__nav-separator{ aria: { hidden: "true" } } |
+              = link_to presentation_venue_songs_path(Current.venue.slug), class: "songs-header__link songs-header__nav-link", target: "_blank", rel: "noopener noreferrer" do
+                %span.songs-header__nav-icon ⤢
+                %span.songs-header__nav-label.songs-header__nav-label--full Presentation Mode
+                %span.songs-header__nav-label.songs-header__nav-label--short Presentation
             - if is_owner
               %span.songs-header__nav-separator{ aria: { hidden: "true" } } |
-              = link_to "Venue Settings →", venue_settings_path(Current.venue.slug), class: "songs-header__link"
+              = link_to venue_settings_path(Current.venue.slug), class: "songs-header__link songs-header__nav-link" do
+                %span.songs-header__nav-icon ⚙
+                %span.songs-header__nav-label.songs-header__nav-label--full Venue Settings
+                %span.songs-header__nav-label.songs-header__nav-label--short Settings
 
   %main.songs-main
     .songs-hero
       .songs-hero__copy
         %h2 Your next song is closer than you think.
         %p Search for a karaoke track, choose a result, and it will appear in the lineup below.
-    .songs-responsive-tabs{ data: { controller: "responsive-tabs", responsive_tabs_breakpoint_value: 1080 } }
+    .songs-responsive-tabs{ data: { controller: "responsive-tabs", responsive_tabs_breakpoint_value: 1000 } }
       .songs-tabs{ role: "tablist", aria: { label: "Venue queue sections" } }
         %button.songs-tab{ id: "queue-tab", type: "button", role: "tab", tabindex: (active_tab == "queue" ? "0" : "-1"), aria: { controls: "queue-panel", selected: (active_tab == "queue").to_s }, data: { responsive_tabs_target: "tab", tab_name: "queue", action: "click->responsive-tabs#select keydown->responsive-tabs#navigate" } } Queue
         %button.songs-tab{ id: "add-tab", type: "button", role: "tab", tabindex: (active_tab == "add" ? "0" : "-1"), aria: { controls: "add-panel", selected: (active_tab == "add").to_s }, data: { responsive_tabs_target: "tab", tab_name: "add", action: "click->responsive-tabs#select keydown->responsive-tabs#navigate" } } Add Song
         %button.songs-tab{ id: "qr-tab", type: "button", role: "tab", tabindex: "-1", aria: { controls: "qr-panel", selected: "false" }, data: { responsive_tabs_target: "tab", tab_name: "qr", action: "click->responsive-tabs#select keydown->responsive-tabs#navigate" } } QR Code
 
-      .songs-layout
-        .songs-primary{ id: "queue-panel", role: "tabpanel", aria: { labelledby: "queue-tab" }, data: { responsive_tabs_target: "panel", tab_name: "queue" } }
-          %section.songs-panel.songs-panel--queue{ aria: { labelledby: "upcoming-heading" } }
-            .songs-panel__heading
-              .songs-panel__queue-title
-                %h2#upcoming-heading Upcoming
-                %span.songs-count
-                  %span In Line
-                  %span= @upcoming.count
+      - if can_manage_queue
+        .songs-layout
+          .songs-primary{ id: "queue-panel", role: "tabpanel", aria: { labelledby: "queue-tab" }, data: { responsive_tabs_target: "panel", tab_name: "queue" } }
+            %section.songs-panel.songs-panel--queue{ aria: { labelledby: "upcoming-heading" } }
+              .songs-panel__heading
+                .songs-panel__queue-title
+                  %h2#upcoming-heading
+                    %span Upcoming
+                    %span.songs-heading__mobile-hide Performers
+                  %span.songs-count
+                    %span In Line
+                    %span= @upcoming.count
 
-            - if @upcoming.any?
-              .song-card-list
-                - @upcoming.each_with_index do |song, index|
-                  = render "queue_song_card", song: song, position: index + 1, next_song: index.zero?, can_manage_queue: can_manage_queue
-            - else
-              .songs-empty
-                %span.songs-empty__icon 🎤
-                %h3 The queue is open
-                %p Add the first song and get tonight started.
-
-            - if @skipped.any?
-              .songs-subsection
-                .songs-subsection__heading
-                  %h3 On Hold
-                  %span.songs-count.songs-count--muted= @skipped.count
+              - if @upcoming.any?
                 .song-card-list
-                  - @skipped.each do |song|
-                    = render "queue_song_card", song: song, position: nil, next_song: false, can_manage_queue: can_manage_queue
-
-          %details.songs-panel.songs-panel--finished
-            %summary.songs-panel__summary
-              %h2#finished-heading
-                %span Finished
-                %span.songs-heading__mobile-hide Performers
-              %span.songs-panel__summary-action
-                %span.songs-panel__summary-label= "Show (#{@finished.count})"
-              %span.songs-panel__summary-copy
-                = @finished.any? ? "Review tonight’s completed performances." : "Completed performances will appear here."
-            .songs-panel__collapsible
-              - if @finished.any?
-                .song-card-list.song-card-list--finished
-                  - @finished.each do |song|
-                    = render "queue_song_card", song: song, position: nil, next_song: false, can_manage_queue: can_manage_queue
+                  - @upcoming.each_with_index do |song, index|
+                    = render "queue_song_card", song: song, position: index + 1, next_song: index.zero?, can_manage_queue: can_manage_queue
               - else
-                %p.songs-muted No finished songs yet. They’ll appear here after performances.
+                .songs-empty
+                  %span.songs-empty__icon 🎤
+                  %h3 The queue is open
+                  %p Add the first song and get tonight started.
 
-        %aside.songs-sidebar
-          .songs-tab-panel.songs-tab-panel--add{ id: "add-panel", role: "tabpanel", aria: { labelledby: "add-tab" }, data: { responsive_tabs_target: "panel", tab_name: "add" } }
-            = render "add_song_panel", song: @song
-          .songs-tab-panel.songs-tab-panel--qr{ id: "qr-panel", role: "tabpanel", aria: { labelledby: "qr-tab" }, data: { responsive_tabs_target: "panel", tab_name: "qr" } }
-            = render "qr_panel", queue_url: queue_url
+              - if @skipped.any?
+                .songs-subsection
+                  .songs-subsection__heading
+                    %h3 On Hold
+                    %span.songs-count.songs-count--muted= @skipped.count
+                  .song-card-list
+                    - @skipped.each do |song|
+                      = render "queue_song_card", song: song, position: nil, next_song: false, can_manage_queue: can_manage_queue
+
+            %details.songs-panel.songs-panel--finished
+              %summary.songs-panel__summary
+                %h2#finished-heading
+                  %span Finished
+                  %span.songs-heading__mobile-hide Performers
+                %span.songs-panel__summary-action
+                  %span.songs-panel__summary-label= "Show (#{@finished.count})"
+                %span.songs-panel__summary-copy
+                  = @finished.any? ? "Review tonight’s completed performances." : "Completed performances will appear here."
+              .songs-panel__collapsible
+                - if @finished.any?
+                  .song-card-list.song-card-list--finished
+                    - @finished.each do |song|
+                      = render "queue_song_card", song: song, position: nil, next_song: false, can_manage_queue: can_manage_queue
+                - else
+                  %p.songs-muted No finished songs yet. They’ll appear here after performances.
+
+          %aside.songs-sidebar
+            .songs-tab-panel.songs-tab-panel--add{ id: "add-panel", role: "tabpanel", aria: { labelledby: "add-tab" }, data: { responsive_tabs_target: "panel", tab_name: "add" } }
+              = render "add_song_panel", song: @song
+            .songs-tab-panel.songs-tab-panel--qr{ id: "qr-panel", role: "tabpanel", aria: { labelledby: "qr-tab" }, data: { responsive_tabs_target: "panel", tab_name: "qr" } }
+              = render "qr_panel", queue_url: queue_url
+      - else
+        .songs-layout.songs-layout--performer
+          .songs-layout__column.songs-layout__column--left
+            .songs-tab-panel.songs-tab-panel--add{ id: "add-panel", role: "tabpanel", aria: { labelledby: "add-tab" }, data: { responsive_tabs_target: "panel", tab_name: "add" } }
+              = render "add_song_panel", song: @song
+
+            .songs-primary{ id: "queue-panel", role: "tabpanel", aria: { labelledby: "queue-tab" }, data: { responsive_tabs_target: "panel", tab_name: "queue" } }
+              %section.songs-panel.songs-panel--queue{ aria: { labelledby: "upcoming-heading" } }
+                .songs-panel__heading
+                  .songs-panel__queue-title
+                    %h2#upcoming-heading
+                      %span Upcoming
+                      %span.songs-heading__mobile-hide Performers
+                    %span.songs-count
+                      %span In Line
+                      %span= @upcoming.count
+
+                - if @upcoming.any?
+                  .song-card-list
+                    - @upcoming.each_with_index do |song, index|
+                      = render "queue_song_card", song: song, position: index + 1, next_song: index.zero?, can_manage_queue: can_manage_queue
+                - else
+                  .songs-empty
+                    %span.songs-empty__icon 🎤
+                    %h3 The queue is open
+                    %p Add the first song and get tonight started.
+
+                - if @skipped.any?
+                  .songs-subsection
+                    .songs-subsection__heading
+                      %h3 On Hold
+                      %span.songs-count.songs-count--muted= @skipped.count
+                    .song-card-list
+                      - @skipped.each do |song|
+                        = render "queue_song_card", song: song, position: nil, next_song: false, can_manage_queue: can_manage_queue
+
+          .songs-layout__column.songs-layout__column--right
+            .songs-tab-panel.songs-tab-panel--qr{ id: "qr-panel", role: "tabpanel", aria: { labelledby: "qr-tab" }, data: { responsive_tabs_target: "panel", tab_name: "qr" } }
+              = render "qr_panel", queue_url: queue_url
+
+            %details.songs-panel.songs-panel--finished
+              %summary.songs-panel__summary
+                %h2#finished-heading
+                  %span Finished
+                  %span.songs-heading__mobile-hide Performers
+                %span.songs-panel__summary-action
+                  %span.songs-panel__summary-label= "Show (#{@finished.count})"
+                %span.songs-panel__summary-copy
+                  = @finished.any? ? "Review tonight’s completed performances." : "Completed performances will appear here."
+              .songs-panel__collapsible
+                - if @finished.any?
+                  .song-card-list.song-card-list--finished
+                    - @finished.each do |song|
+                      = render "queue_song_card", song: song, position: nil, next_song: false, can_manage_queue: can_manage_queue
+                - else
+                  %p.songs-muted No finished songs yet. They’ll appear here after performances.
 
   - if can_manage_queue
     .song-player{ hidden: true, role: "dialog", aria: { modal: "true", label: "Now playing" }, data: { youtube_player_target: "overlay", action: "fullscreenchange@document->youtube-player#fullscreenChanged" } }

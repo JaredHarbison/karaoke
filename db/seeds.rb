@@ -29,6 +29,14 @@ end
 performer.update!(role: :performer)
 performer.update!(password: password, password_confirmation: password)
 
+performer_demo = User.find_or_create_by!(email: 'performer.demo@karaoke.test') do |user|
+  user.password = password
+  user.password_confirmation = password
+  user.role = :performer
+end
+performer_demo.update!(role: :performer)
+performer_demo.update!(password: password, password_confirmation: password)
+
 venue = Venue.find_or_create_by!(slug: 'demo-karaoke') do |record|
   record.name = 'Demo Karaoke'
   record.public = true
@@ -49,7 +57,8 @@ end
 puts <<~MESSAGE
   Seeded manual-test data:
     Venue:     Demo Karaoke (/demo-karaoke/songs)
-    Owner:     owner@karaoke.test / #{password}
-    Host:      host@karaoke.test / #{password}
-    Performer: performer@karaoke.test / #{password}
+  Owner:     owner@karaoke.test / #{password}
+  Host:      host@karaoke.test / #{password}
+  Performer: performer@karaoke.test / #{password}
+  Demo:      performer.demo@karaoke.test / #{password}
 MESSAGE

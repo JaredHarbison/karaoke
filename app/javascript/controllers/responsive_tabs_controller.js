@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["tab", "panel"]
-  static values = { breakpoint: { type: Number, default: 1080 } }
+  static values = { breakpoint: { type: Number, default: 1000 } }
 
   connect() {
     this.activeName = this.tabTargets.find(tab => tab.getAttribute("aria-selected") === "true")?.dataset.tabName || "queue"

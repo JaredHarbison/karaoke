@@ -28,6 +28,9 @@ Rails.application.routes.draw do
     # Songs (queue management)
     resources :songs do
       collection do
+        get :presentation
+      end
+      collection do
         get :youtube_search
         get :validate_video
       end

@@ -1,0 +1,74 @@
+- queue_url = venue_songs_url(Current.venue.slug)
+
+.songs-page.songs-page--presentation{ data: { controller: "youtube-player" } }
+  %main.songs-presentation
+    %aside.songs-presentation__drawer
+      %section.songs-panel.songs-panel--presentation-meta
+        .songs-panel__heading
+          %div
+            %h2 Event Details
+          %span.songs-presentation__live-pill Live
+
+        %dl.songs-presentation__meta-list
+          %div.songs-presentation__meta-item
+            %dt Event
+            %dd= @presentation_event_name
+          - if Current.venue.location.present?
+            %div.songs-presentation__meta-item
+              %dt Location
+              %dd= Current.venue.location
+          %div.songs-presentation__meta-item
+            %dt Time
+            %dd= @presentation_time.strftime("%A, %B %-d")
+            %dd= @presentation_time.strftime("%-I:%M %p")
+          - if @presentation_theme.present?
+            %div.songs-presentation__meta-item
+              %dt Theme
+              %dd= @presentation_theme
+
+      %section.songs-panel.songs-panel--presentation-queue
+        .songs-panel__heading
+          %div
+            %h2 Queue Snapshot
+          %span.songs-role-pill.songs-role-pill--presentation
+            %span= "In Line"
+            %span= @upcoming.count
+        - if @presentation_next_song
+          .songs-presentation__next
+            %span.songs-next-badge Next
+            %h3= @presentation_next_song.performer
+            %p.songs-muted Tap play in the right column to start full-screen video.
+        - else
+          .songs-presentation__next
+            %span.songs-next-badge Next
+            %h3 Nothing queued
+            %p.songs-muted Tap play in the right column after a song is added.
+
+      = render "qr_panel", queue_url: queue_url
+
+    %section.songs-presentation__stage
+      .songs-presentation__screen
+        - if @presentation_next_song
+          .songs-presentation__screen-content
+            %span.songs-presentation__screen-eyebrow UP NEXT
+            %h1= @presentation_next_song.performer
+            %div.songs-presentation__screen-actions
+              %button.song-action.song-action--play{ type: "button", title: "Play next song fullscreen", data: { action: "youtube-player#play", youtube_player_url_param: @presentation_next_song.url, youtube_player_finish_url_param: finish_song_venue_song_path(Current.venue.slug, @presentation_next_song), youtube_player_performer_param: @presentation_next_song.performer } }
+                %span.song-action__icon ▶
+                %span Play Next Song
+        - else
+          .songs-presentation__screen-content
+            %span.songs-presentation__screen-eyebrow Ready
+            %h1 Ready for the first song
+            %p.songs-presentation__screen-copy Use the performer view to add a song, then return here to launch it full-screen.
+
+    .song-player{ hidden: true, role: "dialog", aria: { modal: "true", label: "Now playing" }, data: { youtube_player_target: "overlay", action: "fullscreenchange@document->youtube-player#fullscreenChanged" } }
+      .song-player__toolbar
+        %div
+          %h2{ data: { youtube_player_target: "title" } }
+        %button.song-player__close{ type: "button", data: { action: "youtube-player#close", youtube_player_target: "closeButton" } }
+          %span{ aria: { hidden: "true" } } ×
+          %span End playback
+      .song-player__viewport
+        %div.song-player__mount{ data: { youtube_player_target: "mount" } }
+      %p.song-player__status{ role: "status", aria: { live: "polite" }, data: { youtube_player_target: "status" } }
