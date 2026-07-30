@@ -1,15 +1,19 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
+  close() {
+    this.element.open = false
+  }
+
   closeOnOutside(event) {
     if (this.element.open && !this.element.contains(event.target)) {
-      this.element.open = false
+      this.close()
     }
   }
 
   closeOnEscape(event) {
     if (event.key === "Escape" && this.element.open) {
-      this.element.open = false
+      this.close()
       this.element.querySelector("summary")?.focus()
     }
   }

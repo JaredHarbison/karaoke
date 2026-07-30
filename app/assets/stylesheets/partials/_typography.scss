@@ -2,13 +2,13 @@ body {
   color: $yellow; 
   font-family: sans-serif;
   a {
-    color: $yellow; 
+    color: $cyan;
     text-decoration: none;
-    &:hover, &:focus {
-        color: $magenta; 
-        cursor: pointer;
-        outline: none;
-        text-decoration: underline;
+    &:hover, &:focus, &:active {
+      color: $magenta;
+      cursor: pointer;
+      outline: none;
+      text-decoration: none;
     }
   }
   h1 {
@@ -29,7 +29,7 @@ body {
 
   &:hover,
   &:focus {
-    color: $yellow;
+    color: $magenta;
     text-decoration: none;
   }
 }

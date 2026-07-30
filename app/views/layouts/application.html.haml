@@ -10,13 +10,17 @@
     = stylesheet_link_tag "application", "data-turbo-track": "reload"
     = javascript_importmap_tags
   %body{ class: ('auth-screen' if controller_path.start_with?('devise/')) }
-    %header.app-header
+    %header.app-header{ class: ('app-header--songs' if content_for?(:songs_app_header)) }
       .app-header__bar
-        = render 'shared/brand_lockup'
-        .app-header__venue-name= Current.venue.name
-        - if content_for?(:app_header_actions)
-          .app-header__actions
-            = yield :app_header_actions
+        - if content_for?(:songs_app_header)
+          = yield :songs_app_header
+        - else
+          = render 'shared/brand_lockup'
+          - if Current.venue.present?
+            .app-header__venue-name= Current.venue.name
+          - if content_for?(:app_header_actions)
+            .app-header__actions
+              = yield :app_header_actions
       - if notice.present?
         %p.notice{ role: 'status', data: { controller: 'flash' } }= notice
       - if alert.present?

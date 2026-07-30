@@ -179,6 +179,52 @@ RSpec.describe 'Songs', type: :request do
     end
   end
 
+  describe 'PATCH /venues/:venue_slug/songs/:id/pause_song' do
+    let!(:first_song) { create(:song, venue: venue, user: user, updated_at: 2.hours.ago) }
+    let!(:song) { create(:song, venue: venue, user: user, updated_at: 1.hour.ago) }
+    let!(:other_song) { create(:song, venue: venue, user: user, updated_at: 30.minutes.ago) }
+
+    it 'moves a song back in the queue for a host' do
+      venue.add_host(user)
+
+      patch "/#{venue.slug}/songs/#{song.id}/pause_song", params: { spots_back: 1 }
+
+      expect(response).to redirect_to("/#{venue.slug}/songs")
+      expect(song.reload.postponed).to be(true)
+      expect(Song.unscoped.where(venue_id: venue.id, finished: false, skipped: false).order(:updated_at).pluck(:id)).to eq([first_song.id, other_song.id, song.id])
+    end
+
+    it 'does not allow a performer to pause a song' do
+      patch "/#{venue.slug}/songs/#{song.id}/pause_song", params: { spots_back: 1 }
+
+      expect(response).to redirect_to("/#{venue.slug}/songs")
+      expect(song.reload.postponed).to be(false)
+    end
+  end
+
+  describe 'PATCH /venues/:venue_slug/songs/:id/unpause_song' do
+    let!(:song) { create(:song, venue: venue, user: user, postponed: true, updated_at: 1.hour.ago) }
+    let!(:first_song) { create(:song, venue: venue, user: user, updated_at: 2.hours.ago) }
+    let!(:other_song) { create(:song, venue: venue, user: user, updated_at: 30.minutes.ago) }
+
+    it 'moves a paused song to the front of the queue for a host' do
+      venue.add_host(user)
+
+      patch "/#{venue.slug}/songs/#{song.id}/unpause_song"
+
+      expect(response).to redirect_to("/#{venue.slug}/songs")
+      expect(song.reload.postponed).to be(false)
+      expect(Song.unscoped.where(venue_id: venue.id, finished: false, skipped: false).order(:updated_at).pluck(:id)).to eq([song.id, first_song.id, other_song.id])
+    end
+
+    it 'does not allow a performer to unpause a song' do
+      patch "/#{venue.slug}/songs/#{song.id}/unpause_song"
+
+      expect(response).to redirect_to("/#{venue.slug}/songs")
+      expect(song.reload.postponed).to be(true)
+    end
+  end
+
   describe 'PATCH /venues/:venue_slug/songs/:id/requeue_song' do
     let(:song) { create(:song, :finished, venue: venue, user: user, skipped: true, postponed: true) }
 

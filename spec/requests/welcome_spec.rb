@@ -32,4 +32,13 @@ RSpec.describe 'Welcome page', type: :request do
     expect(response.body).to include('Franklin Karaoke')
     expect(response.body).not_to include('Hidden Karaoke')
   end
+
+  it 'renders the sign-in page without a selected venue' do
+    sign_out user
+
+    get new_user_session_path
+
+    expect(response).to be_successful
+    expect(response.body).to include('Sign in')
+  end
 end

@@ -7,6 +7,296 @@
   color: $beige;
 }
 
+.app-header.app-header--songs {
+  position: relative;
+  z-index: $z-dropdown;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  border-bottom: 4px solid $yellow;
+  background: $midnight;
+
+  .app-header__bar {
+    box-sizing: border-box;
+    width: calc(100% - 2rem);
+    max-width: 1180px;
+    min-height: 104px;
+    margin: 0 auto;
+    padding: $space-lg 0;
+  }
+}
+
+.songs-app-header__identity {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: $space-md;
+}
+
+.songs-app-header__brand {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  color: $magenta;
+
+  &:hover,
+  &:focus-visible {
+    color: $magenta;
+  }
+}
+
+.songs-app-header__icon {
+  display: block;
+  width: 2.65rem;
+  height: 2.65rem;
+}
+
+.songs-app-header__venue {
+  min-width: 0;
+
+  h1 {
+    overflow: hidden;
+    margin: 0;
+    color: $beige;
+    font-size: clamp(1.5rem, 3.6vw, 2.7rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.songs-host-menu {
+  position: relative;
+  flex: 0 0 auto;
+  margin-left: auto;
+
+  &[open] .songs-host-menu__caret {
+    transform: rotate(90deg);
+  }
+}
+
+.songs-host-menu__summary {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+  color: $cyan;
+  font-size: clamp(0.9rem, 2vw, 1.25rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: $magenta;
+  }
+}
+
+.songs-host-menu__caret {
+  display: inline-block;
+  font-size: 1.8em;
+  font-weight: 400;
+  line-height: 0.5;
+  transition: transform $transition-fast;
+}
+
+.songs-host-menu__drawer {
+  position: fixed;
+  z-index: $z-dropdown;
+  top: 0;
+  right: 0;
+  display: flex;
+  box-sizing: border-box;
+  width: 360px;
+  max-width: calc(100vw - 1.5rem);
+  min-height: 100vh;
+  flex-direction: column;
+  gap: $space-xl;
+  padding: calc(1rem + #{$space-lg}) $space-xl $space-xl;
+  border-left: 4px solid $yellow;
+  background: $midnight;
+  box-shadow: $shadow-xl;
+}
+
+.songs-host-menu__heading {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: $space-lg;
+  border-bottom: 1px solid rgba($beige, 0.18);
+}
+
+.songs-host-menu__close {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+  padding: 0;
+  border: 0;
+  color: $cyan;
+  background: transparent;
+  font-size: clamp(0.9rem, 2vw, 1.25rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+
+  margin-left: auto;
+
+  &:hover,
+  &:focus-visible {
+    color: $magenta;
+  }
+}
+
+.songs-host-menu__eyebrow {
+  color: rgba($beige, 0.62);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.songs-host-menu__nav {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+}
+
+.songs-host-menu__link {
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
+  padding: $space-sm 0;
+  color: $cyan;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    color: $magenta;
+    text-decoration: none;
+  }
+}
+
+.songs-host-menu__link-icon {
+  display: inline-flex;
+  justify-content: center;
+  width: 1.25rem;
+  font-size: 1.15rem;
+}
+
+@media (min-width: 1212px) {
+  .songs-host-menu__drawer {
+    padding-right: calc((100vw - 1180px) / 2);
+  }
+}
+
+.pause-dialog {
+  width: 420px;
+  max-width: calc(100vw - 2rem);
+  padding: 0;
+  border: 1px solid rgba($yellow, 0.72);
+  border-radius: $radius-lg;
+  color: $beige;
+  background: $midnight;
+  box-shadow: $shadow-xl;
+
+  &::backdrop {
+    background: rgba($midnight, 0.78);
+  }
+}
+
+.pause-dialog__content {
+  padding: $space-xl;
+
+  h2 {
+    margin: 0;
+    color: $beige;
+    font-size: 1.35rem;
+    text-align: left;
+  }
+
+  p {
+    margin: $space-md 0 $space-lg;
+    color: rgba($beige, 0.72);
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+}
+
+.pause-dialog__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $space-md;
+}
+
+.pause-dialog__close {
+  padding: 0;
+  border: 0;
+  color: $cyan;
+  background: transparent;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    color: $magenta;
+  }
+}
+
+.pause-dialog__form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+}
+
+.pause-dialog__field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-md;
+
+  label {
+    color: $beige;
+    font-weight: 800;
+  }
+}
+
+.pause-dialog__input {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-sm;
+  color: $beige;
+  font-size: 0.85rem;
+
+  input {
+    width: 4.5rem;
+    box-sizing: border-box;
+    padding: $space-sm;
+    border: 1px solid rgba($cyan, 0.7);
+    border-radius: $radius-md;
+    color: $midnight;
+    background: $beige;
+    font: inherit;
+    font-weight: 800;
+    text-align: center;
+  }
+}
+
+.pause-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-sm;
+}
+
 .songs-header {
   border-bottom: 4px solid $yellow;
 }
@@ -631,7 +921,9 @@
 
   &--play { color: $magenta; border-color: rgba($magenta, 0.7); }
   &--open { color: $cyan; border-color: rgba($cyan, 0.7); }
-  &--finish { color: $yellow; border-color: rgba($yellow, 0.7); }
+  &--pause { color: $yellow; border-color: rgba($yellow, 0.7); }
+  &--unpause { color: $cyan; border-color: rgba($cyan, 0.7); }
+  &--cancel { color: rgba($beige, 0.72); border-color: rgba($beige, 0.35); }
   &--requeue { color: $cyan; border-color: rgba($cyan, 0.7); }
   &--skip { color: $yellow; border-color: rgba($yellow, 0.7); }
   &--edit { color: $cyan; border-color: rgba($cyan, 0.7); }
@@ -648,8 +940,8 @@
   &--remove:hover,
   &--remove:focus-visible { background: $magenta; }
 
-  &--finish:hover,
-  &--finish:focus-visible,
+  &--pause:hover,
+  &--pause:focus-visible,
   &--open:hover,
   &--open:focus-visible,
   &--requeue:hover,
@@ -657,8 +949,11 @@
   &--edit:hover,
   &--edit:focus-visible { background: $cyan; }
 
-  &--finish:hover,
-  &--finish:focus-visible { background: $yellow; }
+  &--pause:hover,
+  &--pause:focus-visible { background: $yellow; }
+
+  &--cancel:hover,
+  &--cancel:focus-visible { color: $midnight; background: $beige; }
 
   &--skip:hover,
   &--skip:focus-visible { background: $yellow; }

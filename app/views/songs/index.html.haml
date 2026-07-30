@@ -6,42 +6,35 @@
 - next_performer = @upcoming.first&.performer
 - active_tab = performer_view ? "add" : (@song.errors.any? ? "add" : "queue")
 
-- content_for :app_header_actions do
-  %span.songs-role-pill.songs-role-pill--app-header{ class: "songs-role-pill--#{role_label.downcase}" }
-    %span.songs-role-pill__dot
-    = role_label
+- content_for :songs_app_header do
+  .songs-app-header__identity
+    = link_to root_path, class: "songs-app-header__brand", aria: { label: "Karaoke Queue home" } do
+      = image_tag 'favicon.svg', alt: '', class: 'songs-app-header__icon'
+    .songs-app-header__venue
+      %h1= Current.venue.name
+  %details.songs-host-menu{ data: { controller: "disclosure", action: "click@window->disclosure#closeOnOutside keydown@window->disclosure#closeOnEscape" } }
+    %summary.songs-host-menu__summary
+      %span.songs-host-menu__caret{ aria: { hidden: "true" } } ›
+      %span= "#{role_label.upcase} MENU"
+    .songs-host-menu__drawer
+      .songs-host-menu__heading
+        %button.songs-host-menu__close{ type: "button", data: { action: "disclosure#close" } }
+          %span.songs-host-menu__caret{ aria: { hidden: "true" } } ›
+          %span= "#{role_label.upcase} MENU"
+      %nav.songs-host-menu__nav{ aria: { label: "Venue menu" } }
+        = link_to root_path, class: "songs-host-menu__link" do
+          %span.songs-host-menu__link-icon ←
+          %span Back to Venues
+        - if can_manage_queue
+          = link_to presentation_venue_songs_path(Current.venue.slug), class: "songs-host-menu__link", target: "_blank", rel: "noopener noreferrer" do
+            %span.songs-host-menu__link-icon ⤢
+            %span Presentation Mode
+        - if is_owner
+          = link_to venue_settings_path(Current.venue.slug), class: "songs-host-menu__link" do
+            %span.songs-host-menu__link-icon ⚙
+            %span Venue Settings
 
 .songs-page{ class: [("songs-page--manager" if can_manage_queue), ("songs-page--performer" if performer_view)], data: ({ controller: "youtube-player" } if can_manage_queue) }
-  %header.songs-header
-    .songs-header__inner
-      .songs-header__identity
-        .songs-header__venue-meta
-          %span.songs-role-pill.songs-role-pill--venue-meta{ class: "songs-role-pill--#{role_label.downcase}" }
-            %span.songs-role-pill__dot
-            = role_label
-        .songs-header__supporting
-          - if next_performer
-            %p.songs-header__queue-note
-              %strong= "#{next_performer} is next!"
-              %span= "· #{@upcoming.count} #{@upcoming.one? ? 'song' : 'songs'} in line"
-          %nav.songs-header__nav{ aria: { label: "Venue navigation" } }
-            = link_to root_path, class: "context-link songs-back-link songs-header__nav-link" do
-              %span.songs-header__nav-icon ←
-              %span.songs-header__nav-label.songs-header__nav-label--full Back to Venues
-              %span.songs-header__nav-label.songs-header__nav-label--short Venues
-            - if can_manage_queue
-              %span.songs-header__nav-separator{ aria: { hidden: "true" } } |
-              = link_to presentation_venue_songs_path(Current.venue.slug), class: "songs-header__link songs-header__nav-link", target: "_blank", rel: "noopener noreferrer" do
-                %span.songs-header__nav-icon ⤢
-                %span.songs-header__nav-label.songs-header__nav-label--full Presentation Mode
-                %span.songs-header__nav-label.songs-header__nav-label--short Presentation
-            - if is_owner
-              %span.songs-header__nav-separator{ aria: { hidden: "true" } } |
-              = link_to venue_settings_path(Current.venue.slug), class: "songs-header__link songs-header__nav-link" do
-                %span.songs-header__nav-icon ⚙
-                %span.songs-header__nav-label.songs-header__nav-label--full Venue Settings
-                %span.songs-header__nav-label.songs-header__nav-label--short Settings
-
   %main.songs-main
     .songs-responsive-tabs{ data: { controller: "responsive-tabs", responsive_tabs_breakpoint_value: 1000 } }
       .songs-tabs{ role: "tablist", aria: { label: "Venue queue sections" } }
@@ -88,8 +81,6 @@
                   %span.songs-heading__mobile-hide Performers
                 %span.songs-panel__summary-action
                   %span.songs-panel__summary-label= "Show (#{@finished.count})"
-                %span.songs-panel__summary-copy
-                  = @finished.any? ? "Review tonight’s completed performances." : "Completed performances will appear here."
               .songs-panel__collapsible
                 - if @finished.any?
                   .song-card-list.song-card-list--finished
@@ -150,8 +141,6 @@
                   %span.songs-heading__mobile-hide Performers
                 %span.songs-panel__summary-action
                   %span.songs-panel__summary-label= "Show (#{@finished.count})"
-                %span.songs-panel__summary-copy
-                  = @finished.any? ? "Review tonight’s completed performances." : "Completed performances will appear here."
               .songs-panel__collapsible
                 - if @finished.any?
                   .song-card-list.song-card-list--finished

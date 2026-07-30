@@ -2,9 +2,9 @@ class SongsController < ApplicationController
   before_action :authenticate_user!
   before_action :require_admin!, only: %i[ presentation ]
   protect_from_forgery with: :exception
-  before_action :set_song, only: %i[ destroy edit finish_song requeue_song show skip_song update ]
+  before_action :set_song, only: %i[ destroy edit finish_song pause_song requeue_song show skip_song unpause_song update ]
   before_action :authorize_manageable_song!, only: %i[ destroy edit skip_song update ]
-  before_action :authorize_admin_for_queue_actions, only: %i[ finish_song requeue_song ]
+  before_action :authorize_admin_for_queue_actions, only: %i[ finish_song pause_song requeue_song unpause_song ]
 
   # POST /:venue_slug/songs or /:venue_slug/songs.json
   def create
@@ -66,6 +66,21 @@ class SongsController < ApplicationController
     load_queue
   end
 
+  # PATCH /:venue_slug/songs/1/pause_song
+  def pause_song
+    spots_back = Integer(params[:spots_back], exception: false)
+
+    if spots_back.blank? || spots_back < 1
+      redirect_to venue_songs_path(Current.venue.slug), alert: "Choose at least one spot to move the song back."
+      return
+    end
+
+    SongQueue::Reorder.pause!(@song, spots_back)
+    redirect_to venue_songs_path(Current.venue.slug), notice: "#{@song.performer}'s song was paused."
+  rescue ActiveRecord::RecordInvalid, ArgumentError
+    redirect_to venue_songs_path(Current.venue.slug), alert: "#{@song.performer}'s song could not be paused."
+  end
+
   # GET /:venue_slug/songs/presentation
   def presentation
     load_queue
@@ -82,6 +97,14 @@ class SongsController < ApplicationController
     else
       redirect_to venue_songs_path(Current.venue.slug), alert: "#{@song.performer}'s song could not be requeued."
     end
+  end
+
+  # PATCH /:venue_slug/songs/1/unpause_song
+  def unpause_song
+    SongQueue::Reorder.unpause!(@song)
+    redirect_to venue_songs_path(Current.venue.slug), notice: "#{@song.performer}'s song is next in line."
+  rescue ActiveRecord::RecordInvalid, ArgumentError
+    redirect_to venue_songs_path(Current.venue.slug), alert: "#{@song.performer}'s song could not be unpaused."
   end
 
   # PATCH /:venue_slug/songs/1/skip_song
