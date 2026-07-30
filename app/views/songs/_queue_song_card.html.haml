@@ -77,9 +77,6 @@
               %span.song-action__icon ×
               %span Remove
       - else
-        = button_to skip_song_venue_song_path(Current.venue.slug, song), method: :patch, class: "song-action song-action--skip", title: (song.skipped? ? "Return song" : "Skip song"), form: { data: { turbo: false } } do
-          %span.song-action__icon= song.skipped? ? "↩" : "Ⅱ"
-          %span= song.skipped? ? "Return" : "Skip"
         %details.song-actions-secondary{ data: { controller: "disclosure", action: "click@window->disclosure#closeOnOutside keydown@window->disclosure#closeOnEscape" } }
           %summary.song-action.song-action--more
             %span.song-action__icon ⋯

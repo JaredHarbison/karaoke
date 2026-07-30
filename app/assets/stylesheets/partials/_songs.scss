@@ -75,6 +75,13 @@
   &[open] .songs-host-menu__caret {
     transform: rotate(90deg);
   }
+
+  &[open] > .songs-host-menu__summary {
+    position: fixed;
+    z-index: $z-dropdown + 1;
+    top: calc(1rem + #{$space-lg});
+    right: 1rem;
+  }
 }
 
 .songs-host-menu__summary {
@@ -126,31 +133,9 @@
 }
 
 .songs-host-menu__heading {
-  display: flex;
-  justify-content: flex-end;
+  height: 2rem;
   padding-bottom: $space-lg;
   border-bottom: 1px solid rgba($beige, 0.18);
-}
-
-.songs-host-menu__close {
-  display: inline-flex;
-  align-items: center;
-  gap: $space-xs;
-  padding: 0;
-  border: 0;
-  color: $cyan;
-  background: transparent;
-  font-size: clamp(0.9rem, 2vw, 1.25rem);
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-
-  margin-left: auto;
-
-  &:hover,
-  &:focus-visible {
-    color: $magenta;
-  }
 }
 
 .songs-host-menu__eyebrow {
@@ -192,6 +177,10 @@
 }
 
 @media (min-width: 1212px) {
+  .songs-host-menu[open] > .songs-host-menu__summary {
+    right: calc((100vw - 1180px) / 2);
+  }
+
   .songs-host-menu__drawer {
     padding-right: calc((100vw - 1180px) / 2);
   }

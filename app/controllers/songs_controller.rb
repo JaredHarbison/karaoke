@@ -3,8 +3,8 @@ class SongsController < ApplicationController
   before_action :require_admin!, only: %i[ presentation ]
   protect_from_forgery with: :exception
   before_action :set_song, only: %i[ destroy edit finish_song pause_song requeue_song show skip_song unpause_song update ]
-  before_action :authorize_manageable_song!, only: %i[ destroy edit skip_song update ]
-  before_action :authorize_admin_for_queue_actions, only: %i[ finish_song pause_song requeue_song unpause_song ]
+  before_action :authorize_manageable_song!, only: %i[ destroy edit update ]
+  before_action :authorize_admin_for_queue_actions, only: %i[ finish_song pause_song requeue_song skip_song unpause_song ]
 
   # POST /:venue_slug/songs or /:venue_slug/songs.json
   def create

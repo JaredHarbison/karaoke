@@ -18,9 +18,6 @@
       %span= "#{role_label.upcase} MENU"
     .songs-host-menu__drawer
       .songs-host-menu__heading
-        %button.songs-host-menu__close{ type: "button", data: { action: "disclosure#close" } }
-          %span.songs-host-menu__caret{ aria: { hidden: "true" } } ›
-          %span= "#{role_label.upcase} MENU"
       %nav.songs-host-menu__nav{ aria: { label: "Venue menu" } }
         = link_to root_path, class: "songs-host-menu__link" do
           %span.songs-host-menu__link-icon ←
