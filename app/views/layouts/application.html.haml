@@ -13,6 +13,7 @@
     %header.app-header
       .app-header__bar
         = render 'shared/brand_lockup'
+        .app-header__venue-name= Current.venue.name
         - if content_for?(:app_header_actions)
           .app-header__actions
             = yield :app_header_actions

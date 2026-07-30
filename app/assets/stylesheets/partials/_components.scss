@@ -684,35 +684,6 @@
   }
 }
 
-.video-selection {
-  border-top: 1px solid $ink-light;
-  padding-top: $space-md;
-  margin-top: $space-md;
-
-  label {
-    display: block;
-    margin-bottom: $space-sm;
-    font-weight: 500;
-    color: $text-primary;
-  }
-
-  input {
-    width: 100%;
-    padding: $space-sm;
-    border: 1px solid $ink-light;
-    border-radius: $radius-md;
-    background-color: #f9f9f9;
-    font-size: 0.875rem;
-    color: $text-secondary;
-    
-    &:focus {
-      outline: 2px solid $cyan;
-      outline-offset: 2px;
-      background-color: white;
-    }
-  }
-}
-
 .validation-message {
   margin-top: $space-md;
   padding: $space-sm;

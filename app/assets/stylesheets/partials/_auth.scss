@@ -33,8 +33,7 @@
   display: flex;
   font-size: 1.3rem;
   font-weight: 800;
-  gap: $space-md;
-  letter-spacing: 0.08em;
+  gap: $space-sm;
   line-height: 1;
   max-width: 480px;
   text-transform: uppercase;
@@ -68,7 +67,16 @@
 .app-header__bar {
   align-items: center;
   display: flex;
+  gap: 1rem;
   width: 100%;
+    .app-header__venue-name {
+    color: $beige;
+    font-size: 1.3rem;
+    font-weight: 800;
+    gap: $space-md;
+    letter-spacing: 0.08em;
+    line-height: 1;
+  }
 }
 .app-header__actions {
   align-items: center;

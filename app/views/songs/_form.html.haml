@@ -22,12 +22,5 @@
     
     %div#song-results{ data: { youtube_search_target: "results" }, class: "youtube-results-container" }
     
-    .video-selection
-      = label_tag do
-        %strong 📎 Selected Video URL:
-        %div#song-url-wrapper
-          \#{form.text_field :url, data: { youtube_search_target: "urlField" }, placeholder: "URL will appear here or paste manually", readonly: true}
-      = form.hidden_field :title, data: { youtube_search_target: "titleField" }
-  
   .form-actions
     = form.submit "Queue Song", class: "btn btn-primary btn-large", data: { disable_with: "Queueing..." }

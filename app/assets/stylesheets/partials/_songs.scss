@@ -83,12 +83,6 @@
   letter-spacing: -0.05em;
 }
 
-.songs-header__subtitle {
-  margin: 0;
-  color: rgba(242, 238, 226, 0.7);
-  font-size: 0.9rem;
-}
-
 .songs-header__venue-meta {
   display: flex;
   align-items: center;
@@ -144,9 +138,8 @@
 
 .songs-role-pill {
   padding: $space-xs $space-sm;
-  color: $midnight;
-  border: 1px solid $green;
-  background: $green;
+  color: $green;
+  box-shadow: 0 0 0 2px rgba(57, 255, 136, 0.5);
 
   &--host,
   &--performer {
@@ -177,37 +170,6 @@
   max-width: 1180px;
   margin: 0 auto;
   padding: $space-2xl 0 $space-3xl;
-}
-
-.songs-hero {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: $space-xl;
-  margin-bottom: $space-xl;
-}
-
-.songs-hero__copy {
-  max-width: 620px;
-
-  h2 {
-    margin: $space-xs 0;
-    color: $beige;
-    font-size: clamp(1.6rem, 3vw, 2.6rem);
-    line-height: 1.05;
-    text-align: left;
-  }
-
-  p:last-child {
-    margin: $space-sm 0 0;
-    color: rgba(242, 238, 226, 0.66);
-    font-size: 0.95rem;
-  }
-}
-
-.songs-hero__stats {
-  display: flex;
-  gap: $space-sm;
 }
 
 .songs-stat {
@@ -823,9 +785,6 @@
   }
 
   .search-input-group label,
-  .video-selection label {
-    color: $beige;
-  }
 
   .search-input-group .input-row {
     align-items: stretch;
@@ -898,8 +857,8 @@
 .songs-instructions {
   max-width: none;
   margin: $space-lg 0 0;
-  padding-top: $space-md;
-  border-top: 1px solid rgba($beige, 0.14);
+  padding-bottom: $space-md;
+  border-bottom: 1px solid rgba($beige, 0.14);
 
   summary {
     padding: 0;
@@ -1131,14 +1090,6 @@
     padding-top: $space-lg;
   }
 
-  .songs-hero {
-    margin-bottom: $space-lg;
-  }
-
-  .songs-hero__copy h2 {
-    font-size: clamp(1.5rem, 5vw, 2.15rem);
-  }
-
   .songs-tabs {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1346,14 +1297,6 @@
     width: calc(100% - 1rem);
     max-width: 960px;
     padding-top: $space-md;
-  }
-
-  .songs-hero {
-    margin-bottom: $space-md;
-  }
-
-  .songs-hero__copy p:last-child {
-    font-size: 0.86rem;
   }
 
   .song-queue-card__actions {
