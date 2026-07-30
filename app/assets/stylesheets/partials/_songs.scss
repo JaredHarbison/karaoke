@@ -229,7 +229,7 @@
 .pause-dialog__close {
   padding: 0;
   border: 0;
-  color: $cyan;
+  color: $magenta;
   background: transparent;
   font-size: 1.5rem;
   line-height: 1;
@@ -237,7 +237,8 @@
 
   &:hover,
   &:focus-visible {
-    color: $magenta;
+    color: $midnight;
+    background: $magenta;
   }
 }
 
@@ -284,6 +285,10 @@
   display: flex;
   justify-content: flex-end;
   gap: $space-sm;
+
+  .song-action {
+    width: 7rem;
+  }
 }
 
 .songs-header {
@@ -910,9 +915,9 @@
 
   &--play { color: $magenta; border-color: rgba($magenta, 0.7); }
   &--open { color: $cyan; border-color: rgba($cyan, 0.7); }
-  &--pause { color: $yellow; border-color: rgba($yellow, 0.7); }
+  &--pause { color: $magenta; border-color: rgba($magenta, 0.7); }
   &--unpause { color: $cyan; border-color: rgba($cyan, 0.7); }
-  &--cancel { color: rgba($beige, 0.72); border-color: rgba($beige, 0.35); }
+  &--cancel { color: $cyan; border-color: rgba($cyan, 0.7); }
   &--requeue { color: $cyan; border-color: rgba($cyan, 0.7); }
   &--skip { color: $yellow; border-color: rgba($yellow, 0.7); }
   &--edit { color: $cyan; border-color: rgba($cyan, 0.7); }
@@ -939,10 +944,10 @@
   &--edit:focus-visible { background: $cyan; }
 
   &--pause:hover,
-  &--pause:focus-visible { background: $yellow; }
+  &--pause:focus-visible { background: $magenta; }
 
   &--cancel:hover,
-  &--cancel:focus-visible { color: $midnight; background: $beige; }
+  &--cancel:focus-visible { color: $midnight; background: $cyan; }
 
   &--skip:hover,
   &--skip:focus-visible { background: $yellow; }

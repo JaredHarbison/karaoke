@@ -53,7 +53,7 @@
           %p Pause #{song.performer} and choose how many queue positions to move them back.
           = form_with url: pause_song_venue_song_path(Current.venue.slug, song), method: :patch, class: "pause-dialog__form", data: { turbo: false } do |form|
             .pause-dialog__field
-              = form.label :spots_back, "Move back"
+              = form.label :spots_back, "# spots to move back:"
               .pause-dialog__input
                 = form.number_field :spots_back, value: 1, min: 1, max: [@upcoming.length - 1, 1].max, required: true
                 %span spots
