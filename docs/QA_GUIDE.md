@@ -45,7 +45,7 @@ venue is `/demo-karaoke/songs`.
 | Recurring series form | Create or edit a series | Recurrence intent, schedule, time zone, and active state persist. |
 | Recurring series list | Select “Generate next 8 weeks” | Supported daily/weekly occurrences are created once; repeating the action does not duplicate them. |
 | Generated occurrence | Edit one generated event | The occurrence changes without changing the series or other occurrences. |
-| `/:venue_slug/themes` | Open as a venue host and create/edit a theme | The reusable theme persists for the current venue; rule enforcement is labeled forthcoming. |
+| `/:venue_slug/themes` | Open as a venue host and create/edit a theme | The reusable theme persists for the current venue; host-only routes work and rule enforcement is labeled forthcoming. |
 | Event themes | Open an event as a venue host and apply/remove a theme | The event shows its applied reusable theme; cross-venue themes are rejected. |
 | Theme isolation | Try to apply a theme from another venue or duplicate a venue theme name | The action is rejected and no cross-venue or duplicate theme is created. |
 

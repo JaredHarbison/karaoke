@@ -37,7 +37,7 @@ fail_if_found() {
 fail_if_found "debug code detected" '^\+[[:space:]]*(binding\.pry|byebug|debugger)([^[:alnum:]_]|$)'
 fail_if_found "obvious secret material detected" '(AKIA[0-9A-Z]{16}|-----BEGIN (RSA|EC|OPENSSH|PRIVATE) KEY-----|(api[_-]?key|client[_-]?secret|access[_-]?token)[[:space:]]*[:=][[:space:]]*[[:alnum:]_./+=-]{12,})'
 
-ruby_files="$(printf '%s\n' "$staged_files" | grep -E '\.rb$' || true)"
+ruby_files="$(printf '%s\n' "$staged_files" | grep -E '(\.rb$|^config/routes\.rb$)' || true)"
 if [[ -n "$ruby_files" ]]; then
   new_ruby_files="$(git diff --cached --name-only --diff-filter=A | grep -E '\.rb$' || true)"
   if [[ -n "$new_ruby_files" ]]; then
@@ -46,6 +46,9 @@ if [[ -n "$ruby_files" ]]; then
   while IFS= read -r ruby_file; do
     [[ -z "$ruby_file" ]] || bundle exec ruby -c "$ruby_file"
   done <<< "$ruby_files"
+  if printf '%s\n' "$staged_files" | grep -Eq '^config/routes\.rb$'; then
+    bundle exec rubocop --cache false config/routes.rb
+  fi
 fi
 
 erb_files="$(printf '%s\n' "$staged_files" | grep -E '\.erb$' || true)"
