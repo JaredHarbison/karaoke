@@ -133,7 +133,7 @@ RSpec.describe 'Songs', type: :request do
         post "/#{venue.slug}/songs", params: { song: { performer: 'Unsafe Singer', url: 'https://youtube.com/unsafe', event_id: other_event.id } }
       }.not_to change(Song, :count)
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(422)
     end
   end
 
