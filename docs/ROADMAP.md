@@ -25,8 +25,9 @@ Phase 1.
    admission integration remains; regression coverage includes incomplete
    and out-of-bounds windows).
 4. Add Fair Queue so performers with fewer completed turns are favored, with
-   sensible tie-breaking and host override (event-scoped ordering foundation
-   complete; configurable controls and audit remain).
+   sensible tie-breaking and host override. Event-level enable/disable,
+   queue-mode explanation, and durable override audit are complete; advanced
+   fairness policy remains future work.
 5. Add time-limited, event-specific temporary host delegation.
 6. Add venue presence, permanent venue QR navigation, and expiring event
    presence/session security.
@@ -75,6 +76,7 @@ The historical foundation remains as a record, but its global roles and
 `VenueAdmin` model were replaced during Phase 1 and are not treated as the
 current architecture.
 
-The Phase 2 foundation is complete for these slices, but event lifecycle
-polish, live theme admission/review integration, Fair Queue, delegation,
+The Phase 2 foundation is complete for these slices, and Fair Queue now has
+its first event-level control and audit surface. Event lifecycle polish, live
+theme admission/review integration, advanced Fair Queue policy, delegation,
 presence, and session security remain planned.

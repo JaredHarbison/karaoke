@@ -3,7 +3,8 @@
 Use this guide for a short browser pass after changes. It covers the current
 implemented product surface, including contextual membership management,
 events/recurring series, event-scoped queueing, and the reusable theme
-foundation. Fair Queue, temporary delegation, presence, and QR session
+foundation. Fair Queue’s initial ordering, event toggle, explanation, and host
+override audit are testable; temporary delegation, presence, and QR session
 security are not testable yet.
 
 ## Setup
@@ -54,6 +55,8 @@ venue is `/demo-karaoke/songs`.
 | Theme isolation | Try to apply a theme from another venue or duplicate a venue theme name | The action is rejected and no cross-venue or duplicate theme is created. |
 | Event Fair Queue | Open an event queue with performers who have different completed-turn histories | Fewer completed turns are favored; equal scores use stable queue order. |
 | Event Fair Queue override | As a host, pause or unpause an event queue song | The host override changes the event queue order without affecting another venue or event. |
+| Event Fair Queue setting | As a host, edit an event and turn Fair Queue off, then open its queue | The queue explains that it is FIFO and follows entry order; turning it back on restores Fair Queue behavior. |
+| Fair Queue override audit | As a host, pause or unpause an event queue song, then view the event | Recent Fair Queue overrides show the action, performer, host, and timestamp. Performers do not see the host audit section. |
 
 The following admission checks are planned and are not yet live in the queue:
 selected videos must be verified karaoke, and explicit lyrics must be rejected
@@ -81,8 +84,8 @@ It generates daily/weekly occurrences and lets a queue song be associated with
 an event. Venue-level queueing remains available. The current theme foundation
 also supports reusable definitions, event applications, bounded windows, and
 automated deterministic evaluator outcomes; live admission/review integration
-is not yet exposed. Fair Queue, delegation, presence, and QR security remain
-planned.
+is not yet exposed. Advanced Fair Queue policy, delegation, presence, and QR
+security remain planned.
 
 | `/:venue_slug/events/:id` | Open an event and choose “View event queue” | The queue is filtered to that event; queueing a song from the Add Song panel preserves the event context. |
 | `/:venue_slug/songs?event_id=:id` | Submit a song for a scheduled event | The song is associated with the selected venue event and appears in its queue. |

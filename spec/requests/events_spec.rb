@@ -77,6 +77,16 @@ RSpec.describe 'Events', type: :request do
       expect(event.reload.name).to eq('Holiday Karaoke')
       expect(series.reload.name).to eq('Friday Karaoke')
     end
+
+    it 'allows a host to configure the event queue mode' do
+      event = create(:event, venue: venue)
+      sign_in host
+
+      patch venue_event_path(venue.slug, event), params: { event: { fair_queue_enabled: false } }
+
+      expect(response).to redirect_to(venue_event_path(venue.slug, event))
+      expect(event.reload.fair_queue_enabled).to be(false)
+    end
   end
 
   describe 'recurring series management' do

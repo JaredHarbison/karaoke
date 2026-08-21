@@ -11,17 +11,17 @@ The first implementation orders an event queue by completed turns recorded in
 the existing event-scoped `Song` history, then uses stable queue position and ID
 tie-breaking. A performer’s additional queued songs count as later turns in the
 same ordering pass. Venue-level queues retain their existing FIFO ordering.
-Host pause/unpause reordering remains the explicit override mechanism.
+Hosts can enable or disable Fair Queue per event, and pause/unpause actions are
+recorded as event-scoped overrides.
 
 ## Consequences / implications
 
 Queue order reflects participation history without exposing unnecessary personal
-history. Manual overrides and exceptional cases should be visible and auditable.
-The current Fair Queue ordering is a service boundary; configurable mode,
-explanatory UI, and durable override audit remain future work.
+history. The event queue explains its active mode, and recent host overrides are
+visible to authorized venue users. The ordering service remains isolated from
+the canonical Song model and can evolve without a queue-domain migration.
 
 ## Deferred details
 
 Skipped songs, duets, newly joined performers, concurrency, configurable
-fairness modes, position messaging, and durable override persistence are
-deferred.
+fairness modes beyond the event toggle, and position messaging are deferred.

@@ -29,5 +29,10 @@
     <%= form.label :status, "Status" %>
     <%= form.select :status, Event.statuses.keys.map { |status| [status.humanize, status] } %>
   </div>
+  <div>
+    <%= form.check_box :fair_queue_enabled %>
+    <%= form.label :fair_queue_enabled, "Use Fair Queue for this event" %>
+    <small>Favor performers with fewer completed turns before repeat turns.</small>
+  </div>
   <%= form.submit %>
 <% end %>

@@ -77,7 +77,7 @@ class SongsController < ApplicationController
       return
     end
 
-    SongQueue::Reorder.pause!(@song, spots_back)
+    SongQueue::Reorder.pause!(@song, spots_back, actor: current_user)
     redirect_to venue_songs_path(Current.venue.slug), notice: "#{@song.performer}'s song was paused."
   rescue ActiveRecord::RecordInvalid, ArgumentError
     redirect_to venue_songs_path(Current.venue.slug), alert: "#{@song.performer}'s song could not be paused."
@@ -103,7 +103,7 @@ class SongsController < ApplicationController
 
   # PATCH /:venue_slug/songs/1/unpause_song
   def unpause_song
-    SongQueue::Reorder.unpause!(@song)
+    SongQueue::Reorder.unpause!(@song, actor: current_user)
     redirect_to venue_songs_path(Current.venue.slug), notice: "#{@song.performer}'s song is next in line."
   rescue ActiveRecord::RecordInvalid, ArgumentError
     redirect_to venue_songs_path(Current.venue.slug), alert: "#{@song.performer}'s song could not be unpaused."
@@ -177,7 +177,7 @@ class SongsController < ApplicationController
     @finished = queue.finished.order(updated_at: :desc)
     @skipped = queue.skipped
     @songs = queue
-    @upcoming = if @current_event
+    @upcoming = if @current_event&.fair_queue_enabled?
                   SongQueue::FairOrder.new(queue.upcoming, event: @current_event).call
                 else
                   queue.upcoming.order(:updated_at)

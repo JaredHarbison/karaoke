@@ -10,6 +10,8 @@
     <% end %>
     <dt>Status</dt>
     <dd><%= @event.status.humanize %></dd>
+    <dt>Queue mode</dt>
+    <dd><%= @event.fair_queue_enabled? ? 'Fair Queue: fewer completed turns are favored' : 'FIFO: songs follow queue order' %></dd>
     <% if @event.event_series %>
       <dt>Series</dt>
       <dd><%= @event.event_series.name %></dd>
@@ -50,6 +52,20 @@
     <% end %>
   </section>
   <p><%= link_to "View event queue", venue_songs_path(Current.venue.slug, event_id: @event.id) %></p>
+  <% if Current.venue.is_admin?(current_user) %>
+    <section aria-labelledby="queue-overrides-heading">
+      <h2 id="queue-overrides-heading">Recent Fair Queue overrides</h2>
+      <% if @queue_overrides.any? %>
+        <ul>
+          <% @queue_overrides.each do |override| %>
+            <li><%= override.action.humanize %> — <%= override.song.performer %> by <%= override.user.display_name %> (<%= l(override.created_at, format: :short) %>)</li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No host overrides have been recorded.</p>
+      <% end %>
+    </section>
+  <% end %>
   <% if Current.venue.is_admin?(current_user) %>
     <%= link_to "Edit event", edit_venue_event_path(Current.venue.slug, @event) %>
   <% end %>

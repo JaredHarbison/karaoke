@@ -14,6 +14,7 @@ class EventsController < ApplicationController
   def show
     @themes = Current.venue.themes.where(active: true).order(:name)
     @theme_applications = @event.event_theme_applications.includes(:theme).order(:starts_at)
+    @queue_overrides = @event.song_queue_overrides.includes(:song, :user).order(created_at: :desc).limit(10)
   end
 
   def new
@@ -69,6 +70,6 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.require(:event).permit(:name, :starts_at, :ends_at, :status, :event_series_id)
+    params.require(:event).permit(:name, :starts_at, :ends_at, :status, :event_series_id, :fair_queue_enabled)
   end
 end

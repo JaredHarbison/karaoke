@@ -1,0 +1,16 @@
+# frozen_string_literal: true
+
+require 'rails_helper'
+
+RSpec.describe SongQueueOverride, type: :model do
+  it 'requires the song to belong to the recorded event' do
+    event = create(:event)
+    other_event = create(:event)
+    song = create(:song, event: other_event)
+
+    override = described_class.new(event: event, song: song, user: event.venue.owner, action: 'pause')
+
+    expect(override).not_to be_valid
+    expect(override.errors[:song]).to include('must belong to the same event')
+  end
+end

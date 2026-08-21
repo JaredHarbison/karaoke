@@ -36,6 +36,9 @@
 
 .songs-page{ class: [("songs-page--manager" if can_manage_queue), ("songs-page--performer" if performer_view)], data: ({ controller: "youtube-player" } if can_manage_queue) }
   %main.songs-main
+    - if @current_event
+      %p.songs-queue-explanation
+        = @current_event.fair_queue_enabled? ? "Fair Queue favors performers with fewer completed turns before repeat turns." : "FIFO queue: songs follow the order they entered the queue."
     .songs-responsive-tabs{ data: { controller: "responsive-tabs", responsive_tabs_breakpoint_value: 1000 } }
       .songs-tabs{ role: "tablist", aria: { label: "Venue queue sections" } }
         %button.songs-tab{ id: "queue-tab", type: "button", role: "tab", tabindex: (active_tab == "queue" ? "0" : "-1"), aria: { controls: "queue-panel", selected: (active_tab == "queue").to_s }, data: { responsive_tabs_target: "tab", tab_name: "queue", action: "click->responsive-tabs#select keydown->responsive-tabs#navigate" } } Queue
