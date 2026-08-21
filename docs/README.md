@@ -10,6 +10,7 @@ docs explain decisions without claiming future work is implemented.
 - [Phase 0 completion record](PHASE_0_COMPLETION.md)
 - [Definition of Done](../CONTRIBUTING.md#definition-of-done)
 - [Testing and quality](TESTING.md)
+- [Manual QA guide](QA_GUIDE.md)
 - [Security guidance](SECURITY.md)
 - [Accessibility guidance](ACCESSIBILITY.md)
 - [Architecture decisions](architecture/)
