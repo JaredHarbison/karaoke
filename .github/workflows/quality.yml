@@ -69,15 +69,23 @@ jobs:
       needs.quality.result == 'success' &&
       (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
+    env:
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
 
     steps:
       - name: Check out code
         uses: actions/checkout@v4
 
       - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v4.1.0
+        if: env.HEROKU_API_KEY != '' && env.HEROKU_EMAIL != ''
+        uses: akhileshns/heroku-deploy@v3.15.15
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: peaceful-crag-96802
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
           usedocker: false
+
+      - name: Explain deployment skip
+        if: env.HEROKU_API_KEY == '' || env.HEROKU_EMAIL == ''
+        run: echo "Heroku deployment skipped because HEROKU_API_KEY and/or HEROKU_EMAIL is not configured."
