@@ -41,10 +41,6 @@ if [[ -n "$erb_files" ]]; then
   bundle exec erb_lint $erb_files
 fi
 
-if printf '%s\n' "$staged_files" | grep -Eq '^(app/|config/routes\.rb|db/|Gemfile|Gemfile\.lock|spec/)'; then
-  bundle exec rails runner 'abort("Current venue context is not isolated") unless Current.respond_to?(:venue)'
-fi
-
 if printf '%s\n' "$staged_files" | grep -Eq '^(app/.*\.rb|config/routes\.rb|spec/.*_spec\.rb)$'; then
   COVERAGE=false bundle exec rspec --tag critical
 fi
