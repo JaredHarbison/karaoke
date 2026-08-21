@@ -25,7 +25,7 @@ RSpec.describe EventThemeApplication, type: :model do
 
   it 'rejects a partial or out-of-bounds time window' do
     event = create(:event)
-    partial = build(:event_theme_application, event: event, starts_at: event.starts_at)
+    partial = build(:event_theme_application, event: event, starts_at: event.starts_at, ends_at: nil)
     starts_at = event.starts_at - 1.hour
     outside = build(:event_theme_application, event: event, starts_at: starts_at, ends_at: event.starts_at)
 

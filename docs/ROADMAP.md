@@ -22,7 +22,8 @@ Phase 1.
 3. Add reusable event themes with deterministic checks and host-review
    fallback (theme definitions, event applications, host routes, bounded
    application windows, and a provider-independent evaluator are covered;
-   admission integration remains).
+   admission integration remains; regression coverage includes incomplete
+   and out-of-bounds windows).
 4. Add Fair Queue so performers with fewer completed turns are favored, with
    sensible tie-breaking and host override.
 5. Add time-limited, event-specific temporary host delegation.
