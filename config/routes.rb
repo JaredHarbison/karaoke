@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   
   # Venue discovery
   get '/discover', to: 'venues#discover', as: 'discover_venues'
+  get '/help', to: 'help#index', as: :help
   post '/venues/join/:slug', to: 'venues#join', as: 'join_venue'
   get '/host-invitations/:token', to: 'venue_invitations#show', as: 'venue_invitation'
   
