@@ -4,6 +4,7 @@ on:
   pull_request:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   quality:
@@ -58,3 +59,23 @@ jobs:
         run: |
           bin/rails db:schema:dump
           git diff --exit-code -- db/schema.rb
+
+  deploy:
+    name: Deploy to Heroku
+    needs: quality
+    if: >-
+      needs.quality.result == 'success' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v4.1.0
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: peaceful-crag-96802
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          usedocker: false
