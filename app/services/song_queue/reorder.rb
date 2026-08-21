@@ -2,16 +2,16 @@ module SongQueue
   class Reorder
     class << self
       def pause!(song, spots_back, actor: nil)
-        reorder!(song, spots_back, postponed: true, move_to_front: false, actor: actor, action: 'pause')
+        reorder!(song, spots_back, postponed: true, move_to_front: false, override: { actor: actor, action: 'pause' })
       end
 
       def unpause!(song, actor: nil)
-        reorder!(song, 0, postponed: false, move_to_front: true, actor: actor, action: 'unpause')
+        reorder!(song, 0, postponed: false, move_to_front: true, override: { actor: actor, action: 'unpause' })
       end
 
       private
 
-      def reorder!(song, spots_back, postponed:, move_to_front:, actor:, action:)
+      def reorder!(song, spots_back, postponed:, move_to_front:, override:)
         raise ArgumentError unless song.persisted?
 
         Song.transaction do
@@ -30,7 +30,7 @@ module SongQueue
               updated_at: base_time + index.seconds
             )
           end
-          record_override(song, actor, action, spots_back)
+          record_override(song, override[:actor], override[:action], spots_back)
         end
       end
 
