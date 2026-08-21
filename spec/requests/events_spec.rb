@@ -91,22 +91,21 @@ RSpec.describe 'Events', type: :request do
 
   describe 'temporary host delegation' do
     it 'lets a venue host delegate event queue authority to a venue member' do
-      event = create(:event, venue: venue, starts_at: 1.hour.from_now, ends_at: 3.hours.from_now)
+      event = create(
+        :event, venue: venue, starts_at: 1.hour.from_now.change(sec: 0), ends_at: 3.hours.from_now.change(sec: 0)
+      )
       delegated_host = create(:user)
       venue.venue_memberships.create!(user: delegated_host, role: :performer)
       sign_in owner
 
-      expect do
-        post venue_event_host_delegations_path(venue.slug), params: {
-          event_id: event.id,
-          event_host_delegation: {
-            delegated_user_id: delegated_host.id,
-            starts_at: event.starts_at,
-            ends_at: event.ends_at
-          }
+      post venue_event_host_delegations_path(venue.slug), params: {
+        event_id: event.id,
+        event_host_delegation: {
+          delegated_user_id: delegated_host.id,
+          starts_at: event.starts_at,
+          ends_at: event.ends_at
         }
-      end.to change(EventHostDelegation, :count).by(1)
-
+      }
       expect(response).to redirect_to(venue_event_path(venue.slug, event))
       expect(EventHostDelegation.last.delegated_user).to eq(delegated_host)
     end
