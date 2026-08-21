@@ -2,6 +2,8 @@ class User < ApplicationRecord
   belongs_to :venue, optional: true
   has_many :songs, dependent: :nullify
   has_many :owned_venues, class_name: 'Venue', foreign_key: 'owner_id', dependent: :nullify
+  has_many :venue_memberships, dependent: :destroy
+  has_many :member_venues, through: :venue_memberships, source: :venue
   has_many :admin_for_venues, class_name: 'VenueAdmin', dependent: :destroy
   has_many :venues_as_admin, through: :admin_for_venues, source: :venue
   has_many :sent_venue_invitations, class_name: 'VenueInvitation', foreign_key: :invited_by_id, dependent: :destroy

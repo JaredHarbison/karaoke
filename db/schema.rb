@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_24_000000) do
+ActiveRecord::Schema[7.2].define(version: 2026_08_21_090000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -76,6 +76,18 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_24_000000) do
     t.index ["venue_id"], name: "index_venue_invitations_on_venue_id"
   end
 
+  create_table "venue_memberships", force: :cascade do |t|
+    t.bigint "venue_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "role", default: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_venue_memberships_on_user_id"
+    t.index ["venue_id", "role"], name: "index_venue_memberships_on_venue_id_and_role"
+    t.index ["venue_id", "user_id"], name: "index_venue_memberships_on_venue_id_and_user_id", unique: true
+    t.index ["venue_id"], name: "index_venue_memberships_on_venue_id"
+  end
+
   create_table "venues", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
@@ -97,5 +109,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_24_000000) do
   add_foreign_key "venue_admins", "venues"
   add_foreign_key "venue_invitations", "users", column: "invited_by_id"
   add_foreign_key "venue_invitations", "venues"
+  add_foreign_key "venue_memberships", "users"
+  add_foreign_key "venue_memberships", "venues"
   add_foreign_key "venues", "users", column: "owner_id"
 end

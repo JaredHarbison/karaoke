@@ -4,6 +4,8 @@ RSpec.describe User, type: :model do
   describe 'associations' do
     it { is_expected.to belong_to(:venue).optional }
     it { is_expected.to have_many(:owned_venues).class_name('Venue').with_foreign_key(:owner_id).dependent(:nullify) }
+    it { is_expected.to have_many(:venue_memberships).dependent(:destroy) }
+    it { is_expected.to have_many(:member_venues).through(:venue_memberships).source(:venue) }
     it { is_expected.to have_many(:admin_for_venues).class_name('VenueAdmin').dependent(:destroy) }
     it { is_expected.to have_many(:venues_as_admin).through(:admin_for_venues).source(:venue) }
     it { is_expected.to have_many(:songs).dependent(:nullify) }

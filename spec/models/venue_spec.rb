@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe Venue, type: :model do
   describe 'associations' do
     it { is_expected.to belong_to(:owner).optional }
+    it { is_expected.to have_many(:venue_memberships).dependent(:destroy) }
+    it { is_expected.to have_many(:members).through(:venue_memberships).source(:user) }
     it { is_expected.to have_many(:songs).dependent(:destroy) }
     it { is_expected.to have_many(:users).dependent(:nullify) }
     it { is_expected.to have_many(:admin_assignments).dependent(:destroy) }
@@ -36,6 +38,7 @@ RSpec.describe Venue, type: :model do
       user = create(:user, :admin)
       venue.add_admin(user)
       expect(venue.is_admin?(user)).to be true
+      expect(venue.venue_memberships.find_by(user: user).admin?).to be true
     end
 
     it 'does not add the same admin twice', :critical do
@@ -55,6 +58,7 @@ RSpec.describe Venue, type: :model do
       expect(venue.is_admin?(user)).to be true
       venue.remove_admin(user)
       expect(venue.is_admin?(user)).to be false
+      expect(venue.venue_memberships.find_by(user: user)).to be_nil
     end
   end
 
@@ -87,6 +91,7 @@ RSpec.describe Venue, type: :model do
       venue = create(:venue)
       expect(venue.owner).not_to be_nil
       expect(venue.owner.role).to eq('owner')
+      expect(venue.venue_memberships.find_by(user: venue.owner).owner?).to be true
     end
 
     context 'with_admins trait' do

@@ -15,7 +15,8 @@ remain compatibility-era code until the next phase.
 ## MVP sequence
 
 1. Collapse `VenueAdmin` and global role ambiguity into contextual
-   `VenueMembership`.
+   `VenueMembership` (in progress: membership foundation/backfill first, then
+   authorization and management cutover).
 2. Add events and recurring event series, including independently editable
    occurrences.
 3. Add reusable event themes with deterministic checks and host-review
