@@ -7,6 +7,7 @@ docs explain decisions without claiming future work is implemented.
 ## Start here
 
 - [Product roadmap](ROADMAP.md)
+- [Phase 0 completion record](PHASE_0_COMPLETION.md)
 - [Definition of Done](../CONTRIBUTING.md#definition-of-done)
 - [Testing and quality](TESTING.md)
 - [Security guidance](SECURITY.md)

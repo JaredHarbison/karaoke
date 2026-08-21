@@ -4,13 +4,13 @@ Karaoke Queue is a multi-venue Rails app for collaborative karaoke nights.
 This roadmap is product-oriented; architectural rationale lives in
 [`docs/architecture/`](architecture/).
 
-## Completed foundation
+## Current baseline
 
 The current app has one `User` identity, venue-scoped routes and queue data,
 Devise authentication, venue discovery/joining, owner/legacy host queue
-authorization, and song search/queue workflows. Phase 0 adds documentation,
-engineering guardrails, and role-aware application help. The current `VenueAdmin` and
-global user-role model remain compatibility-era code until the next phase.
+authorization, song search/queue workflows, and the Phase 0 engineering
+guardrails/help framework. The current `VenueAdmin` and global user-role model
+remain compatibility-era code until the next phase.
 
 ## MVP sequence
 
@@ -46,3 +46,13 @@ and authorization coverage, and updates to relevant docs in the same change.
 
 The roadmap does not claim that planned event, theme, Fair Queue, delegation,
 presence, or QR behavior exists today.
+
+## Finished
+
+- [Phase 0: roadmap, architecture records, engineering guardrails, and
+  application help](PHASE_0_COMPLETION.md)
+- [Historical venue foundation](PHASE_1_COMPLETION.md), including venue-scoped
+  routes, queue authorization, and the initial UI organization
+
+The historical foundation remains in the codebase, but its global roles and
+`VenueAdmin` model are intentionally not treated as the final architecture.
