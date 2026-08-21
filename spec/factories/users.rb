@@ -5,7 +5,9 @@ FactoryBot.define do
     password_confirmation { 'SecurePassword123!' }
 
     trait :platform_admin do
-      platform_admin { true }
+      after(:create) do |user|
+        create(:platform_membership, user: user)
+      end
     end
     trait :with_venue do
       association :venue, factory: :venue

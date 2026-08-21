@@ -10,9 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_08_21_110000) do
+ActiveRecord::Schema[7.2].define(version: 2026_08_21_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "platform_memberships", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "role", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_platform_memberships_on_user_id"
+  end
 
   create_table "songs", force: :cascade do |t|
     t.string "category"
@@ -43,9 +51,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_110000) do
     t.string "provider"
     t.string "uid"
     t.bigint "venue_id"
-    t.boolean "platform_admin", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["platform_admin"], name: "index_users_on_platform_admin"
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["venue_id"], name: "index_users_on_venue_id"
@@ -92,6 +98,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_110000) do
     t.index ["slug"], name: "index_venues_on_slug", unique: true
   end
 
+  add_foreign_key "platform_memberships", "users"
   add_foreign_key "songs", "users"
   add_foreign_key "songs", "venues"
   add_foreign_key "users", "venues"

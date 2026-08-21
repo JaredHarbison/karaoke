@@ -25,7 +25,8 @@ docs explain decisions without claiming future work is implemented.
 
 The current code uses one `User`, venue-scoped routes, and contextual
 `VenueMembership` authorization. The completed Phase 1 decision and its
-remaining UI follow-ups are in [identity and venue permissions](architecture/identity_and_venue_permissions.md).
+remaining UI follow-ups, including PlatformMembership, are in [identity and
+venue permissions](architecture/identity_and_venue_permissions.md).
 
 ## Quality tools
 

@@ -4,6 +4,7 @@ class User < ApplicationRecord
   has_many :owned_venues, class_name: 'Venue', foreign_key: 'owner_id', dependent: :nullify
   has_many :venue_memberships, dependent: :destroy
   has_many :member_venues, through: :venue_memberships, source: :venue
+  has_many :platform_memberships, dependent: :destroy
   has_many :sent_venue_invitations, class_name: 'VenueInvitation', foreign_key: :invited_by_id, dependent: :destroy
 
   # Include default devise modules. Others available are:
@@ -42,7 +43,7 @@ class User < ApplicationRecord
   end
 
   def platform_operator?
-    platform_admin?
+    platform_memberships.where(role: :admin).exists?
   end
 
   def display_name

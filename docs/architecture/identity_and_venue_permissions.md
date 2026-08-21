@@ -19,15 +19,16 @@ explicit, queryable, and auditable. Phase 1 adds the membership table and
 backfills existing venue owners, legacy venue admins, and users with an
 existing venue association. Authorization and host management now resolve
 through memberships; the legacy `VenueAdmin` table and global venue-role column
-have now been removed. A separate `platform_admin` capability is reserved for
-application-wide staff authority and does not grant venue ownership.
+have now been removed. A separate `PlatformMembership` relationship is reserved
+for application-wide staff authority and does not grant venue ownership.
 
 ## Deferred details
 
 Membership role semantics beyond the current owner/admin/performer mapping,
-platform-admin workflows such as venue-joining moderation, ownership transfer,
-event-level permissions, and richer member management are deferred. Event and
-event-level authority are not implemented.
+PlatformMembership roles beyond the initial admin role, platform-admin
+workflows such as venue-joining moderation, ownership transfer, event-level
+permissions, and richer member management are deferred. Event and event-level
+authority are not implemented.
 
 ## Planned UI/UX follow-up
 

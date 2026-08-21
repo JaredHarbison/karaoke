@@ -45,8 +45,8 @@ the existing queue and settings behavior remains stable while authorization and
 host management resolve through contextual membership data. The legacy
 `VenueAdmin` table and global user role are no longer used. The `/admins` URLs
 may remain in links for compatibility, but the visible workflow is presented as
-host management. Platform-admin workflows are not yet exposed and require a
-separate future QA section when venue-joining moderation is implemented.
+host management. PlatformMembership workflows are not yet exposed and require
+a separate future QA section when venue-joining moderation is implemented.
 
 ## Record findings
 

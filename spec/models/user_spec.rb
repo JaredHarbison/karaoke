@@ -6,6 +6,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_many(:owned_venues).class_name('Venue').with_foreign_key(:owner_id).dependent(:nullify) }
     it { is_expected.to have_many(:venue_memberships).dependent(:destroy) }
     it { is_expected.to have_many(:member_venues).through(:venue_memberships).source(:venue) }
+    it { is_expected.to have_many(:platform_memberships).dependent(:destroy) }
     it { is_expected.to have_many(:songs).dependent(:nullify) }
   end
 
