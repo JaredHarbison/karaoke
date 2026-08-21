@@ -50,9 +50,21 @@ class EventsController < ApplicationController
   private
 
   def load_show_data
+    load_theme_data
+    load_queue_audit_data
+    load_delegation_data
+  end
+
+  def load_theme_data
     @themes = Current.venue.themes.where(active: true).order(:name)
     @theme_applications = @event.event_theme_applications.includes(:theme).order(:starts_at)
+  end
+
+  def load_queue_audit_data
     @queue_overrides = @event.song_queue_overrides.includes(:song, :user).order(created_at: :desc).limit(10)
+  end
+
+  def load_delegation_data
     @event_host_delegations = @event.event_host_delegations
                                     .includes(:delegated_user, :delegated_by_user)
                                     .order(starts_at: :desc)

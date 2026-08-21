@@ -18,6 +18,8 @@ recurring-series authority.
 Authority can be audited and expires automatically. Existing contextual venue
 membership remains the source of permanent venue authority.
 The event page is the management surface for authorized permanent hosts.
+It exposes active and revoked delegations without making delegated users
+responsible for venue-wide administration.
 
 ## Deferred details
 

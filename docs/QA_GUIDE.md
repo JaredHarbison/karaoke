@@ -58,7 +58,7 @@ venue is `/demo-karaoke/songs`.
 | Event Fair Queue setting | As a host, edit an event and turn Fair Queue off, then open its queue | The queue explains that it is FIFO and follows entry order; turning it back on restores Fair Queue behavior. |
 | Fair Queue override audit | As a host, pause or unpause an event queue song, then view the event | Recent Fair Queue overrides show the action, performer, host, and timestamp. Performers do not see the host audit section. |
 | Temporary host delegation | As a permanent venue host, open an event and delegate a venue member for a time inside the event window | The event page lists the delegation and its time window; the delegated user can manage that event’s queue only while the delegation is active. |
-| Temporary host revocation | As a permanent venue host, revoke an active delegation | The delegation is marked revoked and the delegated user no longer has event queue authority. |
+| Temporary host revocation | As a permanent venue host, revoke an active delegation | The event page marks the delegation revoked and the delegated user no longer has event queue authority. |
 | Temporary host boundaries | Try to delegate outside the event window or as a performer | The delegation is rejected; performers cannot create or revoke delegations. Event and delegation times use the minute precision shown in the forms. |
 
 The following admission checks are planned and are not yet live in the queue:
