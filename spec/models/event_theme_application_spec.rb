@@ -15,8 +15,21 @@ RSpec.describe EventThemeApplication, type: :model do
   end
 
   it 'supports a bounded event-time window' do
-    application = build(:event_theme_application, starts_at: 1.hour.from_now, ends_at: 2.hours.from_now)
+    event = create(:event)
+    starts_at = event.starts_at + 1.hour
+    ends_at = event.ends_at - 1.hour
+    application = build(:event_theme_application, event: event, starts_at: starts_at, ends_at: ends_at)
 
     expect(application).to be_valid
+  end
+
+  it 'rejects a partial or out-of-bounds time window' do
+    event = create(:event)
+    partial = build(:event_theme_application, event: event, starts_at: event.starts_at)
+    starts_at = event.starts_at - 1.hour
+    outside = build(:event_theme_application, event: event, starts_at: starts_at, ends_at: event.starts_at)
+
+    expect(partial).not_to be_valid
+    expect(outside).not_to be_valid
   end
 end

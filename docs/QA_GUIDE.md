@@ -47,6 +47,7 @@ venue is `/demo-karaoke/songs`.
 | Generated occurrence | Edit one generated event | The occurrence changes without changing the series or other occurrences. |
 | `/:venue_slug/themes` | Open as a venue host and create/edit a theme | The reusable theme persists for the current venue; host-only routes work and rule enforcement is labeled forthcoming. |
 | Event themes | Open an event as a venue host and apply/remove a theme | The event shows its applied reusable theme; cross-venue themes are rejected. |
+| Event theme window | Apply a theme with start/end values inside the event | The event displays the bounded window; partial or out-of-event windows are rejected. |
 | Theme isolation | Try to apply a theme from another venue or duplicate a venue theme name | The action is rejected and no cross-venue or duplicate theme is created. |
 
 The following admission checks are planned and are not yet live in the queue:

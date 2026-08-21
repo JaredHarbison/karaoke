@@ -22,6 +22,11 @@
         <% @theme_applications.each do |application| %>
           <li>
             <%= application.theme.name %>
+            <% if application.starts_at && application.ends_at %>
+              (<%= l(application.starts_at, format: :short) %>–<%= l(application.ends_at, format: :short) %>)
+            <% else %>
+              (entire event)
+            <% end %>
             <% if Current.venue.is_admin?(current_user) %>
               <%= button_to "Remove", venue_event_theme_application_path(Current.venue.slug, application), method: :delete %>
             <% end %>
@@ -36,6 +41,10 @@
         <%= hidden_field_tag 'event_theme_application[event_id]', @event.id %>
         <%= label_tag 'event_theme_application_theme_id', 'Apply theme' %>
         <%= select_tag 'event_theme_application[theme_id]', options_from_collection_for_select(@themes, :id, :name), include_blank: 'Choose a theme' %>
+        <%= label_tag 'event_theme_application_starts_at', 'Window starts (optional)' %>
+        <%= datetime_local_field_tag 'event_theme_application[starts_at]' %>
+        <%= label_tag 'event_theme_application_ends_at', 'Window ends (optional)' %>
+        <%= datetime_local_field_tag 'event_theme_application[ends_at]' %>
         <%= form.submit 'Apply theme' %>
       <% end %>
     <% end %>

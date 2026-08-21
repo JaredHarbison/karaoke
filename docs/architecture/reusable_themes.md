@@ -9,7 +9,7 @@ theme and rules applied at a given time. A song check can also be uncertain.
 
 The first implementation defines reusable venue-scoped `Theme` records and
 `EventThemeApplication` records that attach them to one event. An application
-may carry an optional event-time window. Store the applicable theme context with
+may carry an optional event-time window bounded by the event. Store the applicable theme context with
 the performance/queue admission. Deterministic checks should reject or admit
 when reliable; uncertain cases go to host review. Theme-ineligible or pending
 songs may return to normal/Fair Queue eligibility when the theme ends unless
