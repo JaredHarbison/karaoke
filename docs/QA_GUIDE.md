@@ -49,6 +49,11 @@ venue is `/demo-karaoke/songs`.
 | Event themes | Open an event as a venue host and apply/remove a theme | The event shows its applied reusable theme; cross-venue themes are rejected. |
 | Theme isolation | Try to apply a theme from another venue or duplicate a venue theme name | The action is rejected and no cross-venue or duplicate theme is created. |
 
+The following admission checks are planned and are not yet live in the queue:
+selected videos must be verified karaoke, and explicit lyrics must be rejected
+when the venue policy disallows them. Unknown provider metadata should produce
+a review state rather than an automatic admission.
+
 ## Phase 1 membership checkpoint
 
 The completed Phase 1 slice does not introduce a new visible page. Verify that

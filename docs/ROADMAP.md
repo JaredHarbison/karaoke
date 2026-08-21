@@ -29,6 +29,13 @@ Phase 1.
    presence/session security.
 7. Complete MVP accessibility, reliability, presentation, and mobile polish.
 
+### Planned admission validation
+
+Before a song becomes a performance, provider-backed validation must establish
+that the selected YouTube video is genuinely karaoke and must reject explicit
+lyrics when the venue policy disallows them. Missing or ambiguous metadata must
+go to review rather than silently entering the queue.
+
 ## Post-MVP
 
 - Voting and other independently configurable event queue modes.

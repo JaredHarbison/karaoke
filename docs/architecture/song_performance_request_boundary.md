@@ -16,9 +16,12 @@ history. Do not rename the current queue object to `SongRequest`.
 ## Consequences / implications
 
 History, queue state, performer identity, and requests can evolve independently
-without duplicate representations or a misleading rename.
+without duplicate representations or a misleading rename. Admission validation
+belongs at the provider/performance boundary: karaoke status and venue content
+policy must be established before a performance is admitted.
 
 ## Deferred details
 
-The migration shape, canonical metadata ownership, snapshots, duets, and
-request permissions are deferred until event requirements are understood.
+The migration shape, canonical metadata ownership, snapshots, duets, request
+permissions, provider metadata verification, and the live admission workflow
+are deferred until event requirements are understood.
