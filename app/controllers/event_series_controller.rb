@@ -5,7 +5,7 @@ class EventSeriesController < ApplicationController
   before_action :authenticate_user!
   before_action :require_current_venue!
   before_action :require_admin!
-  before_action :set_event_series, only: %i[edit update]
+  before_action :set_event_series, only: %i[edit update generate_occurrences]
 
   def index
     @event_series = Current.venue.event_series.order(:name)
@@ -38,6 +38,13 @@ class EventSeriesController < ApplicationController
     end
   end
 
+  def generate_occurrences
+    count = generated_occurrence_count
+    redirect_to venue_event_series_index_path(Current.venue.slug), notice: "Generated #{count} event occurrences."
+  rescue ArgumentError => e
+    redirect_to venue_event_series_index_path(Current.venue.slug), alert: e.message
+  end
+
   private
 
   def set_event_series
@@ -46,5 +53,15 @@ class EventSeriesController < ApplicationController
 
   def event_series_params
     params.require(:event_series).permit(:name, :recurrence_rule, :starts_at, :ends_at, :time_zone, :active)
+  end
+
+  def generated_occurrence_count
+    EventSeriesOccurrenceGenerator.new(@event_series, through: occurrence_generation_through).call.size
+  end
+
+  def occurrence_generation_through
+    return 8.weeks.from_now unless params[:through].present?
+
+    Time.zone.parse(params[:through]).end_of_day
   end
 end

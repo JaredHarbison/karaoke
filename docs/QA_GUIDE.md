@@ -43,6 +43,8 @@ venue is `/demo-karaoke/songs`.
 | Event edit | Change one occurrence associated with a series | The occurrence changes while the series name and recurrence rule remain unchanged. |
 | `/:venue_slug/event-series` | Open as venue owner/host | Existing recurring series appear and can be edited. |
 | Recurring series form | Create or edit a series | Recurrence intent, schedule, time zone, and active state persist. |
+| Recurring series list | Select “Generate next 8 weeks” | Supported daily/weekly occurrences are created once; repeating the action does not duplicate them. |
+| Generated occurrence | Edit one generated event | The occurrence changes without changing the series or other occurrences. |
 
 ## Phase 1 membership checkpoint
 

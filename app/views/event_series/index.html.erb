@@ -9,6 +9,7 @@
         <li>
           <%= link_to series.name, edit_venue_event_series_path(Current.venue.slug, series) %>
           — <%= series.recurrence_rule %>
+          <%= button_to "Generate next 8 weeks", generate_occurrences_venue_event_series_path(Current.venue.slug, series), method: :post %>
         </li>
       <% end %>
     </ul>

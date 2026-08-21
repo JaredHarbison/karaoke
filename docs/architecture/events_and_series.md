@@ -22,11 +22,13 @@ audit history. Series provide reusable scheduling; occurrence overrides make
 exceptions explicit and independently editable. Venue owners and hosts manage
 events only through their contextual `VenueMembership`.
 
-The current UI exposes event listing and host-managed event/series forms. It
-does not yet generate occurrences from recurrence rules or attach songs to an
-event.
+The current UI exposes event listing and host-managed event/series forms. The
+first generator supports daily and weekly rules, materializes occurrences
+idempotently, and preserves existing occurrence edits. It does not attach songs
+to an event.
 
 ## Deferred details
 
-Timezone rules, recurrence syntax, cancellation, archival, publication,
-conflict handling, and migration from the current venue queue are deferred.
+Monthly/complex recurrence syntax, timezone/DST edge cases beyond the current
+timezone-aware generator, cancellation, archival, publication, conflict
+handling, and migration from the current venue queue are deferred.
