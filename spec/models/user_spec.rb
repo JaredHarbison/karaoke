@@ -64,7 +64,7 @@ RSpec.describe User, type: :model do
       it 'returns true' do
         owner = create(:user, :owner)
         venue = create(:venue, owner: owner)
-        user = create(:user, :admin)
+        user = create(:user, :performer)
         venue.add_admin(user)
         expect(user.admin_of?(venue)).to be true
       end

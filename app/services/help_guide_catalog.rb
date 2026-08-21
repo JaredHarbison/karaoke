@@ -54,6 +54,6 @@ class HelpGuideCatalog
     return false unless user
     return true if audience == :all
 
-    audience == :venue_operator && (user.owned_venues.exists? || user.venues_as_admin.exists?)
+    audience == :venue_operator && user.venue_operator?
   end
 end

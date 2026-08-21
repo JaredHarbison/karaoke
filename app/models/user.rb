@@ -37,7 +37,13 @@ class User < ApplicationRecord
   end
   
   def admin_of?(venue)
-    owner_of?(venue) || venues_as_admin.include?(venue)
+    venue.admin?(self)
+  end
+
+  def venue_operator?
+    venue_memberships.where(role: %i[owner admin]).exists? ||
+      owned_venues.exists? ||
+      venues_as_admin.exists?
   end
 
   def display_name

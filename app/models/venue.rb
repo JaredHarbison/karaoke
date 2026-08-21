@@ -32,10 +32,29 @@ class Venue < ApplicationRecord
   alias_method :remove_host, :remove_admin
   
   def is_admin?(user)
-    user.present? && (owner_id == user.id || admins.include?(user))
+    admin?(user)
   end
 
   alias_method :is_host?, :is_admin?
+
+  def membership_for(user)
+    return unless user
+
+    venue_memberships.find_by(user_id: user.id)
+  end
+
+  def owner?(user)
+    user.present? && (owner_id == user.id || membership_for(user)&.owner?)
+  end
+
+  def admin?(user)
+    return false unless user
+
+    membership = membership_for(user)
+    return true if membership&.owner? || membership&.admin?
+
+    owner_id == user.id || admins.exists?(id: user.id)
+  end
   
   private
 

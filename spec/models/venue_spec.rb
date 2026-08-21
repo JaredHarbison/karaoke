@@ -35,7 +35,7 @@ RSpec.describe Venue, type: :model do
   describe '#add_admin' do
     it 'adds a user as an admin' do
       venue = create(:venue)
-      user = create(:user, :admin)
+      user = create(:user, :performer)
       venue.add_admin(user)
       expect(venue.is_admin?(user)).to be true
       expect(venue.venue_memberships.find_by(user: user).admin?).to be true
@@ -43,7 +43,7 @@ RSpec.describe Venue, type: :model do
 
     it 'does not add the same admin twice', :critical do
       venue = create(:venue)
-      user = create(:user, :admin)
+      user = create(:user, :performer)
       venue.add_admin(user)
       venue.add_admin(user)
       expect(venue.admins.where(id: user.id).count).to eq(1)
@@ -53,7 +53,7 @@ RSpec.describe Venue, type: :model do
   describe '#remove_admin' do
     it 'removes a user as an admin', :critical do
       venue = create(:venue)
-      user = create(:user, :admin)
+      user = create(:user, :performer)
       venue.add_admin(user)
       expect(venue.is_admin?(user)).to be true
       venue.remove_admin(user)
@@ -66,7 +66,7 @@ RSpec.describe Venue, type: :model do
     context 'when user is an admin' do
       it 'returns true' do
         venue = create(:venue)
-        user = create(:user, :admin)
+        user = create(:user, :performer)
         venue.add_admin(user)
         expect(venue.is_admin?(user)).to be true
       end

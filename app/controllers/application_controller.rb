@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
   end
 
   def require_owner!
-    unless Current.venue.present? && Current.user.present? && Current.venue.owner_id == Current.user.id
+    unless Current.venue.present? && Current.venue.owner?(Current.user)
       redirect_to (Current.venue ? venue_songs_path(Current.venue.slug) : discover_venues_path), alert: 'Only the venue owner can access this page.'
     end
   end
