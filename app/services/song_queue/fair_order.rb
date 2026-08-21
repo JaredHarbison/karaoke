@@ -36,7 +36,8 @@ module SongQueue
 
     def fairness_key(song, completed_turns, turns_in_queue)
       performer = song.performer.to_s.downcase
-      [completed_turns[performer] + turns_in_queue[performer], completed_turns[performer], song.updated_at, song.id]
+      completed = completed_turns.fetch(performer, 0)
+      [completed + turns_in_queue[performer], completed, song.updated_at, song.id]
     end
 
     def completed_turns_by_performer
