@@ -10,9 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_08_21_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_08_21_130000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "event_series", force: :cascade do |t|
+    t.bigint "venue_id", null: false
+    t.string "name", null: false
+    t.string "recurrence_rule", null: false
+    t.datetime "starts_at", null: false
+    t.datetime "ends_at"
+    t.string "time_zone", default: "UTC", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["venue_id", "active"], name: "index_event_series_on_venue_id_and_active"
+    t.index ["venue_id"], name: "index_event_series_on_venue_id"
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.bigint "venue_id", null: false
+    t.bigint "event_series_id"
+    t.string "name", null: false
+    t.datetime "starts_at", null: false
+    t.datetime "ends_at"
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_series_id", "starts_at"], name: "index_events_on_event_series_id_and_starts_at"
+    t.index ["event_series_id"], name: "index_events_on_event_series_id"
+    t.index ["venue_id", "starts_at"], name: "index_events_on_venue_id_and_starts_at"
+    t.index ["venue_id"], name: "index_events_on_venue_id"
+  end
 
   create_table "platform_memberships", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -98,6 +127,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_120000) do
     t.index ["slug"], name: "index_venues_on_slug", unique: true
   end
 
+  add_foreign_key "event_series", "venues"
+  add_foreign_key "events", "event_series"
+  add_foreign_key "events", "venues"
   add_foreign_key "platform_memberships", "users"
   add_foreign_key "songs", "users"
   add_foreign_key "songs", "venues"

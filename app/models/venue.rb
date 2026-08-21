@@ -7,6 +7,8 @@ class Venue < ApplicationRecord
   has_many :songs, dependent: :destroy
   has_many :users, dependent: :nullify
   has_many :invitations, class_name: 'VenueInvitation', dependent: :destroy
+  has_many :event_series, dependent: :destroy
+  has_many :events, dependent: :destroy
   
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true, format: { with: /\A[a-z0-9-]+\z/, message: "only allows lowercase letters, numbers, and hyphens" }

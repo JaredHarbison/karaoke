@@ -41,9 +41,11 @@ that a run passed unless the command exits successfully.
 
 ## Database and migration checks
 
-For migrations, inspect `bin/rails db:migrate:status`, run the migration in a
-disposable/test database, verify constraints and indexes, and check that the
-schema is clean. Prefer safe, reversible migrations where practical.
+For local migrations, use `bin/rails db:migrate`; Rails updates `db/schema.rb`
+after a successful migration in the normal development configuration. Inspect
+the schema diff and verify constraints and indexes. CI separately dumps the
+schema and checks that it is reproducible. Prefer safe, reversible migrations
+where practical.
 
 ## Documentation maintenance
 
