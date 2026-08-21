@@ -55,6 +55,10 @@ selected videos must be verified karaoke, and explicit lyrics must be rejected
 when the venue policy disallows them. Unknown provider metadata should produce
 a review state rather than an automatic admission.
 
+Theme rule evaluation is also not yet exposed as a queue workflow; its current
+evaluator is covered by automated tests until provider metadata and host review
+are integrated.
+
 ## Phase 1 membership checkpoint
 
 The completed Phase 1 slice does not introduce a new visible page. Verify that

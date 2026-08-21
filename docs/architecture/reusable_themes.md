@@ -15,6 +15,10 @@ when reliable; uncertain cases go to host review. Theme-ineligible or pending
 songs may return to normal/Fair Queue eligibility when the theme ends unless
 explicitly rejected or removed for another reason.
 
+The current evaluator supports simple required and blocked keyword rules as a
+provider-independent foundation. It returns eligible, rejected, or review and
+does not yet change queue admission.
+
 ## Consequences / implications
 
 Theme behavior is auditable and reusable rather than copied into each song.
@@ -23,5 +27,6 @@ labels deterministic rule enforcement as forthcoming.
 
 ## Deferred details
 
-Metadata providers, rule authoring, review UI, time-window precedence, and
-exact status transitions are deferred.
+Metadata providers, rule authoring UI, provider-to-metadata normalization,
+review UI, time-window precedence, queue admission integration, and exact
+status transitions are deferred.
