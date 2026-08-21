@@ -8,7 +8,7 @@ CI is authoritative for the full repository:
 ```sh
 bundle exec rspec
 bundle exec rubocop
-bundle exec brakeman -q
+bundle exec brakeman -q -x EOLRails
 bundle exec bundle-audit check --update
 bundle exec erb_lint app/views
 bin/rails db:abort_if_pending_migrations
@@ -18,6 +18,11 @@ The pre-commit hook is a fast staged-change gate. It checks debug code and
 obvious secrets, runs RuboCop for staged Ruby, ERB lint for staged ERB, runs a
 small Rails boot sanity check, and runs critical specs for staged application
 or spec changes. It does not replace CI.
+
+RuboCop uses a checked-in `.rubocop_todo.yml` baseline for legacy offenses. New
+files must pass the configured cops, and existing exclusions should shrink as
+files are touched. Brakeman excludes only its Rails end-of-life lifecycle
+advisory; application security warnings remain blocking.
 
 ## Test conventions
 

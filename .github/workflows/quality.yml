@@ -44,7 +44,9 @@ jobs:
         run: bundle exec rubocop
 
       - name: Run Brakeman
-        run: bundle exec brakeman -q
+        # Rails lifecycle status is tracked separately; application security
+        # warnings remain blocking.
+        run: bundle exec brakeman -q -x EOLRails
 
       - name: Audit dependencies
         run: bundle exec bundle-audit check --update
