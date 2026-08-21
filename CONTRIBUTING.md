@@ -37,6 +37,18 @@ git config core.hooksPath .git-hooks
 The full authoritative gate runs in CI. The hook must fail when a required
 tool is unavailable; it must not turn a missing or skipped check into a pass.
 
+## Agent command workflow
+
+When working through an approved agent shell, prefer one command per execution
+so approval prefixes remain predictable. Use clean command prefixes such as
+`bundle exec`, `bin/rails`, `gh run`, and the appropriate `git` subcommand;
+avoid chaining unrelated commands with `&&` or prefixing commands with shell
+environment assignments when an equivalent direct invocation is available.
+
+After pushing, prefer one long-lived `gh run watch <run-id>` process over
+repeated status polling. Keep commit, merge, rebase, push, destructive Git
+operations, and production mutations approval-gated.
+
 ## Markdown standards
 
 All documentation and markdown files must:
