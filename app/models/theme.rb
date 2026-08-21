@@ -7,5 +7,4 @@ class Theme < ApplicationRecord
   has_many :events, through: :event_theme_applications
 
   validates :name, presence: true, uniqueness: { scope: :venue_id }
-  validates :rules, presence: true
 end
