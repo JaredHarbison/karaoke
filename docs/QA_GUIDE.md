@@ -37,6 +37,12 @@ venue is `/demo-karaoke/songs`.
 | `/help` as performer | Open help | General queue guidance appears; venue-operator guides are hidden. |
 | `/help` as owner/host | Open help | General and planned venue-operator guides appear; planned guides are labeled forthcoming. |
 | Signed-out `/help` | Open help | User is sent to sign in. |
+| `/:venue_slug/events` | Open as an authenticated performer | Upcoming venue events appear without host-management controls. |
+| `/:venue_slug/events/new` | Open as a venue host and create an event | The event is saved for the current venue and appears in the event list. |
+| `/:venue_slug/events/new` | Open as a performer | Access is rejected or redirected; no event is created. |
+| Event edit | Change one occurrence associated with a series | The occurrence changes while the series name and recurrence rule remain unchanged. |
+| `/:venue_slug/event-series` | Open as venue owner/host | Existing recurring series appear and can be edited. |
+| Recurring series form | Create or edit a series | Recurrence intent, schedule, time zone, and active state persist. |
 
 ## Phase 1 membership checkpoint
 
@@ -47,6 +53,12 @@ host management resolve through contextual membership data. The legacy
 may remain in links for compatibility, but the visible workflow is presented as
 host management. PlatformMembership workflows are not yet exposed and require
 a separate future QA section when venue-joining moderation is implemented.
+
+## Phase 2 event checkpoint
+
+The initial event surface adds venue-scoped event and recurring-series pages.
+It does not yet generate future occurrences, move queue songs into event scope,
+or expose themes, Fair Queue, delegation, presence, or QR security.
 
 ## Record findings
 

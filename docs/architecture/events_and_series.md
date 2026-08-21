@@ -8,7 +8,8 @@ change to every occurrence.
 
 ## Decision
 
-Phase 2 implementation begins with separate `Event` and `EventSeries` records.
+Phase 2 now has separate `Event` and `EventSeries` records and a first
+venue-scoped management surface.
 Both belong to a `Venue`; an `Event` may belong to one series, while every
 occurrence owns its editable title, schedule, and lifecycle fields. A one-off
 event has no series. `PlatformMembership` does not grant automatic venue
@@ -20,6 +21,10 @@ Events provide the future boundary for queue state, lifecycle, settings, and
 audit history. Series provide reusable scheduling; occurrence overrides make
 exceptions explicit and independently editable. Venue owners and hosts manage
 events only through their contextual `VenueMembership`.
+
+The current UI exposes event listing and host-managed event/series forms. It
+does not yet generate occurrences from recurrence rules or attach songs to an
+event.
 
 ## Deferred details
 

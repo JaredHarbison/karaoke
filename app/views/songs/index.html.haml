@@ -22,6 +22,9 @@
         = link_to root_path, class: "songs-host-menu__link" do
           %span.songs-host-menu__link-icon ←
           %span Back to Venues
+        = link_to venue_events_path(Current.venue.slug), class: "songs-host-menu__link" do
+          %span.songs-host-menu__link-icon ◷
+          %span Events
         - if can_manage_queue
           = link_to presentation_venue_songs_path(Current.venue.slug), class: "songs-host-menu__link", target: "_blank", rel: "noopener noreferrer" do
             %span.songs-host-menu__link-icon ⤢

@@ -1,0 +1,5 @@
+<main class="container" aria-labelledby="edit-event-heading">
+  <p><%= link_to "Back to event", venue_event_path(Current.venue.slug, @event) %></p>
+  <h1 id="edit-event-heading">Edit event</h1>
+  <%= render "form", form_url: venue_event_path(Current.venue.slug, @event), form_method: :patch %>
+</main>

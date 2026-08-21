@@ -51,6 +51,9 @@ Rails.application.routes.draw do
     # Admin management (owner only)
     post '/admins', to: 'venues#create_admin', as: 'admins'
     delete '/admins/:id', to: 'venues#destroy_admin', as: 'admin'
+
+    resources :events, except: :destroy
+    resources :event_series, path: 'event-series', except: :show
   end
   
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

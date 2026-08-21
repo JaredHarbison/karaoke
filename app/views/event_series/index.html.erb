@@ -1,0 +1,18 @@
+<main class="container" aria-labelledby="event-series-heading">
+  <p><%= link_to "Back to events", venue_events_path(Current.venue.slug) %></p>
+  <h1 id="event-series-heading">Recurring event series</h1>
+  <p>Series define recurring intent. Individual occurrences can be edited independently.</p>
+  <p><%= link_to "Create recurring series", new_venue_event_series_path(Current.venue.slug) %></p>
+  <% if @event_series.any? %>
+    <ul>
+      <% @event_series.each do |series| %>
+        <li>
+          <%= link_to series.name, edit_venue_event_series_path(Current.venue.slug, series) %>
+          — <%= series.recurrence_rule %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>No recurring series have been created yet.</p>
+  <% end %>
+</main>

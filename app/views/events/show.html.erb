@@ -1,0 +1,21 @@
+<main class="container" aria-labelledby="event-heading">
+  <p><%= link_to "Back to events", venue_events_path(Current.venue.slug) %></p>
+  <h1 id="event-heading"><%= @event.name %></h1>
+  <dl>
+    <dt>Starts</dt>
+    <dd><%= l(@event.starts_at, format: :long) %></dd>
+    <% if @event.ends_at %>
+      <dt>Ends</dt>
+      <dd><%= l(@event.ends_at, format: :long) %></dd>
+    <% end %>
+    <dt>Status</dt>
+    <dd><%= @event.status.humanize %></dd>
+    <% if @event.event_series %>
+      <dt>Series</dt>
+      <dd><%= @event.event_series.name %></dd>
+    <% end %>
+  </dl>
+  <% if Current.venue.is_admin?(current_user) %>
+    <%= link_to "Edit event", edit_venue_event_path(Current.venue.slug, @event) %>
+  <% end %>
+</main>

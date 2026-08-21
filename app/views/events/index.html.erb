@@ -1,0 +1,29 @@
+<main class="container" aria-labelledby="events-heading">
+  <header>
+    <p><%= link_to "Back to queue", venue_songs_path(Current.venue.slug) %></p>
+    <h1 id="events-heading">Events</h1>
+    <p>Review upcoming karaoke nights for <%= Current.venue.name %>.</p>
+    <% if Current.venue.is_admin?(current_user) %>
+      <p>
+        <%= link_to "Create event", new_venue_event_path(Current.venue.slug) %>
+        · <%= link_to "Manage recurring series", venue_event_series_index_path(Current.venue.slug) %>
+      </p>
+    <% end %>
+  </header>
+
+  <% if @events.any? %>
+    <ul>
+      <% @events.each do |event| %>
+        <li>
+          <%= link_to event.name, venue_event_path(Current.venue.slug, event) %>
+          — <%= l(event.starts_at, format: :long) %>
+          <% if event.event_series %>
+            <span>(<%= event.event_series.name %>)</span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>No events have been scheduled yet.</p>
+  <% end %>
+</main>

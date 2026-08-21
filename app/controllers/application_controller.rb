@@ -46,6 +46,12 @@ class ApplicationController < ActionController::Base
       redirect_to discover_venues_path, alert: 'Venue not found. Please select a venue to continue.'
     end
   end
+
+  def require_current_venue!
+    return if Current.venue.present?
+
+    redirect_to discover_venues_path, alert: 'Venue not found. Please select a venue to continue.'
+  end
   
   def require_admin!
     unless Current.venue.present? && Current.venue.is_admin?(Current.user)
