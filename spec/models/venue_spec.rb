@@ -96,7 +96,7 @@ RSpec.describe Venue, type: :model do
     context 'with_admins trait' do
       it 'creates admins for the venue' do
         venue = create(:venue, :with_admins, admin_count: 3)
-      expect(venue.hosts.count).to eq(3)
+        expect(venue.hosts.count).to eq(3)
       end
     end
 
