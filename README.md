@@ -33,7 +33,7 @@ migration.
 
 ## Tech stack
 
-- Ruby 3.3.0 and Rails 7.1
+- Ruby 3.3.0 and Rails 7.2
 - PostgreSQL
 - Hotwire (Turbo and Stimulus) with import maps
 - ERB, Haml, and a custom Sass component system
