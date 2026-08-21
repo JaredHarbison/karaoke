@@ -7,6 +7,7 @@ class Event < ApplicationRecord
   has_many :songs, dependent: :nullify
   has_many :song_queue_overrides, dependent: :destroy
   has_many :event_host_delegations, dependent: :destroy
+  has_many :event_presence_sessions, dependent: :destroy
   has_many :event_theme_applications, dependent: :destroy
   has_many :themes, through: :event_theme_applications
 

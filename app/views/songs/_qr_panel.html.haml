@@ -5,6 +5,6 @@
       %span.songs-panel__summary-label= "Show"
     %span.songs-panel__summary-copy Scan this code from your phone to open this venue’s queue.
   .songs-panel__collapsible
-    .songs-qr
-      = image_tag "Untitled.png", alt: "QR code for the #{Current.venue.name} queue"
+    .songs-qr{ role: "img", aria: { label: "QR code for the permanent #{Current.venue.name} queue link" } }
+      != qr_code_svg(queue_url)
     %code.songs-qr__url= queue_url

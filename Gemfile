@@ -50,6 +50,7 @@ gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"
 
 gem "haml-rails", "~> 2.0"
+gem "rqrcode", "~> 3.0"
 
 gem "sassc-rails"
 

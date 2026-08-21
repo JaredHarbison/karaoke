@@ -4,8 +4,8 @@ Use this guide for a short browser pass after changes. It covers the current
 implemented product surface, including contextual membership management,
 events/recurring series, event-scoped queueing, and the reusable theme
 foundation. Fair Queue’s initial ordering, event toggle, explanation, and host
-override audit are testable; temporary delegation, presence, and QR session
-security are not testable yet.
+override audit are testable; venue/event presence access is now testable, while
+physical location enforcement remains forthcoming.
 
 ## Setup
 
@@ -60,6 +60,9 @@ venue is `/demo-karaoke/songs`.
 | Temporary host delegation | As a permanent venue host, open an event and delegate a venue member for a time inside the event window | The event page lists the delegation and its time window; the delegated user can manage that event’s queue only while the delegation is active. |
 | Temporary host revocation | As a permanent venue host, revoke an active delegation | The event page marks the delegation revoked and the delegated user no longer has event queue authority. |
 | Temporary host boundaries | Try to delegate outside the event window or as a performer | The delegation is rejected; performers cannot create or revoke delegations. Event and delegation times use the minute precision shown in the forms. |
+| Permanent venue QR access | Open the permanent venue presence URL or scan its QR destination | The URL resolves to that venue’s existing queue flow without selecting another venue. |
+| Event access code | As a permanent venue host, generate an event access code and open it before expiry | The code resolves to the selected event queue. |
+| Event access expiry/revocation | Open an expired or revoked event access code | Access is rejected and the user is sent to venue discovery. |
 
 The following admission checks are planned and are not yet live in the queue:
 selected videos must be verified karaoke, and explicit lyrics must be rejected
@@ -87,9 +90,9 @@ It generates daily/weekly occurrences and lets a queue song be associated with
 an event. Venue-level queueing remains available. The current theme foundation
 also supports reusable definitions, event applications, bounded windows, and
 automated deterministic evaluator outcomes; live admission/review integration
-is not yet exposed. Advanced Fair Queue policy, delegation, presence, and QR
-security remain planned. Temporary host delegation is now testable from the
-event page for queue authority, expiry, and revocation.
+is not yet exposed. Advanced Fair Queue policy and physical location security
+remain planned. Temporary host delegation and event access sessions are
+testable from the event page for authority, expiry, and revocation.
 
 | `/:venue_slug/events/:id` | Open an event and choose “View event queue” | The queue is filtered to that event; queueing a song from the Add Song panel preserves the event context. |
 | `/:venue_slug/songs?event_id=:id` | Submit a song for a scheduled event | The song is associated with the selected venue event and appears in its queue. |

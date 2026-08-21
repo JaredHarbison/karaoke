@@ -32,7 +32,9 @@ Phase 1.
    authority, expiry, revocation, and host management surface complete;
    notifications and conflict handling remain future work).
 6. Add venue presence, permanent venue QR navigation, and expiring event
-   presence/session security.
+   presence/session security (permanent venue and expiring event access URLs,
+   revocation, and bounded expiry are complete; physical location enforcement
+   remains future work).
 7. Complete MVP accessibility, reliability, presentation, and mobile polish.
 
 ### Planned admission validation
@@ -81,5 +83,6 @@ current architecture.
 The Phase 2 foundation is complete for these slices, and Fair Queue now has
 its first event-level control and audit surface. Event lifecycle polish, live
 theme admission/review integration, advanced Fair Queue policy, delegation,
-presence, and session security remain planned. Temporary delegation now has its
-initial event-scoped queue authority and management surface.
+presence, and session security now have their initial access-token surface.
+Temporary delegation now has its initial event-scoped queue authority and
+management surface.

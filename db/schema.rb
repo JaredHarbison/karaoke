@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_08_21_195000) do
+ActiveRecord::Schema[7.2].define(version: 2026_08_21_201000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -27,6 +27,20 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_195000) do
     t.index ["delegated_user_id"], name: "index_event_host_delegations_on_delegated_user_id"
     t.index ["event_id", "starts_at", "ends_at"], name: "idx_on_event_id_starts_at_ends_at_e340379ba6"
     t.index ["event_id"], name: "index_event_host_delegations_on_event_id"
+  end
+
+  create_table "event_presence_sessions", force: :cascade do |t|
+    t.bigint "event_id", null: false
+    t.bigint "created_by_user_id", null: false
+    t.string "token", null: false
+    t.datetime "expires_at", null: false
+    t.datetime "revoked_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_user_id"], name: "index_event_presence_sessions_on_created_by_user_id"
+    t.index ["event_id", "expires_at"], name: "index_event_presence_sessions_on_event_id_and_expires_at"
+    t.index ["event_id"], name: "index_event_presence_sessions_on_event_id"
+    t.index ["token"], name: "index_event_presence_sessions_on_token", unique: true
   end
 
   create_table "event_series", force: :cascade do |t|
@@ -178,7 +192,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_195000) do
     t.datetime "updated_at", null: false
     t.bigint "owner_id"
     t.boolean "public", default: true
+    t.string "presence_token"
     t.index ["owner_id"], name: "index_venues_on_owner_id"
+    t.index ["presence_token"], name: "index_venues_on_presence_token", unique: true
     t.index ["public"], name: "index_venues_on_public"
     t.index ["slug"], name: "index_venues_on_slug", unique: true
   end
@@ -186,6 +202,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_195000) do
   add_foreign_key "event_host_delegations", "events"
   add_foreign_key "event_host_delegations", "users", column: "delegated_by_user_id"
   add_foreign_key "event_host_delegations", "users", column: "delegated_user_id"
+  add_foreign_key "event_presence_sessions", "events"
+  add_foreign_key "event_presence_sessions", "users", column: "created_by_user_id"
   add_foreign_key "event_series", "venues"
   add_foreign_key "event_theme_applications", "events"
   add_foreign_key "event_theme_applications", "themes"

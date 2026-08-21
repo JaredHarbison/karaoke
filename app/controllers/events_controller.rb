@@ -69,6 +69,7 @@ class EventsController < ApplicationController
                                     .includes(:delegated_user, :delegated_by_user)
                                     .order(starts_at: :desc)
     @delegation_candidates = Current.venue.members.order(:email)
+    @presence_sessions = @event.event_presence_sessions.order(created_at: :desc)
   end
 
   def set_event

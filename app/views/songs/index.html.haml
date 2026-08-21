@@ -2,7 +2,7 @@
 - performer_view = !can_manage_queue
 - is_owner = Current.venue.owner == current_user
 - role_label = is_owner ? "Owner" : (can_manage_queue ? "Host" : "Performer")
-- queue_url = venue_songs_url(Current.venue.slug)
+- queue_url = venue_presence_url(Current.venue.presence_token)
 - next_performer = @upcoming.first&.performer
 - active_tab = performer_view ? "add" : (@song.errors.any? ? "add" : "queue")
 

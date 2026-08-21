@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   # Venue discovery
   get '/discover', to: 'venues#discover', as: 'discover_venues'
   get '/help', to: 'help#index', as: :help
+  get '/venues/presence/:token', to: 'presence#venue', as: :venue_presence
+  get '/event-presence/:token', to: 'presence#event', as: :event_presence
   post '/venues/join/:slug', to: 'venues#join', as: 'join_venue'
   get '/host-invitations/:token', to: 'venue_invitations#show', as: 'venue_invitation'
   
@@ -54,6 +56,7 @@ Rails.application.routes.draw do
 
     resources :events, except: :destroy
     resources :event_host_delegations, only: %i[create destroy]
+    resources :event_presence_sessions, only: %i[create destroy]
     resources :themes, except: :show
     resources :event_theme_applications, only: %i[create destroy]
     resources :event_series, path: 'event-series', except: :show do

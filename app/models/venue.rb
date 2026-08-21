@@ -17,6 +17,7 @@ class Venue < ApplicationRecord
   
   before_validation :generate_slug, if: -> { slug.blank? && name.present? }
   after_create :ensure_owner_membership
+  before_validation :ensure_presence_token
   
   def add_host(user)
     membership = venue_memberships.find_or_initialize_by(user: user)
@@ -68,5 +69,9 @@ class Venue < ApplicationRecord
   
   def generate_slug
     self.slug = name.parameterize
+  end
+
+  def ensure_presence_token
+    self.presence_token ||= SecureRandom.urlsafe_base64(24)
   end
 end

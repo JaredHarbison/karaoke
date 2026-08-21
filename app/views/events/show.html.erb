@@ -53,6 +53,32 @@
   </section>
   <p><%= link_to "View event queue", venue_songs_path(Current.venue.slug, event_id: @event.id) %></p>
   <% if Current.venue.is_admin?(current_user) %>
+    <section aria-labelledby="presence-heading">
+      <h2 id="presence-heading">Event access</h2>
+      <% if @presence_sessions.any? %>
+        <ul>
+          <% @presence_sessions.each do |presence_session| %>
+            <li>
+              <%= link_to event_presence_url(presence_session.token), event_presence_url(presence_session.token) %>
+              — expires <%= l(presence_session.expires_at, format: :short) %>
+              <% if presence_session.revoked_at %>(revoked)<% else %>
+                <%= button_to 'Revoke', venue_event_presence_session_path(Current.venue.slug, presence_session), method: :delete %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No event access codes are active.</p>
+      <% end %>
+      <%= form_with url: venue_event_presence_sessions_path(Current.venue.slug), scope: :event_presence_session, method: :post, local: true do |form| %>
+        <%= hidden_field_tag :event_id, @event.id %>
+        <%= form.label :expires_at, 'Expires (optional)' %>
+        <%= form.datetime_local_field :expires_at, value: @event.ends_at&.strftime('%Y-%m-%dT%H:%M') %>
+        <%= form.submit 'Generate event access code' %>
+      <% end %>
+    </section>
+  <% end %>
+  <% if Current.venue.is_admin?(current_user) %>
     <section aria-labelledby="delegations-heading">
       <h2 id="delegations-heading">Temporary event hosts</h2>
       <% if @event_host_delegations.any? %>
