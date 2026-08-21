@@ -121,9 +121,10 @@ checks. See [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`docs/TESTING.md`](docs/TE
 
 ## Current direction
 
-Phase 0 establishes documentation, engineering guardrails, and internal admin
-help. The next product phase is to collapse the legacy global role ambiguity
-into contextual `VenueMembership`; events and recurring event series follow.
+Phase 0 established documentation, engineering guardrails, and internal help.
+Phase 1 established contextual `VenueMembership` authorization and
+`PlatformMembership` identity. Phase 2 event/series and reusable-theme
+foundations are now in progress; Fair Queue and later event operations follow.
 
 ## License
 

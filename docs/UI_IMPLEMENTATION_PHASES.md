@@ -5,7 +5,9 @@
 This is a historical UI planning document. Current product sequencing is in
 [`ROADMAP.md`](ROADMAP.md); planned architecture is in
 [`architecture/`](architecture/). Items below must not be read as proof that
-future events, themes, presence, or Fair Queue behavior is implemented.
+future Fair Queue, presence, QR security, or live theme-admission behavior is
+implemented; the current event/theme foundation is tracked in the roadmap and
+QA guide.
 
 **Key Principles:**
 
@@ -24,7 +26,10 @@ future events, themes, presence, or Fair Queue behavior is implemented.
 | Host | `host` | KJ / karaoke runner; queue management |
 | Performer | `performer` | General user; default role |
 
-> **Note:** Early Phase 1 code used "Admin" for what is now called "Host." Phase 2 covers the rename migration. The flowchart (design reference) uses User / Admin / Host — these map to Performer / Owner / Host respectively.
+> **Note:** Early Phase 1 code used "Admin" for what is now called "Host." The
+> contextual membership migration is complete. The flowchart (design
+> reference) uses User / Admin / Host — these map to Performer / Owner / Host
+> respectively.
 
 ---
 

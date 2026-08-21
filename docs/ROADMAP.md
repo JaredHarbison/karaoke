@@ -64,7 +64,16 @@ presence, or QR behavior exists today.
   application help](PHASE_0_COMPLETION.md)
 - [Historical venue foundation](PHASE_1_COMPLETION.md), including venue-scoped
   routes, queue authorization, and the initial UI organization
+- Phase 1 contextual membership and platform-membership foundation, including
+  membership-backed host management and application-wide staff identity.
+- Phase 2 event/theme foundation slices: venue-scoped events, recurring
+  occurrence materialization, event-scoped queue association, reusable themes,
+  bounded theme applications, and deterministic evaluator outcomes.
 
 The historical foundation remains as a record, but its global roles and
 `VenueAdmin` model were replaced during Phase 1 and are not treated as the
 current architecture.
+
+The Phase 2 foundation is complete for these slices, but event lifecycle
+polish, live theme admission/review integration, Fair Queue, delegation,
+presence, and session security remain planned.

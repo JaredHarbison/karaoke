@@ -1,8 +1,10 @@
 # Manual QA Guide
 
 Use this guide for a short browser pass after changes. It covers the current
-implemented product surface; planned event UI, membership management, themes,
-Fair Queue, presence, and QR session security are not testable yet.
+implemented product surface, including contextual membership management,
+events/recurring series, event-scoped queueing, and the reusable theme
+foundation. Fair Queue, temporary delegation, presence, and QR session
+security are not testable yet.
 
 ## Setup
 
@@ -74,8 +76,11 @@ a separate future QA section when venue-joining moderation is implemented.
 
 The initial event surface adds venue-scoped event and recurring-series pages.
 It generates daily/weekly occurrences and lets a queue song be associated with
-an event. Venue-level queueing remains available. It does not yet expose
-themes, Fair Queue, delegation, presence, or QR security.
+an event. Venue-level queueing remains available. The current theme foundation
+also supports reusable definitions, event applications, bounded windows, and
+automated deterministic evaluator outcomes; live admission/review integration
+is not yet exposed. Fair Queue, delegation, presence, and QR security remain
+planned.
 
 | `/:venue_slug/events/:id` | Open an event and choose “View event queue” | The queue is filtered to that event; queueing a song from the Add Song panel preserves the event context. |
 | `/:venue_slug/songs?event_id=:id` | Submit a song for a scheduled event | The song is associated with the selected venue event and appears in its queue. |
