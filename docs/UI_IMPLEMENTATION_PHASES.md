@@ -2,7 +2,10 @@
 
 ## Overview
 
-This document outlines the phased approach to modernizing the UI with role-based access control, real-time Turbo Frames, slug-based routing, and a professional design system.
+This is a historical UI planning document. Current product sequencing is in
+[`ROADMAP.md`](ROADMAP.md); planned architecture is in
+[`architecture/`](architecture/). Items below must not be read as proof that
+future events, themes, presence, or Fair Queue behavior is implemented.
 
 **Key Principles:**
 
@@ -27,10 +30,11 @@ This document outlines the phased approach to modernizing the UI with role-based
 
 ---
 
-## Phase 1: Foundational Architecture ✅ COMPLETED
+## Historical Phase 1: Foundational Architecture
 
-> All Phase 1 work is complete. See [PHASE_1_COMPLETION.md](./PHASE_1_COMPLETION.md) for full details.
-> **Note:** Phase 1 established roles/models/routes using "Admin" terminology and a `venue_admins` table. Phase 2 renames these to "Host" across the codebase.
+> The foundation was applied, but the global role and `VenueAdmin` model are
+> compatibility-era code. See [PHASE_1_COMPLETION.md](./PHASE_1_COMPLETION.md)
+> and the planned [contextual permission decision](architecture/identity_and_venue_permissions.md).
 
 ### Phase 1 Objectives
 

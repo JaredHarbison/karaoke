@@ -18,10 +18,12 @@ The Karaoke Queue app supports multiple venues (karaoke locations), each with th
 - Accessible via `Current.venue` and `Current.user`
 - Automatically cleared after each request
 
-### 3. Default Scopes
+### 3. Query scoping
 
-- Songs automatically scoped to `Current.venue_id`
-- Users optionally belong to venues
+- Controllers and services explicitly scope venue-owned queries through
+  `Current.venue` or an equivalent venue relation.
+- Users currently optionally belong to a venue; planned permissions are
+  documented in [identity and venue permissions](identity_and_venue_permissions.md).
 
 ### 4. ApplicationController
 
@@ -34,9 +36,9 @@ before_action :set_current_user   # Set current_user via Devise
 
 ## Flow
 
-1. **User visits**: `http://localhost:3000?venue_slug=joes-bar`
+1. **User visits**: `http://localhost:3000/joes-bar/songs`
 2. **Controller sets**: `Current.venue = Venue.find_by(slug: "joes-bar")`
-3. **Song queries**: Automatically filtered by `where(venue_id: Current.venue_id)`
+3. **Song queries**: Scope through `Current.venue` before loading records
 4. **On create**: New songs auto-assigned to `Current.venue`
 
 ## Session Persistence
@@ -74,10 +76,8 @@ end
 
 ## Authorization
 
-Currently: Users can edit/delete only their own songs.
+Current authorization combines venue ownership, legacy `VenueAdmin` assignments,
+and song ownership. It is a compatibility model.
 
-Future considerations:
-
-- Admin/host roles per venue
-- Venue ownership
-- Permission tiers (DJ, performer, host)
+The planned contextual membership direction is documented separately and is
+not implemented by Phase 0.

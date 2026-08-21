@@ -25,9 +25,11 @@ routes, role-aware authorization, and the migration notes under `docs/`.
 - **Host** runs the karaoke queue for a venue.
 - **Performer** joins a venue and submits or updates their own songs.
 
-Some current code still calls the host role `admin`. The planned rename and its
-data migration are documented in
-[`docs/UI_IMPLEMENTATION_PHASES.md`](docs/UI_IMPLEMENTATION_PHASES.md).
+The current implementation still contains the legacy `admin` role and
+`VenueAdmin` join model. They are compatibility-era foundations, not the final
+permission architecture. The next domain phase will move venue permissions to
+contextual venue membership; this Phase 0 change does not perform that
+migration.
 
 ## Tech stack
 
@@ -96,27 +98,32 @@ exercise. Never commit `.env`; it is ignored by Git.
 
 ```sh
 bundle exec rspec
-bundle exec rspec --tag critical
+bundle exec rubocop
+bundle exec brakeman -q
+bundle exec bundle-audit check --update
+bundle exec erb_lint app/views
 ```
 
-The suite includes model, request, workflow, and system coverage. Request specs
-exercise venue isolation and role-based queue permissions; the critical tag
-provides a faster check of the main user paths.
+The pre-commit hook runs a fast staged-change gate. CI is authoritative for the
+full suite and repository-wide security, dependency, style, and template
+checks. See [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`docs/TESTING.md`](docs/TESTING.md).
 
 ## Project documentation
 
-- [`docs/UI_IMPLEMENTATION_PHASES.md`](docs/UI_IMPLEMENTATION_PHASES.md) tracks
-  the staged product and terminology migration.
-- [`docs/PHASE_1_COMPLETION.md`](docs/PHASE_1_COMPLETION.md) records the
-  foundational venue and authorization work.
+- [`docs/ROADMAP.md`](docs/ROADMAP.md) describes the agreed MVP and post-MVP
+  sequencing.
+- [`docs/architecture/`](docs/architecture/) records planned and current
+  architectural decisions.
+- [`docs/help/`](docs/help/) contains the version-controlled guides rendered at
+  `/help`, with visibility determined by guide audience and user role.
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) explains the development and commit
   conventions.
 
 ## Current direction
 
-The next major phase completes the user-facing Host terminology migration,
-continues the role-specific interface work, and deepens the end-to-end coverage
-of sign-in, venue discovery, and live queue management.
+Phase 0 establishes documentation, engineering guardrails, and internal admin
+help. The next product phase is to collapse the legacy global role ambiguity
+into contextual `VenueMembership`; events and recurring event series follow.
 
 ## License
 

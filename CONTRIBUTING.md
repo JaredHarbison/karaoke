@@ -1,4 +1,43 @@
-# Markdown Contribution Standards
+# Contributing to Karaoke Queue
+
+## Definition of Done
+
+A change is complete only when it preserves working behavior (unless an
+intentional change is documented), is small and reviewable, and has appropriate
+coverage and checks for its risk. Before handoff, review:
+
+- Accessibility: semantic structure, keyboard use, focus, labels, contrast, and
+  screen-reader behavior where UI changes are involved.
+- Database polish: constraints, indexes, safe/reversible migrations, and schema
+  consistency where data changes are involved.
+- Performance: query count, scoping, indexes, and avoidable work on hot paths.
+- Security: authentication, venue/event-scoped authorization, input handling,
+  secrets, CSRF, and privileged behavior.
+- Code quality: focused design, existing conventions, and no unnecessary
+  rewrite or duplicate representation of a domain concept.
+- Tests written for new business rules and authorization boundaries, and the
+  relevant tests actually run. Never claim a check was run if it was not.
+- Help documentation updated when a user or operator workflow changes.
+- Architecture docs updated in the same change when the architecture changes.
+- Each commit updates relevant documentation when the change affects product
+  behavior, architecture, operations, or developer workflow.
+
+Authorization must be scoped to the relevant venue or event context. Business
+rules and privileged behavior require automated coverage. Prefer incremental,
+reviewable changes over broad rewrites.
+
+## Local quality gate
+
+Enable the fast staged-change hook with:
+
+```sh
+git config core.hooksPath .git-hooks
+```
+
+The full authoritative gate runs in CI. The hook must fail when a required
+tool is unavailable; it must not turn a missing or skipped check into a pass.
+
+## Markdown standards
 
 All documentation and markdown files must:
 
@@ -42,4 +81,6 @@ Common domains: `auth`, `songs`, `venues`, `ui`, `models`, `controllers`, `route
 
 ---
 
-Add these instructions to your `CONTRIBUTING.md` or `README.md` to help contributors avoid introducing markdown errors. If you want an automated pre-commit hook or CI config, let me know!
+CI and the pre-commit hook enforce the checks that are available in the
+repository. Keep documentation claims aligned with the code and commands that
+were actually run.

@@ -1,5 +1,9 @@
 # Accessibility Guidelines
 
+WCAG 2.1 AA is the project target, not a claim of completed compliance. Review
+and test each user-facing change with the appropriate automated and manual
+checks.
+
 This document outlines accessibility standards and best practices for the Karaoke Queue application, based on WCAG 2.1 Level AA standards.
 
 ## Standards & Compliance

@@ -1,5 +1,11 @@
 # Security Guidelines
 
+This is guidance and a review checklist, not a certification or claim that all
+listed controls are implemented. Current authorization remains compatible with
+the legacy `VenueAdmin` model; future contextual venue/event authorization is
+planned in the architecture decision records. Run the configured security
+checks and report their actual results.
+
 This document outlines security best practices and vulnerability prevention strategies based on OWASP Top 10 and industry standards.
 
 ## Security Standards

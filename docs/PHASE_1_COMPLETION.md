@@ -1,11 +1,14 @@
-# Phase 1: Foundational Architecture - COMPLETED ✓
+# Historical Phase 1 Foundation Record
 
 **Date Started:** February 15, 2026  
-**Status:** Complete and migrated  
+**Status:** Historical foundation record; not the final domain architecture
 
 ## Summary
 
-Phase 1 established the foundational architecture for the redesigned karaoke application. All database migrations are applied and the codebase is ready for Phase 2.
+This records the venue, role, and authorization foundation implemented in
+February 2026. It remains a current-state reference, but its global role and
+`VenueAdmin` decisions are compatibility-era choices. The planned replacement
+is contextual `VenueMembership`; Phase 0 does not implement that migration.
 
 ---
 
@@ -185,16 +188,17 @@ rails assets:precompile
 
 ---
 
-## Known Issues / Next Actions
+## Historical limitations / follow-up
 
-1. **Existing data**: Users and venues need role/owner assignment. Create migration script in Phase 2.
-2. **Venues controller**: Not yet created. Needed for discover, join, settings pages (Phase 2+).
-3. **Views**: Still using old templates. Update in Phase 2 with Turbo Frames.
-4. **Authorization**: Checks in place in controllers, views need conditional rendering based on roles.
+1. Existing data may still need owner and legacy host assignment at deployment.
+2. The current permission model needs the planned contextual membership
+   migration.
+3. Events, recurring series, themes, Fair Queue, temporary delegation, and
+   presence/session security remain future work.
 
 ---
 
-## Phase 2 Next Steps
+## Historical UI next steps
 
 See [UI_IMPLEMENTATION_PHASES.md](./UI_IMPLEMENTATION_PHASES.md#phase-2-ui--component-architecture) for detailed Phase 2 tasks:
 
