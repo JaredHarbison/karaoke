@@ -12,6 +12,18 @@ if [[ -z "$staged_files" ]]; then
   exit 0
 fi
 
+behavior_files="$(printf '%s\n' "$staged_files" | grep -E '^(app/|config/routes\.rb$|db/migrate/|spec/|Gemfile$|Gemfile\.lock$)' || true)"
+if [[ -n "$behavior_files" ]]; then
+  documentation_files="$(printf '%s\n' "$staged_files" | grep -E '^docs/(ROADMAP|QA_GUIDE)\.md$' || true)"
+  if [[ -z "$documentation_files" ]]; then
+    echo "FAILED: behavior changes must review and update docs/ROADMAP.md or docs/QA_GUIDE.md"
+    echo "Relevant staged files:"
+    printf '%s\n' "$behavior_files"
+    echo "If documentation is genuinely not relevant, split the change or document that decision in the commit review."
+    exit 1
+  fi
+fi
+
 fail_if_found() {
   local label="$1"
   local pattern="$2"

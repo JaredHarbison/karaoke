@@ -24,6 +24,11 @@ coverage and checks for its risk. Before handoff, review:
 - Architecture docs updated in the same change when the architecture changes.
 - Each commit updates relevant documentation when the change affects product
   behavior, architecture, operations, or developer workflow.
+- The pre-commit hook enforces a documentation review for application,
+  routing, migration, dependency, and test changes: stage an appropriate
+  `docs/ROADMAP.md` or `docs/QA_GUIDE.md` update in the same commit. A
+  documentation-only or tooling-only commit may omit them when neither guide
+  is relevant.
 
 Authorization must be scoped to the relevant venue or event context. Business
 rules and privileged behavior require automated coverage. Prefer incremental,
