@@ -25,5 +25,8 @@ the canonical Song model and can evolve without a queue-domain migration.
 
 ## Deferred details
 
-Skipped songs, duets, newly joined performers, concurrency, configurable
-fairness modes beyond the event toggle, and position messaging are deferred.
+Skipped songs, duets, newly joined performers, concurrency hardening,
+configurable fairness modes beyond the event toggle, and position messaging are
+deferred to the remaining MVP work. Queue runtime cutoff is specified
+separately in the queue-admission decision and applies regardless of Fair Queue
+mode.

@@ -22,6 +22,9 @@ does not yet change queue admission.
 ## Consequences / implications
 
 Theme behavior is auditable and reusable rather than copied into each song.
+Computed eligibility belongs to the event Performance/theme-application
+context, not a global Song/Theme join. A future `ThemeSong` join may represent
+curated reusable playlists, but it should not replace event-time evaluation.
 Host review is a deliberate fallback, not a false certainty. The current UI
 labels deterministic rule enforcement as forthcoming.
 

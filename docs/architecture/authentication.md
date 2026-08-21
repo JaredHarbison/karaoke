@@ -81,6 +81,11 @@ Via Devise form (signup currently disabled but password auth works).
 - Persisted via Rails session store
 - Remember-me token optional
 
+Planned event presence is separate from identity authentication. A signed-in
+user will still need an expiring, event-scoped presence session before queue
+admission. Losing that presence session should prevent new queue submissions
+without signing the user out of the application.
+
 ## Routes
 
 Protected routes require authentication:

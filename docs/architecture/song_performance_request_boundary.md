@@ -8,8 +8,10 @@ request between performers have different lifecycles.
 
 ## Decision
 
-Planned: preserve the current queue object while leaving room to separate a
-canonical `Song` from an event `Performance`/queue entry. A future user-to-user
+Planned: preserve the current queue object while introducing a canonical `Song`
+separate from an event `Performance`/queue entry. Reuse the canonical Song when
+the same provider video is selected again, but create a new Performance for every
+performer/event queue entry. A future user-to-user
 `Request` means one performer asking another to sing a song from that person's
 history. Do not rename the current queue object to `SongRequest`.
 
@@ -17,11 +19,13 @@ history. Do not rename the current queue object to `SongRequest`.
 
 History, queue state, performer identity, and requests can evolve independently
 without duplicate representations or a misleading rename. Admission validation
-belongs at the provider/performance boundary: karaoke status and venue content
-policy must be established before a performance is admitted.
+belongs at the provider/performance boundary: karaoke status, venue content
+policy, and duration should be established before a Performance is admitted.
+Duration is snapshotted on the Performance with its source (`provider` or
+`average`) for runtime cutoff decisions.
 
 ## Deferred details
 
-The migration shape, canonical metadata ownership, snapshots, duets, request
-permissions, provider metadata verification, and the live admission workflow
-are deferred until event requirements are understood.
+The migration shape, canonical metadata ownership, curated theme membership,
+duets, request permissions, provider metadata verification, and the live
+admission workflow are deferred until the event lifecycle work is complete.

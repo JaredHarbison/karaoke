@@ -4,65 +4,102 @@ Karaoke Queue is a multi-venue Rails app for collaborative karaoke nights.
 This roadmap is product-oriented; architectural rationale lives in
 [`docs/architecture/`](architecture/).
 
-## Current baseline
+## Current status
 
-The current app has one `User` identity, venue-scoped routes and queue data,
-Devise authentication, venue discovery/joining, contextual venue membership
-authorization, membership-backed host management, song search/queue workflows,
-and the Phase 0 engineering guardrails/help framework. Contextual
-`VenueMembership` authorization and membership-backed host management complete
-Phase 1.
+The engineering, identity, contextual venue authorization, event/series,
+reusable theme, initial Fair Queue, temporary delegation, and presence-token
+foundations are complete. The remaining MVP work is to connect those
+foundations into a secure event lifecycle and polished queue admission flow.
 
 ## MVP sequence
 
-1. Collapse global role ambiguity into contextual `VenueMembership` (complete).
-2. Add events and recurring event series, including independently editable
-   occurrences (in progress: venue-scoped management, daily/weekly
-   materialization, and transitional event-scoped queueing are complete).
-3. Add reusable event themes with deterministic checks and host-review
-   fallback (theme definitions, event applications, host routes, bounded
-   application windows, and a provider-independent evaluator are covered;
-   admission integration remains; regression coverage includes incomplete
-   and out-of-bounds windows).
-4. Add Fair Queue so performers with fewer completed turns are favored, with
-   sensible tie-breaking and host override. Event-level enable/disable,
-   queue-mode explanation, and durable override audit are complete; advanced
-   fairness policy remains future work.
-5. Add time-limited, event-specific temporary host delegation (initial queue
-   authority, expiry, revocation, and host management surface complete;
-   notifications and conflict handling remain future work).
-6. Add venue presence, permanent venue QR navigation, and expiring event
-   presence/session security (permanent venue and expiring event access URLs,
-   revocation, and bounded expiry are complete; physical location enforcement
-   remains future work).
-7. Complete MVP accessibility, reliability, presentation, and mobile polish.
+### 1. Event lifecycle and presence-gated admission
 
-### Planned admission validation
+- Add scheduled, live, and completed event states with a host-controlled start.
+- Keep one permanent venue QR as the printed/displayed entry point.
+- Resolve it to the active event, next upcoming event, or event discovery.
+- Show a short-lived, readable event code only on host/presentation/display
+  screens after the event starts.
+- Require authentication plus an active event presence session before queueing.
+- Rotate the display code during the event; do not expose it before start.
+- Expire presence at event close plus a small grace period.
+- Harden code attempts, re-entry, and concurrent event admission.
 
-Before a song becomes a performance, provider-backed validation must establish
-that the selected YouTube video is genuinely karaoke and must reject explicit
-lyrics when the venue policy disallows them. Missing or ambiguous metadata must
-go to review rather than silently entering the queue.
+Separate printed event QRs are not required for MVP. A dynamically displayed
+event QR may remain an optional future convenience.
+
+### 2. Canonical song and performance admission
+
+- Preserve the current queue behavior while introducing the canonical `Song` /
+  event-specific `Performance` boundary.
+- Reuse a canonical YouTube selection when it is chosen again, but create a new
+  Performance for every performer/event queue entry.
+- Validate karaoke suitability and venue content policy before admission.
+- Persist validated video duration when available.
+- If duration is unavailable, estimate from the average of known-duration songs
+  already queued for that event; estimated values do not feed that average.
+- Snapshot effective duration and its source on the Performance.
+
+### 3. Queue cutoff and event runtime protection
+
+- Calculate projected queue time as each effective video duration plus 30
+  seconds of transition time.
+- Default to stopping new admissions when projected completion exceeds the
+  event end.
+- Allow an explicit host/owner “allow queue overrun” override with audit.
+- Perform status, presence, cutoff, and insertion checks atomically so a rush
+  of submissions cannot bypass the cutoff.
+- Prevent duplicate submissions caused by retries or double taps.
+
+### 4. Live theme admission and review
+
+- Evaluate themes against Performances in the event/time-window context.
+- Support eligible, pending/review, and rejected outcomes.
+- Release pending or theme-ineligible performances into normal/Fair Queue
+  eligibility when the theme ends unless explicitly removed or rejected.
+- Add host review and clear explanations.
+
+Theme rules remain event-specific. A curated `ThemeSong` join is not required
+unless reusable theme playlists become an MVP need.
+
+### 5. Fair Queue hardening
+
+- Preserve event-level Fair Queue and host override audit.
+- Add robust handling for skipped songs, duets, new performers, and
+  concurrency.
+- Add configurable fairness modes only where real usage requires them.
+
+### 6. MVP UX, accessibility, reliability, and presentation polish
+
+- Complete responsive event, access-code, queue, and host workflows.
+- Run accessibility and mobile reviews.
+- Improve presentation mode, retry states, and operational feedback.
+- Complete the human QA pass across the MVP.
 
 ## Post-MVP
 
-- Voting and other independently configurable event queue modes.
-- Rich presentation mode and real-time updates where they support the MVP.
-- A future user-to-user `Request` concept, kept distinct from the current queue
-  song object.
-- Additional event, theme, and venue operations informed by real usage.
+- RSVP or “interested” state, separate from queue authorization.
+- Rich event-first public discovery and shareable event pages.
+- Event images, social preview cards, and Partiful-like presentation.
+- Downloadable calendar files, then calendar subscription URLs and provider
+  integrations that can reflect event changes.
+- Optional geolocation as a secondary presence signal.
+- Dynamically displayed event QR codes as an optional shortcut.
+- Curated reusable theme playlists backed by a `ThemeSong` join.
+- Advanced Fair Queue modes and automatic event extension.
+- The future user-to-user `Request` concept, distinct from Song and
+  Performance.
+- Stronger anti-sharing and physical-location enforcement.
 
 ## Dependencies and guardrails
 
 Contextual venue membership is the authorization foundation for event and host
-work. Events must exist before event-scoped themes, Fair Queue settings,
-temporary delegation, or event presence can be authoritative. Presence/session
-security depends on event lifecycle and venue-scoped authorization. Each phase
-needs an architecture decision, acceptance criteria, automated business-rule
-and authorization coverage, and updates to relevant docs in the same change.
-
-The roadmap does not claim that planned event, theme, Fair Queue, delegation,
-presence, or QR behavior exists today.
+work. Event lifecycle must precede presence-gated queue admission. Canonical
+Song/Performance separation and duration metadata must precede reliable runtime
+cutoff decisions. Live theme admission depends on the Performance boundary.
+Each phase needs architecture rationale, acceptance criteria, automated
+business-rule and authorization coverage, and relevant roadmap/QA updates in
+the same change.
 
 ## Finished
 
@@ -70,19 +107,17 @@ presence, or QR behavior exists today.
   application help](PHASE_0_COMPLETION.md)
 - [Historical venue foundation](PHASE_1_COMPLETION.md), including venue-scoped
   routes, queue authorization, and the initial UI organization
-- Phase 1 contextual membership and platform-membership foundation, including
-  membership-backed host management and application-wide staff identity.
-- Phase 2 event/theme foundation slices: venue-scoped events, recurring
-  occurrence materialization, event-scoped queue association, reusable themes,
-  bounded theme applications, and deterministic evaluator outcomes.
+- Phase 1 contextual membership and platform-membership foundation.
+- Phase 2 event/theme foundation: venue-scoped events, recurring occurrence
+  materialization, event-scoped queue association, reusable themes, bounded
+  applications, and deterministic evaluator outcomes.
+- Initial Fair Queue ordering, event controls, queue explanation, and override
+  audit.
+- Initial temporary event host delegation with expiry, revocation, and scoped
+  queue authority.
+- Initial venue presence token, dynamic venue QR, and expiring event presence
+  session foundation.
 
-The historical foundation remains as a record, but its global roles and
-`VenueAdmin` model were replaced during Phase 1 and are not treated as the
-current architecture.
-
-The Phase 2 foundation is complete for these slices, and Fair Queue now has
-its first event-level control and audit surface. Event lifecycle polish, live
-theme admission/review integration, advanced Fair Queue policy, delegation,
-presence, and session security now have their initial access-token surface.
-Temporary delegation now has its initial event-scoped queue authority and
-management surface.
+The finished items are foundations. Event start enforcement, presence-gated
+queue admission, duration-aware cutoff, live theme admission, and full
+concurrency hardening remain planned MVP work.
