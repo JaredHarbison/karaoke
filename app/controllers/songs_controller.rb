@@ -1,5 +1,6 @@
 class SongsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_queue_event
   before_action :require_admin!, only: %i[ presentation ]
   protect_from_forgery with: :exception
   before_action :set_song, only: %i[ destroy edit finish_song pause_song requeue_song show skip_song unpause_song update ]
@@ -12,10 +13,11 @@ class SongsController < ApplicationController
     @song.user = current_user
     @song.venue = Current.venue if Current.venue
     @song.performer = current_user.display_name if @song.performer.blank?
+    assign_song_event
     
     respond_to do |format|
       if @song.save
-        format.html { redirect_to venue_songs_path(Current.venue.slug), notice: "A song was created for #{ @song.performer }." }
+        format.html { redirect_to queue_path, notice: "A song was created for #{ @song.performer }." }
         format.turbo_stream
         format.json { render :show, status: :created, location: @song }
       else
@@ -62,7 +64,7 @@ class SongsController < ApplicationController
 
   # GET /:venue_slug/songs
   def index
-    @song = Song.new
+    @song = Song.new(event: @current_event)
     load_queue
   end
 
@@ -126,8 +128,9 @@ class SongsController < ApplicationController
   # PATCH/PUT /:venue_slug/songs/1 or /:venue_slug/songs/1.json
   def update
     respond_to do |format|
-      if @song.update(song_params)
-        format.html { redirect_to venue_songs_path(Current.venue.slug), notice: "#{@song.performer}'s song was successfully updated." }
+      assign_song_event
+      if @song.save
+        format.html { redirect_to queue_path, notice: "#{@song.performer}'s song was successfully updated." }
         format.json { render :show, status: :ok, location: @song }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -169,11 +172,33 @@ class SongsController < ApplicationController
   private
 
   def load_queue
-    @finished = Song.finished.order(updated_at: :desc)
-    @skipped = Song.skipped
-    @songs = Song.all
-    @upcoming = Song.upcoming.order(:updated_at)
+    @available_events = Current.venue.events.where(status: :scheduled).order(:starts_at)
+    queue = @current_event ? Song.where(event: @current_event) : Song.all
+    @finished = queue.finished.order(updated_at: :desc)
+    @skipped = queue.skipped
+    @songs = queue
+    @upcoming = queue.upcoming.order(:updated_at)
     @user_role = determine_user_role
+  end
+
+  def set_queue_event
+    return if params[:event_id].blank?
+
+    @current_event = Current.venue.events.find_by(id: params[:event_id])
+  end
+
+  def assign_song_event
+    attributes = song_params
+    event_id = attributes.delete(:event_id)
+    @song.assign_attributes(attributes)
+    return if event_id.blank?
+
+    @song.event = Current.venue.events.find_by(id: event_id)
+    @song.errors.add(:event, 'is not available for this venue') unless @song.event
+  end
+
+  def queue_path
+    venue_songs_path(Current.venue.slug, event_id: @current_event&.id)
   end
 
   def set_song
@@ -183,6 +208,7 @@ class SongsController < ApplicationController
   def song_params
     params.require(:song).permit(
       :category, 
+      :event_id,
       :finished, 
       :performer, 
       :postponed, 

@@ -24,11 +24,13 @@ events only through their contextual `VenueMembership`.
 
 The current UI exposes event listing and host-managed event/series forms. The
 first generator supports daily and weekly rules, materializes occurrences
-idempotently, and preserves existing occurrence edits. It does not attach songs
-to an event.
+idempotently, and preserves existing occurrence edits. Existing `Song` records
+can now optionally point to an event for transitional event-scoped queueing;
+venue-level songs remain supported.
 
 ## Deferred details
 
 Monthly/complex recurrence syntax, timezone/DST edge cases beyond the current
 timezone-aware generator, cancellation, archival, publication, conflict
-handling, and migration from the current venue queue are deferred.
+handling, and the eventual canonical `Performance` migration from the current
+`Song` queue object are deferred.

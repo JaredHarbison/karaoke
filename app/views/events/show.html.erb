@@ -15,6 +15,7 @@
       <dd><%= @event.event_series.name %></dd>
     <% end %>
   </dl>
+  <p><%= link_to "View event queue", venue_songs_path(Current.venue.slug, event_id: @event.id) %></p>
   <% if Current.venue.is_admin?(current_user) %>
     <%= link_to "Edit event", edit_venue_event_path(Current.venue.slug, @event) %>
   <% end %>

@@ -59,8 +59,12 @@ a separate future QA section when venue-joining moderation is implemented.
 ## Phase 2 event checkpoint
 
 The initial event surface adds venue-scoped event and recurring-series pages.
-It does not yet generate future occurrences, move queue songs into event scope,
-or expose themes, Fair Queue, delegation, presence, or QR security.
+It generates daily/weekly occurrences and lets a queue song be associated with
+an event. Venue-level queueing remains available. It does not yet expose
+themes, Fair Queue, delegation, presence, or QR security.
+
+| `/:venue_slug/events/:id` | Open an event and choose “View event queue” | The queue is filtered to that event; queueing a song from the Add Song panel preserves the event context. |
+| `/:venue_slug/songs?event_id=:id` | Submit a song for a scheduled event | The song is associated with the selected venue event and appears in its queue. |
 
 ## Record findings
 

@@ -116,6 +116,39 @@ RSpec.describe 'Songs', type: :request do
       expect(Song.last.performer).to eq(user.display_name)
       expect(response).to redirect_to("/#{venue.slug}/songs")
     end
+
+    it 'associates a song with an event in the current venue' do
+      event = create(:event, venue: venue)
+
+      post "/#{venue.slug}/songs", params: { song: { performer: 'Event Singer', url: 'https://youtube.com/event', event_id: event.id } }
+
+      expect(response).to redirect_to("/#{venue.slug}/songs?event_id=#{event.id}")
+      expect(Song.last.event).to eq(event)
+    end
+
+    it 'does not associate a song with an event from another venue' do
+      other_event = create(:event)
+
+      expect {
+        post "/#{venue.slug}/songs", params: { song: { performer: 'Unsafe Singer', url: 'https://youtube.com/unsafe', event_id: other_event.id } }
+      }.not_to change(Song, :count)
+
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+  end
+
+  describe 'event-scoped queue' do
+    it 'shows only songs associated with the selected event' do
+      event = create(:event, venue: venue)
+      included = create(:song, venue: venue, user: user, performer: 'Included Singer', event: event)
+      create(:song, venue: venue, user: user, performer: 'Venue Singer')
+
+      get "/#{venue.slug}/songs", params: { event_id: event.id }
+
+      expect(response).to be_successful
+      expect(response.body).to include(included.performer)
+      expect(response.body).not_to include('Venue Singer')
+    end
   end
 
   describe 'DELETE /venues/:venue_slug/songs/:id' do

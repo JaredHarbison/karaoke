@@ -4,6 +4,7 @@ RSpec.describe Song, type: :model do
   describe 'associations' do
     it { is_expected.to belong_to(:venue).optional }
     it { is_expected.to belong_to(:user).optional }
+    it { is_expected.to belong_to(:event).optional }
   end
 
   describe 'validations' do
@@ -77,6 +78,16 @@ RSpec.describe Song, type: :model do
   end
 
   describe 'venue isolation' do
+    it 'does not allow an event from another venue' do
+      venue = create(:venue)
+      other_event = create(:event)
+
+      song = build(:song, venue: venue, event: other_event)
+
+      expect(song).not_to be_valid
+      expect(song.errors[:event]).to include('must belong to the same venue')
+    end
+
     it 'belongs to a specific venue' do
       venue1 = create(:venue)
       venue2 = create(:venue)

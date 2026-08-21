@@ -4,6 +4,7 @@
 class Event < ApplicationRecord
   belongs_to :venue
   belongs_to :event_series, optional: true
+  has_many :songs, dependent: :nullify
 
   enum :status, { scheduled: 0, cancelled: 1, completed: 2 }
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_08_21_140000) do
+ActiveRecord::Schema[7.2].define(version: 2026_08_21_150000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -63,6 +63,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_140000) do
     t.bigint "venue_id"
     t.bigint "user_id"
     t.string "title"
+    t.bigint "event_id"
+    t.index ["event_id"], name: "index_songs_on_event_id"
     t.index ["user_id", "created_at"], name: "index_songs_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_songs_on_user_id"
     t.index ["venue_id", "created_at"], name: "index_songs_on_venue_id_and_created_at"
@@ -131,6 +133,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_140000) do
   add_foreign_key "events", "event_series"
   add_foreign_key "events", "venues"
   add_foreign_key "platform_memberships", "users"
+  add_foreign_key "songs", "events"
   add_foreign_key "songs", "users"
   add_foreign_key "songs", "venues"
   add_foreign_key "users", "venues"

@@ -23,4 +23,8 @@
     %div#song-results{ data: { youtube_search_target: "results" }, class: "youtube-results-container" }
     
   .form-actions
+    - if @available_events.present?
+      .form-field
+        = form.label :event_id, "Event"
+        = form.collection_select :event_id, @available_events, :id, :name, { include_blank: "Venue queue (no event)" }
     = form.submit "Queue Song", class: "btn btn-primary btn-large", data: { disable_with: "Queueing..." }
