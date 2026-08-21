@@ -76,6 +76,8 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node for Heroku CLI
         if: env.HEROKU_API_KEY != '' && env.HEROKU_EMAIL != ''
