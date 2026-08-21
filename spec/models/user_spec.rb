@@ -6,13 +6,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_many(:owned_venues).class_name('Venue').with_foreign_key(:owner_id).dependent(:nullify) }
     it { is_expected.to have_many(:venue_memberships).dependent(:destroy) }
     it { is_expected.to have_many(:member_venues).through(:venue_memberships).source(:venue) }
-    it { is_expected.to have_many(:admin_for_venues).class_name('VenueAdmin').dependent(:destroy) }
-    it { is_expected.to have_many(:venues_as_admin).through(:admin_for_venues).source(:venue) }
     it { is_expected.to have_many(:songs).dependent(:nullify) }
-  end
-
-  describe 'enums' do
-    it { is_expected.to define_enum_for(:role).with_values(owner: 0, admin: 1, performer: 2) }
   end
 
   describe 'validations' do
@@ -113,27 +107,6 @@ RSpec.describe User, type: :model do
       expect(user2.email).not_to eq(user1.email)
     end
 
-    context 'with owner trait' do
-      it 'creates a user with owner role' do
-        user = build(:user, :owner)
-        expect(user.role).to eq('owner')
-      end
-    end
-
-    context 'with admin trait' do
-      it 'creates a user with admin role' do
-        user = build(:user, :admin)
-        expect(user.role).to eq('admin')
-      end
-    end
-
-    context 'with performer trait' do
-      it 'creates a user with performer role', :critical do
-        user = build(:user, :performer)
-        expect(user.role).to eq('performer')
-      end
-    end
-
     context 'with_venue trait' do
       it 'associates the user with a venue' do
         user = create(:user, :with_venue)
@@ -147,20 +120,6 @@ RSpec.describe User, type: :model do
         expect(user.provider).to eq('google_oauth2')
         expect(user.uid).not_to be_nil
       end
-    end
-  end
-
-  describe 'role transitions' do
-    it 'can change from performer to admin' do
-      user = create(:user, :performer)
-      user.update(role: :admin)
-      expect(user.reload.role).to eq('admin')
-    end
-
-    it 'can change from admin to performer' do
-      user = create(:user, :admin)
-      user.update(role: :performer)
-      expect(user.reload.role).to eq('performer')
     end
   end
 

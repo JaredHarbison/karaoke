@@ -10,13 +10,13 @@ The current app has one `User` identity, venue-scoped routes and queue data,
 Devise authentication, venue discovery/joining, contextual venue membership
 authorization, membership-backed host management, song search/queue workflows,
 and the Phase 0 engineering guardrails/help framework. Final removal of the
-legacy `VenueAdmin` table and global user-role column is the remaining Phase 1
-cleanup.
+The legacy `VenueAdmin` table is now removed; the global user-role column is the
+remaining Phase 1 cleanup.
 
 ## MVP sequence
 
-1. Collapse `VenueAdmin` and global role ambiguity into contextual
-   `VenueMembership` (in progress: final legacy table/column cleanup).
+1. Collapse global role ambiguity into contextual `VenueMembership` (in
+   progress: final global role-column cleanup).
 2. Add events and recurring event series, including independently editable
    occurrences.
 3. Add reusable event themes with deterministic checks and host-review

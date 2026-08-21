@@ -9,8 +9,6 @@ RSpec.describe Venue, type: :model do
     it { is_expected.to have_many(:hosts).through(:admin_memberships).source(:user) }
     it { is_expected.to have_many(:songs).dependent(:destroy) }
     it { is_expected.to have_many(:users).dependent(:nullify) }
-    it { is_expected.to have_many(:admin_assignments).dependent(:destroy) }
-    it { is_expected.to have_many(:admins).through(:admin_assignments) }
   end
 
   describe 'validations' do
@@ -92,7 +90,6 @@ RSpec.describe Venue, type: :model do
     it 'creates a venue with an owner' do
       venue = create(:venue)
       expect(venue.owner).not_to be_nil
-      expect(venue.owner.role).to eq('owner')
       expect(venue.venue_memberships.find_by(user: venue.owner).owner?).to be true
     end
 

@@ -43,8 +43,8 @@ venue is `/demo-karaoke/songs`.
 The current Phase 1 slice does not introduce a new visible page. Verify that
 the existing queue and settings behavior remains stable while authorization and
 host management resolve through contextual membership data. The legacy
-`/admins` URLs may remain in links for compatibility, but the visible workflow
-is presented as host management.
+`VenueAdmin` table is no longer used. The `/admins` URLs may remain in links for
+compatibility, but the visible workflow is presented as host management.
 
 ## Record findings
 

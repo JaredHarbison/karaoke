@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
   
   def require_venue_for_songs
     # Only enforce for songs routes
-    return unless params[:controller].start_with?('songs') || params[:controller] == 'admins'
+    return unless params[:controller].start_with?('songs')
     
     unless Current.venue.present?
       redirect_to discover_venues_path, alert: 'Venue not found. Please select a venue to continue.'

@@ -6,8 +6,6 @@ class Venue < ApplicationRecord
   has_many :hosts, through: :admin_memberships, source: :user
   has_many :songs, dependent: :destroy
   has_many :users, dependent: :nullify
-  has_many :admin_assignments, class_name: 'VenueAdmin', dependent: :destroy
-  has_many :admins, through: :admin_assignments, source: :user
   has_many :invitations, class_name: 'VenueInvitation', dependent: :destroy
   
   validates :name, presence: true
@@ -17,7 +15,6 @@ class Venue < ApplicationRecord
   after_create :ensure_owner_membership
   
   def add_host(user)
-    admin_assignments.find_or_create_by(user: user)
     membership = venue_memberships.find_or_initialize_by(user: user)
     membership.role = :admin unless membership.owner?
     membership.save!
@@ -26,7 +23,6 @@ class Venue < ApplicationRecord
   alias_method :add_admin, :add_host
   
   def remove_host(user)
-    admin_assignments.find_by(user: user)&.destroy
     membership = venue_memberships.find_by(user: user)
     membership&.destroy if membership&.admin?
   end
@@ -55,7 +51,7 @@ class Venue < ApplicationRecord
     membership = membership_for(user)
     return true if membership&.owner? || membership&.admin?
 
-    owner_id == user.id || admins.exists?(id: user.id)
+    owner_id == user.id
   end
   
   private

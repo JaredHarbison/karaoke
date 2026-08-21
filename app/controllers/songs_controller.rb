@@ -209,7 +209,6 @@ class SongsController < ApplicationController
     membership = Current.venue.membership_for(current_user)
     return membership.role.to_sym if membership&.owner? || membership&.admin?
     return :owner if Current.venue.owner?(current_user)
-    return :admin if Current.venue.admins.exists?(id: current_user.id)
     :performer
   end
 
