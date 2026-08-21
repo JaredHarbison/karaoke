@@ -15,7 +15,7 @@ module SongQueue
         raise ArgumentError unless song.persisted?
 
         Song.transaction do
-          queue = Song.upcoming.order(:updated_at, :id).to_a
+          queue = queue_for(song).order(:updated_at, :id).to_a
           current_index = queue.index { |queued_song| queued_song.id == song.id }
           raise ArgumentError unless current_index
 
@@ -31,6 +31,11 @@ module SongQueue
             )
           end
         end
+      end
+
+      def queue_for(song)
+        scope = Song.upcoming
+        song.event_id.present? ? scope.where(event_id: song.event_id) : scope.where(event_id: nil)
       end
     end
   end

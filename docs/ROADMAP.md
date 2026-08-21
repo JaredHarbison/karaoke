@@ -25,7 +25,8 @@ Phase 1.
    admission integration remains; regression coverage includes incomplete
    and out-of-bounds windows).
 4. Add Fair Queue so performers with fewer completed turns are favored, with
-   sensible tie-breaking and host override.
+   sensible tie-breaking and host override (event-scoped ordering foundation
+   complete; configurable controls and audit remain).
 5. Add time-limited, event-specific temporary host delegation.
 6. Add venue presence, permanent venue QR navigation, and expiring event
    presence/session security.

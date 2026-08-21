@@ -177,7 +177,11 @@ class SongsController < ApplicationController
     @finished = queue.finished.order(updated_at: :desc)
     @skipped = queue.skipped
     @songs = queue
-    @upcoming = queue.upcoming.order(:updated_at)
+    @upcoming = if @current_event
+                  SongQueue::FairOrder.new(queue.upcoming, event: @current_event).call
+                else
+                  queue.upcoming.order(:updated_at)
+                end
     @user_role = determine_user_role
   end
 

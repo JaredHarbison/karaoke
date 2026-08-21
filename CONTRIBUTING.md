@@ -24,6 +24,8 @@ coverage and checks for its risk. Before handoff, review:
 - Architecture docs updated in the same change when the architecture changes.
 - Each commit updates relevant documentation when the change affects product
   behavior, architecture, operations, or developer workflow.
+- Every recap must explicitly confirm whether the roadmap and human QA guide
+  were updated, and must name the next roadmap slice.
 - The pre-commit hook enforces a documentation review for application,
   routing, migration, dependency, and test changes: stage an appropriate
   `docs/ROADMAP.md` or `docs/QA_GUIDE.md` update in the same commit. A

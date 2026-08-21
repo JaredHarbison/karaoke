@@ -52,6 +52,8 @@ venue is `/demo-karaoke/songs`.
 | Event theme window | Apply a theme with start/end values inside the event | The event displays the bounded window; partial or out-of-event windows are rejected. |
 | Theme window validation | Submit a partial or out-of-event theme window | The application is rejected and the existing event theme state is unchanged. |
 | Theme isolation | Try to apply a theme from another venue or duplicate a venue theme name | The action is rejected and no cross-venue or duplicate theme is created. |
+| Event Fair Queue | Open an event queue with performers who have different completed-turn histories | Fewer completed turns are favored; equal scores use stable queue order. |
+| Event Fair Queue override | As a host, pause or unpause an event queue song | The host override changes the event queue order without affecting another venue or event. |
 
 The following admission checks are planned and are not yet live in the queue:
 selected videos must be verified karaoke, and explicit lyrics must be rejected
