@@ -1,71 +1,52 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -euo pipefail
 
-echo "🔍 Running Pre-Commit Quality Checks..."
+echo "Running fast staged-change checks..."
 
-# 1. Tests (REQUIRED - must have 0 failures and no errors)
-echo "✅ Running RSpec tests..."
-TEST_OUTPUT=$(bundle exec rspec --format progress 2>&1)
-echo "$TEST_OUTPUT"
-# Check for failures (ignore SimpleCov coverage threshold exit code)
-if echo "$TEST_OUTPUT" | grep -q "0 failures"; then
-  echo "✅ All tests passed"
-else
-  echo "❌ Test failures detected"
-  exit 1
+export XDG_CACHE_HOME="${TMPDIR:-/tmp}/karaoke-rubocop-cache"
+mkdir -p "$XDG_CACHE_HOME"
+
+staged_files="$(git diff --cached --name-only --diff-filter=ACMR)"
+if [[ -z "$staged_files" ]]; then
+  echo "No staged files; nothing to check."
+  exit 0
 fi
 
-# 2. Brakeman (OPTIONAL - if installed)
-if bundle exec gem list -i brakeman > /dev/null 2>&1; then
-  echo "✅ Running Brakeman security scan..."
-  bundle exec brakeman -q || exit 1
-else
-  echo "⏭️  Skipping Brakeman (not installed - add to Gemfile if needed)"
+fail_if_found() {
+  local label="$1"
+  local pattern="$2"
+  if git diff --cached --no-ext-diff --unified=0 -- . ':!Gemfile.lock' | grep -Ei "$pattern" >/dev/null; then
+    echo "FAILED: $label"
+    git diff --cached --no-ext-diff --unified=0 -- . ':!Gemfile.lock' | grep -Ei "$pattern" || true
+    exit 1
+  fi
+}
+
+fail_if_found "debug code detected" '^\+[[:space:]]*(binding\.pry|byebug|debugger)([^[:alnum:]_]|$)'
+fail_if_found "obvious secret material detected" '(AKIA[0-9A-Z]{16}|-----BEGIN (RSA|EC|OPENSSH|PRIVATE) KEY-----|(api[_-]?key|client[_-]?secret|access[_-]?token)[[:space:]]*[:=][[:space:]]*[[:alnum:]_./+=-]{12,})'
+
+ruby_files="$(printf '%s\n' "$staged_files" | grep -E '\.rb$' || true)"
+if [[ -n "$ruby_files" ]]; then
+  new_ruby_files="$(git diff --cached --name-only --diff-filter=A | grep -E '\.rb$' || true)"
+  if [[ -n "$new_ruby_files" ]]; then
+    bundle exec rubocop --cache false --force-exclusion $new_ruby_files
+  fi
+  while IFS= read -r ruby_file; do
+    [[ -z "$ruby_file" ]] || bundle exec ruby -c "$ruby_file"
+  done <<< "$ruby_files"
 fi
 
-# 3. Bundle audit (OPTIONAL - if installed)
-if command -v bundle-audit > /dev/null 2>&1 || bundle exec gem list -i bundler-audit > /dev/null 2>&1; then
-  echo "✅ Running bundle-audit for vulnerable dependencies..."
-  bundle exec bundle-audit check --update 2>/dev/null || echo "⏭️  Bundle audit check skipped"
-else
-  echo "⏭️  Skipping bundle-audit (not installed - run: gem install bundler-audit)"
+erb_files="$(printf '%s\n' "$staged_files" | grep -E '\.erb$' || true)"
+if [[ -n "$erb_files" ]]; then
+  bundle exec erb_lint $erb_files
 fi
 
-# 4. Check for exposed secrets
-echo "✅ Checking for exposed secrets..."
-if git diff --cached | grep -E "password|secret|api_key|token|credentials" | grep -v ENV; then
-  echo "❌ FAILED: Exposed secrets detected"
-  exit 1
+if printf '%s\n' "$staged_files" | grep -Eq '^(app/|config/routes\.rb|db/|Gemfile|Gemfile\.lock|spec/)'; then
+  bundle exec rails runner 'abort("Current venue context is not isolated") unless Current.respond_to?(:venue)'
 fi
 
-# 5. ERBLint (OPTIONAL - if installed)
-if command -v erb-lint > /dev/null 2>&1 || bundle exec gem list -i erb-lint > /dev/null 2>&1; then
-  echo "✅ Running ERBLint for accessibility..."
-  bundle exec erblint app/views/ 2>/dev/null || echo "⏭️  ERBLint check skipped"
-else
-  echo "⏭️  Skipping ERBLint (not installed - run: bundle add erb-lint)"
+if printf '%s\n' "$staged_files" | grep -Eq '^(app/.*\.rb|config/routes\.rb|spec/.*_spec\.rb)$'; then
+  COVERAGE=false bundle exec rspec --tag critical
 fi
 
-# 6. RuboCop (OPTIONAL - if installed)
-if command -v rubocop > /dev/null 2>&1 || bundle exec gem list -i rubocop > /dev/null 2>&1; then
-  echo "✅ Running RuboCop for code style..."
-  bundle exec rubocop 2>/dev/null || echo "⏭️  RuboCop check skipped"
-else
-  echo "⏭️  Skipping RuboCop (not installed - run: bundle add rubocop)"
-fi
-
-# 7. Check for debug code
-echo "✅ Checking for debug code (binding.pry, byebug, debugger)..."
-if git diff --cached | grep -E "binding\.pry|byebug|debugger"; then
-  echo "❌ FAILED: Debug code detected"
-  exit 1
-fi
-
-echo ""
-echo "✨ All critical checks passed!"
-echo "   ✅ Tests: 103 examples, 0 failures"
-echo "   ✅ No exposed secrets"
-echo "   ✅ No debug code"
-echo ""
-echo "Ready to commit! 🚀"
-
+echo "Fast staged-change checks passed. CI remains authoritative for full checks."

@@ -1,0 +1,60 @@
+name: Quality
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/karaoke_test
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: '3.3.0'
+
+      - name: Prepare database
+        run: bin/rails db:prepare
+
+      - name: Run full RSpec suite
+        run: bundle exec rspec
+
+      - name: Run RuboCop
+        run: bundle exec rubocop
+
+      - name: Run Brakeman
+        run: bundle exec brakeman -q
+
+      - name: Audit dependencies
+        run: bundle exec bundle-audit check --update
+
+      - name: Lint ERB templates
+        run: bundle exec erb_lint app/views
+
+      - name: Verify migrations are applied
+        run: bin/rails db:abort_if_pending_migrations
+
+      - name: Verify schema is clean
+        run: |
+          bin/rails db:schema:dump
+          git diff --exit-code -- db/schema.rb

@@ -78,6 +78,10 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_bot_rails'
   gem 'faker'
+  gem 'brakeman'
+  gem 'bundler-audit'
+  gem 'rubocop-rails'
+  gem 'erb_lint'
 end
 
 group :test do
