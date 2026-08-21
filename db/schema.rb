@@ -10,9 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_08_21_171000) do
+ActiveRecord::Schema[7.2].define(version: 2026_08_21_195000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "event_host_delegations", force: :cascade do |t|
+    t.bigint "event_id", null: false
+    t.bigint "delegated_user_id", null: false
+    t.bigint "delegated_by_user_id", null: false
+    t.datetime "starts_at", null: false
+    t.datetime "ends_at", null: false
+    t.datetime "revoked_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["delegated_by_user_id"], name: "index_event_host_delegations_on_delegated_by_user_id"
+    t.index ["delegated_user_id"], name: "index_event_host_delegations_on_delegated_user_id"
+    t.index ["event_id", "starts_at", "ends_at"], name: "idx_on_event_id_starts_at_ends_at_e340379ba6"
+    t.index ["event_id"], name: "index_event_host_delegations_on_event_id"
+  end
 
   create_table "event_series", force: :cascade do |t|
     t.bigint "venue_id", null: false
@@ -168,6 +183,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_171000) do
     t.index ["slug"], name: "index_venues_on_slug", unique: true
   end
 
+  add_foreign_key "event_host_delegations", "events"
+  add_foreign_key "event_host_delegations", "users", column: "delegated_by_user_id"
+  add_foreign_key "event_host_delegations", "users", column: "delegated_user_id"
   add_foreign_key "event_series", "venues"
   add_foreign_key "event_theme_applications", "events"
   add_foreign_key "event_theme_applications", "themes"

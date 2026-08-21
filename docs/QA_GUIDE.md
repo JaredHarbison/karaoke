@@ -57,6 +57,9 @@ venue is `/demo-karaoke/songs`.
 | Event Fair Queue override | As a host, pause or unpause an event queue song | The event-scoped host override changes that event’s queue order without affecting another venue or event. |
 | Event Fair Queue setting | As a host, edit an event and turn Fair Queue off, then open its queue | The queue explains that it is FIFO and follows entry order; turning it back on restores Fair Queue behavior. |
 | Fair Queue override audit | As a host, pause or unpause an event queue song, then view the event | Recent Fair Queue overrides show the action, performer, host, and timestamp. Performers do not see the host audit section. |
+| Temporary host delegation | As a permanent venue host, open an event and delegate a venue member for a time inside the event window | The delegation appears with its time window; the delegated user can manage that event’s queue only while the delegation is active. |
+| Temporary host revocation | As a permanent venue host, revoke an active delegation | The delegation is marked revoked and the delegated user no longer has event queue authority. |
+| Temporary host boundaries | Try to delegate outside the event window or as a performer | The delegation is rejected; performers cannot create or revoke delegations. |
 
 The following admission checks are planned and are not yet live in the queue:
 selected videos must be verified karaoke, and explicit lyrics must be rejected
@@ -85,7 +88,8 @@ an event. Venue-level queueing remains available. The current theme foundation
 also supports reusable definitions, event applications, bounded windows, and
 automated deterministic evaluator outcomes; live admission/review integration
 is not yet exposed. Advanced Fair Queue policy, delegation, presence, and QR
-security remain planned.
+security remain planned. Temporary host delegation is now testable from the
+event page for queue authority, expiry, and revocation.
 
 | `/:venue_slug/events/:id` | Open an event and choose “View event queue” | The queue is filtered to that event; queueing a song from the Add Song panel preserves the event context. |
 | `/:venue_slug/songs?event_id=:id` | Submit a song for a scheduled event | The song is associated with the selected venue event and appears in its queue. |

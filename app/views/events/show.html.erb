@@ -53,6 +53,36 @@
   </section>
   <p><%= link_to "View event queue", venue_songs_path(Current.venue.slug, event_id: @event.id) %></p>
   <% if Current.venue.is_admin?(current_user) %>
+    <section aria-labelledby="delegations-heading">
+      <h2 id="delegations-heading">Temporary event hosts</h2>
+      <% if @event_host_delegations.any? %>
+        <ul>
+          <% @event_host_delegations.each do |delegation| %>
+            <li>
+              <%= delegation.delegated_user.display_name %> — <%= l(delegation.starts_at, format: :short) %> to <%= l(delegation.ends_at, format: :short) %>
+              <% if delegation.revoked_at %>(revoked)<% end %>
+              <% unless delegation.revoked_at %>
+                <%= button_to 'Revoke', venue_event_host_delegation_path(Current.venue.slug, delegation), method: :delete %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No temporary hosts are scheduled.</p>
+      <% end %>
+      <%= form_with url: venue_event_host_delegations_path(Current.venue.slug), scope: :event_host_delegation, method: :post, local: true do |form| %>
+        <%= hidden_field_tag :event_id, @event.id %>
+        <%= form.label :delegated_user_id, 'Delegate host' %>
+        <%= form.collection_select :delegated_user_id, @delegation_candidates, :id, :display_name, include_blank: 'Choose a venue member' %>
+        <%= form.label :starts_at, 'Starts' %>
+        <%= form.datetime_local_field :starts_at, value: @event.starts_at.strftime('%Y-%m-%dT%H:%M') %>
+        <%= form.label :ends_at, 'Ends' %>
+        <%= form.datetime_local_field :ends_at, value: (@event.ends_at || @event.starts_at + 4.hours).strftime('%Y-%m-%dT%H:%M') %>
+        <%= form.submit 'Delegate host' %>
+      <% end %>
+    </section>
+  <% end %>
+  <% if Current.venue.is_admin?(current_user) %>
     <section aria-labelledby="queue-overrides-heading">
       <h2 id="queue-overrides-heading">Recent Fair Queue overrides</h2>
       <% if @queue_overrides.any? %>

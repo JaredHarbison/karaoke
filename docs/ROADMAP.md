@@ -28,7 +28,9 @@ Phase 1.
    sensible tie-breaking and host override. Event-level enable/disable,
    queue-mode explanation, and durable override audit are complete; advanced
    fairness policy remains future work.
-5. Add time-limited, event-specific temporary host delegation.
+5. Add time-limited, event-specific temporary host delegation (initial queue
+   authority, expiry, revocation, and host management surface complete;
+   notifications and conflict handling remain future work).
 6. Add venue presence, permanent venue QR navigation, and expiring event
    presence/session security.
 7. Complete MVP accessibility, reliability, presentation, and mobile polish.
@@ -79,4 +81,5 @@ current architecture.
 The Phase 2 foundation is complete for these slices, and Fair Queue now has
 its first event-level control and audit surface. Event lifecycle polish, live
 theme admission/review integration, advanced Fair Queue policy, delegation,
-presence, and session security remain planned.
+presence, and session security remain planned. Temporary delegation now has its
+initial event-scoped queue authority and management surface.

@@ -1,4 +1,4 @@
-- can_manage_queue = Current.venue.is_admin?(current_user)
+- can_manage_queue = @can_manage_queue
 - performer_view = !can_manage_queue
 - is_owner = Current.venue.owner == current_user
 - role_label = is_owner ? "Owner" : (can_manage_queue ? "Host" : "Performer")

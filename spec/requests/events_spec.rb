@@ -89,6 +89,38 @@ RSpec.describe 'Events', type: :request do
     end
   end
 
+  describe 'temporary host delegation' do
+    it 'lets a venue host delegate event queue authority to a venue member' do
+      event = create(:event, venue: venue, starts_at: 1.hour.from_now, ends_at: 3.hours.from_now)
+      delegated_host = create(:user)
+      venue.venue_memberships.create!(user: delegated_host, role: :performer)
+      sign_in owner
+
+      expect do
+        post venue_event_host_delegations_path(venue.slug), params: {
+          event_id: event.id,
+          event_host_delegation: {
+            delegated_user_id: delegated_host.id,
+            starts_at: event.starts_at,
+            ends_at: event.ends_at
+          }
+        }
+      end.to change(EventHostDelegation, :count).by(1)
+
+      expect(response).to redirect_to(venue_event_path(venue.slug, event))
+      expect(EventHostDelegation.last.delegated_user).to eq(delegated_host)
+    end
+
+    it 'does not allow a performer to create a delegation' do
+      event = create(:event, venue: venue)
+      sign_in performer
+
+      post venue_event_host_delegations_path(venue.slug), params: { event_id: event.id }
+
+      expect(response).to redirect_to(venue_songs_path(venue.slug))
+    end
+  end
+
   describe 'recurring series management' do
     it 'allows a venue owner to create a series', :critical do
       sign_in owner

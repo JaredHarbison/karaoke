@@ -183,6 +183,7 @@ class SongsController < ApplicationController
                   queue.upcoming.order(:updated_at)
                 end
     @user_role = determine_user_role
+    @can_manage_queue = Current.venue.is_admin?(current_user) || @current_event&.temporary_host?(current_user)
   end
 
   def set_queue_event
@@ -223,7 +224,7 @@ class SongsController < ApplicationController
   end
   
   def authorize_admin_for_queue_actions
-    unless Current.venue.is_admin?(current_user)
+    unless Current.venue.is_admin?(current_user) || @song.event&.temporary_host?(current_user)
       redirect_to venue_songs_path(Current.venue.slug), alert: "Only admins can manage the queue."
     end
   end
@@ -239,6 +240,7 @@ class SongsController < ApplicationController
     membership = Current.venue.membership_for(current_user)
     return membership.role.to_sym if membership&.owner? || membership&.admin?
     return :owner if Current.venue.owner?(current_user)
+    return :host if @current_event&.temporary_host?(current_user)
     :performer
   end
 

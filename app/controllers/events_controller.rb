@@ -15,6 +15,8 @@ class EventsController < ApplicationController
     @themes = Current.venue.themes.where(active: true).order(:name)
     @theme_applications = @event.event_theme_applications.includes(:theme).order(:starts_at)
     @queue_overrides = @event.song_queue_overrides.includes(:song, :user).order(created_at: :desc).limit(10)
+    @event_host_delegations = @event.event_host_delegations.includes(:delegated_user, :delegated_by_user).order(starts_at: :desc)
+    @delegation_candidates = Current.venue.members.order(:email)
   end
 
   def new

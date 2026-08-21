@@ -6,6 +6,8 @@ class User < ApplicationRecord
   has_many :member_venues, through: :venue_memberships, source: :venue
   has_many :platform_memberships, dependent: :destroy
   has_many :sent_venue_invitations, class_name: 'VenueInvitation', foreign_key: :invited_by_id, dependent: :destroy
+  has_many :event_host_delegations, dependent: :destroy, foreign_key: :delegated_user_id
+  has_many :granted_event_host_delegations, class_name: 'EventHostDelegation', dependent: :restrict_with_exception, foreign_key: :delegated_by_user_id
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable

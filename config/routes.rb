@@ -53,6 +53,7 @@ Rails.application.routes.draw do
     delete '/admins/:id', to: 'venues#destroy_admin', as: 'admin'
 
     resources :events, except: :destroy
+    resources :event_host_delegations, only: %i[create destroy]
     resources :themes, except: :show
     resources :event_theme_applications, only: %i[create destroy]
     resources :event_series, path: 'event-series', except: :show do
