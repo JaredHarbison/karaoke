@@ -1,7 +1,7 @@
 # Manual QA Guide
 
 Use this guide for a short browser pass after changes. It covers the current
-implemented product surface; planned events, membership management, themes,
+implemented product surface; planned event UI, membership management, themes,
 Fair Queue, presence, and QR session security are not testable yet.
 
 ## Setup

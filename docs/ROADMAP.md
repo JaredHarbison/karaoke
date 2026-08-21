@@ -17,7 +17,7 @@ Phase 1.
 
 1. Collapse global role ambiguity into contextual `VenueMembership` (complete).
 2. Add events and recurring event series, including independently editable
-   occurrences.
+   occurrences (in progress).
 3. Add reusable event themes with deterministic checks and host-review
    fallback.
 4. Add Fair Queue so performers with fewer completed turns are favored, with
