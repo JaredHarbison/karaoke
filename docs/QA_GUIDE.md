@@ -31,16 +31,20 @@ venue is `/demo-karaoke/songs`.
 | `/demo-karaoke/settings` as owner | Edit venue details and save | Changes persist and visible feedback confirms the update. |
 | Settings as owner | Add an existing user as host | The host appears in the list and can manage the queue. |
 | Settings as owner | Remove a host | The host disappears from the list and loses host queue authority. |
+| Settings as owner | Add an email that is not yet registered | A host invitation link is created and the owner receives visible confirmation. |
+| Host invitation | Open the invitation while signed out, then sign in with the invited email | The invitation is accepted and the user can manage the venue queue. |
+| Host invitation | Try to accept with a different account email | Acceptance is rejected and the invitation remains pending. |
 | `/help` as performer | Open help | General queue guidance appears; venue-operator guides are hidden. |
 | `/help` as owner/host | Open help | General and planned venue-operator guides appear; planned guides are labeled forthcoming. |
 | Signed-out `/help` | Open help | User is sent to sign in. |
 
 ## Phase 1 membership checkpoint
 
-The current Phase 1 slice should not introduce a new visible page. Verify that
-the existing queue and settings behavior remains stable while authorization is
-resolved through contextual membership data. Owner/host membership editing is
-the next frontend slice and is intentionally not complete yet.
+The current Phase 1 slice does not introduce a new visible page. Verify that
+the existing queue and settings behavior remains stable while authorization and
+host management resolve through contextual membership data. The legacy
+`/admins` URLs may remain in links for compatibility, but the visible workflow
+is presented as host management.
 
 ## Record findings
 

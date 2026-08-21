@@ -21,7 +21,7 @@ class VenueInvitation < ApplicationRecord
     raise ActiveRecord::RecordInvalid, self unless pending? && email.casecmp?(user.email)
 
     transaction do
-      venue.add_admin(user)
+      venue.add_host(user)
       update!(accepted_at: Time.current)
     end
   end

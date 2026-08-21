@@ -21,7 +21,7 @@
     - if @venues.any?
       .venue-card-grid
         - @venues.each do |venue|
-          - featured_host = venue.admins.first || venue.owner
+          - featured_host = venue.hosts.first || venue.owner
           %article.venue-card
             %h3= venue.name
             %p.venue-card__location= venue.location.presence || "Location not listed"

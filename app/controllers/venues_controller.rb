@@ -29,7 +29,7 @@ class VenuesController < ApplicationController
   
   # GET /:venue_slug/settings - Venue settings (owner only)
   def settings
-    @admins = @venue.admins.where.not(id: @venue.owner_id)
+    @hosts = @venue.hosts
     @admin_search_results = []
   end
   
@@ -44,7 +44,7 @@ class VenuesController < ApplicationController
   
   # GET /:venue_slug/admins - List admins (owner only)
   def admins_list
-    @admins = @venue.admins
+    @hosts = @venue.hosts
   end
   
   # POST /:venue_slug/admins - Add admin (owner only)
@@ -69,7 +69,7 @@ class VenuesController < ApplicationController
       return
     end
     
-    @venue.add_admin(@user)
+    @venue.add_host(@user)
     message = "#{@user.email} added as host."
     
     respond_to do |format|
@@ -81,7 +81,7 @@ class VenuesController < ApplicationController
   # DELETE /:venue_slug/admins/:id - Remove admin (owner only)
   def destroy_admin
     @user = User.find(params[:id])
-    @venue.remove_admin(@user)
+    @venue.remove_host(@user)
     message = "#{@user.email} removed as host."
     
     respond_to do |format|

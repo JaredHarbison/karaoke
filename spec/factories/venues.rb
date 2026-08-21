@@ -20,7 +20,7 @@ FactoryBot.define do
       after(:create) do |venue, evaluator|
         evaluator.admin_count.times do
           admin = create(:user, role: :admin)
-          venue.add_admin(admin)
+          venue.add_host(admin)
         end
       end
     end

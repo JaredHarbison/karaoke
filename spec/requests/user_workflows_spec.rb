@@ -57,7 +57,7 @@ RSpec.describe 'User Journeys', type: :request do
       expect(response).to be_successful
 
       post "/#{venue.slug}/admins", params: { email: admin.email }
-      expect(venue.reload.admins).to include(admin)
+      expect(venue.reload.hosts).to include(admin)
     end
   end
 end

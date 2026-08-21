@@ -7,16 +7,16 @@ This roadmap is product-oriented; architectural rationale lives in
 ## Current baseline
 
 The current app has one `User` identity, venue-scoped routes and queue data,
-Devise authentication, venue discovery/joining, owner/legacy host queue
-authorization, song search/queue workflows, and the Phase 0 engineering
-guardrails/help framework. The current `VenueAdmin` and global user-role model
-remain compatibility-era code until the next phase.
+Devise authentication, venue discovery/joining, contextual venue membership
+authorization, membership-backed host management, song search/queue workflows,
+and the Phase 0 engineering guardrails/help framework. Final removal of the
+legacy `VenueAdmin` table and global user-role column is the remaining Phase 1
+cleanup.
 
 ## MVP sequence
 
 1. Collapse `VenueAdmin` and global role ambiguity into contextual
-   `VenueMembership` (in progress: membership foundation/backfill first, then
-   authorization and management cutover).
+   `VenueMembership` (in progress: final legacy table/column cleanup).
 2. Add events and recurring event series, including independently editable
    occurrences.
 3. Add reusable event themes with deterministic checks and host-review

@@ -20,8 +20,8 @@
       </div>
       <div class="settings-stat">
         <span class="settings-stat__label">Hosts</span>
-        <strong><%= @admins.size %></strong>
-        <span><%= @admins.size == 1 ? "person" : "people" %> can manage the queue</span>
+        <strong><%= @hosts.size %></strong>
+        <span><%= @hosts.size == 1 ? "person" : "people" %> can manage the queue</span>
       </div>
       <div class="settings-stat settings-stat--highlight">
         <span class="settings-stat__label">Venue link</span>
@@ -81,15 +81,15 @@
         <p class="settings-card__intro">Hosts can play, skip, and finish songs. They cannot change venue settings.</p>
 
         <div class="host-list">
-          <% if @admins.any? %>
-            <% @admins.each do |admin| %>
+          <% if @hosts.any? %>
+            <% @hosts.each do |host| %>
               <div class="host-row">
-                <span class="host-avatar"><%= admin.email.first.upcase %></span>
+                <span class="host-avatar"><%= host.email.first.upcase %></span>
                 <span class="host-row__identity">
-                  <strong><%= admin.email %></strong>
+                  <strong><%= host.email %></strong>
                   <small>Queue host</small>
                 </span>
-                <%= button_to "Remove", venue_admin_path(@venue.slug, admin.id), method: :delete, class: "settings-button settings-button--quiet-danger", data: { turbo_confirm: "Remove #{admin.email} as a host?" } %>
+                <%= button_to "Remove", venue_admin_path(@venue.slug, host.id), method: :delete, class: "settings-button settings-button--quiet-danger", data: { turbo_confirm: "Remove #{host.email} as a host?" } %>
               </div>
             <% end %>
           <% else %>

@@ -8,7 +8,7 @@ RSpec.describe VenueInvitation, type: :model do
     user = create(:user, email: 'host@example.com')
     invitation = described_class.create!(venue: venue, invited_by: inviter, email: user.email)
 
-    expect { invitation.accept!(user) }.to change { venue.reload.admins.to_a }.from([]).to([user])
+    expect { invitation.accept!(user) }.to change { venue.reload.hosts.to_a }.from([]).to([user])
     expect(invitation.reload).to be_present
     expect(invitation.accepted_at).to be_present
   end

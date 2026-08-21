@@ -5,6 +5,8 @@ RSpec.describe Venue, type: :model do
     it { is_expected.to belong_to(:owner).optional }
     it { is_expected.to have_many(:venue_memberships).dependent(:destroy) }
     it { is_expected.to have_many(:members).through(:venue_memberships).source(:user) }
+    it { is_expected.to have_many(:admin_memberships).class_name('VenueMembership').dependent(:destroy) }
+    it { is_expected.to have_many(:hosts).through(:admin_memberships).source(:user) }
     it { is_expected.to have_many(:songs).dependent(:destroy) }
     it { is_expected.to have_many(:users).dependent(:nullify) }
     it { is_expected.to have_many(:admin_assignments).dependent(:destroy) }
@@ -46,7 +48,7 @@ RSpec.describe Venue, type: :model do
       user = create(:user, :performer)
       venue.add_admin(user)
       venue.add_admin(user)
-      expect(venue.admins.where(id: user.id).count).to eq(1)
+      expect(venue.hosts.where(id: user.id).count).to eq(1)
     end
   end
 
@@ -97,7 +99,7 @@ RSpec.describe Venue, type: :model do
     context 'with_admins trait' do
       it 'creates admins for the venue' do
         venue = create(:venue, :with_admins, admin_count: 3)
-        expect(venue.admins.count).to eq(3)
+      expect(venue.hosts.count).to eq(3)
       end
     end
 

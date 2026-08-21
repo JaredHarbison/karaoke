@@ -76,7 +76,7 @@ RSpec.describe 'Venues', type: :request do
       sign_in owner
       post "/#{venue.slug}/admins", params: { email: owner.email }
 
-      expect(venue.reload.admins).not_to include(owner)
+      expect(venue.reload.hosts).not_to include(owner)
       expect(response).to redirect_to(venue_settings_path(venue.slug))
     end
   end

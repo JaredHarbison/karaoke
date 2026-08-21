@@ -2,6 +2,8 @@ class Venue < ApplicationRecord
   belongs_to :owner, class_name: 'User', optional: true
   has_many :venue_memberships, dependent: :destroy
   has_many :members, through: :venue_memberships, source: :user
+  has_many :admin_memberships, -> { where(role: :admin) }, class_name: 'VenueMembership', dependent: :destroy
+  has_many :hosts, through: :admin_memberships, source: :user
   has_many :songs, dependent: :destroy
   has_many :users, dependent: :nullify
   has_many :admin_assignments, class_name: 'VenueAdmin', dependent: :destroy
@@ -14,22 +16,22 @@ class Venue < ApplicationRecord
   before_validation :generate_slug, if: -> { slug.blank? && name.present? }
   after_create :ensure_owner_membership
   
-  def add_admin(user)
+  def add_host(user)
     admin_assignments.find_or_create_by(user: user)
     membership = venue_memberships.find_or_initialize_by(user: user)
     membership.role = :admin unless membership.owner?
     membership.save!
   end
 
-  alias_method :add_host, :add_admin
+  alias_method :add_admin, :add_host
   
-  def remove_admin(user)
+  def remove_host(user)
     admin_assignments.find_by(user: user)&.destroy
     membership = venue_memberships.find_by(user: user)
     membership&.destroy if membership&.admin?
   end
 
-  alias_method :remove_host, :remove_admin
+  alias_method :remove_admin, :remove_host
   
   def is_admin?(user)
     admin?(user)

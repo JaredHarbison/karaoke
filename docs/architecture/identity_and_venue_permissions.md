@@ -18,9 +18,9 @@ relevant venue (and event when applicable) before granting access.
 Users remain identifiable across venues, while venue permissions become
 explicit, queryable, and auditable. Phase 1 adds the membership table and
 backfills existing venue owners, legacy venue admins, and users with an
-existing venue association. Existing `VenueAdmin` authorization remains as a
-compatibility path until call sites and management workflows move to
-memberships.
+existing venue association. Authorization and host management now resolve
+through memberships; the legacy `VenueAdmin` table is retained only until its
+final cleanup migration is verified.
 
 ## Deferred details
 
@@ -40,8 +40,8 @@ The remaining frontend work is to make contextual authority visible and
 manageable:
 
 - Show the active venue and the user's venue-specific role clearly.
-- Replace owner settings' legacy host list with membership-backed host/member
-  management, including invitations and safe removal/role changes.
+- Extend the membership-backed owner settings host management with explicit
+  role editing, member visibility, and safer removal/ownership safeguards.
 - Keep performer queueing unchanged while ensuring host controls appear only
   for the active venue membership.
 - Add multi-venue membership navigation and empty/unauthorized states when

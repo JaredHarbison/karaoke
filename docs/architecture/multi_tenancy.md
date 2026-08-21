@@ -76,8 +76,9 @@ end
 
 ## Authorization
 
-Current authorization combines venue ownership, legacy `VenueAdmin` assignments,
-and song ownership. It is a compatibility model.
+Current authorization combines venue ownership, contextual `VenueMembership`
+assignments, and song ownership. The legacy `VenueAdmin` table remains only as
+a compatibility bridge during Phase 1 cleanup.
 
-The planned contextual membership direction is documented separately and is
-not implemented by Phase 0.
+The contextual membership direction and remaining cleanup are documented in
+[identity and venue permissions](identity_and_venue_permissions.md).
