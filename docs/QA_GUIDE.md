@@ -47,4 +47,5 @@ the next frontend slice and is intentionally not complete yet.
 For each issue, record the account, page, action, expected result, actual
 result, browser/device, and a screenshot or console error when relevant.
 
-Update this guide whenever a user-facing workflow changes.
+Review this guide on every commit. Update it whenever the change affects a
+testable page, action, authorization boundary, or operational workflow.

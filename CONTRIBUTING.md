@@ -18,6 +18,9 @@ coverage and checks for its risk. Before handoff, review:
 - Tests written for new business rules and authorization boundaries, and the
   relevant tests actually run. Never claim a check was run if it was not.
 - Help documentation updated when a user or operator workflow changes.
+- [`docs/QA_GUIDE.md`](docs/QA_GUIDE.md) reviewed on every commit and updated
+  when the change affects a testable page, action, authorization boundary, or
+  operational workflow.
 - Architecture docs updated in the same change when the architecture changes.
 - Each commit updates relevant documentation when the change affects product
   behavior, architecture, operations, or developer workflow.
