@@ -28,3 +28,23 @@ Membership role semantics beyond the current owner/admin/performer compatibility
 mapping, invitations, ownership transfer, event-level permissions, and final
 legacy-table removal are deferred. The migration is in progress; event and
 event-level authority are not implemented.
+
+## Planned UI/UX follow-up
+
+The Phase 1 membership foundation does not add a new screen or change the
+performer queue flow. Existing queue controls now resolve through the
+membership boundary, with the legacy `VenueAdmin` read path retained during
+cutover.
+
+The remaining frontend work is to make contextual authority visible and
+manageable:
+
+- Show the active venue and the user's venue-specific role clearly.
+- Replace owner settings' legacy host list with membership-backed host/member
+  management, including invitations and safe removal/role changes.
+- Keep performer queueing unchanged while ensuring host controls appear only
+  for the active venue membership.
+- Add multi-venue membership navigation and empty/unauthorized states when
+  users belong to multiple venues.
+- Update help and accessibility copy when the management workflows become
+  operational.
