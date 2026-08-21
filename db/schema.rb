@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_08_21_150000) do
+ActiveRecord::Schema[7.2].define(version: 2026_08_21_160000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,6 +26,18 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_150000) do
     t.datetime "updated_at", null: false
     t.index ["venue_id", "active"], name: "index_event_series_on_venue_id_and_active"
     t.index ["venue_id"], name: "index_event_series_on_venue_id"
+  end
+
+  create_table "event_theme_applications", force: :cascade do |t|
+    t.bigint "event_id", null: false
+    t.bigint "theme_id", null: false
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id", "theme_id"], name: "index_event_theme_applications_on_event_id_and_theme_id", unique: true
+    t.index ["event_id"], name: "index_event_theme_applications_on_event_id"
+    t.index ["theme_id"], name: "index_event_theme_applications_on_theme_id"
   end
 
   create_table "events", force: :cascade do |t|
@@ -69,6 +81,18 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_150000) do
     t.index ["user_id"], name: "index_songs_on_user_id"
     t.index ["venue_id", "created_at"], name: "index_songs_on_venue_id_and_created_at"
     t.index ["venue_id"], name: "index_songs_on_venue_id"
+  end
+
+  create_table "themes", force: :cascade do |t|
+    t.bigint "venue_id", null: false
+    t.string "name", null: false
+    t.text "description"
+    t.jsonb "rules", default: {}, null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["venue_id", "name"], name: "index_themes_on_venue_id_and_name", unique: true
+    t.index ["venue_id"], name: "index_themes_on_venue_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -130,12 +154,15 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_150000) do
   end
 
   add_foreign_key "event_series", "venues"
+  add_foreign_key "event_theme_applications", "events"
+  add_foreign_key "event_theme_applications", "themes"
   add_foreign_key "events", "event_series"
   add_foreign_key "events", "venues"
   add_foreign_key "platform_memberships", "users"
   add_foreign_key "songs", "events"
   add_foreign_key "songs", "users"
   add_foreign_key "songs", "venues"
+  add_foreign_key "themes", "venues"
   add_foreign_key "users", "venues"
   add_foreign_key "venue_invitations", "users", column: "invited_by_id"
   add_foreign_key "venue_invitations", "venues"

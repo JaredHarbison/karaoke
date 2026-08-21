@@ -1,0 +1,5 @@
+<main class="container" aria-labelledby="edit-theme-heading">
+  <p><%= link_to "Back to themes", venue_themes_path(Current.venue.slug) %></p>
+  <h1 id="edit-theme-heading">Edit theme</h1>
+  <%= render "form", form_url: venue_theme_path(Current.venue.slug, @theme), form_method: :patch %>
+</main>

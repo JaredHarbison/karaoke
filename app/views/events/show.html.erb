@@ -15,6 +15,31 @@
       <dd><%= @event.event_series.name %></dd>
     <% end %>
   </dl>
+  <section aria-labelledby="themes-heading">
+    <h2 id="themes-heading">Themes</h2>
+    <% if @theme_applications.any? %>
+      <ul>
+        <% @theme_applications.each do |application| %>
+          <li>
+            <%= application.theme.name %>
+            <% if Current.venue.is_admin?(current_user) %>
+              <%= button_to "Remove", venue_event_theme_application_path(Current.venue.slug, application), method: :delete %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>No themes are applied to this event.</p>
+    <% end %>
+    <% if Current.venue.is_admin?(current_user) && @themes.any? %>
+      <%= form_with url: venue_event_theme_applications_path(Current.venue.slug), method: :post, local: true do |form| %>
+        <%= hidden_field_tag 'event_theme_application[event_id]', @event.id %>
+        <%= label_tag 'event_theme_application_theme_id', 'Apply theme' %>
+        <%= select_tag 'event_theme_application[theme_id]', options_from_collection_for_select(@themes, :id, :name), include_blank: 'Choose a theme' %>
+        <%= form.submit 'Apply theme' %>
+      <% end %>
+    <% end %>
+  </section>
   <p><%= link_to "View event queue", venue_songs_path(Current.venue.slug, event_id: @event.id) %></p>
   <% if Current.venue.is_admin?(current_user) %>
     <%= link_to "Edit event", edit_venue_event_path(Current.venue.slug, @event) %>

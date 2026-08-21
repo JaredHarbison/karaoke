@@ -11,7 +11,10 @@ class EventsController < ApplicationController
     @events = Current.venue.events.includes(:event_series).order(:starts_at)
   end
 
-  def show; end
+  def show
+    @themes = Current.venue.themes.where(active: true).order(:name)
+    @theme_applications = @event.event_theme_applications.includes(:theme).order(:starts_at)
+  end
 
   def new
     @event = Current.venue.events.new(starts_at: 1.day.from_now.change(min: 0))

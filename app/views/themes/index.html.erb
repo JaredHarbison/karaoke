@@ -1,0 +1,18 @@
+<main class="container" aria-labelledby="themes-heading">
+  <p><%= link_to "Back to queue", venue_songs_path(Current.venue.slug) %></p>
+  <h1 id="themes-heading">Themes</h1>
+  <p>Themes are reusable definitions. Deterministic song rules are forthcoming.</p>
+  <p><%= link_to "Create theme", new_venue_theme_path(Current.venue.slug) %></p>
+  <% if @themes.any? %>
+    <ul>
+      <% @themes.each do |theme| %>
+        <li>
+          <%= link_to theme.name, edit_venue_theme_path(Current.venue.slug, theme) %>
+          <% unless theme.active? %><span>(inactive)</span><% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>No themes have been created yet.</p>
+  <% end %>
+</main>

@@ -1,0 +1,26 @@
+<%= form_with model: @theme, url: form_url, method: form_method, local: true do |form| %>
+  <% if @theme.errors.any? %>
+    <div role="alert">
+      <h2><%= pluralize(@theme.errors.count, "error") %> prevented saving:</h2>
+      <ul>
+        <% @theme.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div>
+    <%= form.label :name, "Theme name" %>
+    <%= form.text_field :name, required: true %>
+  </div>
+  <div>
+    <%= form.label :description, "Description" %>
+    <%= form.text_area :description %>
+  </div>
+  <div>
+    <%= form.label :active, "Available for event hosts" %>
+    <%= form.check_box :active %>
+  </div>
+  <p>The deterministic song rules and host-review workflow are forthcoming.</p>
+  <%= form.submit %>
+<% end %>

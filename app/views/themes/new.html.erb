@@ -1,0 +1,5 @@
+<main class="container" aria-labelledby="new-theme-heading">
+  <p><%= link_to "Back to themes", venue_themes_path(Current.venue.slug) %></p>
+  <h1 id="new-theme-heading">Create theme</h1>
+  <%= render "form", form_url: venue_themes_path(Current.venue.slug), form_method: :post %>
+</main>

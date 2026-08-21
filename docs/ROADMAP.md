@@ -20,7 +20,7 @@ Phase 1.
    occurrences (in progress: venue-scoped management, daily/weekly
    materialization, and transitional event-scoped queueing are complete).
 3. Add reusable event themes with deterministic checks and host-review
-   fallback.
+   fallback (theme definitions and event applications in progress).
 4. Add Fair Queue so performers with fewer completed turns are favored, with
    sensible tie-breaking and host override.
 5. Add time-limited, event-specific temporary host delegation.
