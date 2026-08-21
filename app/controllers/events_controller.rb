@@ -12,11 +12,7 @@ class EventsController < ApplicationController
   end
 
   def show
-    @themes = Current.venue.themes.where(active: true).order(:name)
-    @theme_applications = @event.event_theme_applications.includes(:theme).order(:starts_at)
-    @queue_overrides = @event.song_queue_overrides.includes(:song, :user).order(created_at: :desc).limit(10)
-    @event_host_delegations = @event.event_host_delegations.includes(:delegated_user, :delegated_by_user).order(starts_at: :desc)
-    @delegation_candidates = Current.venue.members.order(:email)
+    load_show_data
   end
 
   def new
@@ -52,6 +48,16 @@ class EventsController < ApplicationController
   end
 
   private
+
+  def load_show_data
+    @themes = Current.venue.themes.where(active: true).order(:name)
+    @theme_applications = @event.event_theme_applications.includes(:theme).order(:starts_at)
+    @queue_overrides = @event.song_queue_overrides.includes(:song, :user).order(created_at: :desc).limit(10)
+    @event_host_delegations = @event.event_host_delegations
+                                    .includes(:delegated_user, :delegated_by_user)
+                                    .order(starts_at: :desc)
+    @delegation_candidates = Current.venue.members.order(:email)
+  end
 
   def set_event
     @event = Current.venue.events.find(params[:id])
