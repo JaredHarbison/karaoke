@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Use coverage for the full suite; focused runs are intentionally coverage-free.
+ENV['COVERAGE'] = 'false' if ARGV.any?
+
+exec 'bundle', 'exec', 'rspec', *ARGV

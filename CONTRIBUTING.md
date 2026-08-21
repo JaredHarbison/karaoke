@@ -43,8 +43,8 @@ tool is unavailable; it must not turn a missing or skipped check into a pass.
 ## Agent command workflow
 
 When working through an approved agent shell, prefer one command per execution
-so approval prefixes remain predictable. Use clean command prefixes such as
-`bundle exec`, `bin/rails`, `gh run`, and the appropriate `git` subcommand;
+so approval prefixes remain predictable. Use clean repository-native command
+prefixes such as `bin/rspec`, `bin/rails`, `gh run`, and the appropriate `git` subcommand;
 avoid chaining unrelated commands with `&&` or prefixing commands with shell
 environment assignments when an equivalent direct invocation is available.
 

@@ -35,7 +35,7 @@ The pre-commit hook runs fast checks over staged changes; CI runs the full
 authoritative gate. A missing required tool is a failure, not a skipped pass.
 
 ```sh
-bundle exec rspec
+bin/rspec
 bundle exec rubocop
 bundle exec brakeman -q
 bundle exec bundle-audit check --update

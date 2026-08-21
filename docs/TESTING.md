@@ -6,7 +6,7 @@ Run the checks relevant to the change and report the exact commands and result.
 CI is authoritative for the full repository:
 
 ```sh
-bundle exec rspec
+bin/rspec
 bundle exec rubocop
 bundle exec brakeman -q -x EOLRails
 bundle exec bundle-audit check --update
@@ -14,7 +14,9 @@ bundle exec erb_lint app/views
 bin/rails db:abort_if_pending_migrations
 ```
 
-The pre-commit hook is a fast staged-change gate. It checks debug code and
+The `bin/rspec` entry point enables coverage for the full suite and disables it
+for focused arguments, so local targeted runs do not require environment
+assignments. The pre-commit hook is a fast staged-change gate. It checks debug code and
 obvious secrets, runs RuboCop for staged Ruby, ERB lint for staged ERB, runs a
 small Rails boot sanity check, and runs critical specs for staged application
 or spec changes. It does not replace CI.
