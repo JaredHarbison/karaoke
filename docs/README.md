@@ -23,9 +23,9 @@ docs explain decisions without claiming future work is implemented.
 - [Current request context](models/current.md)
 - [Current models](models/)
 
-The current code uses one `User`, venue-scoped routes, a legacy global role
-enum, and `VenueAdmin`. The planned contextual membership direction is in
-[identity and venue permissions](architecture/identity_and_venue_permissions.md).
+The current code uses one `User`, venue-scoped routes, and contextual
+`VenueMembership` authorization. The completed Phase 1 decision and its
+remaining UI follow-ups are in [identity and venue permissions](architecture/identity_and_venue_permissions.md).
 
 ## Quality tools
 

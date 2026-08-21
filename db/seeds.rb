@@ -8,33 +8,25 @@ password = 'KaraokeDemo123!'
 owner = User.find_or_create_by!(email: 'owner@karaoke.test') do |user|
   user.password = password
   user.password_confirmation = password
-  user.role = :owner
 end
-owner.update!(role: :owner)
 owner.update!(password: password, password_confirmation: password)
 
 host = User.find_or_create_by!(email: 'host@karaoke.test') do |user|
   user.password = password
   user.password_confirmation = password
-  user.role = :admin
 end
-host.update!(role: :admin)
 host.update!(password: password, password_confirmation: password)
 
 performer = User.find_or_create_by!(email: 'performer@karaoke.test') do |user|
   user.password = password
   user.password_confirmation = password
-  user.role = :performer
 end
-performer.update!(role: :performer)
 performer.update!(password: password, password_confirmation: password)
 
 performer_demo = User.find_or_create_by!(email: 'performer.demo@karaoke.test') do |user|
   user.password = password
   user.password_confirmation = password
-  user.role = :performer
 end
-performer_demo.update!(role: :performer)
 performer_demo.update!(password: password, password_confirmation: password)
 
 venue = Venue.find_or_create_by!(slug: 'demo-karaoke') do |record|

@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe 'User Journeys', type: :system, tag: :critical do
   let(:venue) { create(:venue) }
   let(:owner) { venue.owner }
-  let(:admin) { create(:user, :admin) }
-  let(:performer) { create(:user, :performer, venue: venue) }
+  let(:admin) { create(:user) }
+  let(:performer) { create(:user, venue: venue) }
 
   before do
     driven_by :rack_test

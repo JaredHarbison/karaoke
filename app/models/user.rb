@@ -6,8 +6,6 @@ class User < ApplicationRecord
   has_many :member_venues, through: :venue_memberships, source: :venue
   has_many :sent_venue_invitations, class_name: 'VenueInvitation', foreign_key: :invited_by_id, dependent: :destroy
 
-  enum role: { owner: 0, admin: 1, performer: 2 }
-  
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -41,6 +39,10 @@ class User < ApplicationRecord
   def venue_operator?
     venue_memberships.where(role: %i[owner admin]).exists? ||
       owned_venues.exists?
+  end
+
+  def platform_operator?
+    platform_admin?
   end
 
   def display_name

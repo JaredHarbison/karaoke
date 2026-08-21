@@ -30,7 +30,7 @@ RSpec.describe User, type: :model do
   describe '#owner_of?' do
     context 'when user owns the venue' do
       it 'returns true', :critical do
-        user = create(:user, :owner)
+        user = create(:user)
         venue = create(:venue, owner: user)
         expect(user.owner_of?(venue)).to be true
       end
@@ -48,7 +48,7 @@ RSpec.describe User, type: :model do
   describe '#admin_of?' do
     context 'when user owns the venue' do
       it 'returns true (owner is implicitly admin)', :critical do
-        owner = create(:user, :owner)
+        owner = create(:user)
         venue = create(:venue, owner: owner)
         expect(owner.admin_of?(venue)).to be true
       end
@@ -56,9 +56,9 @@ RSpec.describe User, type: :model do
 
     context 'when user is explicit admin' do
       it 'returns true' do
-        owner = create(:user, :owner)
+        owner = create(:user)
         venue = create(:venue, owner: owner)
-        user = create(:user, :performer)
+        user = create(:user)
         venue.add_admin(user)
         expect(user.admin_of?(venue)).to be true
       end
@@ -66,7 +66,7 @@ RSpec.describe User, type: :model do
 
     context 'when user is not admin' do
       it 'returns false', :critical do
-        user = create(:user, :performer)
+        user = create(:user)
         venue = create(:venue)
         expect(user.admin_of?(venue)).to be false
       end
@@ -78,6 +78,16 @@ RSpec.describe User, type: :model do
       user = build(:user, email: 'jared.harbison@example.com')
 
       expect(user.display_name).to eq('Jared Harbison')
+    end
+  end
+
+  describe '#platform_operator?' do
+    it 'is false for ordinary users' do
+      expect(create(:user).platform_operator?).to be false
+    end
+
+    it 'is true for application administrators' do
+      expect(create(:user, :platform_admin).platform_operator?).to be true
     end
   end
 

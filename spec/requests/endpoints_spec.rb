@@ -5,7 +5,7 @@ require 'rails_helper'
 
 RSpec.describe 'Songs Endpoints', type: :request do
   let(:venue) { create(:venue) }
-  let(:performer) { create(:user, :performer, venue: venue) }
+  let(:performer) { create(:user, venue: venue) }
   let(:song) { create(:song, venue: venue, user: performer) }
 
   describe 'GET /venues/:venue_slug/songs' do

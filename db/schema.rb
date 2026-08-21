@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_08_21_090000) do
+ActiveRecord::Schema[7.2].define(version: 2026_08_21_110000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -43,22 +43,12 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_090000) do
     t.string "provider"
     t.string "uid"
     t.bigint "venue_id"
-    t.integer "role", default: 2, null: false
+    t.boolean "platform_admin", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["platform_admin"], name: "index_users_on_platform_admin"
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["role"], name: "index_users_on_role"
     t.index ["venue_id"], name: "index_users_on_venue_id"
-  end
-
-  create_table "venue_admins", force: :cascade do |t|
-    t.bigint "venue_id", null: false
-    t.bigint "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_venue_admins_on_user_id"
-    t.index ["venue_id", "user_id"], name: "index_venue_admins_on_venue_id_and_user_id", unique: true
-    t.index ["venue_id"], name: "index_venue_admins_on_venue_id"
   end
 
   create_table "venue_invitations", force: :cascade do |t|
@@ -105,8 +95,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_090000) do
   add_foreign_key "songs", "users"
   add_foreign_key "songs", "venues"
   add_foreign_key "users", "venues"
-  add_foreign_key "venue_admins", "users"
-  add_foreign_key "venue_admins", "venues"
   add_foreign_key "venue_invitations", "users", column: "invited_by_id"
   add_foreign_key "venue_invitations", "venues"
   add_foreign_key "venue_memberships", "users"

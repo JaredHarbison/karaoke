@@ -7,8 +7,8 @@
 
 This records the venue, role, and authorization foundation implemented in
 February 2026. It remains a current-state reference, but its global role and
-`VenueAdmin` decisions are compatibility-era choices. The planned replacement
-is contextual `VenueMembership`; Phase 0 does not implement that migration.
+`VenueAdmin` decisions were compatibility-era choices. Phase 1 replaced them
+with contextual `VenueMembership`; this document remains historical.
 
 ---
 

@@ -58,6 +58,12 @@ class ApplicationController < ActionController::Base
       redirect_to (Current.venue ? venue_songs_path(Current.venue.slug) : discover_venues_path), alert: 'Only the venue owner can access this page.'
     end
   end
+
+  def require_platform_admin!
+    return if Current.user&.platform_operator?
+
+    redirect_to root_path, alert: 'You do not have permission to access this page.'
+  end
   
   def render_404
     render file: "#{Rails.root}/public/404.html", status: :not_found, layout: false

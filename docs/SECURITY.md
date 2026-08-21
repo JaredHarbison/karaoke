@@ -2,9 +2,11 @@
 
 This is guidance and a review checklist, not a certification or claim that all
 listed controls are implemented. Venue authorization now resolves through
-contextual `VenueMembership` records; the legacy `VenueAdmin` table has been
-removed. Event-level authorization is future work. Run the configured security
-checks and report their actual results.
+contextual `VenueMembership` records; the legacy `VenueAdmin` table and global
+venue-role column have been removed. Application-wide staff access is a
+separate `platform_admin` capability and must not be used as a venue-context
+authorization substitute. Event-level authorization is future work. Run the
+configured security checks and report their actual results.
 
 This document outlines security best practices and vulnerability prevention strategies based on OWASP Top 10 and industry standards.
 

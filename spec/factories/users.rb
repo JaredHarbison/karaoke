@@ -3,20 +3,10 @@ FactoryBot.define do
     sequence(:email) { |n| "user#{n}@example.com" }
     password { 'SecurePassword123!' }
     password_confirmation { 'SecurePassword123!' }
-    role { :performer }
-    
-    trait :owner do
-      role { :owner }
+
+    trait :platform_admin do
+      platform_admin { true }
     end
-    
-    trait :admin do
-      role { :admin }
-    end
-    
-    trait :performer do
-      role { :performer }
-    end
-    
     trait :with_venue do
       association :venue, factory: :venue
     end

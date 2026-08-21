@@ -2,14 +2,13 @@
 
 ## Context / problem
 
-The app currently has one `User` table, a global role enum, and a legacy
-`VenueAdmin` join model. A global role cannot accurately express that authority
+The app has one `User` table. A global role cannot accurately express that authority
 belongs to a particular venue and may later vary by event.
 
 ## Decision
 
-Keep one `User` identity model. Phase 1 begins replacing the ambiguous global venue
-admin representation with a contextual `VenueMembership` relationship that
+Keep one `User` identity model. Phase 1 replaced the ambiguous global venue admin
+representation with a contextual `VenueMembership` relationship that
 holds a user's venue-specific permissions. Authorization must resolve the
 relevant venue (and event when applicable) before granting access.
 
@@ -19,13 +18,16 @@ Users remain identifiable across venues, while venue permissions become
 explicit, queryable, and auditable. Phase 1 adds the membership table and
 backfills existing venue owners, legacy venue admins, and users with an
 existing venue association. Authorization and host management now resolve
-through memberships; the legacy `VenueAdmin` table has now been removed.
+through memberships; the legacy `VenueAdmin` table and global venue-role column
+have now been removed. A separate `platform_admin` capability is reserved for
+application-wide staff authority and does not grant venue ownership.
 
 ## Deferred details
 
 Membership role semantics beyond the current owner/admin/performer mapping,
-ownership transfer, event-level permissions, and richer member management are
-deferred. Event and event-level authority are not implemented.
+platform-admin workflows such as venue-joining moderation, ownership transfer,
+event-level permissions, and richer member management are deferred. Event and
+event-level authority are not implemented.
 
 ## Planned UI/UX follow-up
 

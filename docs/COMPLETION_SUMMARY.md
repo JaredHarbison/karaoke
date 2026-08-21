@@ -15,11 +15,11 @@ not current quality claims. Use [`docs/TESTING.md`](TESTING.md),
 
 ## Current interpretation
 
-The foundation remains in the codebase, but `VenueAdmin` and global roles are
-not the final permission architecture. The planned replacement is contextual
-`VenueMembership`, as described in
+This historical foundation has since been normalized: `VenueAdmin` and the
+global user-role column were replaced by contextual `VenueMembership`, as
+described in
 [`docs/architecture/identity_and_venue_permissions.md`](architecture/identity_and_venue_permissions.md).
-Phase 0 does not perform that migration.
+Phase 1 completed that migration; this document remains a historical record.
 
 The product roadmap, architecture decisions, and role-aware application help are now
 maintained separately so historical completion notes cannot be mistaken for

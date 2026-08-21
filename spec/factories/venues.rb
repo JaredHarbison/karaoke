@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :venue do
     sequence(:name) { |n| "#{Faker::Restaurant.name} #{n}" }
-    association :owner, factory: :user, role: :owner
+    association :owner, factory: :user
     public { true }
     
     trait :private do
@@ -19,7 +19,7 @@ FactoryBot.define do
       
       after(:create) do |venue, evaluator|
         evaluator.admin_count.times do
-          admin = create(:user, role: :admin)
+          admin = create(:user)
           venue.add_host(admin)
         end
       end
@@ -44,7 +44,7 @@ FactoryBot.define do
       
       after(:create) do |venue, evaluator|
         evaluator.performer_count.times do
-          create(:user, role: :performer, venue: venue)
+          create(:user, venue: venue)
         end
       end
     end
