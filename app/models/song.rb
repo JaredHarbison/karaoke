@@ -19,6 +19,11 @@ class Song < ApplicationRecord
   private
 
     def event_belongs_to_venue
+      if event_id.present? && event.nil?
+        errors.add(:event, 'is not available')
+        return
+      end
+
       return unless event && venue_id != event.venue_id
 
       errors.add(:event, 'must belong to the same venue')

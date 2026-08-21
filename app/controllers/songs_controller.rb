@@ -193,9 +193,7 @@ class SongsController < ApplicationController
     @song.assign_attributes(attributes)
     return if event_id.blank?
 
-    @song.event_id = nil
-    @song.event = Current.venue.events.find_by(id: event_id)
-    @song.errors.add(:event, 'is not available for this venue') unless @song.event
+    @song.event = Event.find_by(id: event_id)
   end
 
   def queue_path
