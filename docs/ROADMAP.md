@@ -87,8 +87,10 @@ unless reusable theme playlists become an MVP need.
   turn history.
 - [Initial slice complete] Serialize event queue reorder operations under the
   event lock while preserving scoped host override audit.
-- [Planned] Add broader race-condition/load coverage around simultaneous
-  admissions and reorder requests.
+- [Initial slice complete] Add database-backed race coverage for simultaneous
+  event admissions and reorder requests.
+- [Planned] Add broader production-load coverage and admission throughput
+  instrumentation when real usage warrants it.
 - Add configurable fairness modes only where real usage requires them.
 
 ### 6. MVP UX, accessibility, reliability, and presentation polish

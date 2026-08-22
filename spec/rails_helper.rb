@@ -21,6 +21,7 @@ require 'capybara/rspec'
 require 'factory_bot_rails'
 require 'faker'
 require_relative 'support/auth_helpers'
+require_relative 'support/concurrency_helpers'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are

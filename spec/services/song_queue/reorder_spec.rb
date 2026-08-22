@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# rubocop:disable Metrics/BlockLength
 RSpec.describe SongQueue::Reorder, type: :service do
   it 'keeps host reordering scoped to the song event' do
     event = create(:event)
@@ -27,4 +28,24 @@ RSpec.describe SongQueue::Reorder, type: :service do
 
     described_class.pause!(song, 1, actor: event.venue.owner)
   end
+
+  it 'keeps simultaneous event reorders consistent', use_transactional_fixtures: false do
+    venue = create(:venue)
+    event = create(:event, venue: venue)
+    first = create(:song, event: event, venue: venue, updated_at: 2.hours.ago)
+    second = create(:song, event: event, venue: venue, updated_at: 1.hour.ago)
+    host_id = venue.owner_id
+
+    run_concurrently([first.id, second.id]) do |song_id|
+      described_class.pause!(Song.find(song_id), 1, actor: User.find(host_id))
+    end
+
+    queue_ids = Song.unscoped.where(event_id: event.id).order(:updated_at, :id).pluck(:id)
+    expect(queue_ids).to match_array([first.id, second.id])
+    expect(event.song_queue_overrides.count).to eq(2)
+  ensure
+    SongQueueOverride.where(event_id: event&.id).delete_all
+    venue&.destroy!
+  end
 end
+# rubocop:enable Metrics/BlockLength

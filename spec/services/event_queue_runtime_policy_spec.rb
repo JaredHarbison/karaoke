@@ -53,5 +53,32 @@ RSpec.describe EventQueueRuntimePolicy, type: :service do
 
     expect(result.projected_completion_at).to eq(at + Song::DEFAULT_DURATION_SECONDS + 30)
   end
+
+  it 'serializes simultaneous admissions before applying the event cutoff', use_transactional_fixtures: false do
+    venue = create(:venue)
+    event = create(:event, venue: venue, status: :live, starts_at: 1.hour.ago, ends_at: 5.minutes.from_now)
+
+    results = run_concurrently([1, 2]) do |number|
+      locked_event = Event.find(event.id)
+      candidate = Song.new(
+        event_id: locked_event.id,
+        venue_id: venue.id,
+        performer: "Concurrent Singer #{number}",
+        url: "https://youtube.com/concurrent-#{number}",
+        effective_duration_seconds: 180
+      )
+
+      locked_event.with_lock do
+        result = described_class.call(event: locked_event, candidate: candidate)
+        candidate.save! if result.allowed?
+        result
+      end
+    end
+
+    expect(results.count(&:allowed?)).to eq(1)
+    expect(Song.unscoped.where(event_id: event.id).count).to eq(1)
+  ensure
+    venue&.destroy!
+  end
 end
 # rubocop:enable Metrics/BlockLength
