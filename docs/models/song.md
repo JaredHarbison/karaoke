@@ -26,6 +26,7 @@ create_table :songs do |t|
   t.integer :effective_duration_seconds
   t.string :duration_source
   t.datetime :metadata_checked_at
+  t.string :submission_token
   
   t.timestamps
 end
@@ -63,6 +64,9 @@ Unknown or unverified metadata is held for review. Known duration is preferred;
 missing duration uses the event queue's average of known durations, with a safe
 fallback when none are available. These fields are transitional until the
 canonical `Song`/`Performance` boundary is migrated.
+
+New submissions also receive a unique `submission_token`. Retrying the same
+token resolves to the existing entry rather than creating a duplicate.
 
 ## Multi-tenancy
 

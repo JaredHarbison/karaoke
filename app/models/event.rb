@@ -57,9 +57,11 @@ class Event < ApplicationRecord
   end
 
   def transition_status(from, to)
-    self.class.where(id: id, status: self.class.statuses.fetch(from.to_s)).update_all(
-      status: self.class.statuses.fetch(to.to_s),
-      updated_at: Time.current
-    ).positive?
+    with_lock do
+      return false unless public_send("#{from}?")
+
+      update!(status: to)
+      true
+    end
   end
 end

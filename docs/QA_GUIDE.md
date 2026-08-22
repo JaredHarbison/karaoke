@@ -109,6 +109,7 @@ testable from the event page for authority, expiry, and revocation.
 | Event lifecycle | As a host, complete a live event, then try to queue | The event closes to new submissions, including during the short presence grace period. |
 | Event runtime cutoff | Queue songs until projected completion would pass the event end | The next event submission is rejected with a queue-end message. |
 | Event runtime override | As a venue host, enable “Allow queue beyond event end” and save | The setting is audited and songs may be admitted beyond the planned event end. Performers cannot change it. |
+| Queue retry/idempotency | Submit a song, then retry the same submission or double-tap the action | Only one queue entry exists and the retry reports that it was already queued. |
 
 ## Record findings
 

@@ -9,6 +9,12 @@ class SongsController < ApplicationController
 
   # POST /:venue_slug/songs or /:venue_slug/songs.json
   def create
+    @song = existing_submission
+    if @song
+      redirect_to queue_path, notice: 'That submission was already queued.'
+      return
+    end
+
     @song = Song.new(song_params)
     @song.user = current_user
     @song.venue = Current.venue if Current.venue
@@ -217,6 +223,7 @@ class SongsController < ApplicationController
       :finished, 
       :performer, 
       :postponed, 
+      :submission_token,
       :title,
       :url, 
       :skipped
@@ -228,10 +235,10 @@ class SongsController < ApplicationController
   end
 
   def save_event_song
-    return false unless event_queue_admission_valid? && admit_event_song?
-
     runtime = nil
     @song.event.with_lock do
+      return false unless event_queue_admission_valid? && admit_event_song?
+
       runtime = EventQueueRuntimePolicy.call(event: @song.event, candidate: @song)
       @song.errors.add(:base, runtime.reason) unless runtime.allowed?
       runtime.allowed? && @song.save
@@ -246,7 +253,7 @@ class SongsController < ApplicationController
   end
 
   def event_queue_admission_valid?
-    admission_error = event_queue_admission_error
+    admission_error = event_queue_admission_error(@song.event)
     @song.errors.add(:base, admission_error) if admission_error
     admission_error.nil?
   end
@@ -257,8 +264,7 @@ class SongsController < ApplicationController
     admission.eligible?
   end
 
-  def event_queue_admission_error
-    event = @song.event
+  def event_queue_admission_error(event = @song.event)
     return unless event
     unless event.live?
       return event.scheduled? ? 'This event has not started yet.' : 'This event is closed to new queue submissions.'
@@ -266,6 +272,13 @@ class SongsController < ApplicationController
     return 'Enter the event access code before queueing a song.' unless active_event_presence_for?(event)
 
     nil
+  end
+
+  def existing_submission
+    token = params.dig(:song, :submission_token)
+    return unless token.present?
+
+    Current.venue.songs.find_by(submission_token: token, user_id: current_user.id)
   end
   
   def authorize_admin_for_queue_actions

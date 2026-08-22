@@ -77,6 +77,20 @@ RSpec.describe Song, type: :model do
     end
   end
 
+  describe 'submission idempotency' do
+    it 'generates a submission token for new songs' do
+      expect(build(:song).submission_token).to be_present
+    end
+
+    it 'requires submission tokens to be unique when present' do
+      song = create(:song)
+      duplicate = build(:song, submission_token: song.submission_token)
+
+      expect(duplicate).not_to be_valid
+      expect(duplicate.errors[:submission_token]).to include('has already been taken')
+    end
+  end
+
   describe 'venue isolation' do
     it 'does not allow an event from another venue' do
       venue = create(:venue)

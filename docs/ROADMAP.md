@@ -57,7 +57,7 @@ event QR may remain an optional future convenience.
 - [Initial slice complete] Allow an explicit host/owner “allow queue overrun” override with audit.
 - [Initial slice complete] Perform status, presence, cutoff, and insertion checks atomically so a rush
   of submissions cannot bypass the cutoff.
-- [Planned] Prevent duplicate submissions caused by retries or double taps.
+- [Initial slice complete] Prevent duplicate submissions caused by retries or double taps with a submission idempotency token.
 
 ### 4. Live theme admission and review
 
@@ -128,5 +128,5 @@ the same change.
   session foundation, and live-event queue gate.
 
 The finished items are foundations. Rotating display-code exchange,
-canonical Song/Performance persistence, duplicate-submission idempotency, live
-theme admission, and full concurrency hardening remain planned MVP work.
+canonical Song/Performance persistence, live theme admission, and deeper
+concurrency/load hardening remain planned MVP work.

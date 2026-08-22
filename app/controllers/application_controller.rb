@@ -82,7 +82,7 @@ class ApplicationController < ActionController::Base
     presence_id = session[:event_presence_session_ids].to_h[event.id.to_s]
     return false unless presence_id
 
-    EventPresenceSession.active_at.find_by(id: presence_id, event_id: event.id).present?
+    EventPresenceSession.lock.active_at.find_by(id: presence_id, event_id: event.id).present?
   end
 
   def require_platform_admin!

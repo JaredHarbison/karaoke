@@ -15,9 +15,12 @@ class Song < ApplicationRecord
     validates :url, presence: true, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "must be a valid URL" }
     enum :metadata_status, { legacy: 'legacy', eligible: 'eligible', review: 'review', rejected: 'rejected' }, prefix: true
     validate :event_belongs_to_venue
+    validates :submission_token, uniqueness: true, allow_nil: true
     
     # Scope songs to current venue when set
     default_scope { where(venue_id: Current.venue_id) if Current.venue_id.present? }
+
+    after_initialize :generate_submission_token, if: :new_record?
 
   private
 
@@ -30,6 +33,10 @@ class Song < ApplicationRecord
       return unless event && venue_id != event.venue_id
 
       errors.add(:event, 'must belong to the same venue')
+    end
+
+    def generate_submission_token
+      self.submission_token ||= SecureRandom.uuid
     end
 
   public

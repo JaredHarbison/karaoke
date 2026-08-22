@@ -25,8 +25,9 @@ exist.
 The initial runtime slice stops admission when projected completion exceeds the
 event end unless an explicit, auditable host/owner overrun setting is enabled.
 The event row is locked while the runtime and insertion checks run, preventing
-simultaneous submissions from bypassing the cutoff. Duplicate-submission
-idempotency remains a follow-up.
+simultaneous submissions from bypassing the cutoff. New submissions also carry
+a unique client-held token so retries resolve to the original queue entry
+instead of creating a duplicate.
 
 ## Consequences / implications
 

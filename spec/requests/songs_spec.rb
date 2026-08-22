@@ -132,6 +132,21 @@ RSpec.describe 'Songs', type: :request do
       expect(Song.last).to have_attributes(metadata_status: 'eligible', duration_seconds: 180, duration_source: 'provider')
     end
 
+    it 'does not create a duplicate when the same submission is retried' do
+      event = create(:event, venue: venue, status: :live)
+      presence = create(:event_presence_session, event: event, created_by_user: venue.owner, expires_at: event.ends_at)
+      get event_presence_path(presence.token)
+      allow(YoutubeService).to receive(:validate_karaoke_video).and_return(
+        { video_id: 'retry-video', verified_karaoke: true, explicit_lyrics: false, duration_seconds: 180 }
+      )
+      params = { song: { performer: 'Retry Singer', url: 'https://youtube.com/retry', event_id: event.id, submission_token: SecureRandom.uuid } }
+
+      expect { post "/#{venue.slug}/songs", params: params }.to change(Song, :count).by(1)
+      expect { post "/#{venue.slug}/songs", params: params }.not_to change(Song, :count)
+      expect(response).to redirect_to("/#{venue.slug}/songs?event_id=#{event.id}")
+      expect(flash[:notice]).to include('already queued')
+    end
+
     it 'rejects event queueing before the host starts the event' do
       event = create(:event, venue: venue)
 
