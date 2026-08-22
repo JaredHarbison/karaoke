@@ -78,8 +78,7 @@ unless reusable theme playlists become an MVP need.
 ### 5. Fair Queue hardening
 
 - Preserve event-level Fair Queue and host override audit.
-- Add robust handling for skipped songs, duets, new performers, and
-  concurrency.
+- Add robust handling for skipped songs, new performers, and concurrency.
 - Add configurable fairness modes only where real usage requires them.
 
 ### 6. MVP UX, accessibility, reliability, and presentation polish
@@ -99,6 +98,7 @@ unless reusable theme playlists become an MVP need.
 - Optional geolocation as a secondary presence signal.
 - Dynamically displayed event QR codes as an optional shortcut.
 - Curated reusable theme playlists backed by a `ThemeSong` join.
+- Duet-aware Fair Queue attribution and collaborative-turn exceptions.
 - Advanced Fair Queue modes and automatic event extension.
 - The future user-to-user `Request` concept, distinct from Song and
   Performance.

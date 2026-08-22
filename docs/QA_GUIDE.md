@@ -55,7 +55,7 @@ venue is `/demo-karaoke/songs`.
 | Event theme window | Apply a theme with start/end values inside the event | The event displays the bounded window; partial or out-of-event windows are rejected. |
 | Theme window validation | Submit a partial or out-of-event theme window | The application is rejected and the existing event theme state is unchanged. |
 | Theme isolation | Try to apply a theme from another venue or duplicate a venue theme name | The action is rejected and no cross-venue or duplicate theme is created. |
-| Event Fair Queue | Open an event queue with performers who have different completed-turn histories, including a new performer | Fewer completed turns are favored; performers with no history are handled as zero completed turns; equal scores use stable queue order. |
+| Event Fair Queue | Open an event queue with performers who have different completed-turn histories, including a new performer | Fewer completed turns are favored; performers with no history are handled as zero completed turns; equal scores use stable queue order. Duet-aware exceptions are future work. |
 | Event Fair Queue override | As a host, pause or unpause an event queue song | The event-scoped host override changes that event’s queue order without affecting another venue or event. |
 | Event Fair Queue setting | As a host, edit an event and turn Fair Queue off, then open its queue | The queue explains that it is FIFO and follows entry order; turning it back on restores Fair Queue behavior. |
 | Fair Queue override audit | As a host, pause or unpause an event queue song, then view the event | Recent Fair Queue overrides show the action, performer, host, and timestamp. Performers do not see the host audit section. |
