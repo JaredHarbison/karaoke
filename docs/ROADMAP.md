@@ -32,7 +32,12 @@ polished queue workflow.
   hyphens, and generate easier-to-read codes without ambiguous characters.
 - [Initial slice complete] Expire presence at event close plus a small grace
   period.
-- Harden code attempts, re-entry, and concurrent event admission.
+- [Initial slice complete] Limit repeated event-code attempts with a
+  database-backed window shared across application processes.
+- [Initial slice complete] Preserve re-entry while a presence session remains
+  active and reject re-entry after rotation, revocation, or expiry.
+- [Planned] Add stronger abuse telemetry and retention cleanup for attempt
+  records.
 
 Separate printed event QRs are not required for MVP. A dynamically displayed
 event QR may remain an optional future convenience.

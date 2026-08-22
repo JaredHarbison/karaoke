@@ -23,8 +23,9 @@ class PresenceController < ApplicationController
   end
 
   def event_code
-    normalized_code = params[:short_code].to_s.upcase.delete(' -')
-    presence = EventPresenceSession.active_at.find_by(short_code: normalized_code)
+    return redirect_to discover_venues_path, alert: rate_limit_message unless event_code_allowed?
+
+    presence = EventPresenceSession.active_at.find_by(short_code: normalized_event_code)
     if presence.nil?
       return redirect_to discover_venues_path, alert: 'That event access code has expired or is not valid.'
     end
@@ -37,6 +38,22 @@ class PresenceController < ApplicationController
 
   def active_event_presence
     EventPresenceSession.active_at.find_by(token: params[:token])
+  end
+
+  def event_code_fingerprint
+    Digest::SHA256.hexdigest([Rails.application.secret_key_base, request.remote_ip].join(':'))
+  end
+
+  def event_code_allowed?
+    EventPresenceCodeLimiter.allow?(fingerprint: event_code_fingerprint)
+  end
+
+  def normalized_event_code
+    params[:short_code].to_s.upcase.delete(' -')
+  end
+
+  def rate_limit_message
+    'Too many access-code attempts. Try again in a minute.'
   end
 
   def redirect_to_event_presence(event)

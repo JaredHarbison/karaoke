@@ -69,6 +69,8 @@ venue is `/demo-karaoke/songs`.
 | Event access code formatting | Enter the active code with lowercase letters, spaces, or a hyphen | The normalized six-character code grants presence; invalid or expired codes remain rejected. |
 | Event access expiry/revocation | Open an expired or revoked event access code | Access is rejected and the user is sent to venue discovery. |
 | Event access code entry | As a performer, enter the six-character code shown on the venue display | The performer is granted presence for that event; invalid or expired codes are rejected. |
+| Event access attempt limit | Submit more than ten invalid event codes from the same client within one minute | Further attempts are rejected with a retry message; a later window permits attempts again. |
+| Event access re-entry | Enter a valid code, leave the event queue, then return while the session is active | Re-entry remains available until the session expires or is revoked; rotating the code invalidates the prior session. |
 | Owner security profile | Future post-MVP owner setting for rotating display access | Post-MVP: verify the selected profile changes dynamic event QR/code enforcement without invalidating the permanent venue QR. |
 
 Provider metadata admission is active for live event queues: selected videos

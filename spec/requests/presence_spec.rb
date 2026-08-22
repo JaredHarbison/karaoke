@@ -61,6 +61,17 @@ RSpec.describe 'Presence access', type: :request do
     expect(response).to redirect_to(discover_venues_path)
   end
 
+  it 'limits repeated invalid event access-code attempts' do
+    10.times do
+      get event_presence_code_path(short_code: 'INVALID')
+    end
+
+    get event_presence_code_path(short_code: 'INVALID')
+
+    expect(response).to redirect_to(discover_venues_path)
+    expect(flash[:alert]).to include('Too many access-code attempts')
+  end
+
   it 'allows a host to generate an event presence session' do
     event = create(:event, venue: venue)
     sign_in owner
