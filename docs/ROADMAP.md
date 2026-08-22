@@ -10,8 +10,8 @@ The engineering, identity, contextual venue authorization, event/series,
 reusable theme, initial Fair Queue, temporary delegation, presence-token,
 short-code exchange, and initial event-lifecycle foundations are complete. The
 remaining MVP work is abuse telemetry and retention cleanup, finalizing the
-canonical Performance ownership of admission state, deeper load hardening, and
-polished queue workflow.
+canonical Performance ownership of admission state, deeper load hardening,
+polished queue workflow, and the GitHub Actions Node.js warning cleanup.
 
 ## MVP sequence
 
