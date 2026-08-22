@@ -24,6 +24,24 @@ RSpec.describe 'Presence access', type: :request do
     expect(response).to redirect_to(venue_songs_path(venue.slug, event_id: event.id))
   end
 
+  it 'resolves an active event presence short code case-insensitively' do
+    event = create(:event, venue: venue)
+    presence = create(:event_presence_session, event: event, created_by_user: owner, expires_at: event.ends_at)
+
+    get event_presence_code_path(short_code: presence.short_code.downcase)
+
+    expect(response).to redirect_to(venue_songs_path(venue.slug, event_id: event.id))
+  end
+
+  it 'rejects an expired event presence short code' do
+    event = create(:event, venue: venue)
+    presence = create(:event_presence_session, event: event, created_by_user: owner, expires_at: 1.minute.ago)
+
+    get event_presence_code_path(short_code: presence.short_code)
+
+    expect(response).to redirect_to(discover_venues_path)
+  end
+
   it 'rejects expired event presence URLs' do
     event = create(:event, venue: venue)
     presence = create(:event_presence_session, event: event, created_by_user: owner, expires_at: 1.minute.ago)
@@ -41,6 +59,7 @@ RSpec.describe 'Presence access', type: :request do
       post venue_event_presence_sessions_path(venue.slug), params: { event_id: event.id }
     end.to change(EventPresenceSession, :count).by(1)
 
+    expect(EventPresenceSession.last.short_code).to match(/\A[A-Z0-9]{6}\z/)
     expect(response).to redirect_to(venue_event_path(venue.slug, event))
   end
 end

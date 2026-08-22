@@ -8,9 +8,9 @@ signal without requiring owners to print a new QR for every event.
 
 ## Decision
 
-Planned MVP: keep one permanent venue QR for stable venue landing-page
+MVP: keep one permanent venue QR for stable venue landing-page
 navigation. Resolve it to the active event, next upcoming event, or event
-discovery. After an event starts, display a short readable rotating code on
+discovery. After an event starts, display a short readable event code on
 host/presentation screens and exchange its successful entry for an event-scoped
 expiring presence/session credential. The code is not shown before the event
 starts. Separate printed event QRs are optional future convenience, not the

@@ -7,10 +7,10 @@ This roadmap is product-oriented; architectural rationale lives in
 ## Current status
 
 The engineering, identity, contextual venue authorization, event/series,
-reusable theme, initial Fair Queue, temporary delegation, presence-token, and
-initial event-lifecycle foundations are complete. The remaining MVP work is to
-finish the display-code exchange, runtime-aware admission, and polished queue
-workflow.
+reusable theme, initial Fair Queue, temporary delegation, presence-token,
+short-code exchange, and initial event-lifecycle foundations are complete. The
+remaining MVP work is display-code rotation, deeper concurrency hardening, and
+polished queue workflow.
 
 ## MVP sequence
 
@@ -20,11 +20,14 @@ workflow.
   host-controlled start and completion actions.
 - Keep one permanent venue QR as the printed/displayed entry point.
 - Resolve it to the active event, next upcoming event, or event discovery.
-- Show a short-lived, readable event code only on host/presentation/display
-  screens after the event starts.
+- [Initial slice complete] Generate a readable event code with each event
+  presence session and resolve performer code entry to that event.
+- [Initial slice complete] Show the active event code only on host/event
+  management and presentation contexts after the event starts.
 - [Initial slice complete] Require authentication plus an active event presence
   session before queueing for live event queues.
-- Rotate the display code during the event; do not expose it before start.
+- [Planned] Rotate the display code during the event; do not expose it before
+  start.
 - [Initial slice complete] Expire presence at event close plus a small grace
   period.
 - Harden code attempts, re-entry, and concurrent event admission.

@@ -9,6 +9,7 @@ RSpec.describe EventPresenceSession, type: :model do
 
     expect(session).to be_valid
     expect(session.token).to be_present
+    expect(session.short_code).to match(/\A[A-Z0-9]{6}\z/)
     expect(session.active_at?(event.starts_at + 1.hour)).to be(true)
   end
 

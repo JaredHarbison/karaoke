@@ -95,6 +95,10 @@ class SongsController < ApplicationController
     @presentation_time = Time.zone.now
     @presentation_next_song = @upcoming.first
     @presentation_event_name = Current.venue.name
+    @presentation_event_code =
+      if @current_event&.live?
+        @current_event.event_presence_sessions.active_at.order(created_at: :desc).first&.short_code
+      end
     @presentation_theme = Current.venue.try(:theme).presence
   end
 

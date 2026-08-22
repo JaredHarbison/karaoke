@@ -25,6 +25,10 @@
             %div.songs-presentation__meta-item
               %dt Theme
               %dd= @presentation_theme
+          - if @presentation_event_code.present?
+            %div.songs-presentation__meta-item
+              %dt Event code
+              %dd{ aria: { label: "Event access code" } }= @presentation_event_code
 
       %section.songs-panel.songs-panel--presentation-queue
         .songs-panel__heading

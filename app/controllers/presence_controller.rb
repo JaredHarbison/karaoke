@@ -22,6 +22,16 @@ class PresenceController < ApplicationController
     redirect_to_event_presence(presence.event)
   end
 
+  def event_code
+    presence = EventPresenceSession.active_at.find_by(short_code: params[:short_code].to_s.upcase)
+    if presence.nil?
+      return redirect_to discover_venues_path, alert: 'That event access code has expired or is not valid.'
+    end
+
+    remember_event_presence(presence)
+    redirect_to_event_presence(presence.event)
+  end
+
   private
 
   def active_event_presence

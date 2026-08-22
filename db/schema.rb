@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_08_21_213000) do
+ActiveRecord::Schema[7.2].define(version: 2026_08_22_090000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -37,9 +37,11 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_213000) do
     t.datetime "revoked_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "short_code", null: false
     t.index ["created_by_user_id"], name: "index_event_presence_sessions_on_created_by_user_id"
     t.index ["event_id", "expires_at"], name: "index_event_presence_sessions_on_event_id_and_expires_at"
     t.index ["event_id"], name: "index_event_presence_sessions_on_event_id"
+    t.index ["short_code"], name: "index_event_presence_sessions_on_short_code", unique: true
     t.index ["token"], name: "index_event_presence_sessions_on_token", unique: true
   end
 

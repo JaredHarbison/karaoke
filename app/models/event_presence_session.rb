@@ -9,9 +9,10 @@ class EventPresenceSession < ApplicationRecord
 
   scope :active_at, ->(time = Time.current) { where(revoked_at: nil).where('expires_at > ?', time) }
 
-  before_validation :generate_token, on: :create
+  before_validation :generate_credentials, on: :create
 
   validates :token, presence: true, uniqueness: true
+  validates :short_code, presence: true, uniqueness: true, format: { with: /\A[A-Z0-9]{6}\z/ }
   validates :expires_at, presence: true
   validate :expiry_is_within_event_window
   validate :creator_is_event_host
@@ -22,8 +23,9 @@ class EventPresenceSession < ApplicationRecord
 
   private
 
-  def generate_token
+  def generate_credentials
     self.token ||= SecureRandom.urlsafe_base64(32)
+    self.short_code ||= SecureRandom.alphanumeric(6).upcase
   end
 
   def expiry_is_within_event_window

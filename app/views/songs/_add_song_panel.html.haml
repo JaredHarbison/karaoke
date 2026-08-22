@@ -14,4 +14,12 @@
       .songs-guide__step
         %span 3
         %p Your name joins the lineup. Hosts manage the order.
+  - if @current_event
+    %details.songs-access-code
+      %summary Enter event access code
+      %p Enter the six-character code shown on the venue display to join this event queue.
+      = form_with url: event_presence_code_path, method: :get, local: true do |form|
+        = form.label :short_code, "Event access code"
+        = form.text_field :short_code, maxlength: 6, autocomplete: "one-time-code", autocapitalize: "characters", spellcheck: false
+        = form.submit "Join event"
   = render "form", song: song, index_page: true
