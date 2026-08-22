@@ -18,7 +18,7 @@ coverage and checks for its risk. Before handoff, review:
 - Tests written for new business rules and authorization boundaries, and the
   relevant tests actually run. Never claim a check was run if it was not.
 - Help documentation updated when a user or operator workflow changes.
-- [`docs/QA_GUIDE.md`](docs/QA_GUIDE.md) reviewed on every commit and updated
+- [`docs/qa/`](docs/qa/README.md) reviewed on every commit and updated
   when the change affects a testable page, action, authorization boundary, or
   operational workflow.
 - Architecture docs updated in the same change when the architecture changes.
@@ -28,7 +28,7 @@ coverage and checks for its risk. Before handoff, review:
   were updated, and must name the next roadmap slice.
 - The pre-commit hook enforces a documentation review for application,
   routing, migration, dependency, and test changes: stage an appropriate
-  `docs/ROADMAP.md` or `docs/QA_GUIDE.md` update in the same commit. A
+  `docs/ROADMAP.md` or relevant `docs/qa/` update in the same commit. A
   documentation-only or tooling-only commit may omit them when neither guide
   is relevant.
 
