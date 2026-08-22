@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_08_22_093000) do
+ActiveRecord::Schema[7.2].define(version: 2026_08_22_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -118,6 +118,19 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_22_093000) do
     t.index ["user_id"], name: "index_platform_memberships_on_user_id"
   end
 
+  create_table "song_identities", force: :cascade do |t|
+    t.string "provider", default: "youtube", null: false
+    t.string "provider_video_id", null: false
+    t.string "title"
+    t.boolean "verified_karaoke", default: false, null: false
+    t.boolean "explicit_lyrics"
+    t.integer "duration_seconds"
+    t.datetime "metadata_checked_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["provider", "provider_video_id"], name: "index_song_identities_on_provider_and_provider_video_id", unique: true
+  end
+
   create_table "song_queue_overrides", force: :cascade do |t|
     t.bigint "event_id", null: false
     t.bigint "song_id", null: false
@@ -159,9 +172,11 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_22_093000) do
     t.string "theme_admission_reason"
     t.bigint "theme_reviewed_by_id"
     t.datetime "theme_reviewed_at"
+    t.bigint "song_identity_id"
     t.index ["event_id", "theme_admission_status"], name: "index_songs_on_event_id_and_theme_admission_status"
     t.index ["event_id"], name: "index_songs_on_event_id"
     t.index ["provider", "provider_video_id"], name: "index_songs_on_provider_and_provider_video_id"
+    t.index ["song_identity_id"], name: "index_songs_on_song_identity_id"
     t.index ["submission_token"], name: "index_songs_on_submission_token", unique: true, where: "(submission_token IS NOT NULL)"
     t.index ["theme_application_id"], name: "index_songs_on_theme_application_id"
     t.index ["theme_reviewed_by_id"], name: "index_songs_on_theme_reviewed_by_id"
@@ -262,6 +277,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_22_093000) do
   add_foreign_key "song_queue_overrides", "users"
   add_foreign_key "songs", "event_theme_applications", column: "theme_application_id"
   add_foreign_key "songs", "events"
+  add_foreign_key "songs", "song_identities"
   add_foreign_key "songs", "users"
   add_foreign_key "songs", "users", column: "theme_reviewed_by_id"
   add_foreign_key "songs", "venues"

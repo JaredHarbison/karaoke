@@ -9,7 +9,8 @@ request between performers have different lifecycles.
 ## Decision
 
 The initial slice preserves the current queue object while adding a transitional
-provider metadata and duration boundary. Planned: introduce a canonical `Song`
+provider metadata and duration boundary. A transitional `SongIdentity` now
+persists the canonical provider identity. Planned: introduce a canonical `Song`
 separate from an event `Performance`/queue entry. Reuse the canonical Song when
 the same provider video is selected again, but create a new Performance for every
 performer/event queue entry. A future user-to-user

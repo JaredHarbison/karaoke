@@ -5,6 +5,7 @@ class Song < ApplicationRecord
     belongs_to :venue, optional: true
     belongs_to :user, optional: true
     belongs_to :event, optional: true
+    belongs_to :song_identity, optional: true
     belongs_to :theme_application, class_name: 'EventThemeApplication', optional: true
     belongs_to :theme_reviewed_by, class_name: 'User', optional: true
     

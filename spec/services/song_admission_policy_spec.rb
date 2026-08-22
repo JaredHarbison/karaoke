@@ -25,6 +25,7 @@ RSpec.describe SongAdmissionPolicy, type: :service do
       metadata_status: 'eligible', provider_video_id: 'video-1', duration_seconds: 180,
       effective_duration_seconds: 180, duration_source: 'provider'
     )
+    expect(song.song_identity).to have_attributes(provider_video_id: 'video-1', verified_karaoke: true)
   end
 
   it 'reuses validated catalog metadata without calling the provider again' do

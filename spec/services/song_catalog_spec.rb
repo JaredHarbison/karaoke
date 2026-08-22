@@ -26,6 +26,22 @@ RSpec.describe SongCatalog, type: :service do
     )
   end
 
+  it 'persists one canonical identity for provider metadata' do
+    metadata = {
+      video_id: 'video-4', title: 'Canonical Karaoke Video', verified_karaoke: true,
+      explicit_lyrics: false, duration_seconds: 195
+    }
+
+    first = described_class.record!(metadata)
+    second = described_class.record!(metadata.merge(title: 'Updated Title'))
+
+    expect(second).to eq(first)
+    expect(SongIdentity.where(provider: 'youtube', provider_video_id: 'video-4').count).to eq(1)
+    expect(described_class.metadata_for('https://youtube.com/watch?v=video-4')).to include(
+      title: 'Updated Title', duration_seconds: 195
+    )
+  end
+
   it 'does not reuse rejected or unverified provider metadata' do
     create(:song, provider: 'youtube', provider_video_id: 'video-2', metadata_status: 'rejected')
     create(:song, provider: 'youtube', provider_video_id: 'video-3', metadata_status: 'review')

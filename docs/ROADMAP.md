@@ -45,13 +45,13 @@ event QR may remain an optional future convenience.
 ### 2. Canonical song and performance admission
 
 - [Initial slice complete] Preserve the current queue behavior while adding a
-  transitional provider-metadata boundary; the eventual canonical `Song` /
-  event-specific `Performance` boundary remains planned.
+  transitional provider-metadata boundary; canonical provider identities now
+  persist independently from queue entries.
 - [Initial slice complete] Reuse validated YouTube provider metadata from a
   prior eligible selection while creating a new queue `Song` for each
   performer/event entry.
-- [Planned] Introduce the canonical `Song` model and create a new
-  event-specific `Performance` for every queue entry.
+- [Planned] Promote the canonical provider identity to the `Song` domain model
+  and migrate each queue entry to a new event-specific `Performance` record.
 - [Initial slice complete] Validate available provider metadata and venue content
   policy before event admission; unknown metadata is held for review.
 - [Initial slice complete] Persist validated video duration when available.
@@ -133,7 +133,8 @@ Contextual venue membership is the authorization foundation for event and host
 work. Event lifecycle is the prerequisite for presence-gated queue admission;
 the initial lifecycle and gate are now implemented. Canonical
 Song/Performance separation remains the long-term owner of queue and theme
-admission state; the current slice uses transitional Song fields safely.
+admission state; this slice establishes the persisted identity boundary while
+the current queue record continues to carry transitional fields safely.
 Each phase needs architecture rationale, acceptance criteria, automated
 business-rule and authorization coverage, and relevant roadmap/QA updates in
 the same change. The CI quality gate includes the full RSpec suite,
@@ -158,6 +159,6 @@ dependency sources are not treated as application code.
 - Initial venue presence token, dynamic venue QR, expiring event presence
   session foundation, and live-event queue gate.
 
-The finished items are foundations. Rotating display-code exchange, canonical
-Song/Performance persistence, richer theme tooling, and deeper concurrency/load
-hardening remain planned MVP work.
+The finished items are foundations. The final canonical Song/Performance
+record migration, richer theme tooling, and deeper concurrency/load hardening
+remain planned MVP work.
