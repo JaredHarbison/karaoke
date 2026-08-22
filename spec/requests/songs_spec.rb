@@ -39,6 +39,14 @@ RSpec.describe 'Songs', type: :request do
       expect(response.body.index('songs-panel--add')).to be < response.body.index('songs-panel--qr')
     end
 
+    it 'renders fields for the YouTube selector to populate' do
+      get "/#{venue.slug}/songs"
+
+      page = Nokogiri::HTML(response.body)
+      expect(page.at_css('input#song_url')['name']).to eq('song[url]')
+      expect(page.at_css('input#song_title')['name']).to eq('song[title]')
+    end
+
     it 'shows Play only for the next queued song' do
       sign_out user
       sign_in venue.owner

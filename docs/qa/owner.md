@@ -25,25 +25,32 @@ during the shared journey before continuing here.
 ## Events and recurring series
 
 1. Open `/523-franklin-ave/events` and create or edit an event.
+   - Verify the event start/end values remain the values entered; queue cutoff is a separate policy and must not rewrite event times.
    - The event belongs to this venue.
    - Performers cannot access owner event-management actions.
 2. Open the recurring-series page.
    - Create/edit recurrence intent, schedule, time zone, and active state.
    - Generate the next eight weeks twice; occurrences are not duplicated.
+   - Confirm a saved series appears in the event form’s recurring-series selector.
 3. Edit one generated occurrence.
    - The occurrence changes without changing its series or sibling occurrences.
+4. Confirm the venue, event, recurring-series, theme, and queue-management pages have reachable navigation links.
 
 ## Theme and queue setup
 
 1. Open `/523-franklin-ave/themes`.
    - Create a reusable theme with required and blocked comma-separated words.
    - Edit it and confirm the values persist normalized.
+   - Theme setup and application controls should be discoverable from the event-management workflow.
+   - Bounded theme windows must stay inside the event start/end window.
 2. Apply the theme to an event.
    - Bounded windows must stay inside the event.
    - Overlapping windows on one event are rejected; touching windows work.
 3. Open the event queue.
    - Fair Queue can be enabled/disabled.
    - Queue cutoff and overrun settings are visible and audited.
+   - Verify both settings on the event detail/edit pages, not only on the queue page.
+   - Select a YouTube result and confirm the queue form receives its URL/title before submitting.
 
 ## Presence and delegation
 
@@ -52,8 +59,11 @@ during the shared journey before continuing here.
 2. Rotate the code.
    - The prior code/session is revoked; the permanent venue entry point remains.
 3. Delegate a venue member for a time inside the event.
+   - The owner may delegate to another venue member; a delegator cannot delegate to themself.
    - The event lists the delegation and its expiry.
    - Revoke it and confirm authority is removed.
 
 Finish with the [shared checks](shared.md), then repeat relevant queue actions
-as the host and performer.
+as the host and performer. Log navigation, alert, sidebar, QR, and styling
+concerns in `FINDINGS.md`; the broader UI overhaul is intentionally outside
+this QA pass.

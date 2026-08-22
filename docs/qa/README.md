@@ -43,9 +43,11 @@ bin/rails runner 'venue = Venue.find_by!(slug: "523-franklin-ave"); puts({ venue
 2. Open `/discover` and search for `523 Franklin Ave`.
    - The venue appears.
    - Empty and unsuccessful searches remain usable.
+   - Record any discovery/navigation concerns in `FINDINGS.md`.
 3. Open the venue from discovery.
    - The venue queue or event entry point loads.
    - The permanent venue entry point does not select another venue.
+     - This means the venue URL remains scoped to the venue you opened; it must not silently switch `Current.venue` to another venue.
    - The public discovery/venue surface shows no owner- or host-only controls.
 4. Open `/sign_in` and sign in with the role under test.
    - Authentication succeeds without an authorization error.
