@@ -30,7 +30,7 @@ venue.add_host(host)
   ['Alex', 'https://www.youtube.com/watch?v=demo-alex', performer],
   ['Jamie', 'https://www.youtube.com/watch?v=demo-jamie', performer]
 ].each do |performer_name, url, user|
-  venue.songs.find_or_create_by!(performer: performer_name, url: url) do |song|
+  venue.performances.find_or_create_by!(performer: performer_name, url: url) do |song|
     song.user = user
     song.category = 'pop'
   end
@@ -53,7 +53,7 @@ if ENV['KARAOKE_QA_FIXTURE'] == 'franklin'
     ENV.fetch('KARAOKE_QA_PERFORMER_EMAIL', 'jared.harbison+performer@gmail.com'), qa_password
   )
 
-  qa_venue = Venue.find_or_create_by!(slug: '523-franklin-ave')
+  qa_venue = Venue.find_or_initialize_by(slug: '523-franklin-ave')
   qa_venue.update!(name: '523 Franklin Ave', location: '523 Franklin Ave', public: true, owner: qa_owner)
   qa_venue.add_host(qa_host)
 
