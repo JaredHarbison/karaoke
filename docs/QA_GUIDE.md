@@ -129,3 +129,7 @@ result, browser/device, and a screenshot or console error when relevant.
 
 Review this guide on every commit. Update it whenever the change affects a
 testable page, action, authorization boundary, or operational workflow.
+
+Repository quality changes should also keep the authoritative CI checks
+healthy: full RSpec, Rake-aware RuboCop, Brakeman, dependency audit, template
+lint, migration consistency, and schema cleanliness.

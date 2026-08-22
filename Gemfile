@@ -82,6 +82,7 @@ group :development, :test do
   gem 'brakeman'
   gem 'bundler-audit'
   gem 'rubocop-rails'
+  gem 'rubocop-rake'
   gem 'erb_lint'
 end
 
