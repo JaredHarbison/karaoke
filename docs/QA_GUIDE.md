@@ -19,6 +19,9 @@ bin/rails db:seed
 Use the local development accounts printed by the seed command. The seeded
 venue is `/demo-karaoke/songs`.
 
+For repository quality, run the GitHub Actions `Quality` workflow after a
+push. It must complete without the Node.js 20 deprecation annotation.
+
 ## Current QA pass
 
 | Page | Action | Expected result |

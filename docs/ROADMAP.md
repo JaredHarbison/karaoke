@@ -121,7 +121,7 @@ unless reusable theme playlists become an MVP need.
 - Run accessibility and mobile reviews.
 - Improve presentation mode, retry states, and operational feedback.
 - Complete the human QA pass across the MVP.
-- [Planned] Upgrade the GitHub Actions runtime dependencies needed to fully
+- [In progress] Upgrade the GitHub Actions runtime dependencies needed to fully
   resolve the Node.js 20 deprecation warning and verify a warning-free quality
   run.
 
