@@ -16,8 +16,28 @@ Run the development seed data:
 bin/rails db:seed
 ```
 
-Use the local development accounts printed by the seed command. The seeded
-venue is `/demo-karaoke/songs`.
+Use the local development accounts printed by the seed command. The default
+fixture is `Demo Karaoke` at `/demo-karaoke/songs`; its owner, host, and
+performer accounts all use the local seed password shown by the command.
+
+For the owner/host/performer workflow pass at the requested address, create the
+optional local-only fixture with a password supplied through the environment:
+
+```sh
+KARAOKE_QA_FIXTURE=franklin KARAOKE_QA_PASSWORD='choose-a-local-only-password' bin/rails db:seed
+```
+
+This creates:
+
+| Role | Local QA email | Initial page |
+| --- | --- | --- |
+| Owner | `jared.harbison@gmail.com` | `/523-franklin-ave/events` |
+| Host | `jared.harbison+host@gmail.com` | `/523-franklin-ave/events` |
+| Performer | `jared.harbison+performer@gmail.com` | `/523-franklin-ave/songs` |
+
+Use the same local-only password supplied as `KARAOKE_QA_PASSWORD` for all
+three accounts. The fixture is available only in development and is safe to
+rerun; it does not alter production or test data.
 
 For repository quality, run the GitHub Actions `Quality` workflow after a
 push. It must complete without the Node.js 20 deprecation annotation.

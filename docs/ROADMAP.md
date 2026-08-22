@@ -9,9 +9,8 @@ This roadmap is product-oriented; architectural rationale lives in
 The engineering, identity, contextual venue authorization, event/series,
 reusable theme, initial Fair Queue, temporary delegation, presence-token,
 short-code exchange, and initial event-lifecycle foundations are complete. The
-remaining MVP work is abuse telemetry and retention cleanup, finalizing the
-canonical Performance ownership of admission state, deeper load hardening,
-polished queue workflow, and the GitHub Actions Node.js warning cleanup.
+remaining MVP work is the expanded UX, accessibility, reliability, and
+human-QA phase below.
 
 ## MVP sequence
 
@@ -120,12 +119,53 @@ unless reusable theme playlists become an MVP need.
   real usage identifies a bottleneck.
 - Add configurable fairness modes only where real usage requires them.
 
-### 6. MVP UX, accessibility, reliability, and presentation polish
+### 6. MVP UX, accessibility, reliability, and presentation phase
 
-- Complete responsive event, access-code, queue, and host workflows.
-- Run accessibility and mobile reviews.
-- Improve presentation mode, retry states, and operational feedback.
-- Complete the human QA pass across the MVP.
+This is intentionally a multi-slice phase. Each slice should be independently
+reviewable, manually testable, and documented in the same commit.
+
+#### 6.1 Queue workflow audit
+
+- [Planned] Map performer, host, event, and presentation states and resolve
+  inconsistent or confusing transitions.
+
+#### 6.2 Performer queue UX
+
+- [Planned] Improve add-song feedback, validation errors, duplicate-submission
+  messaging, retry states, and event-context preservation.
+
+#### 6.3 Host queue operations
+
+- [Planned] Improve finish, skip, pause, requeue, theme-review, cutoff, and
+  authorization feedback for venue hosts and temporary event hosts.
+
+#### 6.4 Presentation and display mode
+
+- [Planned] Refine now-playing, upcoming queue, event name, short-code, and
+  host-facing access context for display screens.
+
+#### 6.5 Accessibility review
+
+- [Planned] Review keyboard flow, focus management, status announcements,
+  labels, semantic structure, contrast, and error association.
+
+#### 6.6 Responsive/mobile review
+
+- [Planned] Review queue, add-song, event, theme, presence-code, and host
+  screens at narrow viewport sizes.
+
+#### 6.7 Reliability and operational feedback
+
+- [Planned] Improve loading states, stale submissions, concurrency responses,
+  unavailable metadata, expired presence, and recovery paths.
+
+#### 6.8 Human QA completion
+
+- [Planned] Run the page/action/result guide as owner, host, and performer;
+  record failures, fix them in focused commits, and complete the MVP pass.
+- [Initial slice complete] Provide an idempotent, opt-in local QA fixture for
+  owner, host, performer, venue, and event workflow testing.
+
 - [Initial slice complete] Upgrade the GitHub Actions runtime dependencies needed to fully
   resolve the Node.js 20 deprecation warning and verify a warning-free quality
   run.
