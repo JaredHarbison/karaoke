@@ -118,9 +118,10 @@ Song/Performance separation remains the long-term owner of queue and theme
 admission state; the current slice uses transitional Song fields safely.
 Each phase needs architecture rationale, acceptance criteria, automated
 business-rule and authorization coverage, and relevant roadmap/QA updates in
-the same change. The CI quality gate includes the full RSpec suite, Rake-aware
-RuboCop, Brakeman, dependency audit, template lint, migration checks, and
-schema cleanliness verification.
+the same change. The CI quality gate includes the full RSpec suite,
+project-source and Rake-aware RuboCop, Brakeman, dependency audit, template
+lint, migration checks, and schema cleanliness verification; vendored
+dependency sources are not treated as application code.
 
 ## Finished
 
