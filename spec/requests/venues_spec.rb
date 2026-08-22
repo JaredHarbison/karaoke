@@ -50,9 +50,10 @@ RSpec.describe 'Venues', type: :request do
   describe 'PATCH /:venue_slug/settings' do
     it 'updates venue settings for owner', :critical do
       sign_in owner
-      patch "/#{venue.slug}/settings", params: { venue: { name: 'Updated Venue' } }
+      patch "/#{venue.slug}/settings", params: { venue: { name: 'Updated Venue', explicit_lyrics_allowed: true } }
       expect(response).to redirect_to(venue_settings_path(venue.slug))
       expect(venue.reload.name).to eq('Updated Venue')
+      expect(venue.explicit_lyrics_allowed?).to be(true)
     end
   end
 

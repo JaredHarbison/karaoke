@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# rubocop:disable Metrics/BlockLength
 RSpec.describe YoutubeVideoPolicy, type: :service do
   it 'admits only verified karaoke metadata with known clean lyrics' do
     result = described_class.call(
@@ -33,4 +34,13 @@ RSpec.describe YoutubeVideoPolicy, type: :service do
   it 'reviews unknown karaoke or lyrics metadata instead of admitting it' do
     expect(described_class.call(video: {}, explicit_lyrics_allowed: false).status).to eq(:review)
   end
+
+  it 'reviews a video without verified karaoke metadata' do
+    result = described_class.call(
+      video: { verified_karaoke: false, explicit_lyrics: false }, explicit_lyrics_allowed: true
+    )
+
+    expect(result).to have_attributes(status: :review, reason: /karaoke status/)
+  end
 end
+# rubocop:enable Metrics/BlockLength

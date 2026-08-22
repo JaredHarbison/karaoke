@@ -15,11 +15,12 @@ navigation entry point; the current event access URL establishes event
 presence. A short rotating display code remains planned. Presence expires at
 event close plus a small grace period.
 
-Projected queue runtime sums each Performance’s effective video duration plus a
-30-second transition buffer. Known provider duration is preferred. If it is
-missing, the Performance uses the average of known-duration songs already in
-that event queue; estimated values do not feed the average. A safe fallback is
-used when no known durations exist.
+Projected queue runtime will sum each Performance’s effective video duration
+plus a 30-second transition buffer. The initial admission slice now prefers a
+known provider duration. If it is missing, the transitional queue record uses
+the average of known-duration songs already in that event queue; estimated
+values do not feed the average. A safe fallback is used when no known durations
+exist.
 
 Admission stops when projected completion exceeds the event end unless an
 explicit, auditable host/owner overrun setting is enabled. Status, presence,

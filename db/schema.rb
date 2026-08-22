@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_08_21_201000) do
+ActiveRecord::Schema[7.2].define(version: 2026_08_21_210000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -120,7 +120,16 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_201000) do
     t.bigint "user_id"
     t.string "title"
     t.bigint "event_id"
+    t.string "provider", default: "youtube", null: false
+    t.string "provider_video_id"
+    t.string "metadata_status", default: "legacy", null: false
+    t.boolean "explicit_lyrics"
+    t.integer "duration_seconds"
+    t.integer "effective_duration_seconds"
+    t.string "duration_source"
+    t.datetime "metadata_checked_at"
     t.index ["event_id"], name: "index_songs_on_event_id"
+    t.index ["provider", "provider_video_id"], name: "index_songs_on_provider_and_provider_video_id"
     t.index ["user_id", "created_at"], name: "index_songs_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_songs_on_user_id"
     t.index ["venue_id", "created_at"], name: "index_songs_on_venue_id_and_created_at"
@@ -193,6 +202,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_201000) do
     t.bigint "owner_id"
     t.boolean "public", default: true
     t.string "presence_token"
+    t.boolean "explicit_lyrics_allowed", default: false, null: false
     t.index ["owner_id"], name: "index_venues_on_owner_id"
     t.index ["presence_token"], name: "index_venues_on_presence_token", unique: true
     t.index ["public"], name: "index_venues_on_public"

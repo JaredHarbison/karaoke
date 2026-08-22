@@ -226,7 +226,12 @@ class SongsController < ApplicationController
   def save_song
     admission_error = event_queue_admission_error
     @song.errors.add(:base, admission_error) if admission_error
-    admission_error.nil? && @song.save
+    return false if admission_error
+    return @song.save unless @song.event
+
+    admission = SongAdmissionPolicy.call(song: @song, venue: Current.venue)
+    @song.errors.add(:base, admission.reason) unless admission.eligible?
+    admission.eligible? && @song.save
   end
 
   def event_queue_admission_error

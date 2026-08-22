@@ -121,11 +121,15 @@ RSpec.describe 'Songs', type: :request do
       event = create(:event, venue: venue, status: :live)
       presence = create(:event_presence_session, event: event, created_by_user: venue.owner, expires_at: event.ends_at)
       get event_presence_path(presence.token)
+      allow(YoutubeService).to receive(:validate_karaoke_video).and_return(
+        { video_id: 'event-video', verified_karaoke: true, explicit_lyrics: false, duration_seconds: 180 }
+      )
 
       post "/#{venue.slug}/songs", params: { song: { performer: 'Event Singer', url: 'https://youtube.com/event', event_id: event.id } }
 
       expect(response).to redirect_to("/#{venue.slug}/songs?event_id=#{event.id}")
       expect(Song.last.event).to eq(event)
+      expect(Song.last).to have_attributes(metadata_status: 'eligible', duration_seconds: 180, duration_source: 'provider')
     end
 
     it 'rejects event queueing before the host starts the event' do

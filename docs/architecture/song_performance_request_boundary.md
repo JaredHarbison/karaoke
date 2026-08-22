@@ -8,7 +8,8 @@ request between performers have different lifecycles.
 
 ## Decision
 
-Planned: preserve the current queue object while introducing a canonical `Song`
+The initial slice preserves the current queue object while adding a transitional
+provider metadata and duration boundary. Planned: introduce a canonical `Song`
 separate from an event `Performance`/queue entry. Reuse the canonical Song when
 the same provider video is selected again, but create a new Performance for every
 performer/event queue entry. A future user-to-user
@@ -27,5 +28,5 @@ Duration is snapshotted on the Performance with its source (`provider` or
 ## Deferred details
 
 The migration shape, canonical metadata ownership, curated theme membership,
-duets, request permissions, provider metadata verification, and the live
-admission workflow are deferred until the event lifecycle work is complete.
+duets, request permissions, provider metadata verification beyond the current
+adapter, and the final Performance migration remain deferred.

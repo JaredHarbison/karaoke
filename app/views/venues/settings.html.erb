@@ -65,6 +65,17 @@
             </span>
           </label>
 
+          <label class="visibility-toggle" for="venue_explicit_lyrics_allowed">
+            <span class="visibility-toggle__switch">
+              <%= form.check_box :explicit_lyrics_allowed, id: "venue_explicit_lyrics_allowed" %>
+              <span class="visibility-toggle__track"></span>
+            </span>
+            <span>
+              <strong>Allow explicit lyrics</strong>
+              <small>Permit event queue selections identified as explicit by provider metadata.</small>
+            </span>
+          </label>
+
           <div class="settings-form__actions">
             <%= form.submit "Save venue details", class: "settings-button settings-button--primary" %>
           </div>

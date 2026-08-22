@@ -32,6 +32,7 @@ venue is `/demo-karaoke/songs`.
 | Queue as host | Open presentation mode | Presentation page loads in a separate tab and does not expose owner settings. |
 | `/demo-karaoke/settings` as performer/host | Open the owner-only URL | Request is rejected or redirected with an authorization message. |
 | `/demo-karaoke/settings` as owner | Edit venue details and save | Changes persist and visible feedback confirms the update. |
+| `/demo-karaoke/settings` as owner | Toggle “Allow explicit lyrics” and save | The venue policy persists and is applied to future event queue selections. |
 | Settings as owner | Add an existing user as host | The host appears in the list and can manage the queue. |
 | Settings as owner | Remove a host | The host disappears from the list and loses host queue authority. |
 | Settings as owner | Add an email that is not yet registered | A host invitation link is created and the owner receives visible confirmation. |
@@ -64,10 +65,11 @@ venue is `/demo-karaoke/songs`.
 | Event access code | As a permanent venue host, generate an event access code and open it before expiry | The code resolves to the selected event queue. |
 | Event access expiry/revocation | Open an expired or revoked event access code | Access is rejected and the user is sent to venue discovery. |
 
-The following admission checks are planned and are not yet live in the queue:
-selected videos must be verified karaoke, and explicit lyrics must be rejected
-when the venue policy disallows them. Unknown provider metadata should produce
-a review state rather than an automatic admission.
+Provider metadata admission is active for live event queues: selected videos
+must satisfy the current karaoke/content policy, explicit lyrics are rejected
+when the venue disallows them, and unknown provider metadata produces a review
+state rather than automatic admission. Venue-level queueing remains a legacy
+compatibility path until the canonical Performance migration.
 
 Theme rule evaluation is also not yet exposed as a queue workflow; its current
 evaluator is covered by automated tests until provider metadata and host review
@@ -99,6 +101,10 @@ testable from the event page for authority, expiry, and revocation.
 | Event lifecycle | As a venue host, start a scheduled event | The event becomes Live and performers can proceed to event access. |
 | Event lifecycle | As a performer, try to start or complete an event | The action is rejected; only an authorized event host can change lifecycle state. |
 | Event access code | Open the active event access code, then queue a song for the live event | The event presence is remembered for the session and the song appears in that event queue. |
+| Live event media admission | Select a result with unknown or unverified provider metadata | The event submission is held with a review message; it is not silently admitted. |
+| Live event media admission | Select eligible karaoke metadata with a known duration | The event queue entry is admitted and its provider duration is stored. |
+| Live event media admission | Select explicit metadata while the venue disallows explicit lyrics | The event submission is rejected with a content-policy message. |
+| Live event media admission | Queue a video with no known duration after known-duration songs exist | The entry uses the average of known provider durations; prior estimates do not affect that average. |
 | Live event queue | Try to queue without opening an active event access code | The submission is rejected with an access-code/presence message. |
 | Event lifecycle | As a host, complete a live event, then try to queue | The event closes to new submissions, including during the short presence grace period. |
 

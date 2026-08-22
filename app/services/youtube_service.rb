@@ -93,18 +93,33 @@ class YoutubeService
     
     has_karaoke = title.include?('karaoke') || description.include?('karaoke')
     has_lyrics = title.include?('lyrics') || title.include?('lyric') || description.include?('lyrics')
-    
+    explicit_lyrics = [title, description].any? do |text|
+      text.match?(/\b(explicit|dirty|uncensored|parental advisory)\b/)
+    end
+
     {
       valid: has_karaoke || has_lyrics,
       video_id: video_id,
       title: video.dig('snippet', 'title'),
       has_karaoke: has_karaoke,
       has_lyrics: has_lyrics,
+      verified_karaoke: has_karaoke,
+      explicit_lyrics: explicit_lyrics,
+      duration_seconds: parse_duration(video.dig('contentDetails', 'duration')),
       thumbnail: video.dig('snippet', 'thumbnails', 'medium', 'url')
     }
   end
   
   private
+
+  def self.parse_duration(value)
+    return unless value.present?
+
+    match = value.match(/\AP(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?\z/)
+    return unless match
+
+    (match[1].to_i * 86_400) + (match[2].to_i * 3_600) + (match[3].to_i * 60) + match[4].to_i
+  end
   
   def self.make_request(url)
     http = Net::HTTP.new(url.host, url.port)

@@ -34,15 +34,19 @@ event QR may remain an optional future convenience.
 
 ### 2. Canonical song and performance admission
 
-- Preserve the current queue behavior while introducing the canonical `Song` /
-  event-specific `Performance` boundary.
-- Reuse a canonical YouTube selection when it is chosen again, but create a new
+- [Initial slice complete] Preserve the current queue behavior while adding a
+  transitional provider-metadata boundary; the eventual canonical `Song` /
+  event-specific `Performance` boundary remains planned.
+- [Planned] Reuse a canonical YouTube selection when it is chosen again, but create a new
   Performance for every performer/event queue entry.
-- Validate karaoke suitability and venue content policy before admission.
-- Persist validated video duration when available.
-- If duration is unavailable, estimate from the average of known-duration songs
-  already queued for that event; estimated values do not feed that average.
-- Snapshot effective duration and its source on the Performance.
+- [Initial slice complete] Validate available provider metadata and venue content
+  policy before event admission; unknown metadata is held for review.
+- [Initial slice complete] Persist validated video duration when available.
+- [Initial slice complete] If duration is unavailable, estimate from the average
+  of known-duration songs already queued for that event; estimated values do not
+  feed that average.
+- [Initial slice complete] Snapshot effective duration and its source on the
+  transitional queue record; the eventual Performance owns this field.
 
 ### 3. Queue cutoff and event runtime protection
 
@@ -124,5 +128,5 @@ the same change.
   session foundation, and live-event queue gate.
 
 The finished items are foundations. Rotating display-code exchange,
-duration-aware cutoff, live theme admission, and full concurrency hardening
-remain planned MVP work.
+canonical Song/Performance persistence, duration-aware cutoff, live theme
+admission, and full concurrency hardening remain planned MVP work.

@@ -98,6 +98,6 @@ class VenuesController < ApplicationController
   end
   
   def venue_params
-    params.require(:venue).permit(:name, :location, :public)
+    params.require(:venue).permit(:name, :location, :public, :explicit_lyrics_allowed)
   end
 end

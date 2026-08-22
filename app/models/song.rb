@@ -1,4 +1,6 @@
 class Song < ApplicationRecord
+    DEFAULT_DURATION_SECONDS = 180
+
     belongs_to :venue, optional: true
     belongs_to :user, optional: true
     belongs_to :event, optional: true
@@ -11,6 +13,7 @@ class Song < ApplicationRecord
     
     validates :performer, presence: true
     validates :url, presence: true, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "must be a valid URL" }
+    enum :metadata_status, { legacy: 'legacy', eligible: 'eligible', review: 'review', rejected: 'rejected' }, prefix: true
     validate :event_belongs_to_venue
     
     # Scope songs to current venue when set
@@ -27,5 +30,13 @@ class Song < ApplicationRecord
       return unless event && venue_id != event.venue_id
 
       errors.add(:event, 'must belong to the same venue')
+    end
+
+  public
+
+    def known_duration_average
+      return unless event_id
+
+      Song.unscoped.where(event_id: event_id).where.not(duration_seconds: nil).average(:duration_seconds)&.round
     end
 end

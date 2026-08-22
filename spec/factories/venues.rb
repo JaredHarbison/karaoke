@@ -3,6 +3,7 @@ FactoryBot.define do
     sequence(:name) { |n| "#{Faker::Restaurant.name} #{n}" }
     association :owner, factory: :user
     public { true }
+    explicit_lyrics_allowed { false }
     
     trait :private do
       public { false }
