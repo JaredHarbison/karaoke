@@ -153,7 +153,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_22_090000) do
     t.index ["event_id", "theme_admission_status"], name: "index_songs_on_event_id_and_theme_admission_status"
     t.index ["event_id"], name: "index_songs_on_event_id"
     t.index ["provider", "provider_video_id"], name: "index_songs_on_provider_and_provider_video_id"
-    t.index ["submission_token"], name: "index_songs_on_submission_token", unique: true, where: "(submission_token IS NOT NULL)"
+    t.index ["submission_token"], name: "index_songs_on_submission_token", unique: true,
+                                  where: "(submission_token IS NOT NULL)"
     t.index ["theme_application_id"], name: "index_songs_on_theme_application_id"
     t.index ["theme_reviewed_by_id"], name: "index_songs_on_theme_reviewed_by_id"
     t.index ["user_id", "created_at"], name: "index_songs_on_user_id_and_created_at"
