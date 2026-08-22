@@ -71,7 +71,7 @@ event QR may remain an optional future convenience.
   of known-duration songs already queued for that event; estimated values do not
   feed that average.
 - [Initial slice complete] Snapshot effective duration and its source on the
-  transitional queue record; the eventual Performance owns this field.
+  Performance queue record; Performance owns this field.
 
 ### 3. Queue cutoff and event runtime protection
 
