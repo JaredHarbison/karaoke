@@ -3,13 +3,19 @@
 Account: `jared.harbison@gmail.com`  
 Start: `/523-franklin-ave/events`
 
+The public discovery and venue pages are intentionally role-neutral. Owner
+controls begin after sign-in and venue authorization; verify that boundary
+during the shared journey before continuing here.
+
 ## Venue and membership
 
 1. Open `/523-franklin-ave/settings`.
    - Venue details can be edited and saved.
    - “Allow explicit lyrics” persists and affects future selections.
 2. Add an existing user as a host.
-   - The host appears and receives host authority.
+   - `jared.harbison+host@gmail.com` is already registered but is not yet a
+     member of this venue.
+   - The host appears and receives host authority after the owner adds them.
 3. Remove the host.
    - The host disappears and loses host authority.
 4. Create an invitation for an unregistered email.

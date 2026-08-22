@@ -24,6 +24,17 @@ Use the same password for:
 The fixture is development-only and safe to rerun. Do not use these accounts
 or the local password in production.
 
+The fixture includes one scheduled event and two pending queue entries. The
+host email is intentionally only a registered user at first; the owner journey
+adds that user to the venue before the host journey begins.
+
+Optional read-only fixture check, only if the UI does not show the expected
+records:
+
+```sh
+bin/rails runner 'venue = Venue.find_by!(slug: "523-franklin-ave"); puts({ venue: venue.name, owner: venue.owner.email, hosts: venue.hosts.pluck(:email), events: venue.events.pluck(:name), queue: venue.performances.where.not(event_id: nil).pluck(:performer) }.inspect)'
+```
+
 ## Shared discovery journey
 
 1. Open `/`.
@@ -35,6 +46,7 @@ or the local password in production.
 3. Open the venue from discovery.
    - The venue queue or event entry point loads.
    - The permanent venue entry point does not select another venue.
+   - The public discovery/venue surface shows no owner- or host-only controls.
 4. Open `/sign_in` and sign in with the role under test.
    - Authentication succeeds without an authorization error.
 5. Continue with the matching role journey:

@@ -55,7 +55,7 @@ if ENV['KARAOKE_QA_FIXTURE'] == 'franklin'
 
   qa_venue = Venue.find_or_initialize_by(slug: '523-franklin-ave')
   qa_venue.update!(name: '523 Franklin Ave', location: '523 Franklin Ave', public: true, owner: qa_owner)
-  qa_venue.add_host(qa_host)
+  qa_venue.remove_host(qa_host)
 
   qa_event = qa_venue.events.find_or_initialize_by(name: 'Franklin Karaoke QA')
   qa_event.assign_attributes(
@@ -65,12 +65,23 @@ if ENV['KARAOKE_QA_FIXTURE'] == 'franklin'
   )
   qa_event.save!
 
+  [
+    ['QA Performer Song', 'https://www.youtube.com/watch?v=qa-performer-song', qa_performer],
+    ['QA Guest Song', 'https://www.youtube.com/watch?v=qa-guest-song', nil]
+  ].each do |performer_name, url, user|
+    qa_venue.performances.find_or_create_by!(event: qa_event, performer: performer_name, url: url) do |performance|
+      performance.user = user
+      performance.category = 'qa'
+    end
+  end
+
   puts <<~MESSAGE
     Optional QA fixture:
       Venue:     523 Franklin Ave (/523-franklin-ave/events)
       Owner:     #{qa_owner.email}
-      Host:      #{qa_host.email}
+      Host:      #{qa_host.email} (registered user; owner must add as host)
       Performer: #{qa_performer.email}
+      Event:     Franklin Karaoke QA (scheduled; two pending queue entries)
       Password:  supplied through KARAOKE_QA_PASSWORD (local only)
   MESSAGE
 end

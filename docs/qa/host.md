@@ -3,6 +3,10 @@
 Account: `jared.harbison+host@gmail.com`  
 Start: `/523-franklin-ave/events`
 
+Prerequisite: complete the owner journey’s “Add an existing user as a host”
+step. Before that action, this account is authenticated but has no authority
+over `523 Franklin Ave`.
+
 ## Event operations
 
 1. Open the event list and event detail page.
