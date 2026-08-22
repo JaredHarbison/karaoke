@@ -15,6 +15,7 @@ RSpec.describe Performance, type: :model do
     identity = create(:song_identity, provider_video_id: 'performance-video')
     performance = create(:song, song_identity: identity)
 
+    expect(performance.song).to eq(identity)
     expect(identity.performances.map(&:id)).to contain_exactly(performance.id)
   end
 end

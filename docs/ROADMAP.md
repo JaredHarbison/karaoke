@@ -50,6 +50,9 @@ event QR may remain an optional future convenience.
 - [Initial slice complete] Route application queue reads and writes through an
   event-specific `Performance` model backed by the existing queue table, with
   the old `Song` name retained only for compatibility.
+- [Initial slice complete] Expose the canonical association as
+  `Performance#song`; `song_identity` remains a compatibility alias during the
+  naming migration.
 - [Initial slice complete] Reuse validated YouTube provider metadata from a
   prior eligible selection while creating a new queue `Song` for each
   performer/event entry.

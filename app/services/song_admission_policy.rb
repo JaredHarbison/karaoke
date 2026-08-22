@@ -27,7 +27,7 @@ class SongAdmissionPolicy
       video: metadata,
       explicit_lyrics_allowed: @venue.explicit_lyrics_allowed?
     )
-    @song.song_identity = SongCatalog.record!(metadata)
+    @song.song = SongCatalog.record!(metadata)
     record_metadata(metadata, decision)
     admit_eligible_song(metadata) if decision.status == :eligible
     return content_policy_review(metadata, decision) if decision.status == :rejected

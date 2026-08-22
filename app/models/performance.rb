@@ -10,7 +10,7 @@ class Performance < ApplicationRecord
   belongs_to :venue, optional: true
   belongs_to :user, optional: true
   belongs_to :event, optional: true
-  belongs_to :song_identity, optional: true
+  belongs_to :song, class_name: 'SongIdentity', foreign_key: :song_identity_id, optional: true
   belongs_to :theme_application, class_name: 'EventThemeApplication', optional: true
   belongs_to :theme_reviewed_by, class_name: 'User', optional: true
 
@@ -34,6 +34,9 @@ class Performance < ApplicationRecord
   default_scope { where(venue_id: Current.venue_id) if Current.venue_id.present? }
 
   after_initialize :generate_submission_token, if: :new_record?
+
+  alias song_identity song
+  alias song_identity= song=
 
   def known_duration_average
     return unless event_id
