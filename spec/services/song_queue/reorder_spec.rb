@@ -19,4 +19,12 @@ RSpec.describe SongQueue::Reorder, type: :service do
       event: event, song: target, user: host, action: 'pause', spots_back: 1
     )
   end
+
+  it 'locks the event while reordering an event queue' do
+    event = create(:event)
+    song = create(:song, event: event, venue: event.venue)
+    expect(event).to receive(:with_lock).and_call_original
+
+    described_class.pause!(song, 1, actor: event.venue.owner)
+  end
 end
