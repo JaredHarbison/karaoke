@@ -62,6 +62,8 @@ RSpec.describe SongAdmissionPolicy, type: :service do
   end
 
   it 'rejects explicit metadata when the venue disallows it' do
+    theme = create(:theme, venue: venue, rules: { 'required_keywords' => ['disco'] })
+    create(:event_theme_application, event: event, theme: theme)
     allow(YoutubeService).to receive(:validate_karaoke_video).and_return(metadata(explicit_lyrics: true))
     song = build(:song, venue: venue, event: event)
 
@@ -69,6 +71,7 @@ RSpec.describe SongAdmissionPolicy, type: :service do
 
     expect(result).not_to be_eligible
     expect(result.reason).to match(/explicit lyrics/)
+    expect(song.theme_admission_status).to eq('not_applicable')
   end
 
   it 'allows explicit metadata when the venue permits it' do

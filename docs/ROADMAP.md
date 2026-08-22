@@ -61,11 +61,16 @@ event QR may remain an optional future convenience.
 
 ### 4. Live theme admission and review
 
-- Evaluate themes against Performances in the event/time-window context.
-- Support eligible, pending/review, and rejected outcomes.
-- Release pending or theme-ineligible performances into normal/Fair Queue
-  eligibility when the theme ends unless explicitly removed or rejected.
-- Add host review and clear explanations.
+- [Initial slice complete] Evaluate the active reusable theme against event
+  queue metadata and its bounded time window.
+- [Initial slice complete] Persist eligible, review, and explicit rejected
+  outcomes on the transitional queue record with a reason.
+- [Initial slice complete] Release unresolved review entries into normal/Fair
+  Queue eligibility when the theme ends; explicit rejections remain out.
+- [Initial slice complete] Give authorized event hosts approve/reject controls
+  and show the review reason in the queue manager view.
+- [Planned] Move final theme admission ownership to the canonical Performance
+  boundary and support richer rule authoring and overlapping-window policy.
 
 Theme rules remain event-specific. A curated `ThemeSong` join is not required
 unless reusable theme playlists become an MVP need.
@@ -104,8 +109,8 @@ unless reusable theme playlists become an MVP need.
 Contextual venue membership is the authorization foundation for event and host
 work. Event lifecycle is the prerequisite for presence-gated queue admission;
 the initial lifecycle and gate are now implemented. Canonical
-Song/Performance separation and duration metadata must precede reliable runtime
-cutoff decisions. Live theme admission depends on the Performance boundary.
+Song/Performance separation remains the long-term owner of queue and theme
+admission state; the current slice uses transitional Song fields safely.
 Each phase needs architecture rationale, acceptance criteria, automated
 business-rule and authorization coverage, and relevant roadmap/QA updates in
 the same change.
@@ -127,6 +132,6 @@ the same change.
 - Initial venue presence token, dynamic venue QR, expiring event presence
   session foundation, and live-event queue gate.
 
-The finished items are foundations. Rotating display-code exchange,
-canonical Song/Performance persistence, live theme admission, and deeper
-concurrency/load hardening remain planned MVP work.
+The finished items are foundations. Rotating display-code exchange, canonical
+Song/Performance persistence, richer theme tooling, and deeper concurrency/load
+hardening remain planned MVP work.

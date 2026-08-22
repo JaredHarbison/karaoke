@@ -24,7 +24,7 @@ class SongAdmissionPolicy
       explicit_lyrics_allowed: @venue.explicit_lyrics_allowed?
     )
     record_metadata(metadata, decision)
-    snapshot_duration(metadata) if decision.status == :eligible
+    admit_eligible_song(metadata) if decision.status == :eligible
     Result.new(status: decision.status, reason: decision.reason)
   end
 
@@ -36,6 +36,11 @@ class SongAdmissionPolicy
     @song.metadata_status = decision.status
     @song.explicit_lyrics = metadata[:explicit_lyrics]
     @song.metadata_checked_at = Time.current
+  end
+
+  def admit_eligible_song(metadata)
+    snapshot_duration(metadata)
+    record_theme_admission(metadata)
   end
 
   def snapshot_duration(metadata)
@@ -51,5 +56,14 @@ class SongAdmissionPolicy
     return 'average' if average
 
     'fallback'
+  end
+
+  def record_theme_admission(metadata)
+    return @song.theme_admission_status = 'not_applicable' unless @song.event
+
+    decision = ThemeAdmissionPolicy.call(event: @song.event, metadata: metadata)
+    @song.theme_application = decision.application
+    @song.theme_admission_status = decision.status
+    @song.theme_admission_reason = decision.reason
   end
 end

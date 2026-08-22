@@ -5,7 +5,8 @@ implemented product surface, including contextual membership management,
 events/recurring series, event-scoped queueing, and the reusable theme
 foundation. Fair Queue’s initial ordering, event toggle, explanation, and host
 override audit are testable; venue/event presence access is now testable, while
-physical location enforcement remains forthcoming.
+physical location enforcement remains forthcoming. Live theme admission and
+host review are now testable for active event queues.
 
 ## Setup
 
@@ -49,7 +50,7 @@ venue is `/demo-karaoke/songs`.
 | Recurring series form | Create or edit a series | Recurrence intent, schedule, time zone, and active state persist. |
 | Recurring series list | Select “Generate next 8 weeks” | Supported daily/weekly occurrences are created once; repeating the action does not duplicate them. |
 | Generated occurrence | Edit one generated event | The occurrence changes without changing the series or other occurrences. |
-| `/:venue_slug/themes` | Open as a venue host and create/edit a theme | The reusable theme persists for the current venue; host-only routes work and rule enforcement is labeled forthcoming. |
+| `/:venue_slug/themes` | Open as a venue host and create/edit a theme | The reusable theme persists for the current venue; host-only routes work. |
 | Event themes | Open an event as a venue host and apply/remove a theme | The event shows its applied reusable theme; cross-venue themes are rejected. |
 | Event theme window | Apply a theme with start/end values inside the event | The event displays the bounded window; partial or out-of-event windows are rejected. |
 | Theme window validation | Submit a partial or out-of-event theme window | The application is rejected and the existing event theme state is unchanged. |
@@ -71,9 +72,13 @@ when the venue disallows them, and unknown provider metadata produces a review
 state rather than automatic admission. Venue-level queueing remains a legacy
 compatibility path until the canonical Performance migration.
 
-Theme rule evaluation is also not yet exposed as a queue workflow; its current
-evaluator is covered by automated tests until provider metadata and host review
-are integrated.
+For a live event with an active theme, eligible provider metadata enters the
+queue, theme-ineligible or uncertain metadata appears in the host Theme review
+section, and the host can approve or reject it. An unresolved review entry is
+released to normal queue eligibility after its theme window ends; an explicit
+theme-review rejection remains out of the queue only when the host explicitly
+rejects it. A venue content-policy rejection, such as disallowed explicit
+lyrics, bypasses theme review and remains out permanently.
 
 ## Phase 1 membership checkpoint
 
@@ -90,10 +95,10 @@ a separate future QA section when venue-joining moderation is implemented.
 The initial event surface adds venue-scoped event and recurring-series pages.
 It generates daily/weekly occurrences and lets a queue song be associated with
 an event. Venue-level queueing remains available. The current theme foundation
-also supports reusable definitions, event applications, bounded windows, and
-automated deterministic evaluator outcomes; live admission/review integration
-is not yet exposed. Advanced Fair Queue policy and physical location security
-remain planned. Temporary host delegation and event access sessions are
+also supports reusable definitions, event applications, bounded windows,
+deterministic admission outcomes, and host review/release for live queues.
+Advanced Fair Queue policy and physical location security remain planned.
+Temporary host delegation and event access sessions are
 testable from the event page for authority, expiry, and revocation.
 
 | `/:venue_slug/events/:id` | Open an event and choose “View event queue” | The queue is filtered to that event; queueing a song from the Add Song panel preserves the event context. |
@@ -105,6 +110,9 @@ testable from the event page for authority, expiry, and revocation.
 | Live event media admission | Select eligible karaoke metadata with a known duration | The event queue entry is admitted and its provider duration is stored. |
 | Live event media admission | Select explicit metadata while the venue disallows explicit lyrics | The event submission is rejected with a content-policy message. |
 | Live event media admission | Queue a video with no known duration after known-duration songs exist | The entry uses the average of known provider durations; prior estimates do not affect that average. |
+| Live event theme admission | With an active theme, submit a matching, non-matching, or uncertain video | Matching metadata enters the queue; non-matching or uncertain metadata appears in Theme review with an explanation. |
+| Theme review | As an authorized event host, approve or reject a review entry | Approve makes the entry queue-eligible; reject keeps it out and records the decision. Other users cannot use the controls. |
+| Theme release | Leave a review entry unresolved until its theme window ends, then reload the event queue | The entry is released to normal queue eligibility; explicit rejections are not released. |
 | Live event queue | Try to queue without opening an active event access code | The submission is rejected with an access-code/presence message. |
 | Event lifecycle | As a host, complete a live event, then try to queue | The event closes to new submissions, including during the short presence grace period. |
 | Event runtime cutoff | Queue songs until projected completion would pass the event end | The next event submission is rejected with a queue-end message. |

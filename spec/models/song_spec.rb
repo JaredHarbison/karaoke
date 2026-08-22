@@ -5,6 +5,8 @@ RSpec.describe Song, type: :model do
     it { is_expected.to belong_to(:venue).optional }
     it { is_expected.to belong_to(:user).optional }
     it { is_expected.to belong_to(:event).optional }
+    it { is_expected.to belong_to(:theme_application).class_name('EventThemeApplication').optional }
+    it { is_expected.to belong_to(:theme_reviewed_by).class_name('User').optional }
   end
 
   describe 'validations' do

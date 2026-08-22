@@ -70,6 +70,19 @@
                   %h3 The queue is open
                   %p Add the first song and get tonight started.
 
+              - if @theme_review.any?
+                %section.songs-panel.songs-panel--theme-review{ aria: { labelledby: "theme-review-heading" } }
+                  %h2#theme-review-heading Theme review
+                  %p.songs-muted These songs need a host decision before they enter the playable queue.
+                  %ul
+                    - @theme_review.each do |song|
+                      %li
+                        %strong= song.performer
+                        %span= song.title.presence || song.url
+                        %small= song.theme_admission_reason
+                        = button_to "Approve", review_theme_venue_song_path(Current.venue.slug, song), method: :patch, params: { decision: "approve" }
+                        = button_to "Reject", review_theme_venue_song_path(Current.venue.slug, song), method: :patch, params: { decision: "reject" }
+
               - if @skipped.any?
                 .songs-subsection
                   .songs-subsection__heading

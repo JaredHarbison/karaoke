@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_08_21_212000) do
+ActiveRecord::Schema[7.2].define(version: 2026_08_21_213000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -143,9 +143,17 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_212000) do
     t.string "duration_source"
     t.datetime "metadata_checked_at"
     t.string "submission_token"
+    t.bigint "theme_application_id"
+    t.string "theme_admission_status", default: "not_applicable", null: false
+    t.string "theme_admission_reason"
+    t.bigint "theme_reviewed_by_id"
+    t.datetime "theme_reviewed_at"
+    t.index ["event_id", "theme_admission_status"], name: "index_songs_on_event_id_and_theme_admission_status"
     t.index ["event_id"], name: "index_songs_on_event_id"
     t.index ["provider", "provider_video_id"], name: "index_songs_on_provider_and_provider_video_id"
     t.index ["submission_token"], name: "index_songs_on_submission_token", unique: true, where: "(submission_token IS NOT NULL)"
+    t.index ["theme_application_id"], name: "index_songs_on_theme_application_id"
+    t.index ["theme_reviewed_by_id"], name: "index_songs_on_theme_reviewed_by_id"
     t.index ["user_id", "created_at"], name: "index_songs_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_songs_on_user_id"
     t.index ["venue_id", "created_at"], name: "index_songs_on_venue_id_and_created_at"
@@ -241,8 +249,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_212000) do
   add_foreign_key "song_queue_overrides", "events"
   add_foreign_key "song_queue_overrides", "songs"
   add_foreign_key "song_queue_overrides", "users"
+  add_foreign_key "songs", "event_theme_applications", column: "theme_application_id"
   add_foreign_key "songs", "events"
   add_foreign_key "songs", "users"
+  add_foreign_key "songs", "users", column: "theme_reviewed_by_id"
   add_foreign_key "songs", "venues"
   add_foreign_key "themes", "venues"
   add_foreign_key "users", "venues"

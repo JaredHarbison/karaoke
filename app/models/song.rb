@@ -1,15 +1,20 @@
 class Song < ApplicationRecord
     DEFAULT_DURATION_SECONDS = 180
+    QUEUE_ELIGIBLE_THEME_STATUSES = %w[not_applicable eligible released].freeze
 
     belongs_to :venue, optional: true
     belongs_to :user, optional: true
     belongs_to :event, optional: true
+    belongs_to :theme_application, class_name: 'EventThemeApplication', optional: true
+    belongs_to :theme_reviewed_by, class_name: 'User', optional: true
     
-    scope :queued, -> { where( finished: false, skipped: false, postponed: false ) }
+    scope :queued, -> { where(finished: false, skipped: false, postponed: false).queue_eligible }
     scope :finished, -> { where( finished: true ) }
-    scope :upcoming, -> { where( finished: false, skipped: false ) }
+    scope :upcoming, -> { where(finished: false, skipped: false).queue_eligible }
     scope :postponed, -> { where( finished: false, postponed: true ) }
     scope :skipped, -> { where( finished: false, skipped: true ) }
+    scope :queue_eligible, -> { where(theme_admission_status: QUEUE_ELIGIBLE_THEME_STATUSES) }
+    scope :theme_review, -> { where(theme_admission_status: 'review') }
     
     validates :performer, presence: true
     validates :url, presence: true, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "must be a valid URL" }

@@ -42,6 +42,7 @@ Rails.application.routes.draw do
         patch :pause_song
         patch :unpause_song
         patch :requeue_song
+        patch :review_theme
         patch :skip_song
       end
     end

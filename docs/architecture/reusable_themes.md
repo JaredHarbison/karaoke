@@ -15,21 +15,28 @@ when reliable; uncertain cases go to host review. Theme-ineligible or pending
 songs may return to normal/Fair Queue eligibility when the theme ends unless
 explicitly rejected or removed for another reason.
 
-The current evaluator supports simple required and blocked keyword rules as a
-provider-independent foundation. It returns eligible, rejected, or review and
-does not yet change queue admission.
+The initial live evaluator supports simple required and blocked keyword rules as
+a provider-independent foundation. Eligible songs enter the event queue;
+uncertain or theme-ineligible songs enter host review. A host may approve or
+explicitly reject a review entry, and unresolved review entries are released to
+normal queue eligibility after the active theme window ends.
+
+Theme review is separate from hard content-policy admission: a video rejected
+because the venue disallows explicit lyrics is never admitted to theme review
+or released by theme expiry.
 
 ## Consequences / implications
 
 Theme behavior is auditable and reusable rather than copied into each song.
 Computed eligibility belongs to the event Performance/theme-application
-context, not a global Song/Theme join. A future `ThemeSong` join may represent
+context, not a global Song/Theme join. The transitional queue record stores the
+application, outcome, explanation, and review decision until the planned
+Song/Performance boundary is completed. A future `ThemeSong` join may represent
 curated reusable playlists, but it should not replace event-time evaluation.
-Host review is a deliberate fallback, not a false certainty. The current UI
-labels deterministic rule enforcement as forthcoming.
+Host review is a deliberate fallback, not a false certainty.
 
 ## Deferred details
 
-Metadata providers, rule authoring UI, provider-to-metadata normalization,
-review UI, time-window precedence, queue admission integration, and exact
-status transitions are deferred.
+Metadata providers, richer rule authoring UI, provider-to-metadata
+normalization, Performance-owned status transitions, and time-window precedence
+for multiple overlapping applications remain deferred.

@@ -11,6 +11,13 @@ class EventThemeApplication < ApplicationRecord
   validate :window_is_complete
   validate :window_is_within_event
 
+  def active_at?(time = Time.current)
+    return false if starts_at && time < starts_at
+    return false if ends_at && time >= ends_at
+
+    true
+  end
+
   private
 
   def theme_belongs_to_event_venue

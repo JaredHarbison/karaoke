@@ -3,9 +3,9 @@ class SongsController < ApplicationController
   before_action :set_queue_event
   before_action :require_admin!, only: %i[ presentation ]
   protect_from_forgery with: :exception
-  before_action :set_song, only: %i[ destroy edit finish_song pause_song requeue_song show skip_song unpause_song update ]
+  before_action :set_song, only: %i[ destroy edit finish_song pause_song requeue_song review_theme show skip_song unpause_song update ]
   before_action :authorize_manageable_song!, only: %i[ destroy edit update ]
-  before_action :authorize_admin_for_queue_actions, only: %i[ finish_song pause_song requeue_song skip_song unpause_song ]
+  before_action :authorize_admin_for_queue_actions, only: %i[ finish_song pause_song requeue_song review_theme skip_song unpause_song ]
 
   # POST /:venue_slug/songs or /:venue_slug/songs.json
   def create
@@ -107,6 +107,22 @@ class SongsController < ApplicationController
     end
   end
 
+  def review_theme
+    status = params[:decision].to_s == 'approve' ? 'eligible' : 'rejected'
+    unless @song.theme_admission_status == 'review'
+      return redirect_to venue_songs_path(Current.venue.slug, event_id: @song.event_id), alert: 'That song is not awaiting theme review.'
+    end
+
+    decision_label = status == 'eligible' ? 'approved' : 'rejected'
+    @song.update!(
+      theme_admission_status: status,
+      theme_admission_reason: "host #{decision_label} theme admission",
+      theme_reviewed_by: current_user,
+      theme_reviewed_at: Time.current
+    )
+    redirect_to venue_songs_path(Current.venue.slug, event_id: @song.event_id), notice: "Theme review #{decision_label}."
+  end
+
   # PATCH /:venue_slug/songs/1/unpause_song
   def unpause_song
     SongQueue::Reorder.unpause!(@song, actor: current_user)
@@ -179,9 +195,11 @@ class SongsController < ApplicationController
 
   def load_queue
     @available_events = Current.venue.events.where(status: %i[scheduled live]).order(:starts_at)
+    ThemeAdmissionRelease.call(event: @current_event) if @current_event
     queue = @current_event ? Song.where(event: @current_event) : Song.all
     @finished = queue.finished.order(updated_at: :desc)
     @skipped = queue.skipped
+    @theme_review = queue.theme_review.order(:created_at)
     @songs = queue
     @upcoming = if @current_event&.fair_queue_enabled?
                   SongQueue::FairOrder.new(queue.upcoming, event: @current_event).call

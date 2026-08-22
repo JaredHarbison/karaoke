@@ -38,7 +38,13 @@ class EventQueueRuntimePolicy
   end
 
   def queued_songs
-    scope = Song.unscoped.where(event_id: @event.id, finished: false, skipped: false, postponed: false)
+    scope = Song.unscoped.where(
+      event_id: @event.id,
+      finished: false,
+      skipped: false,
+      postponed: false,
+      theme_admission_status: Song::QUEUE_ELIGIBLE_THEME_STATUSES
+    )
     scope = scope.where.not(id: @candidate.id) if @candidate.persisted?
     scope.to_a
   end

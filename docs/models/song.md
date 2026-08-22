@@ -27,6 +27,13 @@ create_table :songs do |t|
   t.string :duration_source
   t.datetime :metadata_checked_at
   t.string :submission_token
+
+  # Transitional live theme admission state
+  t.references :theme_application, foreign_key: { to_table: :event_theme_applications }
+  t.string :theme_admission_status, null: false, default: 'not_applicable'
+  t.string :theme_admission_reason
+  t.references :theme_reviewed_by, foreign_key: { to_table: :users }
+  t.datetime :theme_reviewed_at
   
   t.timestamps
 end
@@ -41,6 +48,8 @@ add_index :songs, [:user_id, :created_at]
 belongs_to :venue, optional: true
 belongs_to :user, optional: true
 belongs_to :event, optional: true
+belongs_to :theme_application, class_name: 'EventThemeApplication', optional: true
+belongs_to :theme_reviewed_by, class_name: 'User', optional: true
 ```
 
 ## Scopes
@@ -67,6 +76,12 @@ canonical `Song`/`Performance` boundary is migrated.
 
 New submissions also receive a unique `submission_token`. Retrying the same
 token resolves to the existing entry rather than creating a duplicate.
+
+When an active event theme applies, `theme_admission_status` is `eligible`,
+`review`, or `rejected`; entries without an active theme use
+`not_applicable`. Unresolved review entries become `released` after the theme
+window ends. These fields are transitional and will move to the planned
+event-specific `Performance` boundary.
 
 ## Multi-tenancy
 

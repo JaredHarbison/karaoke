@@ -2,9 +2,19 @@
 
 require 'rails_helper'
 
+# The validation matrix is intentionally kept together as one contract.
+# rubocop:disable Metrics/BlockLength
 RSpec.describe EventThemeApplication, type: :model do
   it { is_expected.to belong_to(:event) }
   it { is_expected.to belong_to(:theme) }
+
+  it 'knows whether its theme window is active' do
+    event = create(:event, starts_at: 1.hour.ago, ends_at: 1.hour.from_now)
+    application = create(:event_theme_application, event: event, starts_at: event.starts_at, ends_at: event.ends_at)
+
+    expect(application.active_at?).to be(true)
+    expect(application.active_at?(2.hours.from_now)).to be(false)
+  end
 
   it 'requires the theme to belong to the event venue' do
     event = create(:event)
@@ -33,3 +43,4 @@ RSpec.describe EventThemeApplication, type: :model do
     expect(outside).not_to be_valid
   end
 end
+# rubocop:enable Metrics/BlockLength

@@ -147,6 +147,29 @@ RSpec.describe 'Songs', type: :request do
       expect(flash[:notice]).to include('already queued')
     end
 
+    it 'holds a theme-ineligible song for host review and allows approval' do
+      event = create(:event, venue: venue, status: :live, starts_at: 1.hour.ago)
+      theme = create(:theme, venue: venue, rules: { 'required_keywords' => ['disco'] })
+      create(:event_theme_application, event: event, theme: theme)
+      presence = create(:event_presence_session, event: event, created_by_user: venue.owner, expires_at: event.ends_at)
+      get event_presence_path(presence.token)
+      allow(YoutubeService).to receive(:validate_karaoke_video).and_return(
+        { video_id: 'theme-video', verified_karaoke: true, explicit_lyrics: false, duration_seconds: 180, title: 'Unknown Song' }
+      )
+
+      expect do
+        post "/#{venue.slug}/songs", params: { song: { event_id: event.id, performer: 'Theme Singer', url: 'https://youtube.com/theme' } }
+      end.to change(Song, :count).by(1)
+      song = Song.last
+      expect(song.theme_admission_status).to eq('review')
+
+      sign_out user
+      sign_in venue.owner
+      patch review_theme_venue_song_path(venue.slug, song), params: { decision: 'approve' }
+
+      expect(song.reload).to have_attributes(theme_admission_status: 'eligible', theme_reviewed_by: venue.owner)
+    end
+
     it 'rejects event queueing before the host starts the event' do
       event = create(:event, venue: venue)
 
