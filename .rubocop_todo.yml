@@ -206,6 +206,7 @@ Metrics/BlockLength:
     - 'spec/factories/venues.rb'
     - 'spec/models/song_spec.rb'
     - 'spec/models/performance_queue_spec.rb'
+    - 'spec/models/performance_spec.rb'
     - 'spec/models/user_spec.rb'
     - 'spec/models/venue_admin_spec.rb'
     - 'spec/models/venue_spec.rb'

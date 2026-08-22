@@ -125,11 +125,10 @@ class SongsController < ApplicationController
     status = params[:decision].to_s == 'approve' ? 'eligible' : 'rejected'
     decision_label = status == 'eligible' ? 'approved' : 'rejected'
     reason_label = rejection_reason == 'content_policy' ? 'content policy' : 'theme'
-    @song.update!(
-      theme_admission_status: status,
-      theme_admission_reason: "host #{decision_label} #{reason_label} admission",
-      theme_reviewed_by: current_user,
-      theme_reviewed_at: Time.current
+    @song.review_theme!(
+      status: status,
+      reason: "host #{decision_label} #{reason_label} admission",
+      reviewer: current_user
     )
     redirect_to venue_songs_path(Current.venue.slug, event_id: @song.event_id), notice: "Theme review #{decision_label}."
   end

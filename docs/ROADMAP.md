@@ -89,14 +89,15 @@ event QR may remain an optional future convenience.
 - [Initial slice complete] Evaluate the active reusable theme against event
   queue metadata and its bounded time window.
 - [Initial slice complete] Persist eligible, review, and explicit rejected
-  outcomes on the transitional queue record with a reason.
+  outcomes through the canonical Performance admission boundary.
 - [Initial slice complete] Release unresolved review entries into normal/Fair
   Queue eligibility when the theme ends; explicit rejections remain out.
 - [Initial slice complete] Give authorized event hosts approve/reject controls
   and show the review reason in the queue manager view. Review distinguishes
   temporary theme incoherence from permanent content-policy rejection.
-- [Planned] Move final theme admission ownership to the canonical Performance
-  boundary and support richer rule authoring and overlapping-window policy.
+- [Initial slice complete] Move theme admission transitions and release rules
+  to the canonical Performance boundary.
+- [Planned] Support richer rule authoring and overlapping-window policy.
 
 Theme rules remain event-specific. A curated `ThemeSong` join is not required
 unless reusable theme playlists become an MVP need.
@@ -148,8 +149,8 @@ Contextual venue membership is the authorization foundation for event and host
 work. Event lifecycle is the prerequisite for presence-gated queue admission;
 the initial lifecycle and gate are now implemented. Canonical
 Song/Performance separation remains the long-term owner of queue and theme
-admission state; this slice establishes the persisted identity boundary while
-the current queue record continues to carry transitional fields safely.
+admission state; Performance now owns the admission transitions while the
+existing queue table continues to carry the fields safely.
 Each phase needs architecture rationale, acceptance criteria, automated
 business-rule and authorization coverage, and relevant roadmap/QA updates in
 the same change. The CI quality gate includes the full RSpec suite,

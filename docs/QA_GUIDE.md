@@ -85,8 +85,8 @@ push. It must complete without the Node.js 20 deprecation annotation.
 Provider metadata admission is active for live event queues: selected videos
 must satisfy the current karaoke/content policy, explicit lyrics are rejected
 when the venue disallows them, and unknown provider metadata produces a review
-state rather than automatic admission. Venue-level queueing remains a legacy
-compatibility path until the canonical Performance migration.
+state rather than automatic admission. Performance owns the admission state;
+the legacy queue table and external song routes remain compatibility details.
 
 For a live event with an active theme, eligible provider metadata enters the
 queue, theme-ineligible or uncertain metadata appears in the host Theme review

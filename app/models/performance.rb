@@ -6,6 +6,7 @@ class Performance < ApplicationRecord
 
   DEFAULT_DURATION_SECONDS = 180
   QUEUE_ELIGIBLE_THEME_STATUSES = %w[not_applicable eligible released].freeze
+  THEME_ADMISSION_STATUSES = (QUEUE_ELIGIBLE_THEME_STATUSES + %w[review rejected]).freeze
 
   belongs_to :venue, optional: true
   belongs_to :user, optional: true
@@ -38,6 +39,37 @@ class Performance < ApplicationRecord
   alias song_identity song
   alias song_identity= song=
 
+  def assign_theme_admission(application:, status:, reason:)
+    status = status.to_s
+    validate_theme_admission_status!(status)
+    self.theme_application = application
+    self.theme_admission_status = status
+    self.theme_admission_reason = reason
+  end
+
+  def review_theme!(status:, reason:, reviewer:, reviewed_at: Time.current)
+    raise ArgumentError, "unsupported theme review status: #{status}" unless %w[eligible rejected].include?(status)
+
+    update!(
+      theme_admission_status: status,
+      theme_admission_reason: reason,
+      theme_reviewed_by: reviewer,
+      theme_reviewed_at: reviewed_at
+    )
+  end
+
+  def release_theme!(at: Time.current)
+    return false unless theme_admission_status == 'review'
+    return false if theme_admission_reason.to_s.start_with?('content policy:')
+    return false if theme_application&.active_at?(at)
+
+    update!(
+      theme_admission_status: 'released',
+      theme_admission_reason: 'theme window ended; released to normal queue'
+    )
+    true
+  end
+
   def known_duration_average
     return unless event_id
 
@@ -45,6 +77,12 @@ class Performance < ApplicationRecord
   end
 
   private
+
+  def validate_theme_admission_status!(status)
+    return if THEME_ADMISSION_STATUSES.include?(status)
+
+    raise ArgumentError, "unsupported theme admission status: #{status}"
+  end
 
   def event_belongs_to_venue
     if event_id.present? && event.nil?

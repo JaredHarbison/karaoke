@@ -59,9 +59,11 @@ class SongAdmissionPolicy
     theme_decision = ThemeAdmissionPolicy.call(event: @song.event, metadata: metadata) if @song.event
     return Result.new(status: decision.status, reason: decision.reason) unless theme_decision&.application
 
-    @song.theme_application = theme_decision.application
-    @song.theme_admission_status = 'review'
-    @song.theme_admission_reason = "content policy: #{decision.reason}"
+    @song.assign_theme_admission(
+      application: theme_decision.application,
+      status: 'review',
+      reason: "content policy: #{decision.reason}"
+    )
     Result.new(status: :review, reason: @song.theme_admission_reason)
   end
 
@@ -81,11 +83,17 @@ class SongAdmissionPolicy
   end
 
   def record_theme_admission(metadata)
-    return @song.theme_admission_status = 'not_applicable' unless @song.event
+    return record_no_event_theme_admission unless @song.event
 
     decision = ThemeAdmissionPolicy.call(event: @song.event, metadata: metadata)
-    @song.theme_application = decision.application
-    @song.theme_admission_status = decision.status
-    @song.theme_admission_reason = decision.reason
+    @song.assign_theme_admission(
+      application: decision.application,
+      status: decision.status,
+      reason: decision.reason
+    )
+  end
+
+  def record_no_event_theme_admission
+    @song.assign_theme_admission(application: nil, status: 'not_applicable', reason: 'no event')
   end
 end

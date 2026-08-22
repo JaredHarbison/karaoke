@@ -18,4 +18,42 @@ RSpec.describe Performance, type: :model do
     expect(performance.song).to eq(identity)
     expect(identity.performances.map(&:id)).to contain_exactly(performance.id)
   end
+
+  it 'owns theme admission assignment and review transitions' do
+    performance = build(:performance)
+    performance.assign_theme_admission(application: nil, status: 'review', reason: 'theme mismatch')
+
+    expect(performance).to have_attributes(theme_admission_status: 'review', theme_admission_reason: 'theme mismatch')
+
+    reviewer = create(:user)
+    performance.save!
+    performance.review_theme!(status: 'rejected', reason: 'host rejected theme admission', reviewer: reviewer)
+
+    expect(performance.reload).to have_attributes(
+      theme_admission_status: 'rejected',
+      theme_reviewed_by: reviewer
+    )
+  end
+
+  it 'owns release of unresolved theme review after the application ends' do
+    event = create(:event, starts_at: 2.hours.ago)
+    theme = create(:theme, venue: event.venue)
+    application = create(
+      :event_theme_application,
+      event: event,
+      theme: theme,
+      starts_at: event.starts_at,
+      ends_at: 1.minute.ago
+    )
+    performance = create(
+      :performance,
+      event: event,
+      venue: event.venue,
+      theme_application: application,
+      theme_admission_status: 'review'
+    )
+
+    expect(performance.release_theme!).to be(true)
+    expect(performance.reload.theme_admission_status).to eq('released')
+  end
 end
