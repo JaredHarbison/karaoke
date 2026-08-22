@@ -97,7 +97,9 @@ event QR may remain an optional future convenience.
   temporary theme incoherence from permanent content-policy rejection.
 - [Initial slice complete] Move theme admission transitions and release rules
   to the canonical Performance boundary.
-- [Planned] Support richer rule authoring and overlapping-window policy.
+- [Initial slice complete] Provide venue-host rule authoring for required and blocked keywords.
+- [Initial slice complete] Reject overlapping bounded theme windows on the same event so theme precedence is deterministic.
+- [Planned] Expand rule types only when provider metadata and product policy support them.
 
 Theme rules remain event-specific. A curated `ThemeSong` join is not required
 unless reusable theme playlists become an MVP need.

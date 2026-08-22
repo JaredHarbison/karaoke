@@ -21,6 +21,18 @@
     <%= form.label :active, "Available for event hosts" %>
     <%= form.check_box :active %>
   </div>
-  <p>The deterministic song rules and host-review workflow are forthcoming.</p>
+  <fieldset>
+    <legend>Song admission rules</legend>
+    <p>Enter comma-separated words. Metadata must include every required word and none of the blocked words.</p>
+    <div>
+      <%= form.label :required_keywords_text, "Required keywords" %>
+      <%= form.text_field :required_keywords_text, placeholder: "disco, classics" %>
+    </div>
+    <div>
+      <%= form.label :blocked_keywords_text, "Blocked keywords" %>
+      <%= form.text_field :blocked_keywords_text, placeholder: "explicit, live" %>
+    </div>
+  </fieldset>
+  <p>When metadata is unavailable, the song goes to host review.</p>
   <%= form.submit %>
 <% end %>

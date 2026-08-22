@@ -42,5 +42,42 @@ RSpec.describe EventThemeApplication, type: :model do
     expect(partial).not_to be_valid
     expect(outside).not_to be_valid
   end
+
+  it 'rejects overlapping theme windows on the same event' do
+    event = create(:event)
+    create(:event_theme_application, event: event, starts_at: event.starts_at, ends_at: event.starts_at + 1.hour)
+    overlapping = build(
+      :event_theme_application,
+      event: event,
+      starts_at: event.starts_at + 30.minutes,
+      ends_at: event.starts_at + 2.hours
+    )
+
+    expect(overlapping).not_to be_valid
+    expect(overlapping.errors[:base]).to include('a theme time window cannot overlap another theme on the event')
+  end
+
+  it 'allows touching windows and rejects overlap with an all-event theme' do
+    event = create(:event)
+    create(:event_theme_application, event: event, starts_at: event.starts_at, ends_at: event.starts_at + 1.hour)
+    touching = build(
+      :event_theme_application,
+      event: event,
+      starts_at: event.starts_at + 1.hour,
+      ends_at: event.starts_at + 2.hours
+    )
+    expect(touching).to be_valid
+
+    whole_event = create(:event)
+    create(:event_theme_application, event: whole_event)
+    expect(
+      build(
+        :event_theme_application,
+        event: whole_event,
+        starts_at: whole_event.starts_at,
+        ends_at: whole_event.starts_at + 1.hour
+      )
+    ).not_to be_valid
+  end
 end
 # rubocop:enable Metrics/BlockLength

@@ -47,6 +47,6 @@ class ThemesController < ApplicationController
   end
 
   def theme_params
-    params.require(:theme).permit(:name, :description, :active)
+    params.require(:theme).permit(:name, :description, :active, :required_keywords_text, :blocked_keywords_text)
   end
 end

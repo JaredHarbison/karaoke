@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# rubocop:disable Metrics/BlockLength
 RSpec.describe 'Themes', type: :request do
   include Devise::Test::IntegrationHelpers
 
@@ -12,11 +13,17 @@ RSpec.describe 'Themes', type: :request do
 
   it 'allows a host to create a reusable theme' do
     post venue_themes_path(venue.slug), params: {
-      theme: { name: 'Decades Night', description: 'Songs from the 1980s.' }
+      theme: {
+        name: 'Decades Night', description: 'Songs from the 1980s.',
+        required_keywords_text: ' Disco, classics ', blocked_keywords_text: ' explicit '
+      }
     }
 
     expect(response).to redirect_to(venue_themes_path(venue.slug))
-    expect(Theme.last).to have_attributes(name: 'Decades Night', venue: venue)
+    expect(Theme.last).to have_attributes(
+      name: 'Decades Night', venue: venue,
+      rules: { 'required_keywords' => %w[disco classics], 'blocked_keywords' => ['explicit'] }
+    )
   end
 
   it 'denies theme management to performers' do
@@ -39,3 +46,4 @@ RSpec.describe 'Themes', type: :request do
     expect(event.reload.themes).to include(theme)
   end
 end
+# rubocop:enable Metrics/BlockLength

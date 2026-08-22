@@ -14,4 +14,21 @@ RSpec.describe Theme, type: :model do
 
     expect(duplicate).not_to be_valid
   end
+
+  it 'normalizes host-authored keyword rules into the rules document' do
+    theme = build(:theme, required_keywords_text: ' Disco, classics, disco ', blocked_keywords_text: ' Explicit ')
+
+    expect(theme).to be_valid
+    expect(theme.rules).to eq(
+      'required_keywords' => %w[disco classics],
+      'blocked_keywords' => ['explicit']
+    )
+  end
+
+  it 'rejects unsupported rule keys' do
+    theme = build(:theme, rules: { 'artist_allowlist' => ['Dua Lipa'] })
+
+    expect(theme).not_to be_valid
+    expect(theme.errors[:rules]).to include(/unsupported keys/)
+  end
 end

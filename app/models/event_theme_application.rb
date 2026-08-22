@@ -10,6 +10,7 @@ class EventThemeApplication < ApplicationRecord
   validate :theme_belongs_to_event_venue
   validate :window_is_complete
   validate :window_is_within_event
+  validate :window_does_not_overlap_event_theme
 
   def active_at?(time = Time.current)
     return false if starts_at && time < starts_at
@@ -38,6 +39,21 @@ class EventThemeApplication < ApplicationRecord
     return if starts_after_event_start? && ends_before_event_end?
 
     errors.add(:base, 'a theme time window must stay within the event')
+  end
+
+  def window_does_not_overlap_event_theme
+    return unless event
+
+    overlapping = event.event_theme_applications.where.not(id: id).any? do |application|
+      windows_overlap?(application)
+    end
+    errors.add(:base, 'a theme time window cannot overlap another theme on the event') if overlapping
+  end
+
+  def windows_overlap?(application)
+    starts_before_other_end = ends_at.nil? || application.starts_at.nil? || starts_at < application.ends_at
+    other_starts_before_end = application.ends_at.nil? || starts_at.nil? || application.starts_at < ends_at
+    starts_before_other_end && other_starts_before_end
   end
 
   def bounded_window?

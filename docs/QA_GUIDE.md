@@ -57,6 +57,8 @@ push. It must complete without the Node.js 20 deprecation annotation.
 | Event themes | Open an event as a venue host and apply/remove a theme | The event shows its applied reusable theme; cross-venue themes are rejected. |
 | Event theme window | Apply a theme with start/end values inside the event | The event displays the bounded window; partial or out-of-event windows are rejected. |
 | Theme window validation | Submit a partial or out-of-event theme window | The application is rejected and the existing event theme state is unchanged. |
+| Theme rule authoring | As a venue host, create a theme with required and blocked comma-separated keywords | The rule fields persist, are normalized, and are applied to later theme admission checks. |
+| Theme window overlap | Apply two bounded themes whose windows overlap on one event | The second application is rejected; touching windows and windows on different events remain allowed. |
 | Theme isolation | Try to apply a theme from another venue or duplicate a venue theme name | The action is rejected and no cross-venue or duplicate theme is created. |
 | Event Fair Queue | Open an event queue with performers who have different completed-turn histories, including a new performer and a skipped prior song | Fewer completed turns are favored; performers with no history are handled as zero completed turns; skipped songs do not count as completed turns; equal scores use stable queue order. Duet-aware exceptions are future work. |
 | Event Fair Queue override | As a host, pause or unpause an event queue song | The event-scoped host override changes that event’s queue order without affecting another venue or event. |

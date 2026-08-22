@@ -16,7 +16,8 @@ songs may return to normal/Fair Queue eligibility when the theme ends unless
 explicitly rejected or removed for another reason.
 
 The initial live evaluator supports simple required and blocked keyword rules as
-a provider-independent foundation. Eligible songs enter the event queue;
+a provider-independent foundation, with venue-host authoring for both lists.
+Eligible songs enter the event queue;
 uncertain or theme-ineligible songs enter host review. A host may approve or
 explicitly reject a review entry, and unresolved review entries are released to
 normal queue eligibility after the active theme window ends.
@@ -33,10 +34,13 @@ context, not a global Song/Theme join. The transitional queue record stores the
 application, outcome, explanation, and review decision until the planned
 Song/Performance boundary is completed. A future `ThemeSong` join may represent
 curated reusable playlists, but it should not replace event-time evaluation.
-Host review is a deliberate fallback, not a false certainty.
+Host review is a deliberate fallback, not a false certainty. Bounded theme
+windows for one event may not overlap; this avoids silently choosing one theme
+when two applications would otherwise be active at once.
 
 ## Deferred details
 
-Metadata providers, richer rule authoring UI, provider-to-metadata
-normalization, Performance-owned status transitions, and time-window precedence
-for multiple overlapping applications remain deferred.
+Metadata providers, additional rule types, provider-to-metadata normalization,
+and Performance-owned status transitions remain deferred. Theme windows are
+currently non-overlapping by validation; a future policy may support explicit
+precedence if overlapping themes become necessary.
