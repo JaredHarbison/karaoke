@@ -9,7 +9,8 @@ This roadmap is product-oriented; architectural rationale lives in
 The engineering, identity, contextual venue authorization, event/series,
 reusable theme, initial Fair Queue, temporary delegation, presence-token,
 short-code exchange, and initial event-lifecycle foundations are complete. The
-remaining MVP work is display-code rotation, deeper concurrency hardening, and
+remaining MVP work is abuse telemetry and retention cleanup, finalizing the
+canonical Performance ownership of admission state, deeper load hardening, and
 polished queue workflow.
 
 ## MVP sequence
@@ -54,7 +55,7 @@ event QR may remain an optional future convenience.
   `Performance#song`; `song_identity` remains a compatibility alias during the
   naming migration.
 - [Initial slice complete] Reuse validated YouTube provider metadata from a
-  prior eligible selection while creating a new queue `Song` for each
+  prior eligible selection while creating a new queue `Performance` for each
   performer/event entry.
 - [Initial slice complete] Promote the provider identity into the canonical
   `Song` domain model while keeping the physical identity table stable.
