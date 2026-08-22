@@ -33,7 +33,7 @@ FactoryBot.define do
       
       after(:create) do |venue, evaluator|
         evaluator.song_count.times do
-          create(:song, venue: venue)
+          create(:performance, venue: venue)
         end
       end
     end

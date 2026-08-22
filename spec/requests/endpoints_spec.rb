@@ -6,7 +6,7 @@ require 'rails_helper'
 RSpec.describe 'Songs Endpoints', type: :request do
   let(:venue) { create(:venue) }
   let(:performer) { create(:user, venue: venue) }
-  let(:song) { create(:song, venue: venue, user: performer) }
+  let(:song) { create(:performance, venue: venue, user: performer) }
 
   describe 'GET /venues/:venue_slug/songs' do
     it 'requires authentication', :critical do

@@ -16,7 +16,7 @@ RSpec.describe SongAdmissionPolicy, type: :service do
   end
 
   it 'admits eligible metadata and snapshots provider duration' do
-    song = build(:song, venue: venue, event: event)
+    song = build(:performance, venue: venue, event: event)
 
     result = described_class.call(song: song, venue: venue)
 
@@ -30,7 +30,7 @@ RSpec.describe SongAdmissionPolicy, type: :service do
 
   it 'reuses validated catalog metadata without calling the provider again' do
     create(
-      :song,
+      :performance,
       venue: venue,
       provider: 'youtube',
       provider_video_id: 'video-1',
@@ -41,7 +41,7 @@ RSpec.describe SongAdmissionPolicy, type: :service do
       title: 'Cached Karaoke Video'
     )
     expect(YoutubeService).not_to receive(:validate_karaoke_video)
-    song = build(:song, venue: venue, event: event, url: 'https://youtube.com/watch?v=video-1')
+    song = build(:performance, venue: venue, event: event, url: 'https://youtube.com/watch?v=video-1')
 
     result = described_class.call(song: song, venue: venue)
 
@@ -51,11 +51,11 @@ RSpec.describe SongAdmissionPolicy, type: :service do
   end
 
   it 'uses the average of known durations when provider duration is missing' do
-    create(:song, venue: venue, event: event, duration_seconds: 120, effective_duration_seconds: 120)
-    create(:song, venue: venue, event: event, duration_seconds: 240, effective_duration_seconds: 240)
-    create(:song, venue: venue, event: event, duration_seconds: nil, effective_duration_seconds: 900)
+    create(:performance, venue: venue, event: event, duration_seconds: 120, effective_duration_seconds: 120)
+    create(:performance, venue: venue, event: event, duration_seconds: 240, effective_duration_seconds: 240)
+    create(:performance, venue: venue, event: event, duration_seconds: nil, effective_duration_seconds: 900)
     allow(YoutubeService).to receive(:validate_karaoke_video).and_return(metadata(duration_seconds: nil))
-    song = build(:song, venue: venue, event: event)
+    song = build(:performance, venue: venue, event: event)
 
     described_class.call(song: song, venue: venue)
 
@@ -64,19 +64,19 @@ RSpec.describe SongAdmissionPolicy, type: :service do
 
   it 'uses a safe fallback when no known duration exists' do
     allow(YoutubeService).to receive(:validate_karaoke_video).and_return(metadata(duration_seconds: nil))
-    song = build(:song, venue: venue, event: event)
+    song = build(:performance, venue: venue, event: event)
 
     described_class.call(song: song, venue: venue)
 
     expect(song).to have_attributes(
-      effective_duration_seconds: Song::DEFAULT_DURATION_SECONDS,
+      effective_duration_seconds: Performance::DEFAULT_DURATION_SECONDS,
       duration_source: 'fallback'
     )
   end
 
   it 'holds unknown provider metadata for review' do
     allow(YoutubeService).to receive(:validate_karaoke_video).and_return({ error: 'provider unavailable' })
-    song = build(:song, venue: venue, event: event)
+    song = build(:performance, venue: venue, event: event)
 
     result = described_class.call(song: song, venue: venue)
 
@@ -89,7 +89,7 @@ RSpec.describe SongAdmissionPolicy, type: :service do
     theme = create(:theme, venue: venue, rules: { 'required_keywords' => ['disco'] })
     create(:event_theme_application, event: event, theme: theme)
     allow(YoutubeService).to receive(:validate_karaoke_video).and_return(metadata(explicit_lyrics: true))
-    song = build(:song, venue: venue, event: event)
+    song = build(:performance, venue: venue, event: event)
 
     result = described_class.call(song: song, venue: venue)
 
@@ -101,7 +101,7 @@ RSpec.describe SongAdmissionPolicy, type: :service do
 
   it 'hard-rejects explicit metadata outside a theme' do
     allow(YoutubeService).to receive(:validate_karaoke_video).and_return(metadata(explicit_lyrics: true))
-    song = build(:song, venue: venue, event: event)
+    song = build(:performance, venue: venue, event: event)
 
     result = described_class.call(song: song, venue: venue)
 
@@ -112,7 +112,7 @@ RSpec.describe SongAdmissionPolicy, type: :service do
   it 'allows explicit metadata when the venue permits it' do
     venue.update!(explicit_lyrics_allowed: true)
     allow(YoutubeService).to receive(:validate_karaoke_video).and_return(metadata(explicit_lyrics: true))
-    song = build(:song, venue: venue, event: event)
+    song = build(:performance, venue: venue, event: event)
 
     result = described_class.call(song: song, venue: venue)
 

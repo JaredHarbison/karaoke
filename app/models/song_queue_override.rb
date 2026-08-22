@@ -3,7 +3,9 @@
 # Records a host's event-scoped Fair Queue intervention.
 class SongQueueOverride < ApplicationRecord
   belongs_to :event
-  belongs_to :song
+  belongs_to :performance, class_name: 'Performance', foreign_key: :song_id
+  alias song performance
+  alias song= performance=
   belongs_to :user
 
   validates :action, presence: true, inclusion: { in: %w[pause unpause] }

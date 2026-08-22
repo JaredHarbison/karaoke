@@ -17,7 +17,7 @@ RSpec.describe ThemeAdmissionRelease, type: :service do
       ends_at: 1.minute.ago
     )
     song = create(
-      :song,
+      :performance,
       venue: event.venue,
       event: event,
       theme_application: application,
@@ -37,7 +37,7 @@ RSpec.describe ThemeAdmissionRelease, type: :service do
       ends_at: 1.minute.ago
     )
     song = create(
-      :song,
+      :performance,
       venue: event.venue,
       event: event,
       theme_application: application,
@@ -57,7 +57,7 @@ RSpec.describe ThemeAdmissionRelease, type: :service do
       ends_at: 1.minute.ago
     )
     song = create(
-      :song,
+      :performance,
       venue: event.venue,
       event: event,
       theme_application: application,

@@ -7,7 +7,7 @@ RSpec.describe Venue, type: :model do
     it { is_expected.to have_many(:members).through(:venue_memberships).source(:user) }
     it { is_expected.to have_many(:admin_memberships).class_name('VenueMembership').dependent(:destroy) }
     it { is_expected.to have_many(:hosts).through(:admin_memberships).source(:user) }
-    it { is_expected.to have_many(:songs).dependent(:destroy) }
+    it { is_expected.to have_many(:performances).dependent(:destroy) }
     it { is_expected.to have_many(:users).dependent(:nullify) }
   end
 
@@ -103,7 +103,7 @@ RSpec.describe Venue, type: :model do
     context 'with_songs trait' do
       it 'creates songs for the venue' do
         venue = create(:venue, :with_songs, song_count: 5)
-        expect(venue.songs.count).to eq(5)
+        expect(venue.performances.count).to eq(5)
       end
     end
 

@@ -1,6 +1,5 @@
 class User < ApplicationRecord
   belongs_to :venue, optional: true
-  has_many :songs, dependent: :nullify
   has_many :performances, dependent: :nullify
   has_many :owned_venues, class_name: 'Venue', foreign_key: 'owner_id', dependent: :nullify
   has_many :venue_memberships, dependent: :destroy

@@ -7,7 +7,7 @@ RSpec.describe Event, type: :model do
   describe 'associations' do
     it { is_expected.to belong_to(:venue) }
     it { is_expected.to belong_to(:event_series).optional }
-    it { is_expected.to have_many(:songs).dependent(:nullify) }
+    it { is_expected.to have_many(:performances).dependent(:nullify) }
     it { is_expected.to have_many(:event_host_delegations).dependent(:destroy) }
     it { is_expected.to have_many(:event_setting_changes).dependent(:destroy) }
   end

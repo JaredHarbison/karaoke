@@ -9,12 +9,11 @@ request between performers have different lifecycles.
 ## Decision
 
 The initial slice preserves the current queue object while adding a transitional
-provider metadata and duration boundary. A transitional `SongIdentity` now
-persists the canonical provider identity, and application queue access now uses
+provider metadata and duration boundary. The canonical `Song` now persists the
+provider identity in the existing identity table, and application queue access now uses
 an event-specific `Performance` model backed by the existing queue table.
 `Performance#song` is the canonical association, with `song_identity` retained
-only as a compatibility alias. Planned: promote the identity into the
-canonical `Song` model and complete the compatibility migration. Reuse the canonical Song when
+only as a compatibility alias for older records and callers. Reuse the canonical Song when
 the same provider video is selected again, but create a new Performance for every
 performer/event queue entry. A future user-to-user
 `Request` means one performer asking another to sing a song from that person's

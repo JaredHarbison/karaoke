@@ -7,7 +7,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_many(:venue_memberships).dependent(:destroy) }
     it { is_expected.to have_many(:member_venues).through(:venue_memberships).source(:venue) }
     it { is_expected.to have_many(:platform_memberships).dependent(:destroy) }
-    it { is_expected.to have_many(:songs).dependent(:nullify) }
+    it { is_expected.to have_many(:performances).dependent(:nullify) }
   end
 
   describe 'validations' do

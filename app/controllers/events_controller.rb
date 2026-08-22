@@ -80,7 +80,7 @@ class EventsController < ApplicationController
   end
 
   def load_queue_audit_data
-    @queue_overrides = @event.song_queue_overrides.includes(:song, :user).order(created_at: :desc).limit(10)
+    @queue_overrides = @event.song_queue_overrides.includes(:performance, :user).order(created_at: :desc).limit(10)
     @queue_setting_changes = @event.event_setting_changes.includes(:user).order(created_at: :desc).limit(10)
   end
 

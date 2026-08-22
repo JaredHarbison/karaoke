@@ -6,10 +6,10 @@ require 'rails_helper'
 RSpec.describe SongCatalog, type: :service do
   it 'returns validated metadata for an existing eligible YouTube selection' do
     song = create(
-      :song,
+      :canonical_song,
       provider: 'youtube',
       provider_video_id: 'video-1',
-      metadata_status: 'eligible',
+      verified_karaoke: true,
       explicit_lyrics: false,
       duration_seconds: 210,
       metadata_checked_at: 1.hour.ago,
@@ -36,15 +36,15 @@ RSpec.describe SongCatalog, type: :service do
     second = described_class.record!(metadata.merge(title: 'Updated Title'))
 
     expect(second).to eq(first)
-    expect(SongIdentity.where(provider: 'youtube', provider_video_id: 'video-4').count).to eq(1)
+    expect(Song.where(provider: 'youtube', provider_video_id: 'video-4').count).to eq(1)
     expect(described_class.metadata_for('https://youtube.com/watch?v=video-4')).to include(
       title: 'Updated Title', duration_seconds: 195
     )
   end
 
   it 'does not reuse rejected or unverified provider metadata' do
-    create(:song, provider: 'youtube', provider_video_id: 'video-2', metadata_status: 'rejected')
-    create(:song, provider: 'youtube', provider_video_id: 'video-3', metadata_status: 'review')
+    create(:canonical_song, provider: 'youtube', provider_video_id: 'video-2', verified_karaoke: false)
+    create(:canonical_song, provider: 'youtube', provider_video_id: 'video-3', verified_karaoke: false)
 
     expect(described_class.metadata_for('https://youtube.com/watch?v=video-2')).to be_nil
     expect(described_class.metadata_for('https://youtube.com/watch?v=video-3')).to be_nil

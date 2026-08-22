@@ -25,7 +25,7 @@ RSpec.describe 'User Journeys', type: :request do
           category: 'rock'
         }
       }
-      expect(Song.last.performer).to eq('Test Performer')
+      expect(Performance.last.performer).to eq('Test Performer')
     end
   end
 
@@ -36,7 +36,7 @@ RSpec.describe 'User Journeys', type: :request do
     end
 
     it 'admin can manage the queue', :critical do
-      song = create(:song, venue: venue, user: performer)
+      song = create(:performance, venue: venue, user: performer)
       
       patch "/#{venue.slug}/songs/#{song.id}/finish_song"
       expect(song.reload.finished).to be_truthy

@@ -10,7 +10,7 @@ class Performance < ApplicationRecord
   belongs_to :venue, optional: true
   belongs_to :user, optional: true
   belongs_to :event, optional: true
-  belongs_to :song, class_name: 'SongIdentity', foreign_key: :song_identity_id, optional: true
+  belongs_to :song, class_name: 'Song', foreign_key: :song_identity_id, optional: true
   belongs_to :theme_application, class_name: 'EventThemeApplication', optional: true
   belongs_to :theme_reviewed_by, class_name: 'User', optional: true
 

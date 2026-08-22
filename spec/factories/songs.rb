@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :song do
+  factory :performance do
     performer { Faker::Name.name }
     url { "https://www.youtube.com/watch?v=#{Faker::Alphanumeric.alphanumeric(number: 11)}" }
     association :venue
@@ -41,4 +41,6 @@ FactoryBot.define do
       end
     end
   end
+
+  factory :song, parent: :performance
 end

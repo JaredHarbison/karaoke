@@ -12,7 +12,7 @@ RSpec.describe 'Songs', type: :request do
 
   describe 'GET /venues/:venue_slug/songs' do
     it 'displays songs for the venue', :critical do
-      create(:song, venue: venue, user: user)
+      create(:performance, venue: venue, user: user)
       get "/#{venue.slug}/songs"
       expect(response).to be_successful
     end
@@ -42,7 +42,7 @@ RSpec.describe 'Songs', type: :request do
     it 'shows Play only for the next queued song' do
       sign_out user
       sign_in venue.owner
-      create_list(:song, 2, venue: venue)
+      create_list(:performance, 2, venue: venue)
 
       get "/#{venue.slug}/songs"
 
@@ -52,7 +52,7 @@ RSpec.describe 'Songs', type: :request do
     it 'offers a direct video link for queue managers' do
       sign_out user
       sign_in venue.owner
-      create(:song, venue: venue)
+      create(:performance, venue: venue)
 
       get "/#{venue.slug}/songs"
 
@@ -64,7 +64,7 @@ RSpec.describe 'Songs', type: :request do
     it 'shows the song title to queue managers' do
       sign_out user
       sign_in venue.owner
-      create(:song, venue: venue, title: 'Black Velvet')
+      create(:performance, venue: venue, title: 'Black Velvet')
 
       get "/#{venue.slug}/songs"
 
@@ -75,7 +75,7 @@ RSpec.describe 'Songs', type: :request do
     it 'shows archive management actions to owners' do
       sign_out user
       sign_in venue.owner
-      create(:song, :finished, venue: venue)
+      create(:performance, :finished, venue: venue)
 
       get "/#{venue.slug}/songs"
 
@@ -85,7 +85,7 @@ RSpec.describe 'Songs', type: :request do
     end
 
     it 'does not show archive management actions to performers' do
-      create(:song, :finished, venue: venue)
+      create(:performance, :finished, venue: venue)
 
       get "/#{venue.slug}/songs"
 
@@ -104,16 +104,16 @@ RSpec.describe 'Songs', type: :request do
     it 'creates a new song', :critical do
       expect {
         post "/#{venue.slug}/songs", params: { song: { performer: 'Test Artist', url: 'https://youtube.com/test', category: 'pop' } }
-      }.to change(Song, :count).by(1)
+      }.to change(Performance, :count).by(1)
       expect(response).to redirect_to("/#{venue.slug}/songs")
     end
 
     it 'uses the signed-in user name when a selected video omits performer' do
       expect {
         post "/#{venue.slug}/songs", params: { song: { url: 'https://youtube.com/watch?v=test' } }
-      }.to change(Song, :count).by(1)
+      }.to change(Performance, :count).by(1)
 
-      expect(Song.last.performer).to eq(user.display_name)
+      expect(Performance.last.performer).to eq(user.display_name)
       expect(response).to redirect_to("/#{venue.slug}/songs")
     end
 
@@ -128,8 +128,8 @@ RSpec.describe 'Songs', type: :request do
       post "/#{venue.slug}/songs", params: { song: { performer: 'Event Singer', url: 'https://youtube.com/event', event_id: event.id } }
 
       expect(response).to redirect_to("/#{venue.slug}/songs?event_id=#{event.id}")
-      expect(Song.last.event).to eq(event)
-      expect(Song.last).to have_attributes(metadata_status: 'eligible', duration_seconds: 180, duration_source: 'provider')
+      expect(Performance.last.event).to eq(event)
+      expect(Performance.last).to have_attributes(metadata_status: 'eligible', duration_seconds: 180, duration_source: 'provider')
     end
 
     it 'does not create a duplicate when the same submission is retried' do
@@ -141,8 +141,8 @@ RSpec.describe 'Songs', type: :request do
       )
       params = { song: { performer: 'Retry Singer', url: 'https://youtube.com/retry', event_id: event.id, submission_token: SecureRandom.uuid } }
 
-      expect { post "/#{venue.slug}/songs", params: params }.to change(Song, :count).by(1)
-      expect { post "/#{venue.slug}/songs", params: params }.not_to change(Song, :count)
+      expect { post "/#{venue.slug}/songs", params: params }.to change(Performance, :count).by(1)
+      expect { post "/#{venue.slug}/songs", params: params }.not_to change(Performance, :count)
       expect(response).to redirect_to("/#{venue.slug}/songs?event_id=#{event.id}")
       expect(flash[:notice]).to include('already queued')
     end
@@ -159,8 +159,8 @@ RSpec.describe 'Songs', type: :request do
 
       expect do
         post "/#{venue.slug}/songs", params: { song: { event_id: event.id, performer: 'Theme Singer', url: 'https://youtube.com/theme' } }
-      end.to change(Song, :count).by(1)
-      song = Song.last
+      end.to change(Performance, :count).by(1)
+      song = Performance.last
       expect(song.theme_admission_status).to eq('review')
 
       sign_out user
@@ -182,8 +182,8 @@ RSpec.describe 'Songs', type: :request do
 
       expect do
         post "/#{venue.slug}/songs", params: { song: { event_id: event.id, performer: 'Policy Singer', url: 'https://youtube.com/explicit-theme' } }
-      end.to change(Song, :count).by(1)
-      song = Song.last
+      end.to change(Performance, :count).by(1)
+      song = Performance.last
       expect(song).to have_attributes(theme_admission_status: 'review')
 
       sign_out user
@@ -202,7 +202,7 @@ RSpec.describe 'Songs', type: :request do
 
       expect do
         post "/#{venue.slug}/songs", params: { song: { performer: 'Early Singer', url: 'https://youtube.com/early', event_id: event.id } }
-      end.not_to change(Song, :count)
+      end.not_to change(Performance, :count)
 
       expect(response).to have_http_status(422)
       expect(response.body).to include('This event has not started yet.')
@@ -213,7 +213,7 @@ RSpec.describe 'Songs', type: :request do
 
       expect do
         post "/#{venue.slug}/songs", params: { song: { performer: 'Remote Singer', url: 'https://youtube.com/remote', event_id: event.id } }
-      end.not_to change(Song, :count)
+      end.not_to change(Performance, :count)
 
       expect(response).to have_http_status(422)
       expect(response.body).to include('Enter the event access code before queueing a song.')
@@ -226,7 +226,7 @@ RSpec.describe 'Songs', type: :request do
 
       expect do
         post "/#{venue.slug}/songs", params: { song: { performer: 'Late Singer', url: 'https://youtube.com/late', event_id: event.id } }
-      end.not_to change(Song, :count)
+      end.not_to change(Performance, :count)
 
       expect(response).to have_http_status(422)
       expect(
@@ -244,7 +244,7 @@ RSpec.describe 'Songs', type: :request do
 
       expect do
         post "/#{venue.slug}/songs", params: { song: { performer: 'Overrun Singer', url: 'https://youtube.com/long', event_id: event.id } }
-      end.not_to change(Song, :count)
+      end.not_to change(Performance, :count)
 
       expect(response).to have_http_status(422)
       expect(response.body).to include('beyond the event end')
@@ -260,7 +260,7 @@ RSpec.describe 'Songs', type: :request do
 
       expect do
         post "/#{venue.slug}/songs", params: { song: { performer: 'Override Singer', url: 'https://youtube.com/override', event_id: event.id } }
-      end.to change(Song, :count).by(1)
+      end.to change(Performance, :count).by(1)
     end
 
     it 'does not associate a song with an event from another venue' do
@@ -268,7 +268,7 @@ RSpec.describe 'Songs', type: :request do
 
       expect {
         post "/#{venue.slug}/songs", params: { song: { performer: 'Unsafe Singer', url: 'https://youtube.com/unsafe', event_id: other_event.id } }
-      }.not_to change(Song, :count)
+      }.not_to change(Performance, :count)
 
       expect(response).to have_http_status(422)
     end
@@ -277,8 +277,8 @@ RSpec.describe 'Songs', type: :request do
   describe 'event-scoped queue' do
     it 'shows only songs associated with the selected event' do
       event = create(:event, venue: venue)
-      included = create(:song, venue: venue, user: user, performer: 'Included Singer', event: event)
-      create(:song, venue: venue, user: user, performer: 'Venue Singer')
+      included = create(:performance, venue: venue, user: user, performer: 'Included Singer', event: event)
+      create(:performance, venue: venue, user: user, performer: 'Venue Singer')
 
       get "/#{venue.slug}/songs", params: { event_id: event.id }
 
@@ -289,20 +289,20 @@ RSpec.describe 'Songs', type: :request do
   end
 
   describe 'DELETE /venues/:venue_slug/songs/:id' do
-    let(:song) { create(:song, venue: venue, user: user) }
+    let(:song) { create(:performance, venue: venue, user: user) }
 
     it 'deletes the song', :critical do
-      initial_count = Song.count
+      initial_count = Performance.count
       delete "/#{venue.slug}/songs/#{song.id}"
       
       # For now, just check that something happened
       expect([200, 302]).to include(response.status)
-      expect(Song.count).to be < (initial_count + 1)
+      expect(Performance.count).to be < (initial_count + 1)
     end
   end
 
   describe 'PATCH /venues/:venue_slug/songs/:id/finish_song' do
-    let(:song) { create(:song, venue: venue, user: user) }
+    let(:song) { create(:performance, venue: venue, user: user) }
 
     it 'marks song as finished', :critical do
       # Make user an admin for queue management
@@ -331,7 +331,7 @@ RSpec.describe 'Songs', type: :request do
   end
 
   describe 'PATCH /venues/:venue_slug/songs/:id/skip_song' do
-    let(:song) { create(:song, venue: venue, user: user) }
+    let(:song) { create(:performance, venue: venue, user: user) }
 
     it 'marks song as skipped', :critical do
       # Make user an admin for queue management
@@ -350,9 +350,9 @@ RSpec.describe 'Songs', type: :request do
   end
 
   describe 'PATCH /venues/:venue_slug/songs/:id/pause_song' do
-    let!(:first_song) { create(:song, venue: venue, user: user, updated_at: 2.hours.ago) }
-    let!(:song) { create(:song, venue: venue, user: user, updated_at: 1.hour.ago) }
-    let!(:other_song) { create(:song, venue: venue, user: user, updated_at: 30.minutes.ago) }
+    let!(:first_song) { create(:performance, venue: venue, user: user, updated_at: 2.hours.ago) }
+    let!(:song) { create(:performance, venue: venue, user: user, updated_at: 1.hour.ago) }
+    let!(:other_song) { create(:performance, venue: venue, user: user, updated_at: 30.minutes.ago) }
 
     it 'moves a song back in the queue for a host' do
       venue.add_host(user)
@@ -361,7 +361,7 @@ RSpec.describe 'Songs', type: :request do
 
       expect(response).to redirect_to("/#{venue.slug}/songs")
       expect(song.reload.postponed).to be(true)
-      expect(Song.unscoped.where(venue_id: venue.id, finished: false, skipped: false).order(:updated_at).pluck(:id)).to eq([first_song.id, other_song.id, song.id])
+      expect(Performance.unscoped.where(venue_id: venue.id, finished: false, skipped: false).order(:updated_at).pluck(:id)).to eq([first_song.id, other_song.id, song.id])
     end
 
     it 'does not allow a performer to pause a song' do
@@ -373,9 +373,9 @@ RSpec.describe 'Songs', type: :request do
   end
 
   describe 'PATCH /venues/:venue_slug/songs/:id/unpause_song' do
-    let!(:song) { create(:song, venue: venue, user: user, postponed: true, updated_at: 1.hour.ago) }
-    let!(:first_song) { create(:song, venue: venue, user: user, updated_at: 2.hours.ago) }
-    let!(:other_song) { create(:song, venue: venue, user: user, updated_at: 30.minutes.ago) }
+    let!(:song) { create(:performance, venue: venue, user: user, postponed: true, updated_at: 1.hour.ago) }
+    let!(:first_song) { create(:performance, venue: venue, user: user, updated_at: 2.hours.ago) }
+    let!(:other_song) { create(:performance, venue: venue, user: user, updated_at: 30.minutes.ago) }
 
     it 'moves a paused song to the front of the queue for a host' do
       venue.add_host(user)
@@ -384,7 +384,7 @@ RSpec.describe 'Songs', type: :request do
 
       expect(response).to redirect_to("/#{venue.slug}/songs")
       expect(song.reload.postponed).to be(false)
-      expect(Song.unscoped.where(venue_id: venue.id, finished: false, skipped: false).order(:updated_at).pluck(:id)).to eq([song.id, first_song.id, other_song.id])
+      expect(Performance.unscoped.where(venue_id: venue.id, finished: false, skipped: false).order(:updated_at).pluck(:id)).to eq([song.id, first_song.id, other_song.id])
     end
 
     it 'does not allow a performer to unpause a song' do
@@ -396,7 +396,7 @@ RSpec.describe 'Songs', type: :request do
   end
 
   describe 'PATCH /venues/:venue_slug/songs/:id/requeue_song' do
-    let(:song) { create(:song, :finished, venue: venue, user: user, skipped: true, postponed: true) }
+    let(:song) { create(:performance, :finished, venue: venue, user: user, skipped: true, postponed: true) }
 
     it 'returns an archived song to the active queue for a host' do
       venue.add_host(user)
@@ -416,7 +416,7 @@ RSpec.describe 'Songs', type: :request do
   end
 
   describe 'PATCH /venues/:venue_slug/songs/:id' do
-    let(:song) { create(:song, venue: venue, user: user) }
+    let(:song) { create(:performance, venue: venue, user: user) }
 
     it 'updates the song', :critical do
       patch "/#{venue.slug}/songs/#{song.id}", params: { song: { performer: 'Updated Artist' } }
@@ -425,7 +425,7 @@ RSpec.describe 'Songs', type: :request do
   end
 
   describe 'GET /venues/:venue_slug/songs/:id' do
-    let(:song) { create(:song, venue: venue, user: user) }
+    let(:song) { create(:performance, venue: venue, user: user) }
 
     it 'displays the song', :critical do
       get "/#{venue.slug}/songs/#{song.id}"

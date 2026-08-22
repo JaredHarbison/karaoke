@@ -7,8 +7,8 @@ class SongCatalog
     video_id = YoutubeService.extract_video_id(url)
     return unless video_id
 
-    identity = SongIdentity.find_by(provider: 'youtube', provider_video_id: video_id)
-    return metadata_from_identity(identity, video_id) if identity&.metadata_checked_at
+    identity = Song.find_by(provider: 'youtube', provider_video_id: video_id)
+    return metadata_from_identity(identity, video_id) if identity&.metadata_checked_at && identity.verified_karaoke
 
     song = cached_queue_song(video_id)
     metadata_from_queue_song(song, video_id) if song
@@ -18,7 +18,7 @@ class SongCatalog
     video_id = metadata[:video_id]
     return unless video_id
 
-    identity = SongIdentity.find_or_initialize_by(provider: 'youtube', provider_video_id: video_id)
+    identity = Song.find_or_initialize_by(provider: 'youtube', provider_video_id: video_id)
     identity.assign_attributes(identity_attributes(metadata))
     identity.save!
     identity
