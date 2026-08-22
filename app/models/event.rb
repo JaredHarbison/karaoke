@@ -5,6 +5,7 @@ class Event < ApplicationRecord
   belongs_to :venue
   belongs_to :event_series, optional: true
   has_many :songs, dependent: :nullify
+  has_many :performances, dependent: :nullify
   has_many :song_queue_overrides, dependent: :destroy
   has_many :event_host_delegations, dependent: :destroy
   has_many :event_presence_sessions, dependent: :destroy

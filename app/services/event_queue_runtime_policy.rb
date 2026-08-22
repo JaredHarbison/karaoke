@@ -33,17 +33,17 @@ class EventQueueRuntimePolicy
   private
 
   def queue_duration_seconds
-    queued_songs.sum { |song| song.effective_duration_seconds || Song::DEFAULT_DURATION_SECONDS } +
-      (@candidate.effective_duration_seconds || Song::DEFAULT_DURATION_SECONDS)
+    queued_songs.sum { |song| song.effective_duration_seconds || Performance::DEFAULT_DURATION_SECONDS } +
+      (@candidate.effective_duration_seconds || Performance::DEFAULT_DURATION_SECONDS)
   end
 
   def queued_songs
-    scope = Song.unscoped.where(
+    scope = Performance.unscoped.where(
       event_id: @event.id,
       finished: false,
       skipped: false,
       postponed: false,
-      theme_admission_status: Song::QUEUE_ELIGIBLE_THEME_STATUSES
+      theme_admission_status: Performance::QUEUE_ELIGIBLE_THEME_STATUSES
     )
     scope = scope.where.not(id: @candidate.id) if @candidate.persisted?
     scope.to_a

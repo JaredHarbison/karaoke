@@ -9,6 +9,6 @@ class WelcomeController < ApplicationController
       @venues = @venues.where("name ILIKE ? OR slug ILIKE ? OR location ILIKE ?", query, query, query)
     end
     @venues = @venues.order(:name)
-    @queue_counts = Song.unscoped.where(venue_id: @venues.select(:id), finished: false, skipped: false, postponed: false).group(:venue_id).count
+    @queue_counts = Performance.unscoped.where(venue_id: @venues.select(:id), finished: false, skipped: false, postponed: false).group(:venue_id).count
   end
 end

@@ -69,7 +69,7 @@ class SongAdmissionPolicy
     duration = metadata[:duration_seconds]
     average = @song.known_duration_average
     @song.duration_seconds = duration
-    @song.effective_duration_seconds = duration || average || Song::DEFAULT_DURATION_SECONDS
+    @song.effective_duration_seconds = duration || average || Performance::DEFAULT_DURATION_SECONDS
     @song.duration_source = duration_source(duration, average)
   end
 

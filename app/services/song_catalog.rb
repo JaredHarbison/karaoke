@@ -35,7 +35,7 @@ class SongCatalog
   end
 
   def self.cached_queue_song(video_id)
-    Song.unscoped.where(
+    Performance.unscoped.where(
       provider: 'youtube', provider_video_id: video_id, metadata_status: 'eligible'
     ).where.not(metadata_checked_at: nil).order(metadata_checked_at: :desc).first
   end

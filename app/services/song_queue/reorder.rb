@@ -15,7 +15,7 @@ module SongQueue
         raise ArgumentError unless song.persisted?
 
         reorder_transaction = lambda do
-          Song.transaction do
+          Performance.transaction do
             reorder_records(song, spots_back, postponed:, move_to_front:, override:)
           end
         end
@@ -53,7 +53,7 @@ module SongQueue
       end
 
       def queue_for(song)
-        scope = Song.upcoming
+        scope = Performance.upcoming
         song.event_id.present? ? scope.where(event_id: song.event_id) : scope.where(event_id: nil)
       end
     end

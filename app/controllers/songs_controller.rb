@@ -15,7 +15,7 @@ class SongsController < ApplicationController
       return
     end
 
-    @song = Song.new(song_params)
+    @song = Performance.new(song_params)
     @song.user = current_user
     @song.venue = Current.venue if Current.venue
     @song.performer = current_user.display_name if @song.performer.blank?
@@ -70,7 +70,7 @@ class SongsController < ApplicationController
 
   # GET /:venue_slug/songs
   def index
-    @song = Song.new(event: @current_event)
+    @song = Performance.new(event: @current_event)
     load_queue
   end
 
@@ -207,7 +207,7 @@ class SongsController < ApplicationController
   def load_queue
     @available_events = Current.venue.events.where(status: %i[scheduled live]).order(:starts_at)
     ThemeAdmissionRelease.call(event: @current_event) if @current_event
-    queue = @current_event ? Song.where(event: @current_event) : Song.all
+    queue = @current_event ? Performance.where(event: @current_event) : Performance.all
     @finished = queue.finished.order(updated_at: :desc)
     @skipped = queue.skipped
     @theme_review = queue.theme_review.order(:created_at)
@@ -242,7 +242,7 @@ class SongsController < ApplicationController
   end
 
   def set_song
-    @song = Current.venue.songs.find(params[:id])
+    @song = Current.venue.performances.find(params[:id])
   end
     
   def song_params
@@ -307,7 +307,7 @@ class SongsController < ApplicationController
     token = params.dig(:song, :submission_token)
     return unless token.present?
 
-    Current.venue.songs.find_by(submission_token: token, user_id: current_user.id)
+    Current.venue.performances.find_by(submission_token: token, user_id: current_user.id)
   end
   
   def authorize_admin_for_queue_actions

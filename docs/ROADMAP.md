@@ -47,11 +47,15 @@ event QR may remain an optional future convenience.
 - [Initial slice complete] Preserve the current queue behavior while adding a
   transitional provider-metadata boundary; canonical provider identities now
   persist independently from queue entries.
+- [Initial slice complete] Route application queue reads and writes through an
+  event-specific `Performance` model backed by the existing queue table, with
+  the old `Song` name retained only for compatibility.
 - [Initial slice complete] Reuse validated YouTube provider metadata from a
   prior eligible selection while creating a new queue `Song` for each
   performer/event entry.
-- [Planned] Promote the canonical provider identity to the `Song` domain model
-  and migrate each queue entry to a new event-specific `Performance` record.
+- [Planned] Promote `SongIdentity` into the canonical `Song` domain model and
+  complete the compatibility migration so every queue entry is represented
+  directly as a `Performance`.
 - [Initial slice complete] Validate available provider metadata and venue content
   policy before event admission; unknown metadata is held for review.
 - [Initial slice complete] Persist validated video duration when available.
@@ -159,6 +163,6 @@ dependency sources are not treated as application code.
 - Initial venue presence token, dynamic venue QR, expiring event presence
   session foundation, and live-event queue gate.
 
-The finished items are foundations. The final canonical Song/Performance
-record migration, richer theme tooling, and deeper concurrency/load hardening
-remain planned MVP work.
+The finished items are foundations. The final canonical Song naming migration,
+richer theme tooling, and deeper concurrency/load hardening remain planned MVP
+work.

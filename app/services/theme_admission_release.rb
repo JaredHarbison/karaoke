@@ -13,7 +13,7 @@ class ThemeAdmissionRelease
 
   def call
     songs_released = 0
-    Song.unscoped.where(event_id: @event.id, theme_admission_status: 'review').find_each do |song|
+    Performance.unscoped.where(event_id: @event.id, theme_admission_status: 'review').find_each do |song|
       next unless releasable?(song)
 
       release!(song)

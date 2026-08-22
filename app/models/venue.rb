@@ -5,6 +5,7 @@ class Venue < ApplicationRecord
   has_many :admin_memberships, -> { where(role: :admin) }, class_name: 'VenueMembership', dependent: :destroy
   has_many :hosts, through: :admin_memberships, source: :user
   has_many :songs, dependent: :destroy
+  has_many :performances, dependent: :destroy
   has_many :users, dependent: :nullify
   has_many :invitations, class_name: 'VenueInvitation', dependent: :destroy
   has_many :event_series, dependent: :destroy

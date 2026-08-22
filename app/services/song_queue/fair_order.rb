@@ -3,8 +3,8 @@
 module SongQueue
   # Orders one event queue by completed turns, then stable queue position.
   class FairOrder
-    def initialize(songs, event:)
-      @songs = songs.to_a
+    def initialize(performances, event:)
+      @performances = performances.to_a
       @event = event
       @performer_labels_by_user = performer_labels_by_user
     end
@@ -26,7 +26,8 @@ module SongQueue
     private
 
     def queue_state
-      [completed_turns_by_performer, Hash.new(0), @songs.sort_by { |song| [song.updated_at, song.id] }]
+      ordered = @performances.sort_by { |performance| [performance.updated_at, performance.id] }
+      [completed_turns_by_performer, Hash.new(0), ordered]
     end
 
     def next_index(remaining, completed_turns, turns_in_queue)
@@ -42,7 +43,7 @@ module SongQueue
     end
 
     def completed_turns_by_performer
-      finished_songs = Song.unscoped.where(event_id: @event.id, finished: true, skipped: false)
+      finished_songs = Performance.unscoped.where(event_id: @event.id, finished: true, skipped: false)
       finished_songs.pluck(:user_id, :performer).each_with_object(Hash.new(0)) do |(user_id, performer), counts|
         counts[performer_key(user_id: user_id, performer: performer)] += 1
       end
@@ -56,7 +57,7 @@ module SongQueue
 
     def performer_labels_by_user
       labels = Hash.new { |labels_by_user, user_id| labels_by_user[user_id] = [] }
-      songs = Song.unscoped.where(event_id: @event.id).pluck(:user_id, :performer)
+      songs = Performance.unscoped.where(event_id: @event.id).pluck(:user_id, :performer)
       songs.each do |user_id, performer|
         next unless user_id
 
