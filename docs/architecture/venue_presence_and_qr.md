@@ -16,8 +16,10 @@ expiring presence/session credential. The code is not shown before the event
 starts. Separate printed event QRs are optional future convenience, not the
 security foundation.
 
-Rate-limit attempts, expire sessions at event close plus grace, and allow host
-regeneration without invalidating the permanent venue QR. A static QR or code
+Rate-limit attempts, record only hashed-client operational telemetry, and prune
+attempt records after a short 24-hour retention window. Expire sessions at
+event close plus grace, and allow host regeneration without invalidating the
+permanent venue QR. A static QR or code
 is not a perfect proof of physical presence; optional location and stronger
 anti-sharing signals remain future work.
 
@@ -38,6 +40,6 @@ are first-class requirements.
 ## Deferred details
 
 Exact token storage, owner profile names, code rotation interval, re-entry,
-late starts, extended events, inactivity, location retention, and abuse
-handling are deferred. No owner-facing toggle should be presented until its
-selected profile changes actual access enforcement.
+late starts, extended events, inactivity, location retention, and advanced
+abuse response are deferred. No owner-facing toggle should be presented until
+its selected profile changes actual access enforcement.

@@ -37,8 +37,10 @@ polished queue workflow.
   database-backed window shared across application processes.
 - [Initial slice complete] Preserve re-entry while a presence session remains
   active and reject re-entry after rotation, revocation, or expiry.
-- [Planned] Add stronger abuse telemetry and retention cleanup for attempt
-  records.
+- [Initial slice complete] Record blocked-attempt telemetry and last-attempt
+  timestamps without storing raw client addresses.
+- [Initial slice complete] Provide a retention task that removes attempt
+  telemetry after its short privacy window.
 
 Separate printed event QRs are not required for MVP. A dynamically displayed
 event QR may remain an optional future convenience.
@@ -119,6 +121,9 @@ unless reusable theme playlists become an MVP need.
 - Run accessibility and mobile reviews.
 - Improve presentation mode, retry states, and operational feedback.
 - Complete the human QA pass across the MVP.
+- [Planned] Upgrade the GitHub Actions runtime dependencies needed to fully
+  resolve the Node.js 20 deprecation warning and verify a warning-free quality
+  run.
 
 ## Post-MVP
 

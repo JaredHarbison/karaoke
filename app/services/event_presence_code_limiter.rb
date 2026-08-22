@@ -10,9 +10,12 @@ class EventPresenceCodeLimiter
     attempt = find_or_create_attempt(fingerprint, window_started_at)
 
     attempt.with_lock do
-      return false if attempt.attempts >= MAX_ATTEMPTS
+      if attempt.attempts >= MAX_ATTEMPTS
+        record_blocked_attempt!(attempt, now)
+        return false
+      end
 
-      attempt.increment!(:attempts)
+      record_allowed_attempt!(attempt, now)
       true
     end
   end
@@ -28,4 +31,22 @@ class EventPresenceCodeLimiter
   end
 
   private_class_method :find_or_create_attempt
+
+  def self.record_blocked_attempt!(attempt, now)
+    attempt.update_columns(
+      blocked_attempts: attempt.blocked_attempts + 1,
+      last_blocked_at: now,
+      updated_at: now
+    )
+  end
+  private_class_method :record_blocked_attempt!
+
+  def self.record_allowed_attempt!(attempt, now)
+    attempt.update_columns(
+      attempts: attempt.attempts + 1,
+      last_attempt_at: now,
+      updated_at: now
+    )
+  end
+  private_class_method :record_allowed_attempt!
 end

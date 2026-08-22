@@ -11,6 +11,9 @@ RSpec.describe EventPresenceCodeLimiter, type: :service do
     expect(results.last).to be(false)
     expect(results.first(10)).to all(be(true))
     expect(EventPresenceAttempt.last.attempts).to eq(10)
+    expect(EventPresenceAttempt.last.blocked_attempts).to eq(1)
+    expect(EventPresenceAttempt.last.last_attempt_at).to be_present
+    expect(EventPresenceAttempt.last.last_blocked_at).to be_present
   end
 
   it 'starts a fresh counter in the next window' do
@@ -19,5 +22,11 @@ RSpec.describe EventPresenceCodeLimiter, type: :service do
 
     expect(described_class.allow?(fingerprint: fingerprint, now: now + 1.minute)).to be(true)
     expect(EventPresenceAttempt.count).to eq(2)
+  end
+
+  it 'keeps blocked-attempt telemetry cumulative within a window' do
+    12.times { described_class.allow?(fingerprint: fingerprint) }
+
+    expect(EventPresenceAttempt.last.blocked_attempts).to eq(2)
   end
 end
