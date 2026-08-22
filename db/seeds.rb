@@ -17,7 +17,7 @@ end
 owner = seed_user.call('owner@karaoke.test', password)
 host = seed_user.call('host@karaoke.test', password)
 performer = seed_user.call('performer@karaoke.test', password)
-performer_demo = seed_user.call('performer.demo@karaoke.test', password)
+seed_user.call('performer.demo@karaoke.test', password)
 
 venue = Venue.find_or_create_by!(slug: 'demo-karaoke') do |record|
   record.name = 'Demo Karaoke'
