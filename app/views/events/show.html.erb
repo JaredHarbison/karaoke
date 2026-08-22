@@ -17,6 +17,11 @@
       <dd><%= @event.event_series.name %></dd>
     <% end %>
   </dl>
+  <% if @event.scheduled? && Current.venue.is_admin?(current_user) %>
+    <%= button_to 'Start event', start_venue_event_path(Current.venue.slug, @event), method: :patch %>
+  <% elsif @event.live? && @event.host_authorized?(current_user) %>
+    <%= button_to 'Complete event', complete_venue_event_path(Current.venue.slug, @event), method: :patch %>
+  <% end %>
   <section aria-labelledby="themes-heading">
     <h2 id="themes-heading">Themes</h2>
     <% if @theme_applications.any? %>
@@ -73,7 +78,7 @@
       <%= form_with url: venue_event_presence_sessions_path(Current.venue.slug), scope: :event_presence_session, method: :post, local: true do |form| %>
         <%= hidden_field_tag :event_id, @event.id %>
         <%= form.label :expires_at, 'Expires (optional)' %>
-        <%= form.datetime_local_field :expires_at, value: @event.ends_at&.strftime('%Y-%m-%dT%H:%M') %>
+        <%= form.datetime_local_field :expires_at, value: (@event.ends_at && (@event.ends_at + EventPresenceSession::GRACE_PERIOD).strftime('%Y-%m-%dT%H:%M')) %>
         <%= form.submit 'Generate event access code' %>
       <% end %>
     </section>

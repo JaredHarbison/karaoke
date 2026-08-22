@@ -11,7 +11,7 @@ class Event < ApplicationRecord
   has_many :event_theme_applications, dependent: :destroy
   has_many :themes, through: :event_theme_applications
 
-  enum :status, { scheduled: 0, cancelled: 1, completed: 2 }
+  enum :status, { scheduled: 0, cancelled: 1, completed: 2, live: 3 }
 
   validates :name, :starts_at, presence: true
   validates :ends_at, comparison: { greater_than: :starts_at }, allow_nil: true
@@ -21,6 +21,14 @@ class Event < ApplicationRecord
     return false unless user
 
     event_host_delegations.active_at(at).where(delegated_user_id: user.id).exists?
+  end
+
+  def start!
+    transition_status(:scheduled, :live)
+  end
+
+  def complete!
+    transition_status(:live, :completed)
   end
 
   def host_authorized?(user, at: Time.current)
@@ -33,5 +41,12 @@ class Event < ApplicationRecord
     return unless event_series && venue_id != event_series.venue_id
 
     errors.add(:event_series, 'must belong to the same venue')
+  end
+
+  def transition_status(from, to)
+    self.class.where(id: id, status: self.class.statuses.fetch(from.to_s)).update_all(
+      status: self.class.statuses.fetch(to.to_s),
+      updated_at: Time.current
+    ).positive?
   end
 end

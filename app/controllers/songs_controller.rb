@@ -16,7 +16,7 @@ class SongsController < ApplicationController
     assign_song_event
     
     respond_to do |format|
-      if @song.save
+      if save_song
         format.html { redirect_to queue_path, notice: "A song was created for #{ @song.performer }." }
         format.turbo_stream
         format.json { render :show, status: :created, location: @song }
@@ -129,7 +129,7 @@ class SongsController < ApplicationController
   def update
     respond_to do |format|
       assign_song_event
-      if @song.save
+      if save_song
         format.html { redirect_to queue_path, notice: "#{@song.performer}'s song was successfully updated." }
         format.json { render :show, status: :ok, location: @song }
       else
@@ -172,7 +172,7 @@ class SongsController < ApplicationController
   private
 
   def load_queue
-    @available_events = Current.venue.events.where(status: :scheduled).order(:starts_at)
+    @available_events = Current.venue.events.where(status: %i[scheduled live]).order(:starts_at)
     queue = @current_event ? Song.where(event: @current_event) : Song.all
     @finished = queue.finished.order(updated_at: :desc)
     @skipped = queue.skipped
@@ -221,6 +221,23 @@ class SongsController < ApplicationController
       :url, 
       :skipped
     )
+  end
+
+  def save_song
+    admission_error = event_queue_admission_error
+    @song.errors.add(:base, admission_error) if admission_error
+    admission_error.nil? && @song.save
+  end
+
+  def event_queue_admission_error
+    event = @song.event
+    return unless event
+    unless event.live?
+      return event.scheduled? ? 'This event has not started yet.' : 'This event is closed to new queue submissions.'
+    end
+    return 'Enter the event access code before queueing a song.' unless active_event_presence_for?(event)
+
+    nil
   end
   
   def authorize_admin_for_queue_actions

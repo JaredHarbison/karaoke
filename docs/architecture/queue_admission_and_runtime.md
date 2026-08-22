@@ -8,10 +8,12 @@ may be missing from provider metadata, and many performers may submit at once.
 
 ## Decision
 
-Planned MVP admission requires an authenticated user, a live event, and an
-active event presence session. The permanent venue QR is a navigation entry
-point; a short rotating code shown on venue displays establishes event
-presence. Presence expires at event close plus a small grace period.
+The initial MVP admission implementation requires an authenticated user, a
+live event, and an active event presence session. Host actions now transition
+events between scheduled, live, and completed. The permanent venue QR is a
+navigation entry point; the current event access URL establishes event
+presence. A short rotating display code remains planned. Presence expires at
+event close plus a small grace period.
 
 Projected queue runtime sums each Performance’s effective video duration plus a
 30-second transition buffer. Known provider duration is preferred. If it is

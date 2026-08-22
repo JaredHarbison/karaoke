@@ -54,7 +54,12 @@ Rails.application.routes.draw do
     post '/admins', to: 'venues#create_admin', as: 'admins'
     delete '/admins/:id', to: 'venues#destroy_admin', as: 'admin'
 
-    resources :events, except: :destroy
+    resources :events, except: :destroy do
+      member do
+        patch :start
+        patch :complete
+      end
+    end
     resources :event_host_delegations, only: %i[create destroy]
     resources :event_presence_sessions, only: %i[create destroy]
     resources :themes, except: :show

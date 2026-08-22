@@ -7,22 +7,26 @@ This roadmap is product-oriented; architectural rationale lives in
 ## Current status
 
 The engineering, identity, contextual venue authorization, event/series,
-reusable theme, initial Fair Queue, temporary delegation, and presence-token
-foundations are complete. The remaining MVP work is to connect those
-foundations into a secure event lifecycle and polished queue admission flow.
+reusable theme, initial Fair Queue, temporary delegation, presence-token, and
+initial event-lifecycle foundations are complete. The remaining MVP work is to
+finish the display-code exchange, runtime-aware admission, and polished queue
+workflow.
 
 ## MVP sequence
 
 ### 1. Event lifecycle and presence-gated admission
 
-- Add scheduled, live, and completed event states with a host-controlled start.
+- [Initial slice complete] Add scheduled, live, and completed event states with
+  host-controlled start and completion actions.
 - Keep one permanent venue QR as the printed/displayed entry point.
 - Resolve it to the active event, next upcoming event, or event discovery.
 - Show a short-lived, readable event code only on host/presentation/display
   screens after the event starts.
-- Require authentication plus an active event presence session before queueing.
+- [Initial slice complete] Require authentication plus an active event presence
+  session before queueing for live event queues.
 - Rotate the display code during the event; do not expose it before start.
-- Expire presence at event close plus a small grace period.
+- [Initial slice complete] Expire presence at event close plus a small grace
+  period.
 - Harden code attempts, re-entry, and concurrent event admission.
 
 Separate printed event QRs are not required for MVP. A dynamically displayed
@@ -94,7 +98,8 @@ unless reusable theme playlists become an MVP need.
 ## Dependencies and guardrails
 
 Contextual venue membership is the authorization foundation for event and host
-work. Event lifecycle must precede presence-gated queue admission. Canonical
+work. Event lifecycle is the prerequisite for presence-gated queue admission;
+the initial lifecycle and gate are now implemented. Canonical
 Song/Performance separation and duration metadata must precede reliable runtime
 cutoff decisions. Live theme admission depends on the Performance boundary.
 Each phase needs architecture rationale, acceptance criteria, automated
@@ -115,9 +120,9 @@ the same change.
   audit.
 - Initial temporary event host delegation with expiry, revocation, and scoped
   queue authority.
-- Initial venue presence token, dynamic venue QR, and expiring event presence
-  session foundation.
+- Initial venue presence token, dynamic venue QR, expiring event presence
+  session foundation, and live-event queue gate.
 
-The finished items are foundations. Event start enforcement, presence-gated
-queue admission, duration-aware cutoff, live theme admission, and full
-concurrency hardening remain planned MVP work.
+The finished items are foundations. Rotating display-code exchange,
+duration-aware cutoff, live theme admission, and full concurrency hardening
+remain planned MVP work.

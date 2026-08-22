@@ -5,7 +5,8 @@ class EventsController < ApplicationController
   before_action :authenticate_user!
   before_action :require_current_venue!
   before_action :require_admin!, only: %i[new create edit update]
-  before_action :set_event, only: %i[show edit update]
+  before_action :set_event, only: %i[show edit update start complete]
+  before_action :require_event_host!, only: %i[start complete]
 
   def index
     @events = Current.venue.events.includes(:event_series).order(:starts_at)
@@ -44,6 +45,23 @@ class EventsController < ApplicationController
     else
       load_event_series
       render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def start
+    if @event.start!
+      redirect_to venue_event_path(Current.venue.slug, @event), notice: 'Event started. Performers may now queue songs.'
+    else
+      redirect_to venue_event_path(Current.venue.slug, @event), alert: 'Only scheduled events can be started.'
+    end
+  end
+
+  def complete
+    if @event.complete!
+      redirect_to venue_event_path(Current.venue.slug, @event),
+                  notice: 'Event completed. New queue submissions are closed.'
+    else
+      redirect_to venue_event_path(Current.venue.slug, @event), alert: 'Only live events can be completed.'
     end
   end
 

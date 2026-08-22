@@ -65,6 +65,26 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def require_event_host!
+    return if @event&.host_authorized?(current_user)
+
+    redirect_to (Current.venue ? venue_songs_path(Current.venue.slug) : discover_venues_path),
+                alert: 'You do not have permission to manage this event.'
+  end
+
+  def remember_event_presence(presence)
+    event_sessions = session[:event_presence_session_ids].to_h
+    event_sessions[presence.event_id.to_s] = presence.id
+    session[:event_presence_session_ids] = event_sessions
+  end
+
+  def active_event_presence_for?(event)
+    presence_id = session[:event_presence_session_ids].to_h[event.id.to_s]
+    return false unless presence_id
+
+    EventPresenceSession.active_at.find_by(id: presence_id, event_id: event.id).present?
+  end
+
   def require_platform_admin!
     return if Current.user&.platform_operator?
 

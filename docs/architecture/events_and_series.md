@@ -28,9 +28,10 @@ idempotently, and preserves existing occurrence edits. Existing `Song` records
 can now optionally point to an event for transitional event-scoped queueing;
 venue-level songs remain supported.
 
-Planned MVP event lifecycle adds scheduled, live, and completed states. Queue
-submission is unavailable before a host starts the event and closes after event
-completion. Admission checks must be atomic so simultaneous submissions cannot
+The initial MVP lifecycle now supports scheduled, live, and completed states
+with host-controlled start and completion actions. Queue submission is
+unavailable before a host starts the event and closes after event completion.
+Remaining admission checks must be atomic so simultaneous submissions cannot
 bypass event or runtime limits.
 
 ## Deferred details

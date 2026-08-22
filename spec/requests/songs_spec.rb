@@ -118,12 +118,51 @@ RSpec.describe 'Songs', type: :request do
     end
 
     it 'associates a song with an event in the current venue' do
-      event = create(:event, venue: venue)
+      event = create(:event, venue: venue, status: :live)
+      presence = create(:event_presence_session, event: event, created_by_user: venue.owner, expires_at: event.ends_at)
+      get event_presence_path(presence.token)
 
       post "/#{venue.slug}/songs", params: { song: { performer: 'Event Singer', url: 'https://youtube.com/event', event_id: event.id } }
 
       expect(response).to redirect_to("/#{venue.slug}/songs?event_id=#{event.id}")
       expect(Song.last.event).to eq(event)
+    end
+
+    it 'rejects event queueing before the host starts the event' do
+      event = create(:event, venue: venue)
+
+      expect do
+        post "/#{venue.slug}/songs", params: { song: { performer: 'Early Singer', url: 'https://youtube.com/early', event_id: event.id } }
+      end.not_to change(Song, :count)
+
+      expect(response).to have_http_status(422)
+      expect(response.body).to include('This event has not started yet.')
+    end
+
+    it 'rejects live event queueing without an active event presence session' do
+      event = create(:event, venue: venue, status: :live)
+
+      expect do
+        post "/#{venue.slug}/songs", params: { song: { performer: 'Remote Singer', url: 'https://youtube.com/remote', event_id: event.id } }
+      end.not_to change(Song, :count)
+
+      expect(response).to have_http_status(422)
+      expect(response.body).to include('Enter the event access code before queueing a song.')
+    end
+
+    it 'rejects queueing after an event is completed even during presence grace' do
+      event = create(:event, venue: venue, status: :completed)
+      presence = create(:event_presence_session, event: event, created_by_user: venue.owner, expires_at: event.ends_at)
+      get event_presence_path(presence.token)
+
+      expect do
+        post "/#{venue.slug}/songs", params: { song: { performer: 'Late Singer', url: 'https://youtube.com/late', event_id: event.id } }
+      end.not_to change(Song, :count)
+
+      expect(response).to have_http_status(422)
+      expect(
+        ['This event has not started yet.', 'This event is closed'].any? { |message| response.body.include?(message) }
+      ).to be(true)
     end
 
     it 'does not associate a song with an event from another venue' do

@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# rubocop:disable Metrics/BlockLength
 RSpec.describe Event, type: :model do
   describe 'associations' do
     it { is_expected.to belong_to(:venue) }
@@ -32,4 +33,28 @@ RSpec.describe Event, type: :model do
       expect(event.errors[:event_series]).to include('must belong to the same venue')
     end
   end
+
+  describe 'lifecycle transitions' do
+    it 'transitions a scheduled event to live' do
+      event = create(:event)
+
+      expect(event.start!).to be(true)
+      expect(event.reload).to be_live
+    end
+
+    it 'does not complete a scheduled event' do
+      event = create(:event)
+
+      expect(event.complete!).to be(false)
+      expect(event.reload).to be_scheduled
+    end
+
+    it 'does not start an event twice' do
+      event = create(:event, status: :live)
+
+      expect(event.start!).to be(false)
+      expect(event.reload).to be_live
+    end
+  end
 end
+# rubocop:enable Metrics/BlockLength

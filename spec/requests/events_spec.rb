@@ -89,6 +89,38 @@ RSpec.describe 'Events', type: :request do
     end
   end
 
+  describe 'event lifecycle' do
+    it 'allows a permanent venue host to start a scheduled event' do
+      event = create(:event, venue: venue)
+      sign_in host
+
+      patch start_venue_event_path(venue.slug, event)
+
+      expect(response).to redirect_to(venue_event_path(venue.slug, event))
+      expect(event.reload).to be_live
+    end
+
+    it 'does not allow a performer to start an event' do
+      event = create(:event, venue: venue)
+      sign_in performer
+
+      patch start_venue_event_path(venue.slug, event)
+
+      expect(response).to redirect_to(venue_songs_path(venue.slug))
+      expect(event.reload).to be_scheduled
+    end
+
+    it 'allows an active event host to complete a live event' do
+      event = create(:event, venue: venue, status: :live)
+      sign_in host
+
+      patch complete_venue_event_path(venue.slug, event)
+
+      expect(response).to redirect_to(venue_event_path(venue.slug, event))
+      expect(event.reload).to be_completed
+    end
+  end
+
   describe 'temporary host delegation' do
     it 'lets a venue host delegate event queue authority to a venue member' do
       event = create(

@@ -36,7 +36,7 @@ class EventPresenceSessionsController < ApplicationController
 
   def session_expiry
     requested = Time.zone.parse(params[:expires_at].to_s) if params[:expires_at].present?
-    event_end = @event.ends_at || @event.starts_at + 4.hours
+    event_end = (@event.ends_at || @event.starts_at + 4.hours) + EventPresenceSession::GRACE_PERIOD
     [requested || event_end, event_end].min
   end
 end

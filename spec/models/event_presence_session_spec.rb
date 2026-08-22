@@ -12,10 +12,21 @@ RSpec.describe EventPresenceSession, type: :model do
     expect(session.active_at?(event.starts_at + 1.hour)).to be(true)
   end
 
-  it 'rejects an expiry after the event ends' do
+  it 'allows the configured grace period after the event ends' do
     event = create(:event)
     session = described_class.new(
-      event: event, created_by_user: event.venue.owner, expires_at: event.ends_at + 1.minute
+      event: event, created_by_user: event.venue.owner,
+      expires_at: event.ends_at + EventPresenceSession::GRACE_PERIOD
+    )
+
+    expect(session).to be_valid
+  end
+
+  it 'rejects an expiry beyond the configured grace period' do
+    event = create(:event)
+    session = described_class.new(
+      event: event, created_by_user: event.venue.owner,
+      expires_at: event.ends_at + EventPresenceSession::GRACE_PERIOD + 1.minute
     )
 
     expect(session).not_to be_valid

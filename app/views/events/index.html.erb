@@ -16,7 +16,7 @@
       <% @events.each do |event| %>
         <li>
           <%= link_to event.name, venue_event_path(Current.venue.slug, event) %>
-          — <%= l(event.starts_at, format: :long) %>
+          — <%= l(event.starts_at, format: :long) %> (<%= event.status.humanize %>)
           <% if event.event_series %>
             <span>(<%= event.event_series.name %>)</span>
           <% end %>

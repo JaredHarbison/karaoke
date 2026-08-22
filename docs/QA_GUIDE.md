@@ -95,7 +95,12 @@ remain planned. Temporary host delegation and event access sessions are
 testable from the event page for authority, expiry, and revocation.
 
 | `/:venue_slug/events/:id` | Open an event and choose “View event queue” | The queue is filtered to that event; queueing a song from the Add Song panel preserves the event context. |
-| `/:venue_slug/songs?event_id=:id` | Submit a song for a scheduled event | The song is associated with the selected venue event and appears in its queue. |
+| `/:venue_slug/songs?event_id=:id` | Open a scheduled event queue | The queue explains that submissions open when the host starts the event. |
+| Event lifecycle | As a venue host, start a scheduled event | The event becomes Live and performers can proceed to event access. |
+| Event lifecycle | As a performer, try to start or complete an event | The action is rejected; only an authorized event host can change lifecycle state. |
+| Event access code | Open the active event access code, then queue a song for the live event | The event presence is remembered for the session and the song appears in that event queue. |
+| Live event queue | Try to queue without opening an active event access code | The submission is rejected with an access-code/presence message. |
+| Event lifecycle | As a host, complete a live event, then try to queue | The event closes to new submissions, including during the short presence grace period. |
 
 ## Record findings
 

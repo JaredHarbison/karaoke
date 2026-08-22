@@ -18,13 +18,18 @@ class PresenceController < ApplicationController
       return redirect_to discover_venues_path, alert: 'That event access code has expired or been revoked.'
     end
 
-    session[:venue_slug] = presence.event.venue.slug
-    redirect_to venue_songs_path(presence.event.venue.slug, event_id: presence.event.id)
+    remember_event_presence(presence)
+    redirect_to_event_presence(presence.event)
   end
 
   private
 
   def active_event_presence
     EventPresenceSession.active_at.find_by(token: params[:token])
+  end
+
+  def redirect_to_event_presence(event)
+    session[:venue_slug] = event.venue.slug
+    redirect_to venue_songs_path(event.venue.slug, event_id: event.id)
   end
 end

@@ -2,6 +2,8 @@
 
 # A revocable bearer session for presence at one event.
 class EventPresenceSession < ApplicationRecord
+  GRACE_PERIOD = 15.minutes
+
   belongs_to :event
   belongs_to :created_by_user, class_name: 'User'
 
@@ -27,7 +29,7 @@ class EventPresenceSession < ApplicationRecord
   def expiry_is_within_event_window
     return unless event && expires_at
     return unless event.ends_at
-    return if expires_at <= event.ends_at
+    return if expires_at <= event.ends_at + GRACE_PERIOD
 
     errors.add(:expires_at, 'must be no later than the event end')
   end
