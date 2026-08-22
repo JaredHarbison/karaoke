@@ -22,7 +22,7 @@ class SongAdmissionPolicy
   end
 
   def call
-    metadata = YoutubeService.validate_karaoke_video(@song.url)
+    metadata = SongCatalog.metadata_for(@song.url) || YoutubeService.validate_karaoke_video(@song.url)
     decision = YoutubeVideoPolicy.call(
       video: metadata,
       explicit_lyrics_allowed: @venue.explicit_lyrics_allowed?
@@ -40,6 +40,7 @@ class SongAdmissionPolicy
     @song.provider = 'youtube'
     @song.provider_video_id = metadata[:video_id]
     @song.metadata_status = decision.status
+    @song.title = metadata[:title] if @song.title.blank? && metadata[:title].present?
     @song.explicit_lyrics = metadata[:explicit_lyrics]
     @song.metadata_checked_at = Time.current
   end

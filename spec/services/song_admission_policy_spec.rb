@@ -27,6 +27,28 @@ RSpec.describe SongAdmissionPolicy, type: :service do
     )
   end
 
+  it 'reuses validated catalog metadata without calling the provider again' do
+    create(
+      :song,
+      venue: venue,
+      provider: 'youtube',
+      provider_video_id: 'video-1',
+      metadata_status: 'eligible',
+      explicit_lyrics: false,
+      duration_seconds: 180,
+      metadata_checked_at: 1.hour.ago,
+      title: 'Cached Karaoke Video'
+    )
+    expect(YoutubeService).not_to receive(:validate_karaoke_video)
+    song = build(:song, venue: venue, event: event, url: 'https://youtube.com/watch?v=video-1')
+
+    result = described_class.call(song: song, venue: venue)
+
+    expect(result).to be_eligible
+    expect(song.title).to eq('Cached Karaoke Video')
+    expect(song.duration_source).to eq('provider')
+  end
+
   it 'uses the average of known durations when provider duration is missing' do
     create(:song, venue: venue, event: event, duration_seconds: 120, effective_duration_seconds: 120)
     create(:song, venue: venue, event: event, duration_seconds: 240, effective_duration_seconds: 240)

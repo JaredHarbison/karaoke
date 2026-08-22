@@ -47,8 +47,11 @@ event QR may remain an optional future convenience.
 - [Initial slice complete] Preserve the current queue behavior while adding a
   transitional provider-metadata boundary; the eventual canonical `Song` /
   event-specific `Performance` boundary remains planned.
-- [Planned] Reuse a canonical YouTube selection when it is chosen again, but create a new
-  Performance for every performer/event queue entry.
+- [Initial slice complete] Reuse validated YouTube provider metadata from a
+  prior eligible selection while creating a new queue `Song` for each
+  performer/event entry.
+- [Planned] Introduce the canonical `Song` model and create a new
+  event-specific `Performance` for every queue entry.
 - [Initial slice complete] Validate available provider metadata and venue content
   policy before event admission; unknown metadata is held for review.
 - [Initial slice complete] Persist validated video duration when available.
