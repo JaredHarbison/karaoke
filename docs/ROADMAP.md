@@ -28,10 +28,6 @@ workflow.
 - [Initial slice complete] Expire presence at event close plus a small grace
   period.
 - Harden code attempts, re-entry, and concurrent event admission.
-- [Planned] Let venue owners choose a presence-security profile, with a
-  conservative default and an optional stricter mode for rotating display QR
-  and short-code access. The setting must never invalidate the permanent
-  printed venue QR.
 
 Separate printed event QRs are not required for MVP. A dynamically displayed
 event QR may remain an optional future convenience.

@@ -65,7 +65,7 @@ venue is `/demo-karaoke/songs`.
 | Permanent venue QR access | Open the permanent venue presence URL or scan its QR destination | The URL resolves to that venue’s existing queue flow without selecting another venue. |
 | Event access code | As a permanent venue host, generate an event access code and open it before expiry | The code resolves to the selected event queue. |
 | Event access expiry/revocation | Open an expired or revoked event access code | Access is rejected and the user is sent to venue discovery. |
-| Owner security profile | Future owner setting for rotating display access | Planned: verify the selected profile changes dynamic event QR/code enforcement without invalidating the permanent venue QR. |
+| Owner security profile | Future post-MVP owner setting for rotating display access | Post-MVP: verify the selected profile changes dynamic event QR/code enforcement without invalidating the permanent venue QR. |
 
 Provider metadata admission is active for live event queues: selected videos
 must satisfy the current karaoke/content policy, explicit lyrics are rejected

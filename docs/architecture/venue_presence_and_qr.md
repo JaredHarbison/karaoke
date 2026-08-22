@@ -21,12 +21,13 @@ regeneration without invalidating the permanent venue QR. A static QR or code
 is not a perfect proof of physical presence; optional location and stronger
 anti-sharing signals remain future work.
 
-Planned owner control: expose a venue-level presence-security profile with a
+Post-MVP owner control: expose a venue-level presence-security profile with a
 conservative default and an optional stricter mode. The stricter mode may
 rotate the QR/short code shown on presentation or host displays and reduce
 re-entry tolerance. It must affect only dynamic event access—not the permanent
 printed venue QR—and must have an accessibility fallback for performers who
-cannot scan or read a changing code.
+cannot scan or read a changing code. MVP uses one consistent baseline policy
+instead of exposing this configuration.
 
 ## Consequences / implications
 
