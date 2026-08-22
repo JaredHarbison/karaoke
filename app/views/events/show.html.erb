@@ -12,6 +12,8 @@
     <dd><%= @event.status.humanize %></dd>
     <dt>Queue mode</dt>
     <dd><%= @event.fair_queue_enabled? ? 'Fair Queue: fewer completed turns are favored' : 'FIFO: songs follow queue order' %></dd>
+    <dt>Queue cutoff</dt>
+    <dd><%= @event.allow_queue_overrun? ? 'Host override: queue may extend beyond event end' : 'Stops when projected queue reaches event end' %></dd>
     <% if @event.event_series %>
       <dt>Series</dt>
       <dd><%= @event.event_series.name %></dd>
@@ -56,6 +58,16 @@
       <% end %>
     <% end %>
   </section>
+  <% if Current.venue.is_admin?(current_user) && @queue_setting_changes.any? %>
+    <section aria-labelledby="queue-setting-audit-heading">
+      <h2 id="queue-setting-audit-heading">Queue setting audit</h2>
+      <ul>
+        <% @queue_setting_changes.each do |change| %>
+          <li><%= change.setting.humanize %>: <%= change.previous_value ? 'allowed' : 'blocked' %> → <%= change.new_value ? 'allowed' : 'blocked' %> by <%= change.user.display_name %> (<%= l(change.created_at, format: :short) %>)</li>
+        <% end %>
+      </ul>
+    </section>
+  <% end %>
   <p><%= link_to "View event queue", venue_songs_path(Current.venue.slug, event_id: @event.id) %></p>
   <% if Current.venue.is_admin?(current_user) %>
     <section aria-labelledby="presence-heading">

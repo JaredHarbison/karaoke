@@ -41,6 +41,7 @@ class EventsController < ApplicationController
     assign_event_attributes
 
     if @event.save
+      @event.record_queue_overrun_change!(current_user)
       redirect_to venue_event_path(Current.venue.slug, @event), notice: 'Event updated.'
     else
       load_event_series
@@ -80,6 +81,7 @@ class EventsController < ApplicationController
 
   def load_queue_audit_data
     @queue_overrides = @event.song_queue_overrides.includes(:song, :user).order(created_at: :desc).limit(10)
+    @queue_setting_changes = @event.event_setting_changes.includes(:user).order(created_at: :desc).limit(10)
   end
 
   def load_delegation_data
@@ -109,6 +111,8 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.require(:event).permit(:name, :starts_at, :ends_at, :status, :event_series_id, :fair_queue_enabled)
+    params.require(:event).permit(
+      :name, :starts_at, :ends_at, :status, :event_series_id, :fair_queue_enabled, :allow_queue_overrun
+    )
   end
 end

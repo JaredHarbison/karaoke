@@ -50,14 +50,14 @@ event QR may remain an optional future convenience.
 
 ### 3. Queue cutoff and event runtime protection
 
-- Calculate projected queue time as each effective video duration plus 30
+- [Initial slice complete] Calculate projected queue time as each effective video duration plus 30
   seconds of transition time.
-- Default to stopping new admissions when projected completion exceeds the
+- [Initial slice complete] Default to stopping new admissions when projected completion exceeds the
   event end.
-- Allow an explicit host/owner “allow queue overrun” override with audit.
-- Perform status, presence, cutoff, and insertion checks atomically so a rush
+- [Initial slice complete] Allow an explicit host/owner “allow queue overrun” override with audit.
+- [Initial slice complete] Perform status, presence, cutoff, and insertion checks atomically so a rush
   of submissions cannot bypass the cutoff.
-- Prevent duplicate submissions caused by retries or double taps.
+- [Planned] Prevent duplicate submissions caused by retries or double taps.
 
 ### 4. Live theme admission and review
 
@@ -128,5 +128,5 @@ the same change.
   session foundation, and live-event queue gate.
 
 The finished items are foundations. Rotating display-code exchange,
-canonical Song/Performance persistence, duration-aware cutoff, live theme
-admission, and full concurrency hardening remain planned MVP work.
+canonical Song/Performance persistence, duplicate-submission idempotency, live
+theme admission, and full concurrency hardening remain planned MVP work.

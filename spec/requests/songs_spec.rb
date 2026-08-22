@@ -169,6 +169,35 @@ RSpec.describe 'Songs', type: :request do
       ).to be(true)
     end
 
+    it 'rejects an admitted song when it would extend the queue beyond event end' do
+      event = create(:event, venue: venue, status: :live, starts_at: 1.hour.ago, ends_at: 2.minutes.from_now)
+      presence = create(:event_presence_session, event: event, created_by_user: venue.owner, expires_at: event.ends_at)
+      get event_presence_path(presence.token)
+      allow(YoutubeService).to receive(:validate_karaoke_video).and_return(
+        { video_id: 'long-video', verified_karaoke: true, explicit_lyrics: false, duration_seconds: 180 }
+      )
+
+      expect do
+        post "/#{venue.slug}/songs", params: { song: { performer: 'Overrun Singer', url: 'https://youtube.com/long', event_id: event.id } }
+      end.not_to change(Song, :count)
+
+      expect(response).to have_http_status(422)
+      expect(response.body).to include('beyond the event end')
+    end
+
+    it 'allows a song beyond event end when the host override is enabled' do
+      event = create(:event, venue: venue, status: :live, starts_at: 1.hour.ago, ends_at: 2.minutes.from_now, allow_queue_overrun: true)
+      presence = create(:event_presence_session, event: event, created_by_user: venue.owner, expires_at: event.ends_at)
+      get event_presence_path(presence.token)
+      allow(YoutubeService).to receive(:validate_karaoke_video).and_return(
+        { video_id: 'override-video', verified_karaoke: true, explicit_lyrics: false, duration_seconds: 180 }
+      )
+
+      expect do
+        post "/#{venue.slug}/songs", params: { song: { performer: 'Override Singer', url: 'https://youtube.com/override', event_id: event.id } }
+      end.to change(Song, :count).by(1)
+    end
+
     it 'does not associate a song with an event from another venue' do
       other_event = create(:event)
 

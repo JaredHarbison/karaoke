@@ -30,5 +30,10 @@
     <%= form.label :fair_queue_enabled, "Use Fair Queue for this event" %>
     <small>Favor performers with fewer completed turns before repeat turns.</small>
   </div>
+  <div>
+    <%= form.check_box :allow_queue_overrun %>
+    <%= form.label :allow_queue_overrun, "Allow queue beyond event end" %>
+    <small>Keep accepting songs after the planned end. This change is audited.</small>
+  </div>
   <%= form.submit %>
 <% end %>

@@ -9,6 +9,7 @@ RSpec.describe Event, type: :model do
     it { is_expected.to belong_to(:event_series).optional }
     it { is_expected.to have_many(:songs).dependent(:nullify) }
     it { is_expected.to have_many(:event_host_delegations).dependent(:destroy) }
+    it { is_expected.to have_many(:event_setting_changes).dependent(:destroy) }
   end
 
   describe 'validations' do
@@ -54,6 +55,20 @@ RSpec.describe Event, type: :model do
 
       expect(event.start!).to be(false)
       expect(event.reload).to be_live
+    end
+  end
+
+  describe 'queue overrun audit' do
+    it 'records who changed the queue overrun setting' do
+      event = create(:event)
+      user = event.venue.owner
+
+      event.update!(allow_queue_overrun: true)
+      event.record_queue_overrun_change!(user)
+
+      expect(event.event_setting_changes.last).to have_attributes(
+        user: user, setting: 'allow_queue_overrun', previous_value: false, new_value: true
+      )
     end
   end
 end

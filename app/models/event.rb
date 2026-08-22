@@ -8,6 +8,7 @@ class Event < ApplicationRecord
   has_many :song_queue_overrides, dependent: :destroy
   has_many :event_host_delegations, dependent: :destroy
   has_many :event_presence_sessions, dependent: :destroy
+  has_many :event_setting_changes, dependent: :destroy
   has_many :event_theme_applications, dependent: :destroy
   has_many :themes, through: :event_theme_applications
 
@@ -33,6 +34,18 @@ class Event < ApplicationRecord
 
   def host_authorized?(user, at: Time.current)
     venue.admin?(user) || temporary_host?(user, at: at)
+  end
+
+  def record_queue_overrun_change!(user)
+    return unless saved_change_to_allow_queue_overrun?
+
+    previous_value, new_value = saved_change_to_allow_queue_overrun
+    event_setting_changes.create!(
+      user: user,
+      setting: 'allow_queue_overrun',
+      previous_value: previous_value,
+      new_value: new_value
+    )
   end
 
   private

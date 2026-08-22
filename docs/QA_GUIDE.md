@@ -107,6 +107,8 @@ testable from the event page for authority, expiry, and revocation.
 | Live event media admission | Queue a video with no known duration after known-duration songs exist | The entry uses the average of known provider durations; prior estimates do not affect that average. |
 | Live event queue | Try to queue without opening an active event access code | The submission is rejected with an access-code/presence message. |
 | Event lifecycle | As a host, complete a live event, then try to queue | The event closes to new submissions, including during the short presence grace period. |
+| Event runtime cutoff | Queue songs until projected completion would pass the event end | The next event submission is rejected with a queue-end message. |
+| Event runtime override | As a venue host, enable “Allow queue beyond event end” and save | The setting is audited and songs may be admitted beyond the planned event end. Performers cannot change it. |
 
 ## Record findings
 

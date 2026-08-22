@@ -224,14 +224,37 @@ class SongsController < ApplicationController
   end
 
   def save_song
+    @song.event ? save_event_song : save_venue_song
+  end
+
+  def save_event_song
+    return false unless event_queue_admission_valid? && admit_event_song?
+
+    runtime = nil
+    @song.event.with_lock do
+      runtime = EventQueueRuntimePolicy.call(event: @song.event, candidate: @song)
+      @song.errors.add(:base, runtime.reason) unless runtime.allowed?
+      runtime.allowed? && @song.save
+    end
+    runtime&.allowed? && @song.errors.empty?
+  end
+
+  def save_venue_song
     admission_error = event_queue_admission_error
     @song.errors.add(:base, admission_error) if admission_error
-    return false if admission_error
-    return @song.save unless @song.event
+    admission_error.nil? && @song.save
+  end
 
+  def event_queue_admission_valid?
+    admission_error = event_queue_admission_error
+    @song.errors.add(:base, admission_error) if admission_error
+    admission_error.nil?
+  end
+
+  def admit_event_song?
     admission = SongAdmissionPolicy.call(song: @song, venue: Current.venue)
     @song.errors.add(:base, admission.reason) unless admission.eligible?
-    admission.eligible? && @song.save
+    admission.eligible?
   end
 
   def event_queue_admission_error

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_08_21_210000) do
+ActiveRecord::Schema[7.2].define(version: 2026_08_21_211000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -57,6 +57,19 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_210000) do
     t.index ["venue_id"], name: "index_event_series_on_venue_id"
   end
 
+  create_table "event_setting_changes", force: :cascade do |t|
+    t.bigint "event_id", null: false
+    t.bigint "user_id", null: false
+    t.string "setting", null: false
+    t.boolean "previous_value", null: false
+    t.boolean "new_value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id", "created_at"], name: "index_event_setting_changes_on_event_id_and_created_at"
+    t.index ["event_id"], name: "index_event_setting_changes_on_event_id"
+    t.index ["user_id"], name: "index_event_setting_changes_on_user_id"
+  end
+
   create_table "event_theme_applications", force: :cascade do |t|
     t.bigint "event_id", null: false
     t.bigint "theme_id", null: false
@@ -79,6 +92,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_210000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "fair_queue_enabled", default: true, null: false
+    t.boolean "allow_queue_overrun", default: false, null: false
     t.index ["event_series_id", "starts_at"], name: "index_events_on_event_series_id_and_starts_at", unique: true
     t.index ["event_series_id"], name: "index_events_on_event_series_id"
     t.index ["venue_id", "starts_at"], name: "index_events_on_venue_id_and_starts_at"
@@ -215,6 +229,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_21_210000) do
   add_foreign_key "event_presence_sessions", "events"
   add_foreign_key "event_presence_sessions", "users", column: "created_by_user_id"
   add_foreign_key "event_series", "venues"
+  add_foreign_key "event_setting_changes", "events"
+  add_foreign_key "event_setting_changes", "users"
   add_foreign_key "event_theme_applications", "events"
   add_foreign_key "event_theme_applications", "themes"
   add_foreign_key "events", "event_series"

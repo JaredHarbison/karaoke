@@ -87,6 +87,27 @@ RSpec.describe 'Events', type: :request do
       expect(response).to redirect_to(venue_event_path(venue.slug, event))
       expect(event.reload.fair_queue_enabled).to be(false)
     end
+
+    it 'allows a venue host to enable and audit queue overrun' do
+      event = create(:event, venue: venue)
+      sign_in host
+
+      patch venue_event_path(venue.slug, event), params: { event: { allow_queue_overrun: true } }
+
+      expect(response).to redirect_to(venue_event_path(venue.slug, event))
+      expect(event.reload.allow_queue_overrun?).to be(true)
+      expect(event.event_setting_changes.last).to have_attributes(user: host, new_value: true)
+    end
+
+    it 'does not allow a performer to change queue overrun' do
+      event = create(:event, venue: venue)
+      sign_in performer
+
+      patch venue_event_path(venue.slug, event), params: { event: { allow_queue_overrun: true } }
+
+      expect(response).to redirect_to(venue_songs_path(venue.slug))
+      expect(event.reload.allow_queue_overrun?).to be(false)
+    end
   end
 
   describe 'event lifecycle' do

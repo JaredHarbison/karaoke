@@ -22,9 +22,11 @@ the average of known-duration songs already in that event queue; estimated
 values do not feed the average. A safe fallback is used when no known durations
 exist.
 
-Admission stops when projected completion exceeds the event end unless an
-explicit, auditable host/owner overrun setting is enabled. Status, presence,
-runtime, and insertion checks must be serialized or otherwise made atomic.
+The initial runtime slice stops admission when projected completion exceeds the
+event end unless an explicit, auditable host/owner overrun setting is enabled.
+The event row is locked while the runtime and insertion checks run, preventing
+simultaneous submissions from bypassing the cutoff. Duplicate-submission
+idempotency remains a follow-up.
 
 ## Consequences / implications
 
