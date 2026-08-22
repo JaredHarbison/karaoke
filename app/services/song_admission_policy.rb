@@ -6,6 +6,10 @@ class SongAdmissionPolicy
     def eligible?
       status == :eligible
     end
+
+    def saveable?
+      eligible? || status == :review && reason.start_with?('content policy:')
+    end
   end
 
   def self.call(song:, venue:)
@@ -25,6 +29,8 @@ class SongAdmissionPolicy
     )
     record_metadata(metadata, decision)
     admit_eligible_song(metadata) if decision.status == :eligible
+    return content_policy_review(metadata, decision) if decision.status == :rejected
+
     Result.new(status: decision.status, reason: decision.reason)
   end
 
@@ -41,6 +47,16 @@ class SongAdmissionPolicy
   def admit_eligible_song(metadata)
     snapshot_duration(metadata)
     record_theme_admission(metadata)
+  end
+
+  def content_policy_review(metadata, decision)
+    theme_decision = ThemeAdmissionPolicy.call(event: @song.event, metadata: metadata) if @song.event
+    return Result.new(status: decision.status, reason: decision.reason) unless theme_decision&.application
+
+    @song.theme_application = theme_decision.application
+    @song.theme_admission_status = 'review'
+    @song.theme_admission_reason = "content policy: #{decision.reason}"
+    Result.new(status: :review, reason: @song.theme_admission_reason)
   end
 
   def snapshot_duration(metadata)

@@ -14,14 +14,24 @@ class ThemeAdmissionRelease
   def call
     songs_released = 0
     Song.unscoped.where(event_id: @event.id, theme_admission_status: 'review').find_each do |song|
-      next if song.theme_application&.active_at?(@at)
+      next unless releasable?(song)
 
-      song.update!(
-        theme_admission_status: 'released',
-        theme_admission_reason: 'theme window ended; released to normal queue'
-      )
+      release!(song)
       songs_released += 1
     end
     songs_released
+  end
+
+  private
+
+  def releasable?(song)
+    !song.theme_admission_reason.to_s.start_with?('content policy:') && !song.theme_application&.active_at?(@at)
+  end
+
+  def release!(song)
+    song.update!(
+      theme_admission_status: 'released',
+      theme_admission_reason: 'theme window ended; released to normal queue'
+    )
   end
 end

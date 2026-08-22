@@ -170,6 +170,33 @@ RSpec.describe 'Songs', type: :request do
       expect(song.reload).to have_attributes(theme_admission_status: 'eligible', theme_reviewed_by: venue.owner)
     end
 
+    it 'holds explicit lyrics for reject-only content-policy review during a theme' do
+      event = create(:event, venue: venue, status: :live, starts_at: 1.hour.ago)
+      theme = create(:theme, venue: venue)
+      create(:event_theme_application, event: event, theme: theme)
+      presence = create(:event_presence_session, event: event, created_by_user: venue.owner, expires_at: event.ends_at)
+      get event_presence_path(presence.token)
+      allow(YoutubeService).to receive(:validate_karaoke_video).and_return(
+        { video_id: 'explicit-theme-video', verified_karaoke: true, explicit_lyrics: true, duration_seconds: 180, title: 'Explicit Song' }
+      )
+
+      expect do
+        post "/#{venue.slug}/songs", params: { song: { event_id: event.id, performer: 'Policy Singer', url: 'https://youtube.com/explicit-theme' } }
+      end.to change(Song, :count).by(1)
+      song = Song.last
+      expect(song).to have_attributes(theme_admission_status: 'review')
+
+      sign_out user
+      sign_in venue.owner
+      patch review_theme_venue_song_path(venue.slug, song), params: { decision: 'reject', rejection_reason: 'content_policy' }
+
+      expect(song.reload).to have_attributes(
+        theme_admission_status: 'rejected',
+        theme_admission_reason: 'host rejected content policy admission',
+        theme_reviewed_by: venue.owner
+      )
+    end
+
     it 'rejects event queueing before the host starts the event' do
       event = create(:event, venue: venue)
 

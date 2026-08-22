@@ -76,12 +76,16 @@
                   %p.songs-muted These songs need a host decision before they enter the playable queue.
                   %ul
                     - @theme_review.each do |song|
+                      - content_policy_review = song.theme_admission_reason.to_s.start_with?("content policy:")
                       %li
                         %strong= song.performer
                         %span= song.title.presence || song.url
                         %small= song.theme_admission_reason
-                        = button_to "Approve", review_theme_venue_song_path(Current.venue.slug, song), method: :patch, params: { decision: "approve" }
-                        = button_to "Reject", review_theme_venue_song_path(Current.venue.slug, song), method: :patch, params: { decision: "reject" }
+                        - if content_policy_review
+                          = button_to "Reject for content policy", review_theme_venue_song_path(Current.venue.slug, song), method: :patch, params: { decision: "reject", rejection_reason: "content_policy" }
+                        - else
+                          = button_to "Approve theme fit", review_theme_venue_song_path(Current.venue.slug, song), method: :patch, params: { decision: "approve" }
+                          = button_to "Reject theme fit", review_theme_venue_song_path(Current.venue.slug, song), method: :patch, params: { decision: "reject", rejection_reason: "theme" }
 
               - if @skipped.any?
                 .songs-subsection

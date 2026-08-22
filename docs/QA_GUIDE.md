@@ -112,6 +112,7 @@ testable from the event page for authority, expiry, and revocation.
 | Live event media admission | Queue a video with no known duration after known-duration songs exist | The entry uses the average of known provider durations; prior estimates do not affect that average. |
 | Live event theme admission | With an active theme, submit a matching, non-matching, or uncertain video | Matching metadata enters the queue; non-matching or uncertain metadata appears in Theme review with an explanation. |
 | Theme review | As an authorized event host, approve or reject a review entry | Approve makes the entry queue-eligible; reject keeps it out and records the decision. Other users cannot use the controls. |
+| Theme content-policy review | During an active theme, submit disallowed explicit content | The entry appears as reject-only content-policy review; the host can permanently reject it, and no theme expiry releases it. |
 | Theme release | Leave a review entry unresolved until its theme window ends, then reload the event queue | The entry is released to normal queue eligibility; explicit rejections are not released. |
 | Live event queue | Try to queue without opening an active event access code | The submission is rejected with an access-code/presence message. |
 | Event lifecycle | As a host, complete a live event, then try to queue | The event closes to new submissions, including during the short presence grace period. |

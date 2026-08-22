@@ -22,8 +22,8 @@ explicitly reject a review entry, and unresolved review entries are released to
 normal queue eligibility after the active theme window ends.
 
 Theme review is separate from hard content-policy admission: a video rejected
-because the venue disallows explicit lyrics is never admitted to theme review
-or released by theme expiry.
+because the venue disallows explicit lyrics may be held in a reject-only theme
+review panel for the authorized host, but it is never released by theme expiry.
 
 ## Consequences / implications
 

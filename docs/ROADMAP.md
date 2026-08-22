@@ -68,7 +68,8 @@ event QR may remain an optional future convenience.
 - [Initial slice complete] Release unresolved review entries into normal/Fair
   Queue eligibility when the theme ends; explicit rejections remain out.
 - [Initial slice complete] Give authorized event hosts approve/reject controls
-  and show the review reason in the queue manager view.
+  and show the review reason in the queue manager view. Review distinguishes
+  temporary theme incoherence from permanent content-policy rejection.
 - [Planned] Move final theme admission ownership to the canonical Performance
   boundary and support richer rule authoring and overlapping-window policy.
 

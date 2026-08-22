@@ -108,15 +108,22 @@ class SongsController < ApplicationController
   end
 
   def review_theme
-    status = params[:decision].to_s == 'approve' ? 'eligible' : 'rejected'
     unless @song.theme_admission_status == 'review'
       return redirect_to venue_songs_path(Current.venue.slug, event_id: @song.event_id), alert: 'That song is not awaiting theme review.'
     end
 
+    content_policy_review = @song.theme_admission_reason.to_s.start_with?('content policy:')
+    rejection_reason = params[:rejection_reason].to_s
+    if content_policy_review && params[:decision].to_s != 'reject'
+      return redirect_to venue_songs_path(Current.venue.slug, event_id: @song.event_id), alert: 'Content-policy review can only be rejected.'
+    end
+
+    status = params[:decision].to_s == 'approve' ? 'eligible' : 'rejected'
     decision_label = status == 'eligible' ? 'approved' : 'rejected'
+    reason_label = rejection_reason == 'content_policy' ? 'content policy' : 'theme'
     @song.update!(
       theme_admission_status: status,
-      theme_admission_reason: "host #{decision_label} theme admission",
+      theme_admission_reason: "host #{decision_label} #{reason_label} admission",
       theme_reviewed_by: current_user,
       theme_reviewed_at: Time.current
     )
@@ -278,8 +285,8 @@ class SongsController < ApplicationController
 
   def admit_event_song?
     admission = SongAdmissionPolicy.call(song: @song, venue: Current.venue)
-    @song.errors.add(:base, admission.reason) unless admission.eligible?
-    admission.eligible?
+    @song.errors.add(:base, admission.reason) unless admission.saveable?
+    admission.saveable?
   end
 
   def event_queue_admission_error(event = @song.event)
