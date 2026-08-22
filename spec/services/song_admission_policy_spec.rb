@@ -28,6 +28,22 @@ RSpec.describe SongAdmissionPolicy, type: :service do
     expect(song.song_identity).to have_attributes(provider_video_id: 'video-1', verified_karaoke: true)
   end
 
+  it 'publishes an outcome notification for admission throughput instrumentation' do
+    events = []
+    subscriber = lambda do |_name, _started, _finished, _unique_id, payload|
+      events << payload
+    end
+    song = build(:performance, venue: venue, event: event)
+
+    ActiveSupport::Notifications.subscribed(subscriber, 'song_admission_policy.karaoke') do
+      described_class.call(song: song, venue: venue)
+    end
+
+    expect(events).to contain_exactly(
+      include(event_id: event.id, venue_id: venue.id, status: :eligible)
+    )
+  end
+
   it 'reuses validated catalog metadata without calling the provider again' do
     create(
       :performance,

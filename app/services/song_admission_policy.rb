@@ -22,6 +22,18 @@ class SongAdmissionPolicy
   end
 
   def call
+    payload = { event_id: @song.event_id, venue_id: @venue.id }
+
+    ActiveSupport::Notifications.instrument('song_admission_policy.karaoke', payload) do
+      result = admit
+      payload[:status] = result.status
+      result
+    end
+  end
+
+  private
+
+  def admit
     metadata = provider_metadata
     decision = YoutubeVideoPolicy.call(
       video: metadata,
@@ -34,8 +46,6 @@ class SongAdmissionPolicy
 
     Result.new(status: decision.status, reason: decision.reason)
   end
-
-  private
 
   def provider_metadata
     SongCatalog.metadata_for(@song.url) || YoutubeService.validate_karaoke_video(@song.url)

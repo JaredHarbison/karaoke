@@ -63,5 +63,23 @@ RSpec.describe SongQueue::FairOrder, type: :service do
 
     expect(result).to eq([skipped_singer, new_singer])
   end
+
+  it 'keeps a production-sized queue complete and uniquely ordered' do
+    event = create(:event)
+    performances = 120.times.map do |index|
+      create(
+        :performance,
+        event: event,
+        venue: event.venue,
+        performer: "Singer #{index % 30}",
+        updated_at: index.minutes.ago
+      )
+    end
+
+    result = described_class.new(Performance.where(id: performances.map(&:id)), event: event).call
+
+    expect(result.map(&:id)).to match_array(performances.map(&:id))
+    expect(result.map(&:id).uniq).to have_attributes(size: 120)
+  end
 end
 # rubocop:enable Metrics/BlockLength

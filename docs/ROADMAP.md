@@ -114,8 +114,10 @@ unless reusable theme playlists become an MVP need.
   event lock while preserving scoped host override audit.
 - [Initial slice complete] Add database-backed race coverage for simultaneous
   event admissions and reorder requests.
-- [Planned] Add broader production-load coverage and admission throughput
-  instrumentation when real usage warrants it.
+- [Initial slice complete] Add realistic larger-queue coverage and publish
+  admission outcome notifications for throughput instrumentation.
+- [Planned] Measure production latency/volume and tune Fair Queue only when
+  real usage identifies a bottleneck.
 - Add configurable fairness modes only where real usage requires them.
 
 ### 6. MVP UX, accessibility, reliability, and presentation polish
