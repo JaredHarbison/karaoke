@@ -3,6 +3,7 @@
 # A revocable bearer session for presence at one event.
 class EventPresenceSession < ApplicationRecord
   GRACE_PERIOD = 15.minutes
+  DISPLAY_CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
 
   belongs_to :event
   belongs_to :created_by_user, class_name: 'User'
@@ -21,11 +22,20 @@ class EventPresenceSession < ApplicationRecord
     revoked_at.nil? && expires_at > time
   end
 
+  def self.rotate_for!(event:, created_by_user:, expires_at:)
+    event.with_lock do
+      event.event_presence_sessions.active_at.update_all(revoked_at: Time.current, updated_at: Time.current)
+      event.event_presence_sessions.create!(created_by_user: created_by_user, expires_at: expires_at)
+    end
+  end
+
   private
 
   def generate_credentials
     self.token ||= SecureRandom.urlsafe_base64(32)
-    self.short_code ||= SecureRandom.alphanumeric(6).upcase
+    self.short_code ||= Array.new(6) do
+      DISPLAY_CODE_ALPHABET[SecureRandom.random_number(DISPLAY_CODE_ALPHABET.length)]
+    end.join
   end
 
   def expiry_is_within_event_window

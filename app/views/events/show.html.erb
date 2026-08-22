@@ -77,7 +77,7 @@
           <% @presence_sessions.each do |presence_session| %>
             <li>
               <%= link_to event_presence_url(presence_session.token), event_presence_url(presence_session.token) %>
-              <% if @event.live? %><strong>Code: <%= presence_session.short_code %></strong><% end %>
+              <% if @event.live? && presence_session.active_at? %><strong>Code: <%= presence_session.short_code %></strong><% end %>
               — expires <%= l(presence_session.expires_at, format: :short) %>
               <% if presence_session.revoked_at %>(revoked)<% else %>
                 <%= button_to 'Revoke', venue_event_presence_session_path(Current.venue.slug, presence_session), method: :delete %>
@@ -92,7 +92,7 @@
         <%= hidden_field_tag :event_id, @event.id %>
         <%= form.label :expires_at, 'Expires (optional)' %>
         <%= form.datetime_local_field :expires_at, value: (@event.ends_at && (@event.ends_at + EventPresenceSession::GRACE_PERIOD).strftime('%Y-%m-%dT%H:%M')) %>
-        <%= form.submit 'Generate event access code' %>
+        <%= form.submit(@event.live? ? 'Rotate event access code' : 'Generate event access code') %>
       <% end %>
     </section>
   <% end %>

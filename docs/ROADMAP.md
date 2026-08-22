@@ -26,8 +26,10 @@ polished queue workflow.
   management and presentation contexts after the event starts.
 - [Initial slice complete] Require authentication plus an active event presence
   session before queueing for live event queues.
-- [Planned] Rotate the display code during the event; do not expose it before
-  start.
+- [Initial slice complete] Rotate the display code during the event under an
+  event lock; revoke the prior active session and do not expose revoked codes.
+- [Initial slice complete] Normalize typed access codes for case, spaces, and
+  hyphens, and generate easier-to-read codes without ambiguous characters.
 - [Initial slice complete] Expire presence at event close plus a small grace
   period.
 - Harden code attempts, re-entry, and concurrent event admission.

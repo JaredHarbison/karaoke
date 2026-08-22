@@ -33,6 +33,16 @@ RSpec.describe 'Presence access', type: :request do
     expect(response).to redirect_to(venue_songs_path(venue.slug, event_id: event.id))
   end
 
+  it 'accepts readable spacing and hyphen formatting for an event code' do
+    event = create(:event, venue: venue)
+    presence = create(:event_presence_session, event: event, created_by_user: owner, expires_at: event.ends_at)
+    formatted_code = presence.short_code.insert(3, '-').downcase
+
+    get event_presence_code_path(short_code: formatted_code)
+
+    expect(response).to redirect_to(venue_songs_path(venue.slug, event_id: event.id))
+  end
+
   it 'rejects an expired event presence short code' do
     event = create(:event, venue: venue)
     presence = create(:event_presence_session, event: event, created_by_user: owner, expires_at: 1.minute.ago)
@@ -61,6 +71,21 @@ RSpec.describe 'Presence access', type: :request do
 
     expect(EventPresenceSession.last.short_code).to match(/\A[A-Z0-9]{6}\z/)
     expect(response).to redirect_to(venue_event_path(venue.slug, event))
+  end
+
+  it 'rotates the active event access session when a host generates a replacement' do
+    event = create(:event, venue: venue, status: :live)
+    previous = create(:event_presence_session, event: event, created_by_user: owner, expires_at: event.ends_at)
+    sign_in owner
+
+    post venue_event_presence_sessions_path(venue.slug), params: { event_id: event.id }
+
+    replacement = event.event_presence_sessions.order(:created_at).last
+    expect(previous.reload.revoked_at).to be_present
+    expect(replacement).to be_active_at
+
+    get event_presence_path(previous.token)
+    expect(response).to redirect_to(discover_venues_path)
   end
 end
 # rubocop:enable Metrics/BlockLength

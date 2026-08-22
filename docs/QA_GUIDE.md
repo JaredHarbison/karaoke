@@ -65,6 +65,8 @@ venue is `/demo-karaoke/songs`.
 | Temporary host boundaries | Try to delegate outside the event window or as a performer | The delegation is rejected; performers cannot create or revoke delegations. Event and delegation times use the minute precision shown in the forms. |
 | Permanent venue QR access | Open the permanent venue presence URL or scan its QR destination | The URL resolves to that venue’s existing queue flow without selecting another venue. |
 | Event access code | As a permanent venue host, generate an event access code and open it before expiry | The URL and six-character code resolve to the selected event queue. The code is shown in live event management/presentation contexts, not before the event starts. |
+| Event access rotation | As a host, generate a replacement code during a live event, then try the previous code | The new code is active, the previous code is revoked, and the previous URL/code cannot grant event presence. The permanent venue QR remains unchanged. |
+| Event access code formatting | Enter the active code with lowercase letters, spaces, or a hyphen | The normalized six-character code grants presence; invalid or expired codes remain rejected. |
 | Event access expiry/revocation | Open an expired or revoked event access code | Access is rejected and the user is sent to venue discovery. |
 | Event access code entry | As a performer, enter the six-character code shown on the venue display | The performer is granted presence for that event; invalid or expired codes are rejected. |
 | Owner security profile | Future post-MVP owner setting for rotating display access | Post-MVP: verify the selected profile changes dynamic event QR/code enforcement without invalidating the permanent venue QR. |
