@@ -21,6 +21,13 @@ regeneration without invalidating the permanent venue QR. A static QR or code
 is not a perfect proof of physical presence; optional location and stronger
 anti-sharing signals remain future work.
 
+Planned owner control: expose a venue-level presence-security profile with a
+conservative default and an optional stricter mode. The stricter mode may
+rotate the QR/short code shown on presentation or host displays and reduce
+re-entry tolerance. It must affect only dynamic event access—not the permanent
+printed venue QR—and must have an accessibility fallback for performers who
+cannot scan or read a changing code.
+
 ## Consequences / implications
 
 Presence is event-scoped and time-limited; the printed QR is not proof of
@@ -29,5 +36,7 @@ are first-class requirements.
 
 ## Deferred details
 
-Exact token storage, code rotation interval, re-entry, late starts, extended
-events, inactivity, location retention, and abuse handling are deferred.
+Exact token storage, owner profile names, code rotation interval, re-entry,
+late starts, extended events, inactivity, location retention, and abuse
+handling are deferred. No owner-facing toggle should be presented until its
+selected profile changes actual access enforcement.

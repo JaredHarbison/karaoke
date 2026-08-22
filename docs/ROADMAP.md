@@ -28,6 +28,10 @@ workflow.
 - [Initial slice complete] Expire presence at event close plus a small grace
   period.
 - Harden code attempts, re-entry, and concurrent event admission.
+- [Planned] Let venue owners choose a presence-security profile, with a
+  conservative default and an optional stricter mode for rotating display QR
+  and short-code access. The setting must never invalidate the permanent
+  printed venue QR.
 
 Separate printed event QRs are not required for MVP. A dynamically displayed
 event QR may remain an optional future convenience.
@@ -98,6 +102,7 @@ unless reusable theme playlists become an MVP need.
   integrations that can reflect event changes.
 - Optional geolocation as a secondary presence signal.
 - Dynamically displayed event QR codes as an optional shortcut.
+- Owner-configurable presence-security profiles and rotating display access.
 - Curated reusable theme playlists backed by a `ThemeSong` join.
 - Duet-aware Fair Queue attribution and collaborative-turn exceptions.
 - Advanced Fair Queue modes and automatic event extension.
