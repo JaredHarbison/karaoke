@@ -130,8 +130,9 @@ reviewable, manually testable, and documented in the same commit.
   surface, with role-aware management actions rather than an admin-only page.
 - [Planned] Reserve `/:venue_slug` for a future venue profile; use
   `/:venue_slug/events/:event_slug` for the event lobby and queue.
-- [Planned] Introduce event slugs and remove numeric event identifiers from
-  user-facing event URLs.
+- [Initial slice complete] Introduce venue-scoped event slugs for user-facing
+  event URLs; the remaining canonical event-workspace migration is still
+  planned.
 - [Planned] Remove `/songs` after queue links, forms, redirects, tests, and QA
   journeys move to the canonical event surface; do not preserve dead route
   compatibility indefinitely.

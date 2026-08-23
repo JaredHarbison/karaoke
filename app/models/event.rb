@@ -15,8 +15,15 @@ class Event < ApplicationRecord
   enum :status, { scheduled: 0, cancelled: 1, completed: 2, live: 3 }
 
   validates :name, :starts_at, presence: true
+  validates :slug, presence: true, uniqueness: { scope: :venue_id }
   validates :ends_at, comparison: { greater_than: :starts_at }, allow_nil: true
   validate :series_belongs_to_venue
+
+  before_validation :generate_slug, if: -> { slug.blank? && name.present? }
+
+  def to_param
+    slug.presence || super
+  end
 
   def temporary_host?(user, at: Time.current)
     return false unless user
@@ -54,6 +61,19 @@ class Event < ApplicationRecord
     return unless event_series && venue_id != event_series.venue_id
 
     errors.add(:event_series, 'must belong to the same venue')
+  end
+
+  def generate_slug
+    base = name.parameterize.presence || "event-#{id || 'new'}"
+    candidate = base
+    suffix = 2
+
+    while venue && venue.events.where.not(id: id).where(slug: candidate).exists?
+      candidate = "#{base}-#{suffix}"
+      suffix += 1
+    end
+
+    self.slug = candidate
   end
 
   def transition_status(from, to)

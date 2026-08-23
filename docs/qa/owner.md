@@ -25,6 +25,8 @@ during the shared journey before continuing here.
 ## Events and recurring series
 
 1. Open `/523-franklin-ave/events` and create or edit an event.
+   - Event links use a readable event slug under `/523-franklin-ave/events/`.
+   - The event remains scoped to 523 Franklin Ave when opened.
    - Verify the event start/end values remain the values entered; queue cutoff is a separate policy and must not rewrite event times.
    - The event belongs to this venue.
    - Performers cannot access owner event-management actions.

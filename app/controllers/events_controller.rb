@@ -94,7 +94,7 @@ class EventsController < ApplicationController
   end
 
   def set_event
-    @event = Current.venue.events.find(params[:id])
+    @event = Current.venue.events.find_by!(slug: params[:slug])
   end
 
   def load_event_series

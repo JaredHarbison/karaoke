@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_08_23_000000) do
+ActiveRecord::Schema[7.2].define(version: 2026_08_23_133000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -107,8 +107,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_23_000000) do
     t.datetime "updated_at", null: false
     t.boolean "fair_queue_enabled", default: true, null: false
     t.boolean "allow_queue_overrun", default: false, null: false
+    t.string "slug", null: false
     t.index ["event_series_id", "starts_at"], name: "index_events_on_event_series_id_and_starts_at", unique: true
     t.index ["event_series_id"], name: "index_events_on_event_series_id"
+    t.index ["venue_id", "slug"], name: "index_events_on_venue_id_and_slug", unique: true
     t.index ["venue_id", "starts_at"], name: "index_events_on_venue_id_and_starts_at"
     t.index ["venue_id"], name: "index_events_on_venue_id"
   end

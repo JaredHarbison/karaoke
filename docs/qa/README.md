@@ -16,6 +16,12 @@ the interaction felt. Carry successful setup forward—for example, the owner
 adds the host before the host journey begins. Fix confirmed defects during the
 slice, then update the relevant journey and findings together before committing.
 
+For the presentation reset, verify one page at a time. Finish the page's
+primary path and record what was visible, what action was taken, what happened,
+and how clear the interaction felt before moving to another page. The first
+route-foundation check is the venue event index followed by one event page;
+confirm that the event URL is readable and venue-scoped.
+
 ## Before starting
 
 Run the development fixture:

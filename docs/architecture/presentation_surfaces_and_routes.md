@@ -36,8 +36,9 @@ small set of canonical surfaces.
   management, and venue configuration.
 - `/songs` is not a target route. It will be removed after links, forms,
   redirects, tests, and QA journeys move to the canonical event workspace.
-- Event slugs are the intended user-facing identifier; numeric IDs are an
-  implementation detail and should not remain in user-facing event URLs.
+- Event slugs are now the user-facing identifier for event routes; numeric IDs
+  remain an implementation detail. The broader canonical event-workspace and
+  `/songs` removal are still planned slices.
 
 The presentation reset will preserve domain behavior, authorization boundaries,
 and semantic color decisions while replacing the current page-specific layout
