@@ -215,6 +215,12 @@
   background: $green;
 }
 
+.venue-card__status--neutral {
+  color: $beige;
+
+  .venue-card__status-dot { background: $beige; }
+}
+
 .venue-card__location {
   color: $beige;
   font-size: 0.82rem;

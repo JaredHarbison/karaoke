@@ -23,7 +23,7 @@ class WelcomeController < ApplicationController
 
   def current_event_for(venue)
     venue.events
-         .where(status: %i[scheduled live])
+         .current_or_upcoming
          .order(Arel.sql("CASE WHEN status = #{Event.statuses.fetch('live')} THEN 0 ELSE 1 END"), :starts_at)
          .first
   end

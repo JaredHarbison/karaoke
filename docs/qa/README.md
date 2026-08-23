@@ -114,5 +114,8 @@ assertion aligned if the label changes.
 The card footer should shrink to the CTA width and center as one unit; its
 status should align to the CTA's left edge above the button.
 
+Expired or not-yet-started events must not display “open for signups”; only a
+live event inside its configured start/end window may do so.
+
 Verify the role menu slides in from the right below the navbar, while flash
 messages slide down from the navbar using the same brief timing and easing.

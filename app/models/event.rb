@@ -14,6 +14,13 @@ class Event < ApplicationRecord
 
   enum :status, { scheduled: 0, cancelled: 1, completed: 2, live: 3 }
 
+  scope :current_or_upcoming, lambda {
+    now = Time.current
+    scheduled_events = where(status: :scheduled).where('starts_at > ?', now)
+    live_events = where(status: :live).where('starts_at <= ? AND (ends_at IS NULL OR ends_at > ?)', now, now)
+    scheduled_events.or(live_events)
+  }
+
   validates :name, :starts_at, presence: true
   validates :slug, presence: true, uniqueness: { scope: :venue_id }
   validates :ends_at, comparison: { greater_than: :starts_at }, allow_nil: true
@@ -29,6 +36,10 @@ class Event < ApplicationRecord
     return false unless user
 
     event_host_delegations.active_at(at).where(delegated_user_id: user.id).exists?
+  end
+
+  def accepting_signups?(at: Time.current)
+    live? && starts_at <= at && (ends_at.nil? || ends_at > at)
   end
 
   def start!

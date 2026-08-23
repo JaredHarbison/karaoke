@@ -5,7 +5,10 @@ RSpec.describe 'Welcome page', type: :request do
 
   let(:user) { create(:user) }
   let!(:venue) { create(:venue, name: 'Franklin Karaoke', location: '523 Franklin Ave') }
-  let!(:event) { create(:event, venue: venue, name: 'Friday Karaoke', status: :live) }
+  let!(:event) do
+    create(:event, venue: venue, name: 'Friday Karaoke', status: :live,
+                   starts_at: 1.hour.ago, ends_at: 2.hours.from_now)
+  end
   let!(:private_venue) { create(:venue, :private, name: 'Hidden Karaoke') }
 
   before { sign_in user }
@@ -15,6 +18,7 @@ RSpec.describe 'Welcome page', type: :request do
 
     expect(response).to be_successful
     expect(response.body).to include('Franklin Karaoke', '523 Franklin Ave', 'open for signups')
+    expect(response.body).to include('venue-card__status', 'venue-card__status-dot')
     expect(response.body).to include(venue_event_path(venue.slug, event))
     expect(response.body).not_to include(venue_songs_path(venue.slug))
     expect(response.body).to include('search venues or locations')

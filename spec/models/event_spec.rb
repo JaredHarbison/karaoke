@@ -45,6 +45,18 @@ RSpec.describe Event, type: :model do
   end
 
   describe 'lifecycle transitions' do
+    it 'identifies only future scheduled and currently live events' do
+      upcoming = create(:event, starts_at: 1.hour.from_now, ends_at: 2.hours.from_now)
+      live = create(:event, status: :live, starts_at: 1.hour.ago, ends_at: 1.hour.from_now)
+      expired = create(:event, status: :live, starts_at: 2.hours.ago, ends_at: 1.hour.ago)
+      stale = create(:event, status: :scheduled, starts_at: 1.hour.ago, ends_at: 1.hour.from_now)
+
+      expect(Event.current_or_upcoming).to include(upcoming, live)
+      expect(Event.current_or_upcoming).not_to include(expired, stale)
+      expect(live).to be_accepting_signups
+      expect(upcoming).not_to be_accepting_signups
+    end
+
     it 'transitions a scheduled event to live' do
       event = create(:event)
 

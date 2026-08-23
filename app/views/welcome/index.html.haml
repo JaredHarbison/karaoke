@@ -17,11 +17,13 @@
           - else
             #{resume_queue_count} #{resume_queue_count == 1 ? 'song' : 'songs'} in queue · about #{resume_queue_count * 5} min wait
         - last_event = @venue_events[@last_venue.id]
+        - resume_status = last_event&.accepting_signups? ? "open for signups" : (last_event ? "upcoming" : "not accepting signups")
+        - resume_status_active = last_event&.accepting_signups?
         .venue-card__footer
-          .venue-card__status
+          .venue-card__status{ class: ("venue-card__status--neutral" unless resume_status_active) }
             %span.venue-card__status-dot{ aria: { hidden: "true" } }
-            %span open for signups
-          = link_to "Go to event", (last_event ? venue_event_path(@last_venue.slug, last_event) : venue_events_path(@last_venue.slug)), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
+            %span= resume_status
+          = link_to (last_event ? "Go to event" : "View events"), (last_event ? venue_event_path(@last_venue.slug, last_event) : venue_events_path(@last_venue.slug)), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
 
   %main.welcome-main
     .welcome-toolbar
@@ -48,10 +50,12 @@
                 #{queue_count} #{queue_count == 1 ? 'song' : 'songs'} in queue · about #{queue_count * 5} min wait
             .venue-card__footer
               - event = @venue_events[venue.id]
-              .venue-card__status
+              - event_status = event&.accepting_signups? ? "open for signups" : (event ? "upcoming" : "not accepting signups")
+              - event_status_active = event&.accepting_signups?
+              .venue-card__status{ class: ("venue-card__status--neutral" unless event_status_active) }
                 %span.venue-card__status-dot{ aria: { hidden: "true" } }
-                %span open for signups
-              = link_to "View event", (event ? venue_event_path(venue.slug, event) : venue_events_path(venue.slug)), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
+                %span= event_status
+              = link_to (event ? "View event" : "View events"), (event ? venue_event_path(venue.slug, event) : venue_events_path(venue.slug)), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
     - else
       .venue-empty
         %span.venue-empty__icon 🎤
