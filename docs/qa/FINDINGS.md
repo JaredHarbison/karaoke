@@ -30,6 +30,7 @@ result. Do not include real user passwords, private tokens, or personal data.
 | QA-020 | Owner/Performer | Event access | The current short code should be easy to find; old codes should not compete with it | The page primarily listed raw token URLs and several historical sessions, with no visible code when the event was not recognized as live |  |  | Fixed locally; manual recheck |
 | QA-021 | Shared | Sign-out/sign-in transition | Alerts should use one consistent semantic treatment without destabilizing layout | A reddish sign-in alert appeared after signing out; alert, warning, and success treatments need a shared strategy, with magenta likely representing alerts/errors |  |  | UI overhaul follow-up |
 | QA-022 | Owner/Performer | Event index/event page | Selecting an event should stay within the event lobby/workspace | The current event page still links to `/songs`, so the journey lands on the legacy venue queue instead of the selected event context |  |  | Route migration follow-up |
+| QA-023 | Shared | Application shell | The responsive role menu drawer must render through the repository's Sass pipeline | The first right-drawer implementation used CSS `min()` with a `calc()` value, which SassC rejected during the full CI RSpec render pass | Replaced it with equivalent `width` and `max-width` declarations | 2026-08-23 | Fixed; covered by shell request specs and full CI |
 
 ## Resolved findings
 

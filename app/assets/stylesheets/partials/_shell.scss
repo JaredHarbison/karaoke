@@ -130,7 +130,10 @@
 }
 
 @media (max-width: $breakpoint-lg) {
-  .app-menu__drawer { min-width: min(20rem, calc(100vw - 2rem)); }
+  .app-menu__drawer {
+    width: 20rem;
+    max-width: calc(100vw - 2rem);
+  }
 }
 
 @media (max-width: $breakpoint-sm) {
