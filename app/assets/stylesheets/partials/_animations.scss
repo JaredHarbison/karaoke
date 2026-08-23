@@ -13,6 +13,18 @@
   }
 }
 
+// Slide in from the right for the shell drawer.
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 // Slide up animation for exits
 @keyframes slideOutUp {
   from {

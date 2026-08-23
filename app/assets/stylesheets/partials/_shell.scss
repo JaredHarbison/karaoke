@@ -58,6 +58,7 @@
 .app-menu[open] .app-menu__summary::before { transform: rotate(90deg); }
 
 .app-menu__drawer {
+  animation: slideInRight $transition-base;
   background: $midnight;
   border: 2px solid $yellow;
   box-shadow: $shadow-lg;
@@ -123,6 +124,8 @@
 }
 
 .app-shell__flash .app-flash__message {
+  // Flash placement slides down from the navbar; both shell motions share the
+  // same duration and easing token.
   animation: slideInDown $transition-base;
   pointer-events: auto;
 }
