@@ -35,7 +35,7 @@
   font-weight: 800;
 }
 
-.app-menu { margin-left: auto; position: relative; }
+.app-menu { margin-left: auto; }
 
 .app-menu__summary {
   color: $cyan;
@@ -52,20 +52,20 @@
 
 .app-menu__drawer {
   background: $midnight;
-  border: 1px solid $cyan;
+  border: 1px solid $yellow;
   box-shadow: $shadow-lg;
   min-width: 16rem;
+  min-height: calc(100vh - 6rem);
   padding: $space-md;
-  position: fixed;
+  position: absolute;
   right: 0;
-  top: 5.5rem;
-  bottom: 0;
+  top: 100%;
   z-index: $z-dropdown;
 }
 
 .app-menu__heading {
   align-items: center;
-  border-bottom: 1px solid rgba($cyan, 0.35);
+  border-bottom: 1px solid rgba($yellow, 0.35);
   color: $yellow;
   display: flex;
   font-size: 0.8rem;
@@ -141,5 +141,5 @@
   .app-shell__header { padding: $space-sm $space-md; }
   .app-shell__bar { flex-wrap: wrap; gap: $space-sm $space-md; }
   .app-shell__body { padding: $space-lg $space-md; }
-  .app-menu__drawer { top: 4.5rem; }
+  .app-menu__drawer { min-height: calc(100vh - 5rem); }
 }
