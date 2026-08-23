@@ -1,9 +1,11 @@
 # Human QA journeys
 
 This is the browser-level MVP verification path. Start at the public root,
-follow the shared discovery path, then complete the owner, host, and performer
-journeys using separate browser sessions. Record findings before moving to the
-next role.
+follow the shared discovery path, then complete the owner, host, performer, and
+display journeys using separate browser sessions. The target route model uses
+the event workspace as the canonical queue surface; current `/songs` links are
+temporary implementation state and should not be treated as the target UX.
+Record findings before moving to the next role.
 
 ## Guided QA mode
 

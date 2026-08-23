@@ -43,22 +43,24 @@ migration.
 ## Architecture
 
 Venue slugs form the application's tenancy boundary. `ApplicationController`
-resolves the active venue into `Current`, and song lookups are performed through
-that venue. Authorization then combines venue ownership, host membership, and
-song ownership.
+resolves the active venue into `Current`, and queue lookups are performed
+through that venue. Authorization then combines venue ownership, contextual
+venue membership, and performance ownership.
 
 ```text
 /:venue_slug request
     -> resolve Current.venue
     -> authenticate Current.user
     -> authorize owner / host / performer action
-    -> query Current.venue.songs
+    -> query Current.venue queue records
     -> render HTML or Turbo Stream response
 ```
 
-`VenueAdmin` is the join model between users and venues for the role currently
-shown to users as Host. `YoutubeService` keeps external video search and
-validation logic outside the controllers.
+`VenueMembership` is the contextual join model between users and venues for
+owner, host, and performer membership. `YoutubeService` keeps external video
+search and validation logic outside the controllers. The target route and
+presentation surfaces are documented in
+[`docs/architecture/presentation_surfaces_and_routes.md`](docs/architecture/presentation_surfaces_and_routes.md).
 
 ## Running locally
 

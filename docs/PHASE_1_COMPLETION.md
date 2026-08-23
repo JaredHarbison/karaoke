@@ -200,13 +200,12 @@ rails assets:precompile
 
 ## Historical UI next steps
 
-See [UI_IMPLEMENTATION_PHASES.md](./UI_IMPLEMENTATION_PHASES.md#phase-2-ui--component-architecture) for detailed Phase 2 tasks:
-
-1. Layout refactor with persistent header
-2. Header component (venue name, user context, role indicator, secure badge)
-3. Queue container with Turbo Frame structure
-4. Song card components
-5. Role-based view variations
+The historical UI plan below is superseded. Current presentation work is
+planned in [ROADMAP.md](ROADMAP.md) and the
+[presentation-surface decision](architecture/presentation_surfaces_and_routes.md):
+route/surface contract, shared shell reset, state-aware event workspace,
+focused event configuration, mobile-first performer queue, host/owner
+operations, and dedicated desktop display mode.
 
 ---
 

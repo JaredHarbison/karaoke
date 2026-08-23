@@ -9,6 +9,14 @@ future Fair Queue, presence, QR security, or live theme-admission behavior is
 implemented; the current event/theme foundation is tracked in the roadmap and
 QA guide.
 
+> Superseded planning: the implementation approach below predates the guided
+> QA review. The current direction is a presentation reset with a shared shell,
+> canonical event workspace, role-aware event index, focused configuration
+> surfaces, mobile-first performer queue, and dedicated desktop display mode.
+> Use [the route and presentation decision](architecture/presentation_surfaces_and_routes.md)
+> and the roadmap for current work. Do not implement this document's HAML or
+> page-by-page component plan as written.
+
 **Key Principles:**
 
 - Highly accessible, conventional, modern, and professional

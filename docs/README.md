@@ -22,6 +22,7 @@ docs explain decisions without claiming future work is implemented.
 - [Multi-tenancy](architecture/multi_tenancy.md)
 - [Current request context](models/current.md)
 - [Current models](models/)
+- [Planned presentation surfaces and routes](architecture/presentation_surfaces_and_routes.md)
 
 The current code uses one `User`, venue-scoped routes, and contextual
 `VenueMembership` authorization. The completed Phase 1 decision and its

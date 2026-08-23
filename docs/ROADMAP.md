@@ -9,8 +9,8 @@ This roadmap is product-oriented; architectural rationale lives in
 The engineering, identity, contextual venue authorization, event/series,
 reusable theme, initial Fair Queue, temporary delegation, presence-token,
 short-code exchange, and initial event-lifecycle foundations are complete. The
-remaining MVP work is the expanded UX, accessibility, reliability, and
-human-QA phase below.
+remaining MVP work is the route/presentation reset, expanded UX,
+accessibility, reliability, and human-QA sequence below.
 
 ## MVP sequence
 
@@ -124,39 +124,86 @@ unless reusable theme playlists become an MVP need.
 This is intentionally a multi-slice phase. Each slice should be independently
 reviewable, manually testable, and documented in the same commit.
 
-#### 6.1 Queue workflow audit
+#### 6.1 Route and surface contract
 
-- [Planned] Map performer, host, event, and presentation states and resolve
-  inconsistent or confusing transitions.
+- [Planned] Make `/:venue_slug/events` the venue event index and discovery
+  surface, with role-aware management actions rather than an admin-only page.
+- [Planned] Reserve `/:venue_slug` for a future venue profile; use
+  `/:venue_slug/events/:event_slug` for the event lobby and queue.
+- [Planned] Introduce event slugs and remove numeric event identifiers from
+  user-facing event URLs.
+- [Planned] Remove `/songs` after queue links, forms, redirects, tests, and QA
+  journeys move to the canonical event surface; do not preserve dead route
+  compatibility indefinitely.
+- [Planned] Keep `/settings` venue-scoped and separate from event operations.
 
-#### 6.2 Performer queue UX
+#### 6.2 Presentation reset and shared shell
+
+- [Planned] Replace the current page-by-page presentation layer with one shared
+  application shell, responsive container, navigation, page header, cards,
+  forms, buttons, links, alerts, and status treatments.
+- [Planned] Preserve the existing palette and semantic color mapping while
+  consolidating it into concise design tokens and reusable SCSS primitives.
+- [Planned] Use a compact mobile/tablet layout tier and a wider desktop tier.
+- [Planned] Keep performers mobile-first, support hosts and owners from mobile
+  through desktop, and make display mode desktop-oriented.
+- [Planned] Delete obsolete page-specific styles and templates as each surface
+  moves to the shared system.
+
+#### 6.3 Event index and state-aware event workspace
+
+- [Planned] Make the event page state-aware: scheduled lobby, live queue, and
+  completed summary.
+- [Planned] Keep the event page focused on status, context, lobby/queue, and
+  concise operational actions rather than making it a giant settings form.
+- [Planned] Give authorized users clear links to full event editing; avoid
+  duplicate mutation surfaces on both show and edit pages.
+- [Planned] Make the event name, venue, status, timing, and current queue
+  context visible throughout the workflow.
+
+#### 6.4 Event configuration and secondary operations
+
+- [Planned] Consolidate event name, timing, recurrence, queue policy, and
+  occurrence editing into a focused configuration workflow.
+- [Planned] Keep theme application, temporary host delegation, and presence
+  code operations discoverable without crowding the primary queue surface;
+  use focused panels or dialogs where the action is operationally needed.
+- [Planned] Make recurrence structured and selectable rather than requiring
+  users to type recurrence syntax.
+
+#### 6.5 Performer queue UX
 
 - [Planned] Improve add-song feedback, validation errors, duplicate-submission
   messaging, retry states, and event-context preservation.
 - [In progress] Keep event presence recovery visible and focused when a
   performer attempts admission without an active event session.
+- [Planned] Remove the redundant event selector from the performer queue.
+- [Planned] Present search results as horizontally browsable selection cards on
+  mobile, with an accessible wider treatment on desktop.
+- [Planned] Make selection state and the immediate queue action explicit.
 
-#### 6.3 Host queue operations
+#### 6.6 Host and owner operations
 
 - [Planned] Improve finish, skip, pause, requeue, theme-review, cutoff, and
   authorization feedback for venue hosts and temporary event hosts.
+- [Planned] Reduce divergent owner/host actions by using shared operational
+  surfaces and focused secondary actions.
 
-#### 6.4 Presentation and display mode
+#### 6.7 Presentation and display mode
 
 - [Planned] Refine now-playing, upcoming queue, event name, short-code, and
   host-facing access context for display screens.
+- [Planned] Build display mode as a dedicated desktop-oriented surface rather
+  than another variation of the performer queue.
 
-#### 6.5 Accessibility review
+#### 6.8 Accessibility and responsive review
 
 - [Planned] Review keyboard flow, focus management, status announcements,
   labels, semantic structure, contrast, and error association.
-
-#### 6.6 Responsive/mobile review
-
 - [Planned] Review queue, add-song, event, theme, presence-code, and host
   screens at narrow viewport sizes.
 
-#### 6.7 Reliability and operational feedback
+#### 6.9 Reliability and operational feedback
 
 - [In progress] Use the venue's configured time zone for event, recurrence, and
   presence-code deadlines; keep event inputs at minute precision and show one
@@ -164,13 +211,16 @@ reviewable, manually testable, and documented in the same commit.
 - [Planned] Improve loading states, stale submissions, concurrency responses,
   unavailable metadata, expired presence, and recovery paths.
 
-#### 6.8 Human QA completion
+#### 6.10 Human QA completion
 
 - [Planned] Run the page/action/result guide as owner, host, and performer;
   record failures, fix them in focused commits, and complete the MVP pass.
 - [Planned] Use guided one-action QA interviews that carry setup forward across
   owner, host, performer, and display-mode journeys, recording both behavior and
   interaction clarity.
+- [Planned] Repeat functional and visual QA after the presentation reset; the
+  current QA findings are not considered closed merely because the layout is
+  replaced.
 - [Initial slice complete] Provide an idempotent, opt-in local QA fixture for
   owner, host, performer, venue, and event workflow testing.
 
