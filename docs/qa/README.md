@@ -45,6 +45,9 @@ The fixture includes one scheduled event and two pending queue entries. The
 host email is intentionally only a registered user at first; the owner journey
 adds that user to the venue before the host journey begins.
 
+Discovery cards now open the venue's current event workspace when one exists;
+they no longer send a performer to the legacy `/songs` surface.
+
 Optional read-only fixture check, only if the UI does not show the expected
 records:
 
@@ -83,3 +86,24 @@ unnecessary personal data out of it.
 Review this directory on every commit. Update the relevant journey whenever a
 change affects a testable page, action, authorization boundary, or operational
 workflow.
+
+## Identity and shared motion check
+
+On sign-up, verify first name and last name are required. After creating a
+named account, verify compact venue and host surfaces display `First L.` and
+never expose plus-addressing tags. Existing accounts should remain usable with
+their sanitized fallback name. When a flash message, drawer, or interactive
+card appears, confirm its motion is brief and consistent with the shared shell
+motion; page content should not jump as a result.
+
+On the root page, verify the heading says “Today” before 6:00 PM in the
+browser's local time and “Tonight” from 6:00 PM onward. Verify the resume card
+uses the same hover/focus expansion treatment as discovery cards; when its
+height exceeds the copy beside it, the heading/copy column should distribute
+its content without collapsing or jumping.
+
+Verify each venue card's status sits above its centered CTA, with both aligned
+to the same content edge. The resume card should match the venue-card content
+and spacing exactly, with only its “Continue where you left off” eyebrow added
+above the venue name. Its CTA should read “Go to event,” matching the shared
+event-entry action.

@@ -29,10 +29,11 @@
   width: auto;
 }
 
-.app-shell__venue {
+.app-shell__venue,
+.app-menu__summary {
   color: $beige;
   font-size: 1.1rem;
-  font-weight: 800;
+  font-weight: 400;
 }
 
 .app-menu { margin-left: auto; }
@@ -40,13 +41,19 @@
 .app-menu__summary {
   color: $cyan;
   cursor: pointer;
-  font-weight: 400;
   list-style: none;
 }
 
 .app-menu__summary::-webkit-details-marker { display: none; }
 
-.app-menu__summary::before { content: '›'; display: inline-block; margin-right: $space-xs; }
+.app-menu__summary::before {
+  content: '›';
+  display: inline-block;
+  font-size: 1.35em;
+  line-height: 0;
+  margin-right: $space-xs;
+  transition: transform $transition-base;
+}
 
 .app-menu[open] .app-menu__summary::before { transform: rotate(90deg); }
 

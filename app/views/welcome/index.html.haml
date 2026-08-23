@@ -1,13 +1,27 @@
-.welcome-page{ data: { controller: "cta-size" } }
+.welcome-page{ data: { controller: "cta-size time-of-day" } }
   %header.welcome-header
     .welcome-header__copy
-      %h1 Where Are You Singing Tonight?
+      %h1 Where Are You Singing <span data-time-of-day-target="label">Tonight</span>?
       %p Browse public karaoke venues, join a queue, and come back to your last spot whenever you need to.
     - if @last_venue
-      .resume-card
+      - resume_host = @last_venue.hosts.first || @last_venue.owner
+      - resume_queue_count = @queue_counts[@last_venue.id] || 0
+      %article.venue-card.resume-card
         %span.resume-card__label Continue where you left off
-        %strong= @last_venue.name
-        = link_to "Go to #{@last_venue.name}", venue_songs_path(@last_venue.slug), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
+        %h3= @last_venue.name
+        %p.venue-card__location= @last_venue.location.presence || "Location not listed"
+        %p.venue-card__host= "#{resume_host&.display_name || "Venue team"} is hosting!"
+        %p.venue-card__queue
+          - if resume_queue_count.zero?
+            No wait — jump in
+          - else
+            #{resume_queue_count} #{resume_queue_count == 1 ? 'song' : 'songs'} in queue · about #{resume_queue_count * 5} min wait
+        - last_event = @venue_events[@last_venue.id]
+        .venue-card__footer
+          .venue-card__status
+            %span.venue-card__status-dot{ aria: { hidden: "true" } }
+            %span open for signups
+          = link_to "Go to event", (last_event ? venue_event_path(@last_venue.slug, last_event) : venue_events_path(@last_venue.slug)), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
 
   %main.welcome-main
     .welcome-toolbar
@@ -33,10 +47,11 @@
               - else
                 #{queue_count} #{queue_count == 1 ? 'song' : 'songs'} in queue · about #{queue_count * 5} min wait
             .venue-card__footer
+              - event = @venue_events[venue.id]
               .venue-card__status
                 %span.venue-card__status-dot{ aria: { hidden: "true" } }
                 %span open for signups
-              = button_to "Join venue", join_venue_path(slug: venue.slug), method: :post, class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
+              = link_to "View event", (event ? venue_event_path(venue.slug, event) : venue_events_path(venue.slug)), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
     - else
       .venue-empty
         %span.venue-empty__icon 🎤

@@ -13,6 +13,12 @@
       = hidden_field_tag :return_to, auth_return_to if auth_return_to.present?
       = text_field_tag :website, nil, class: 'auth-honeypot', autocomplete: 'off', tabindex: -1, aria: { hidden: true }
       .field
+        = f.label :first_name, 'first name'
+        = f.text_field :first_name, autocomplete: 'given-name', required: true
+      .field
+        = f.label :last_name, 'last name'
+        = f.text_field :last_name, autocomplete: 'family-name', required: true
+      .field
         = f.label :email, 'email address'
         = f.email_field :email, autofocus: true, autocomplete: 'email'
       .field

@@ -101,12 +101,12 @@
           <% if @hosts.any? %>
             <% @hosts.each do |host| %>
               <div class="host-row">
-                <span class="host-avatar"><%= host.email.first.upcase %></span>
+                <span class="host-avatar"><%= host.last_name_initial %></span>
                 <span class="host-row__identity">
-                  <strong><%= host.email %></strong>
+                  <strong><%= host.display_name %></strong>
                   <small>Queue host</small>
                 </span>
-                <%= button_to "Remove", venue_admin_path(@venue.slug, host.id), method: :delete, class: "settings-button settings-button--quiet-danger", data: { turbo_confirm: "Remove #{host.email} as a host?" } %>
+                <%= button_to "Remove", venue_admin_path(@venue.slug, host.id), method: :delete, class: "settings-button settings-button--quiet-danger", data: { turbo_confirm: "Remove #{host.display_name} as a host?" } %>
               </div>
             <% end %>
           <% else %>

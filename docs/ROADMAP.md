@@ -158,8 +158,8 @@ reviewable, manually testable, and documented in the same commit.
   through desktop, and make display mode desktop-oriented.
 - [Planned] Delete obsolete page-specific styles and templates as each surface
   moves to the shared system.
-- Authentication pages are intentionally out of scope for this reset; the
-  current sign-in and sign-up presentation remains unchanged.
+- [In progress] Apply the shared shell and motion rules to authentication
+  pages while keeping the existing sign-in/sign-up form behavior stable.
 
 #### 6.3 Event index and state-aware event workspace
 
@@ -234,6 +234,12 @@ reviewable, manually testable, and documented in the same commit.
   replaced.
 - [Initial slice complete] Provide an idempotent, opt-in local QA fixture for
   owner, host, performer, venue, and event workflow testing.
+
+#### 6.11 Discovery enhancements
+
+- [Future] When venues have reliable coordinates, use browser location
+  permission to suggest the nearest active/upcoming event in the resume area
+  when the user has no previous venue.
 
 - [Initial slice complete] Upgrade the GitHub Actions runtime dependencies needed to fully
   resolve the Node.js 20 deprecation warning and verify a warning-free quality

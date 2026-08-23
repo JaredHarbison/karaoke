@@ -22,6 +22,10 @@ through memberships; the legacy `VenueAdmin` table and global venue-role column
 have now been removed. A separate `PlatformMembership` relationship is reserved
 for application-wide staff authority and does not grant venue ownership.
 
+User-facing identity collects first and last names at account creation. Compact
+surfaces use a first name plus last-name initial; legacy accounts use a
+sanitized email-derived fallback until they are updated.
+
 ## Deferred details
 
 Membership role semantics beyond the current owner/admin/performer mapping,
@@ -48,3 +52,4 @@ manageable:
   users belong to multiple venues.
 - Update help and accessibility copy when the management workflows become
   operational.
+- Add an account profile flow for legacy users who need to supply their names.

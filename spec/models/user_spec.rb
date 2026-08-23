@@ -13,6 +13,8 @@ RSpec.describe User, type: :model do
   describe 'validations' do
     it { is_expected.to validate_presence_of(:email) }
     it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
+    it { is_expected.to validate_presence_of(:first_name) }
+    it { is_expected.to validate_presence_of(:last_name) }
 
     it 'requires a longer mixed-case password with a number' do
       user = build(:user, password: 'alllowercase', password_confirmation: 'alllowercase')
@@ -76,15 +78,22 @@ RSpec.describe User, type: :model do
 
   describe '#display_name' do
     it 'derives a readable name from the email address' do
-      user = build(:user, email: 'jared.harbison@example.com')
+      user = build(:user, email: 'jared.harbison@example.com', first_name: nil, last_name: nil)
 
       expect(user.display_name).to eq('Jared Harbison')
     end
 
     it 'ignores plus-addressing tags when deriving a readable name' do
-      user = build(:user, email: 'jared.harbison+host@example.com')
+      user = build(:user, email: 'jared.harbison+host@example.com', first_name: nil, last_name: nil)
 
       expect(user.display_name).to eq('Jared Harbison')
+    end
+
+    it 'uses a last-name initial for named users' do
+      user = build(:user, first_name: 'Jared', last_name: 'Harbison')
+
+      expect(user.display_name).to eq('Jared H.')
+      expect(user.last_name_initial).to eq('H')
     end
   end
 

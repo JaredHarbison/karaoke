@@ -22,9 +22,11 @@ class VenuesController < ApplicationController
       redirect_to discover_venues_path, alert: 'Venue not found or is not accepting new users.'
       return
     end
-    
+
     session[:venue_slug] = @venue.slug
-    redirect_to venue_songs_path(@venue.slug), notice: "Welcome to #{@venue.name}!"
+    event = @venue.events.where(status: %i[scheduled live]).order(:starts_at).first
+    destination = event ? venue_event_path(@venue.slug, event) : venue_events_path(@venue.slug)
+    redirect_to destination, notice: "Welcome to #{@venue.name}!"
   end
   
   # GET /:venue_slug/settings - Venue settings (owner only)
