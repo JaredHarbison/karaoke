@@ -72,26 +72,33 @@
   <% if Current.venue.is_admin?(current_user) %>
     <section aria-labelledby="presence-heading">
       <h2 id="presence-heading">Event access</h2>
-      <% if @presence_sessions.any? %>
-        <ul>
-          <% @presence_sessions.each do |presence_session| %>
-            <li>
-              <%= link_to event_presence_url(presence_session.token), event_presence_url(presence_session.token) %>
-              <% if @event.live? && presence_session.active_at? %><strong>Code: <%= presence_session.short_code %></strong><% end %>
-              — expires <%= l(presence_session.expires_at, format: :short) %>
-              <% if presence_session.revoked_at %>(revoked)<% else %>
-                <%= button_to 'Revoke', venue_event_presence_session_path(Current.venue.slug, presence_session), method: :delete %>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
+      <% if @active_presence_session %>
+        <p><strong>Event access code: <%= @active_presence_session.short_code %></strong></p>
+        <p>Share this code with performers at the venue. It expires <%= l(@active_presence_session.expires_at, format: :short) %>.</p>
+        <p><%= link_to 'Open access link', event_presence_url(@active_presence_session.token) %></p>
+        <%= button_to 'Revoke active code', venue_event_presence_session_path(Current.venue.slug, @active_presence_session), method: :delete %>
+      <% elsif @presence_sessions.any? %>
+        <p>No event access code is currently active. Generate a new code below.</p>
       <% else %>
-        <p>No event access codes are active.</p>
+        <p>No event access code has been generated yet.</p>
+      <% end %>
+      <% if @presence_sessions.any? %>
+        <details>
+          <summary>Access-code history</summary>
+          <ul>
+            <% @presence_sessions.each do |presence_session| %>
+              <li>
+                <%= presence_session.short_code %> — expires <%= l(presence_session.expires_at, format: :short) %>
+                <% if presence_session.revoked_at %>(revoked)<% end %>
+              </li>
+            <% end %>
+          </ul>
+        </details>
       <% end %>
       <%= form_with url: venue_event_presence_sessions_path(Current.venue.slug), scope: :event_presence_session, method: :post, local: true do |form| %>
         <%= hidden_field_tag :event_id, @event.id %>
         <%= form.label :expires_at, 'Expires (optional)' %>
-        <%= form.datetime_local_field :expires_at, value: (@event.ends_at && (@event.ends_at + EventPresenceSession::GRACE_PERIOD).strftime('%Y-%m-%dT%H:%M')) %>
+        <%= form.datetime_local_field :expires_at, value: datetime_local_value(@event.ends_at && (@event.ends_at + EventPresenceSession::GRACE_PERIOD)) %>
         <%= form.submit(@event.live? ? 'Rotate event access code' : 'Generate event access code') %>
       <% end %>
     </section>
@@ -119,9 +126,9 @@
         <%= form.label :delegated_user_id, 'Delegate host' %>
         <%= form.collection_select :delegated_user_id, @delegation_candidates, :id, :display_name, include_blank: 'Choose a venue member' %>
         <%= form.label :starts_at, 'Starts' %>
-        <%= form.datetime_local_field :starts_at, value: @event.starts_at.strftime('%Y-%m-%dT%H:%M') %>
+        <%= form.datetime_local_field :starts_at, value: datetime_local_value(@event.starts_at) %>
         <%= form.label :ends_at, 'Ends' %>
-        <%= form.datetime_local_field :ends_at, value: (@event.ends_at || @event.starts_at + 4.hours).strftime('%Y-%m-%dT%H:%M') %>
+        <%= form.datetime_local_field :ends_at, value: datetime_local_value(@event.ends_at || @event.starts_at + 4.hours) %>
         <%= form.submit 'Delegate host' %>
       <% end %>
     </section>

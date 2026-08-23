@@ -3,6 +3,10 @@ module ApplicationHelper
     RQRCode::QRCode.new(data).as_svg(module_size: 4, standalone: true, use_path: true).html_safe
   end
 
+  def datetime_local_value(value)
+    value&.in_time_zone&.strftime('%Y-%m-%dT%H:%M')
+  end
+
   def auth_return_to
     candidate = session[:user_return_to] || session['user_return_to'] || params[:return_to]
     return unless candidate.present?

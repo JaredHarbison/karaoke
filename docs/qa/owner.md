@@ -54,11 +54,13 @@ during the shared journey before continuing here.
 
 ## Presence and delegation
 
-1. Start the scheduled event, generate an event access code, and open its URL.
-   - The code is shown only in live host/presentation contexts.
-2. Rotate the code.
+1. Confirm the venue time zone in venue settings, start the scheduled event,
+   and generate an event access code.
+   - The current short code is prominent and its expiry uses the venue's local time.
+2. Open the access link and confirm it reaches the event's queue context.
+3. Rotate the code.
    - The prior code/session is revoked; the permanent venue entry point remains.
-3. Delegate a venue member for a time inside the event.
+4. Delegate a venue member for a time inside the event.
    - The owner may delegate to another venue member; a delegator cannot delegate to themself.
    - The event lists the delegation and its expiry.
    - Revoke it and confirm authority is removed.

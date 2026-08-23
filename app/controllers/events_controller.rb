@@ -90,6 +90,7 @@ class EventsController < ApplicationController
                                     .order(starts_at: :desc)
     @delegation_candidates = Current.venue.members.order(:email)
     @presence_sessions = @event.event_presence_sessions.order(created_at: :desc)
+    @active_presence_session = @presence_sessions.find { |presence| @event.live? && presence.active_at? }
   end
 
   def set_event

@@ -13,6 +13,8 @@ class Venue < ApplicationRecord
   has_many :event_theme_applications, through: :events
   
   validates :name, presence: true
+  validates :time_zone, presence: true
+  validate :time_zone_must_be_supported
   validates :slug, presence: true, uniqueness: true, format: { with: /\A[a-z0-9-]+\z/, message: "only allows lowercase letters, numbers, and hyphens" }
   
   before_validation :generate_slug, if: -> { slug.blank? && name.present? }
@@ -73,5 +75,11 @@ class Venue < ApplicationRecord
 
   def ensure_presence_token
     self.presence_token ||= SecureRandom.urlsafe_base64(24)
+  end
+
+  def time_zone_must_be_supported
+    return if time_zone.blank? || ActiveSupport::TimeZone[time_zone].present?
+
+    errors.add(:time_zone, 'is not supported')
   end
 end

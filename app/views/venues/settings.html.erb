@@ -54,6 +54,12 @@
             <%= form.text_field :location, placeholder: "e.g. 523 Franklin St", autocomplete: "street-address" %>
           </div>
 
+          <div class="settings-field">
+            <%= form.label :time_zone, "Venue time zone" %>
+            <%= form.collection_select :time_zone, @time_zones, :name, :name %>
+            <small>Event times and access-code expiry use this time zone.</small>
+          </div>
+
           <label class="visibility-toggle" for="venue_public">
             <span class="visibility-toggle__switch">
               <%= form.check_box :public, id: "venue_public" %>

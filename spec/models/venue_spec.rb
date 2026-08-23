@@ -13,7 +13,18 @@ RSpec.describe Venue, type: :model do
 
   describe 'validations' do
     it { is_expected.to validate_presence_of(:name) }
+    it 'accepts an ActiveSupport time zone' do
+      expect(build(:venue, time_zone: 'America/New_York')).to be_valid
+    end
+
+    it 'rejects an unsupported time zone' do
+      venue = build(:venue, time_zone: 'Not/A_Time_Zone')
+
+      expect(venue).not_to be_valid
+      expect(venue.errors[:time_zone]).to include('is not supported')
+    end
     it { is_expected.to validate_presence_of(:slug) }
+    it { is_expected.to validate_presence_of(:time_zone) }
     # Slug uniqueness is tested in the slug generation describe block
   end
 

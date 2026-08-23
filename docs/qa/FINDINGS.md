@@ -26,6 +26,9 @@ result. Do not include real user passwords, private tokens, or personal data.
 | QA-017 | Performer | Event queue add-song flow | Select a YouTube result without an active presence session | Selection should prepare the form and make the access-code step visible before submission | Selection auto-submitted and exposed the admission error without showing the required code step |  |  | Fixed locally; manual recheck |
 | QA-018 | Performer | Event queue admission error | Submit without event presence | The required recovery action should be visible and focused | The POST restored admission validation but not the selected event context, so the access-code prompt disappeared from the rendered response and focus remained on search |  |  | Fixed locally; manual recheck |
 
+| QA-019 | Owner/Performer | Event access | Event times and access expiry should use the venue's local time zone | Rails was using UTC while the QA event was scheduled in Eastern time, making the event appear ended and all access sessions inactive |  |  | Fixed locally; manual recheck |
+| QA-020 | Owner/Performer | Event access | The current short code should be easy to find; old codes should not compete with it | The page primarily listed raw token URLs and several historical sessions, with no visible code when the event was not recognized as live |  |  | Fixed locally; manual recheck |
+
 ## Resolved findings
 
 Move an entry here after the fix is deployed and manually rechecked.

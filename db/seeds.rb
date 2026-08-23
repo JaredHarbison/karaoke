@@ -23,7 +23,7 @@ venue = Venue.find_or_create_by!(slug: 'demo-karaoke') do |record|
   record.name = 'Demo Karaoke'
   record.public = true
 end
-venue.update!(name: 'Demo Karaoke', public: true, owner: owner)
+venue.update!(name: 'Demo Karaoke', public: true, owner: owner, time_zone: 'America/New_York')
 venue.add_host(host)
 
 [
@@ -54,7 +54,10 @@ if ENV['KARAOKE_QA_FIXTURE'] == 'franklin'
   )
 
   qa_venue = Venue.find_or_initialize_by(slug: '523-franklin-ave')
-  qa_venue.update!(name: '523 Franklin Ave', location: '523 Franklin Ave', public: true, owner: qa_owner)
+  qa_venue.update!(
+    name: '523 Franklin Ave', location: '523 Franklin Ave', public: true, owner: qa_owner,
+    time_zone: 'America/New_York'
+  )
   qa_venue.remove_host(qa_host)
 
   qa_event = qa_venue.events.find_or_initialize_by(name: 'Franklin Karaoke QA')

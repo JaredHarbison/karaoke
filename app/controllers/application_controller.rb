@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   before_action :set_current_venue
   before_action :set_current_user
   before_action :require_venue_for_songs
+  around_action :use_current_venue_time_zone
   
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
   
@@ -22,6 +23,11 @@ class ApplicationController < ActionController::Base
   
   def set_current_user
     Current.user = current_user if user_signed_in?
+  end
+
+  def use_current_venue_time_zone(&block)
+    zone = ActiveSupport::TimeZone[Current.venue&.time_zone.to_s] || Time.zone
+    Time.use_zone(zone, &block)
   end
 
   def after_sign_in_path_for(resource)

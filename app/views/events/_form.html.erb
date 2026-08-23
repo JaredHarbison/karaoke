@@ -15,11 +15,11 @@
   </div>
   <div>
     <%= form.label :starts_at, "Starts" %>
-    <%= form.datetime_local_field :starts_at, required: true %>
+    <%= form.datetime_local_field :starts_at, value: datetime_local_value(@event.starts_at), required: true %>
   </div>
   <div>
     <%= form.label :ends_at, "Ends" %>
-    <%= form.datetime_local_field :ends_at %>
+    <%= form.datetime_local_field :ends_at, value: datetime_local_value(@event.ends_at) %>
   </div>
   <div>
     <%= form.label :event_series_id, "Recurring series" %>

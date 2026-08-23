@@ -31,6 +31,7 @@ class VenuesController < ApplicationController
   def settings
     @hosts = @venue.hosts
     @admin_search_results = []
+    @time_zones = ActiveSupport::TimeZone.all.sort_by(&:name)
   end
   
   # PATCH /:venue_slug/settings - Update settings (owner only)
@@ -38,6 +39,9 @@ class VenuesController < ApplicationController
     if @venue.update(venue_params)
       redirect_to venue_settings_path(@venue.slug), notice: 'Venue settings updated successfully.'
     else
+      @hosts = @venue.hosts
+      @admin_search_results = []
+      @time_zones = ActiveSupport::TimeZone.all.sort_by(&:name)
       render :settings, alert: 'Failed to update venue settings.'
     end
   end
@@ -98,6 +102,6 @@ class VenuesController < ApplicationController
   end
   
   def venue_params
-    params.require(:venue).permit(:name, :location, :public, :explicit_lyrics_allowed)
+    params.require(:venue).permit(:name, :location, :public, :explicit_lyrics_allowed, :time_zone)
   end
 end

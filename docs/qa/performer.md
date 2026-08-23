@@ -12,8 +12,10 @@ Start: `/523-franklin-ave/songs`
    - The page explains that submissions open when the host starts the event.
    - If the event is live but you lack presence, the access-code step is visible
      and focused before queue submission.
-4. After the host starts the event, enter the active six-character code.
+4. After the host starts the event, enter the active six-character code shown
+   by the host/display.
    - Presence is granted for that event.
+   - The event context remains visible after admission.
    - Invalid, expired, or revoked codes are rejected.
 
 ## Queueing

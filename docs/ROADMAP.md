@@ -158,6 +158,9 @@ reviewable, manually testable, and documented in the same commit.
 
 #### 6.7 Reliability and operational feedback
 
+- [In progress] Use the venue's configured time zone for event, recurrence, and
+  presence-code deadlines; keep event inputs at minute precision and show one
+  active performer access code clearly.
 - [Planned] Improve loading states, stale submissions, concurrency responses,
   unavailable metadata, expired presence, and recovery paths.
 
@@ -225,4 +228,6 @@ dependency sources are not treated as application code.
   session foundation, and live-event queue gate.
 
 The finished items are foundations. Richer theme tooling and deeper
-concurrency/load hardening remain planned MVP work.
+concurrency/load hardening remain planned MVP work. Shared layout and broader
+interaction cleanup remain a separate UI/UX overhaul informed by the guided QA
+pass.

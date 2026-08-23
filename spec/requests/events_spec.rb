@@ -33,6 +33,22 @@ RSpec.describe 'Events', type: :request do
     end
   end
 
+  describe 'GET /:venue_slug/events/:id' do
+    it 'shows the active performer access code without exposing stale codes' do
+      event = create(:event, venue: venue, status: :live)
+      active_session = create(:event_presence_session, event: event, created_by_user: owner, expires_at: event.ends_at)
+      stale_session = create(:event_presence_session, event: event, created_by_user: owner, expires_at: event.ends_at)
+      stale_session.update!(revoked_at: Time.current)
+      sign_in owner
+
+      get venue_event_path(venue.slug, event)
+
+      expect(response).to be_successful
+      expect(response.body).to include("Event access code: #{active_session.short_code}", 'Access-code history')
+      expect(response.body).not_to include(event_presence_url(stale_session.token))
+    end
+  end
+
   describe 'POST /:venue_slug/events' do
     let(:event_attributes) do
       {
