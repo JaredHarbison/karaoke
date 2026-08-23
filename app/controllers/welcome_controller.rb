@@ -2,8 +2,9 @@ class WelcomeController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @last_venue = Venue.find_by(slug: session[:venue_slug]) if session[:venue_slug].present?
-    @venues = Venue.where(public: true)
+    saved_venue = Venue.find_by(slug: session[:venue_slug]) if session[:venue_slug].present?
+    @last_venue = saved_venue if saved_venue && current_event_for(saved_venue)
+    @venues = Venue.where(public: true).where(id: Event.current_or_upcoming.select(:venue_id))
     if params[:search].present?
       query = "%#{ActiveRecord::Base.sanitize_sql_like(params[:search])}%"
       @venues = @venues.where("name ILIKE ? OR slug ILIKE ? OR location ILIKE ?", query, query, query)

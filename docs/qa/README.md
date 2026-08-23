@@ -130,5 +130,9 @@ The resume card follows the venue saved in the current session. If two venues
 share a display name, verify the address and event name before treating their
 cards as duplicates.
 
+The root discovery page shows only public venues with a current or upcoming
+event. Venues with no event, expired events, or completed events must not appear
+as discovery cards.
+
 Verify the role menu slides in from the right below the navbar, while flash
 messages slide down from the navbar using the same brief timing and easing.
