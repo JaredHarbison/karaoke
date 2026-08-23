@@ -233,6 +233,8 @@ RSpec.describe 'Songs', type: :request do
 
       expect(response).to have_http_status(422)
       expect(response.body).to include('Enter the event access code before queueing a song.')
+      expect(response.body).to include('Enter the six-character code shown on the venue display before queueing into this event.')
+      expect(Nokogiri::HTML(response.body).at_css('input[name="short_code"]').has_attribute?('autofocus')).to be(true)
     end
 
     it 'rejects queueing after an event is completed even during presence grace' do

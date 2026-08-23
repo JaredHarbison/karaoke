@@ -133,6 +133,8 @@ reviewable, manually testable, and documented in the same commit.
 
 - [Planned] Improve add-song feedback, validation errors, duplicate-submission
   messaging, retry states, and event-context preservation.
+- [In progress] Keep event presence recovery visible and focused when a
+  performer attempts admission without an active event session.
 
 #### 6.3 Host queue operations
 

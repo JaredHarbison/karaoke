@@ -216,14 +216,20 @@ class SongsController < ApplicationController
                 else
                   queue.upcoming.order(:updated_at)
                 end
-    @user_role = determine_user_role
-    @can_manage_queue = Current.venue.is_admin?(current_user) || @current_event&.temporary_host?(current_user)
+    set_queue_access
   end
 
   def set_queue_event
-    return if params[:event_id].blank?
+    event_id = params[:event_id].presence || params.dig(:song, :event_id).presence
+    return if event_id.blank?
 
-    @current_event = Current.venue.events.find_by(id: params[:event_id])
+    @current_event = Current.venue.events.find_by(id: event_id)
+  end
+
+  def set_queue_access
+    @user_role = determine_user_role
+    @can_manage_queue = Current.venue.is_admin?(current_user) || @current_event&.temporary_host?(current_user)
+    @event_presence_active = @current_event && active_event_presence_for?(@current_event)
   end
 
   def assign_song_event

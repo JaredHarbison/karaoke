@@ -24,6 +24,7 @@ result. Do not include real user passwords, private tokens, or personal data.
 | QA-015 | Owner/Performer | Queue submission | Select a video and submit | Request contains a `song` payload and returns a normal validation result | Browser reproduced `ActionController::ParameterMissing` for `song` |  |  | Fixed locally; manual recheck |
 | QA-016 | All | Application-wide UI | Complete each journey | Layouts/components are concise, aligned, and consistent | Broad UI overhaul is needed beyond this focused bug pass |  |  | Deferred; requires product-owner direction |
 | QA-017 | Performer | Event queue add-song flow | Select a YouTube result without an active presence session | Selection should prepare the form and make the access-code step visible before submission | Selection auto-submitted and exposed the admission error without showing the required code step |  |  | Fixed locally; manual recheck |
+| QA-018 | Performer | Event queue admission error | Submit without event presence | The required recovery action should be visible and focused | The POST restored admission validation but not the selected event context, so the access-code prompt disappeared from the rendered response and focus remained on search |  |  | Fixed locally; manual recheck |
 
 ## Resolved findings
 

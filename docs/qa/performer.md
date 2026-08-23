@@ -10,6 +10,8 @@ Start: `/523-franklin-ave/songs`
    - Upcoming events are visible without host-management controls.
 3. Open the scheduled event queue.
    - The page explains that submissions open when the host starts the event.
+   - If the event is live but you lack presence, the access-code step is visible
+     and focused before queue submission.
 4. After the host starts the event, enter the active six-character code.
    - Presence is granted for that event.
    - Invalid, expired, or revoked codes are rejected.
