@@ -163,6 +163,9 @@ reviewable, manually testable, and documented in the same commit.
 
 - [Planned] Run the page/action/result guide as owner, host, and performer;
   record failures, fix them in focused commits, and complete the MVP pass.
+- [Planned] Use guided one-action QA interviews that carry setup forward across
+  owner, host, performer, and display-mode journeys, recording both behavior and
+  interaction clarity.
 - [Initial slice complete] Provide an idempotent, opt-in local QA fixture for
   owner, host, performer, venue, and event workflow testing.
 

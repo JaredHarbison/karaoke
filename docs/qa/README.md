@@ -5,6 +5,15 @@ follow the shared discovery path, then complete the owner, host, and performer
 journeys using separate browser sessions. Record findings before moving to the
 next role.
 
+## Guided QA mode
+
+For interactive passes, use one action at a time. Before each action, provide
+the role, account state, page, setup, expected result, and what to report. After
+the action, ask what appeared, whether the result was understandable, and how
+the interaction felt. Carry successful setup forward—for example, the owner
+adds the host before the host journey begins. Fix confirmed defects during the
+slice, then update the relevant journey and findings together before committing.
+
 ## Before starting
 
 Run the development fixture:

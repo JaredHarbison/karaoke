@@ -47,6 +47,14 @@ RSpec.describe 'Songs', type: :request do
       expect(page.at_css('input#song_title')['name']).to eq('song[title]')
     end
 
+    it 'opens the event access-code step for an event queue' do
+      event = create(:event, venue: venue, status: :live)
+
+      get "/#{venue.slug}/songs", params: { event_id: event.id }
+
+      expect(Nokogiri::HTML(response.body).at_css('details.songs-access-code').has_attribute?('open')).to be(true)
+    end
+
     it 'shows Play only for the next queued song' do
       sign_out user
       sign_in venue.owner

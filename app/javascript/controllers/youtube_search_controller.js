@@ -170,13 +170,9 @@ export default class extends Controller {
         titleInput.value = button.dataset.videoTitle || ''
       }
 
-      // Auto-submit the form after a brief delay to ensure value is set
-      setTimeout(() => {
-        const form = urlInput.closest('form')
-        if (form) {
-          form.submit()
-        }
-      }, 50)
+      const form = urlInput.closest('form')
+      const submitButton = form?.querySelector('input[type="submit"], button[type="submit"]')
+      submitButton?.focus()
     }
   }
   
