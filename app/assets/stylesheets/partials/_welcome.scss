@@ -129,6 +129,12 @@
       background: darken($magenta, 8%);
       text-decoration: none;
     }
+
+    &:visited {
+      color: $magenta;
+      border-color: $magenta;
+      background: $beige;
+    }
   }
 
   &--secondary {

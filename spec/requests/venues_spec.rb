@@ -26,7 +26,7 @@ RSpec.describe 'Venues', type: :request do
 
       post "/venues/join/#{venue.slug}"
 
-      expect(response).to redirect_to(venue_songs_path(venue.slug, event_id: event.id))
+      expect(response).to redirect_to(venue_event_queue_path(venue.slug, event_slug: event.slug))
     end
   end
 

@@ -117,9 +117,14 @@ status should align to the CTA's left edge above the button.
 Expired or not-yet-started events must not display “open for signups”; only a
 live event inside its configured start/end window may do so.
 
-An active event's discovery card and venue join action should open its queue
-for every role. Scheduled events may open the event lobby instead; management
-controls belong behind explicit owner/host actions.
+An active event's discovery card and venue join action should open its
+slug-based queue at `/:venue_slug/events/:event_slug/queue` for every role.
+Scheduled events may open the event lobby instead; management controls belong
+behind explicit owner/host actions. Expired events should not appear in
+discovery until the event lobby/recap surface is ready.
+
+Visited primary CTAs should remain readable: magenta text uses an ivory
+background and thin magenta border rather than magenta-on-magenta.
 
 Verify the role menu slides in from the right below the navbar, while flash
 messages slide down from the navbar using the same brief timing and easing.

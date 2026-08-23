@@ -221,9 +221,14 @@ class SongsController < ApplicationController
 
   def set_queue_event
     event_id = params[:event_id].presence || params.dig(:song, :event_id).presence
-    return if event_id.blank?
+    @current_event = if params[:event_slug].present?
+                       Current.venue.events.find_by(slug: params[:event_slug])
+                     elsif event_id.present?
+                       Current.venue.events.find_by(id: event_id)
+                     end
+    return if @current_event.blank?
 
-    @current_event = Current.venue.events.find_by(id: event_id)
+    @current_event
   end
 
   def set_queue_access

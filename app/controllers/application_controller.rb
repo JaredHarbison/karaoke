@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
     return venue_events_path(venue.slug) unless event
 
     if event.accepting_signups?
-      venue_songs_path(venue.slug, event_id: event.id)
+      venue_event_queue_path(venue.slug, event_slug: event.slug)
     else
       venue_event_path(venue.slug, event)
     end

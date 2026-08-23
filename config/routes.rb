@@ -62,6 +62,7 @@ Rails.application.routes.draw do
         patch :complete
       end
     end
+    get '/events/:event_slug/queue', to: 'songs#index', as: 'event_queue'
     resources :event_host_delegations, only: %i[create destroy]
     resources :event_presence_sessions, only: %i[create destroy]
     resources :themes, except: :show
