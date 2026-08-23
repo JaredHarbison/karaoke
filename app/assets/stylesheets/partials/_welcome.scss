@@ -240,15 +240,16 @@
   margin-top: $space-lg;
   padding-top: $space-md;
   border-top: 1px solid rgba($cyan, 0.22);
-  align-items: center;
   flex-direction: column;
-  justify-content: center;
   gap: $space-sm;
-}
-.venue-card__footer .welcome-button,
-.venue-card__status { width: var(--welcome-cta-width); }
-.venue-card__status {
+  align-items: unset;
+  justify-content: unset;
+  width: fit-content;
   align-self: center;
+}
+.venue-card__footer .welcome-button { width: var(--welcome-cta-width); }
+.venue-card__status {
+  align-self: flex-start;
   display: flex;
   justify-content: flex-start;
 }

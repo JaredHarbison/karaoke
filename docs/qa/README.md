@@ -110,3 +110,6 @@ event-entry action.
 
 The resume CTA and discovery CTA share the same event-entry wording; keep this
 assertion aligned if the label changes.
+
+The card footer should shrink to the CTA width and center as one unit; its
+status should align to the CTA's left edge above the button.
