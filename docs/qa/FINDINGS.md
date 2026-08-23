@@ -28,6 +28,8 @@ result. Do not include real user passwords, private tokens, or personal data.
 
 | QA-019 | Owner/Performer | Event access | Event times and access expiry should use the venue's local time zone | Rails was using UTC while the QA event was scheduled in Eastern time, making the event appear ended and all access sessions inactive |  |  | Fixed locally; manual recheck |
 | QA-020 | Owner/Performer | Event access | The current short code should be easy to find; old codes should not compete with it | The page primarily listed raw token URLs and several historical sessions, with no visible code when the event was not recognized as live |  |  | Fixed locally; manual recheck |
+| QA-021 | Shared | Sign-out/sign-in transition | Alerts should use one consistent semantic treatment without destabilizing layout | A reddish sign-in alert appeared after signing out; alert, warning, and success treatments need a shared strategy, with magenta likely representing alerts/errors |  |  | UI overhaul follow-up |
+| QA-022 | Owner/Performer | Event index/event page | Selecting an event should stay within the event lobby/workspace | The current event page still links to `/songs`, so the journey lands on the legacy venue queue instead of the selected event context |  |  | Route migration follow-up |
 
 ## Resolved findings
 

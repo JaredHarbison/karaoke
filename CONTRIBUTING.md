@@ -55,6 +55,11 @@ prefixes such as `bin/rspec`, `bin/rails`, `gh run`, and the appropriate `git` s
 avoid chaining unrelated commands with `&&` or prefixing commands with shell
 environment assignments when an equivalent direct invocation is available.
 
+For focused specs, use `bin/rspec path/to/spec.rb` (or the repository's
+equivalent focused `bin/rspec` invocation). Do not prepend `COVERAGE=false`:
+`bin/rspec` disables coverage internally for focused arguments and preserves
+coverage for the full suite.
+
 After pushing, prefer one long-lived `gh run watch <run-id>` process over
 repeated status polling. Keep commit, merge, rebase, push, destructive Git
 operations, and production mutations approval-gated.

@@ -15,8 +15,9 @@ bin/rails db:abort_if_pending_migrations
 ```
 
 The `bin/rspec` entry point enables coverage for the full suite and disables it
-for focused arguments, so local targeted runs do not require environment
-assignments. The pre-commit hook is a fast staged-change gate. It checks debug code and
+for focused arguments. Always use `bin/rspec ...` for focused local runs; do
+not prepend `COVERAGE=false` or another environment assignment. The pre-commit
+hook is a fast staged-change gate. It checks debug code and
 obvious secrets, runs RuboCop for staged Ruby, ERB lint for staged ERB, runs a
 small Rails boot sanity check, and runs critical specs for staged application
 or spec changes. It does not replace CI.

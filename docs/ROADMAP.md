@@ -143,6 +143,8 @@ reviewable, manually testable, and documented in the same commit.
 - [Planned] Replace the current page-by-page presentation layer with one shared
   application shell, responsive container, navigation, page header, cards,
   forms, buttons, links, alerts, and status treatments.
+- [Planned] Define one shared alert/warning/success strategy, including
+  consistent semantic colors, placement, persistence, and non-jumping layout.
 - [Planned] Preserve the existing palette and semantic color mapping while
   consolidating it into concise design tokens and reusable SCSS primitives.
 - [Planned] Use a compact mobile/tablet layout tier and a wider desktop tier.
@@ -150,6 +152,8 @@ reviewable, manually testable, and documented in the same commit.
   through desktop, and make display mode desktop-oriented.
 - [Planned] Delete obsolete page-specific styles and templates as each surface
   moves to the shared system.
+- Authentication pages are intentionally out of scope for this reset; the
+  current sign-in and sign-up presentation remains unchanged.
 
 #### 6.3 Event index and state-aware event workspace
 

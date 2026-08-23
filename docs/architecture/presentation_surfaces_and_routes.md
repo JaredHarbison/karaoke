@@ -45,6 +45,8 @@ and semantic color decisions while replacing the current page-specific layout
 system with concise shared tokens, primitives, and responsive rules. Mobile and
 tablet share the compact tier; desktop receives the wider tier. Display mode is
 desktop-oriented, while performer and host workflows remain usable on mobile.
+The existing sign-in and sign-up pages are intentionally excluded from this
+reset and remain unchanged.
 
 ## Consequences / implications
 
