@@ -20,6 +20,14 @@ RSpec.describe 'Venues', type: :request do
       post "/venues/join/#{venue.slug}"
       expect(response.status).to be_in([200, 302, 404])
     end
+
+    it 'enters the active event queue when joining a public venue' do
+      event = create(:event, venue: venue, status: :live, starts_at: 1.hour.ago, ends_at: 1.hour.from_now)
+
+      post "/venues/join/#{venue.slug}"
+
+      expect(response).to redirect_to(venue_songs_path(venue.slug, event_id: event.id))
+    end
   end
 
   describe 'GET /:venue_slug/settings' do

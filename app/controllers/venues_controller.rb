@@ -25,7 +25,7 @@ class VenuesController < ApplicationController
 
     session[:venue_slug] = @venue.slug
     event = @venue.events.current_or_upcoming.order(:starts_at).first
-    destination = event ? venue_event_path(@venue.slug, event) : venue_events_path(@venue.slug)
+    destination = event_entry_path(@venue, event)
     redirect_to destination, notice: "Welcome to #{@venue.name}!"
   end
   

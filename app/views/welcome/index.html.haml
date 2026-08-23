@@ -23,7 +23,7 @@
           .venue-card__status{ class: ("venue-card__status--neutral" unless resume_status_active) }
             %span.venue-card__status-dot{ aria: { hidden: "true" } }
             %span= resume_status
-          = link_to (last_event ? "Go to event" : "View events"), (last_event ? venue_event_path(@last_venue.slug, last_event) : venue_events_path(@last_venue.slug)), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
+          = link_to (last_event&.accepting_signups? ? "Go to queue" : "Go to event"), event_entry_path(@last_venue, last_event), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
 
   %main.welcome-main
     .welcome-toolbar
@@ -55,7 +55,7 @@
               .venue-card__status{ class: ("venue-card__status--neutral" unless event_status_active) }
                 %span.venue-card__status-dot{ aria: { hidden: "true" } }
                 %span= event_status
-              = link_to (event ? "View event" : "View events"), (event ? venue_event_path(venue.slug, event) : venue_events_path(venue.slug)), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
+              = link_to (event&.accepting_signups? ? "View queue" : "View event"), event_entry_path(venue, event), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
     - else
       .venue-empty
         %span.venue-empty__icon 🎤

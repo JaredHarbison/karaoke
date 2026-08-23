@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  helper_method :event_entry_path
+
   before_action :set_current_venue
   before_action :set_current_user
   before_action :require_venue_for_songs
@@ -7,7 +9,17 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
   
   private
-  
+
+  def event_entry_path(venue, event)
+    return venue_events_path(venue.slug) unless event
+
+    if event.accepting_signups?
+      venue_songs_path(venue.slug, event_id: event.id)
+    else
+      venue_event_path(venue.slug, event)
+    end
+  end
+
   def set_current_venue
     # Extract venue_slug from URL path (e.g., /joes-bar/songs)
     venue_slug = params[:venue_slug]

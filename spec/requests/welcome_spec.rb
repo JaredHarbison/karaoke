@@ -19,8 +19,8 @@ RSpec.describe 'Welcome page', type: :request do
     expect(response).to be_successful
     expect(response.body).to include('Franklin Karaoke', '523 Franklin Ave', 'open for signups')
     expect(response.body).to include('venue-card__status', 'venue-card__status-dot')
-    expect(response.body).to include(venue_event_path(venue.slug, event))
-    expect(response.body).not_to include(venue_songs_path(venue.slug))
+    expect(response.body).to include(venue_songs_path(venue.slug, event_id: event.id))
+    expect(response.body).not_to include(%(href="#{venue_songs_path(venue.slug)}"))
     expect(response.body).to include('search venues or locations')
     expect(response.body).to include('Performer Menu', venue.owner.display_name)
     expect(response.body).not_to include('PUBLIC VENUES', 'choose a venue')
@@ -31,8 +31,8 @@ RSpec.describe 'Welcome page', type: :request do
     get venue_event_path(venue.slug, event)
     get root_path
 
-    expect(response.body).to include('Go to event')
-    expect(response.body).to include(venue_event_path(venue.slug, event))
+    expect(response.body).to include('Go to queue')
+    expect(response.body).to include(venue_songs_path(venue.slug, event_id: event.id))
   end
 
   it 'filters public venues by search' do
