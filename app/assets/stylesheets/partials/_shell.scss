@@ -21,6 +21,7 @@
   display: flex;
   gap: $space-lg;
   min-height: 3.5rem;
+  position: relative;
 }
 
 .app-shell__bar .brand-lockup {
@@ -34,23 +35,65 @@
   font-weight: 800;
 }
 
-.app-shell__nav {
-  align-items: center;
-  display: flex;
-  gap: $space-md;
-  margin-left: auto;
+.app-menu { margin-left: auto; position: relative; }
+
+.app-menu__summary {
+  color: $cyan;
+  cursor: pointer;
+  font-weight: 800;
+  list-style: none;
 }
 
-.app-shell__nav form { margin: 0; }
+.app-menu__summary::-webkit-details-marker { display: none; }
 
-.app-shell__nav-link,
-.app-shell__sign-out,
-.app-shell__sidebar-link {
+.app-menu__summary::before { content: '›'; display: inline-block; margin-right: $space-xs; }
+
+.app-menu[open] .app-menu__summary::before { transform: rotate(90deg); }
+
+.app-menu__drawer {
+  background: $midnight;
+  border: 1px solid $cyan;
+  box-shadow: $shadow-lg;
+  min-width: 16rem;
+  padding: $space-md;
+  position: absolute;
+  right: 0;
+  top: calc(100% + $space-md);
+  z-index: $z-dropdown;
+}
+
+.app-menu__heading {
+  align-items: center;
+  border-bottom: 1px solid rgba($cyan, 0.35);
+  color: $yellow;
+  display: flex;
+  font-size: 0.8rem;
+  font-weight: 800;
+  justify-content: space-between;
+  letter-spacing: 0.06em;
+  padding-bottom: $space-sm;
+  text-transform: uppercase;
+}
+
+.app-menu__close {
+  background: none;
+  border: 0;
+  color: $cyan;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+
+.app-menu__nav { display: grid; gap: $space-sm; padding-top: $space-md; }
+
+.app-menu__link,
+.app-menu__sign-out {
   color: $cyan;
   font-weight: 700;
+  text-align: left;
 }
 
-.app-shell__sign-out {
+.app-menu__sign-out {
   background: none;
   border: 0;
   cursor: pointer;
@@ -58,31 +101,7 @@
   padding: 0;
 }
 
-.app-shell__body {
-  display: grid;
-  gap: $space-xl;
-  grid-template-columns: 12rem minmax(0, 1fr);
-  padding: $space-xl $space-lg;
-}
-
-.app-shell__sidebar {
-  border-right: 1px solid rgba($cyan, 0.35);
-  padding-right: $space-lg;
-}
-
-.app-shell__sidebar-label {
-  color: $yellow;
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  margin: 0 0 $space-sm;
-  text-transform: uppercase;
-}
-
-.app-shell__sidebar-link {
-  display: block;
-  padding: $space-sm 0;
-}
+.app-shell__body { padding: $space-xl $space-lg; }
 
 .app-shell__content {
   min-width: 0;
@@ -111,19 +130,11 @@
 }
 
 @media (max-width: $breakpoint-lg) {
-  .app-shell__body { grid-template-columns: 1fr; }
-  .app-shell__sidebar {
-    border-bottom: 1px solid rgba($cyan, 0.35);
-    border-right: 0;
-    padding: 0 0 $space-sm;
-  }
-  .app-shell__sidebar nav { display: flex; gap: $space-md; }
-  .app-shell__sidebar-link { padding: 0; }
+  .app-menu__drawer { min-width: min(20rem, calc(100vw - 2rem)); }
 }
 
 @media (max-width: $breakpoint-sm) {
   .app-shell__header { padding: $space-sm $space-md; }
   .app-shell__bar { flex-wrap: wrap; gap: $space-sm $space-md; }
-  .app-shell__nav { flex-basis: 100%; margin-left: 0; }
   .app-shell__body { padding: $space-lg $space-md; }
 }

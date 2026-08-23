@@ -1,7 +1,0 @@
-%aside.app-shell__sidebar
-  %p.app-shell__sidebar-label Venue menu
-  %nav{ aria: { label: 'Venue navigation' } }
-    = link_to 'Events', venue_events_path(Current.venue.slug), class: 'app-shell__sidebar-link'
-    - if Current.venue&.owner?(current_user)
-      = link_to 'Venue settings', venue_settings_path(Current.venue.slug), class: 'app-shell__sidebar-link'
-    = link_to 'Help', help_path, class: 'app-shell__sidebar-link'

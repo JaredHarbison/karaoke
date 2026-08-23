@@ -34,8 +34,6 @@
       .app-shell
         = render 'shared/application_shell'
         .app-shell__body
-          - if Current.venue.present?
-            = render 'shared/venue_sidebar'
           .app-shell__content#main-content
             .app-flash{ aria: { live: 'polite' } }
               - if notice.present?

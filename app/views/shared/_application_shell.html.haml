@@ -3,12 +3,24 @@
     = render 'shared/brand_lockup'
     - if Current.venue.present?
       = link_to Current.venue.name, venue_events_path(Current.venue.slug), class: 'app-shell__venue'
-    %nav.app-shell__nav{ aria: { label: 'Application navigation' } }
-      = link_to 'Events', (Current.venue ? venue_events_path(Current.venue.slug) : discover_venues_path), class: 'app-shell__nav-link'
-      = link_to 'Help', help_path, class: 'app-shell__nav-link'
-      - if Current.venue&.owner?(current_user)
-        = link_to 'Venue settings', venue_settings_path(Current.venue.slug), class: 'app-shell__nav-link'
-      - if user_signed_in?
-        = button_to 'Sign out', destroy_user_session_path, method: :delete, class: 'app-shell__sign-out'
-      - else
-        = link_to 'Sign in', new_user_session_path, class: 'app-shell__nav-link'
+    - menu_label = if Current.venue&.owner?(current_user)
+      - 'Owner Menu'
+    - elsif Current.venue&.admin?(current_user)
+      - 'Host Menu'
+    - else
+      - 'Performer Menu'
+    %details.app-menu{ data: { controller: 'disclosure', action: 'click@window->disclosure#closeOnOutside keydown@window->disclosure#closeOnEscape' } }
+      %summary.app-menu__summary= menu_label
+      .app-menu__drawer
+        .app-menu__heading
+          %span= menu_label
+          %button.app-menu__close{ type: 'button', data: { action: 'disclosure#close' } } Close
+        %nav.app-menu__nav{ aria: { label: menu_label } }
+          = link_to 'Events', (Current.venue ? venue_events_path(Current.venue.slug) : discover_venues_path), class: 'app-menu__link'
+          - if Current.venue&.owner?(current_user)
+            = link_to 'Venue Settings', venue_settings_path(Current.venue.slug), class: 'app-menu__link'
+          = link_to 'Help', help_path, class: 'app-menu__link'
+          - if user_signed_in?
+            = button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'app-menu__sign-out'
+          - else
+            = link_to 'Sign in', new_user_session_path, class: 'app-menu__link'

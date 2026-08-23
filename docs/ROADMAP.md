@@ -143,6 +143,9 @@ reviewable, manually testable, and documented in the same commit.
 - [Initial slice complete] Establish one shared application shell for event,
   venue-management, theme, and recurring-event surfaces; queue and auth
   surfaces remain intentionally scoped follow-ups.
+- [In progress] Keep the navbar limited to the root/venue identity and a
+  role-labeled menu opener; expose role-aware navigation in a right-side drawer
+  rather than a permanent sidebar or duplicated navbar links.
 - [In progress] Replace the current page-by-page presentation layer with one shared
   application shell, responsive container, navigation, page header, cards,
   forms, buttons, links, alerts, and status treatments.
