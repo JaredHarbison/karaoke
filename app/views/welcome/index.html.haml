@@ -56,7 +56,7 @@
               .venue-card__status{ class: ("venue-card__status--neutral" unless event_status_active) }
                 %span.venue-card__status-dot{ aria: { hidden: "true" } }
                 %span= event_status
-              - event_cta = event.nil? ? "View events" : (event.accepting_signups? ? "View queue" : "View event")
+              - event_cta = event.nil? ? "View events" : (event.accepting_signups? ? "Go to queue" : "View event")
               = link_to event_cta, event_entry_path(venue, event), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
     - else
       .venue-empty

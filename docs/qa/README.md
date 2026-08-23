@@ -123,8 +123,9 @@ Scheduled events may open the event lobby instead; management controls belong
 behind explicit owner/host actions. Expired events should not appear in
 discovery until the event lobby/recap surface is ready.
 
-Visited primary CTAs should remain readable: magenta text uses an ivory
-background and thin magenta border rather than magenta-on-magenta.
+Activated primary CTAs should remain readable briefly: magenta text uses an
+ivory background and thin magenta border rather than magenta-on-magenta, then
+the CTA returns to its normal state.
 
 The resume card follows the venue saved in the current session. If two venues
 share a display name, verify the address and event name before treating their
