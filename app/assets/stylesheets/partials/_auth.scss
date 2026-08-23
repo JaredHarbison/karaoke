@@ -2,17 +2,10 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  gap: $space-2xl;
+  gap: $space-lg;
   justify-content: center;
-  min-height: calc(100vh - 2rem);
-  padding: $space-2xl $space-md;
-}
-
-.auth-screen > .alert,
-.auth-screen > .notice {
-  box-sizing: border-box;
-  margin: 0 auto;
-  max-width: 480px;
+  min-height: calc(100vh - 8rem);
+  padding: $space-lg $space-md;
 }
 
 .auth-card {

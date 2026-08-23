@@ -15,6 +15,7 @@ RSpec.describe 'Welcome page', type: :request do
     expect(response).to be_successful
     expect(response.body).to include('Franklin Karaoke', '523 Franklin Ave', 'open for signups')
     expect(response.body).to include('search venues or locations')
+    expect(response.body).to include('Performer Menu', venue.owner.display_name)
     expect(response.body).not_to include('PUBLIC VENUES', 'choose a venue')
     expect(response.body).not_to include('Hidden Karaoke')
   end
@@ -39,6 +40,7 @@ RSpec.describe 'Welcome page', type: :request do
     get new_user_session_path
 
     expect(response).to be_successful
-    expect(response.body).to include('Sign in')
+    expect(response.body).to include('Sign in', 'Performer Menu', 'Skip to main content')
+    expect(response.body).not_to include('app-header')
   end
 end

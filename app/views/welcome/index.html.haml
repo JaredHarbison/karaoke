@@ -25,7 +25,7 @@
           %article.venue-card
             %h3= venue.name
             %p.venue-card__location= venue.location.presence || "Location not listed"
-            %p.venue-card__host= "#{featured_host&.email&.split("@")&.first || "Venue team"} is hosting!"
+            %p.venue-card__host= "#{featured_host&.display_name || "Venue team"} is hosting!"
             - queue_count = @queue_counts[venue.id] || 0
             %p.venue-card__queue
               - if queue_count.zero?

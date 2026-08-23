@@ -12,7 +12,7 @@
   - auth_surface = controller_path.match?(/\A(devise|users\/(sessions|registrations))/)
   - legacy_queue_surface = controller_path == 'songs'
   %body{ class: ('auth-screen' if auth_surface) }
-    - if auth_surface || legacy_queue_surface
+    - if legacy_queue_surface
       %header.app-header{ class: ('app-header--songs' if content_for?(:songs_app_header)) }
         .app-header__bar
           - if content_for?(:songs_app_header)

@@ -40,7 +40,7 @@
 .app-menu__summary {
   color: $cyan;
   cursor: pointer;
-  font-weight: 800;
+  font-weight: 400;
   list-style: none;
 }
 
@@ -63,34 +63,30 @@
   z-index: $z-dropdown;
 }
 
-.app-menu__heading {
-  align-items: center;
-  border-bottom: 1px solid rgba($yellow, 0.35);
-  color: $yellow;
-  display: flex;
-  font-size: 0.8rem;
-  font-weight: 800;
-  justify-content: space-between;
-  letter-spacing: 0.06em;
-  padding-bottom: $space-sm;
-  text-transform: uppercase;
-}
-
 .app-menu__close {
   background: none;
   border: 0;
   color: $cyan;
   cursor: pointer;
-  font: inherit;
-  padding: 0;
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1;
+  margin-left: auto;
+  padding: 0 0 $space-sm;
 }
 
-.app-menu__nav { display: grid; gap: $space-sm; padding-top: $space-md; }
+.app-menu__nav {
+  border-top: 1px solid rgba($yellow, 0.35);
+  display: grid;
+  gap: $space-sm;
+  padding-top: $space-md;
+}
 
 .app-menu__link,
 .app-menu__sign-out {
   color: $cyan;
-  font-weight: 700;
+  font-weight: 400;
   text-align: left;
 }
 
@@ -103,6 +99,8 @@
 }
 
 .app-shell__body { padding: $space-xl $space-lg; }
+
+.auth-screen .app-shell__body { padding-top: $space-lg; }
 
 .app-shell__content {
   min-width: 0;

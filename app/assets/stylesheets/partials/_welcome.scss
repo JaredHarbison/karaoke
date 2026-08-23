@@ -20,7 +20,7 @@
   padding: $space-xl 0;
   color: $beige;
   background: $midnight;
-  border-bottom: 4px solid $yellow;
+  border-bottom: 2px solid $yellow;
 }
 
 .welcome-header__copy {
@@ -188,9 +188,11 @@
   box-shadow: none;
   transition: box-shadow $transition-base, transform $transition-base;
 
-  &:hover {
+  &:hover,
+  &:focus-within {
     box-shadow: $shadow-lg;
-    transform: translateY(-2px);
+    transform: scale(1.02);
+    z-index: 1;
   }
 
   h3 {

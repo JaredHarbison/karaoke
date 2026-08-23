@@ -12,9 +12,7 @@
     %details.app-menu{ data: { controller: 'disclosure', action: 'click@window->disclosure#closeOnOutside keydown@window->disclosure#closeOnEscape' } }
       %summary.app-menu__summary= menu_label
       .app-menu__drawer
-        .app-menu__heading
-          %span= menu_label
-          %button.app-menu__close{ type: 'button', data: { action: 'disclosure#close' } } Close
+        %button.app-menu__close{ type: 'button', aria: { label: 'Close menu' }, data: { action: 'disclosure#close' } } ×
         %nav.app-menu__nav{ aria: { label: menu_label } }
           = link_to 'Events', (Current.venue ? venue_events_path(Current.venue.slug) : discover_venues_path), class: 'app-menu__link'
           - if Current.venue&.owner?(current_user)
