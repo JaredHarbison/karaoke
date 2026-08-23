@@ -1,4 +1,4 @@
-.welcome-page{ data: { controller: "cta-size time-of-day" } }
+.welcome-page{ data: { controller: "cta-size time-of-day cta-state" } }
   %header.welcome-header
     .welcome-header__copy
       %h1 Where Are You Singing <span data-time-of-day-target="label">Tonight</span>?
@@ -23,7 +23,8 @@
           .venue-card__status{ class: ("venue-card__status--neutral" unless resume_status_active) }
             %span.venue-card__status-dot{ aria: { hidden: "true" } }
             %span= resume_status
-          = link_to (last_event&.accepting_signups? ? "Go to queue" : "Go to event"), event_entry_path(@last_venue, last_event), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
+          - resume_cta = last_event.nil? ? "View events" : (last_event.accepting_signups? ? "Go to queue" : "Go to event")
+          = link_to resume_cta, event_entry_path(@last_venue, last_event), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
 
   %main.welcome-main
     .welcome-toolbar
@@ -55,7 +56,8 @@
               .venue-card__status{ class: ("venue-card__status--neutral" unless event_status_active) }
                 %span.venue-card__status-dot{ aria: { hidden: "true" } }
                 %span= event_status
-              = link_to (event&.accepting_signups? ? "View queue" : "View event"), event_entry_path(venue, event), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
+              - event_cta = event.nil? ? "View events" : (event.accepting_signups? ? "View queue" : "View event")
+              = link_to event_cta, event_entry_path(venue, event), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
     - else
       .venue-empty
         %span.venue-empty__icon 🎤

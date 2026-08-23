@@ -1,5 +1,6 @@
 import { application } from "controllers/application"
 import CtaSizeController from "controllers/cta_size_controller"
+import CtaStateController from "controllers/cta_state_controller"
 import DisclosureController from "controllers/disclosure_controller"
 import FlashController from "controllers/flash_controller"
 import HelloController from "controllers/hello_controller"
@@ -13,6 +14,7 @@ import YoutubePlayerController from "controllers/youtube_player_controller"
 import YoutubeSearchController from "controllers/youtube_search_controller"
 
 application.register("cta-size", CtaSizeController)
+application.register("cta-state", CtaStateController)
 application.register("disclosure", DisclosureController)
 application.register("flash", FlashController)
 application.register("hello", HelloController)

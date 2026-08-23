@@ -126,5 +126,9 @@ discovery until the event lobby/recap surface is ready.
 Visited primary CTAs should remain readable: magenta text uses an ivory
 background and thin magenta border rather than magenta-on-magenta.
 
+The resume card follows the venue saved in the current session. If two venues
+share a display name, verify the address and event name before treating their
+cards as duplicates.
+
 Verify the role menu slides in from the right below the navbar, while flash
 messages slide down from the navbar using the same brief timing and easing.
