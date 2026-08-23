@@ -2,15 +2,16 @@
 @import 'tokens';
 
 .app-shell {
+  margin: -1rem;
   min-height: 100vh;
 }
 
 .app-shell__header {
   border-bottom: 2px solid $yellow;
   padding: $space-md $space-lg;
+  position: relative;
 }
 
-.app-shell__bar,
 .app-shell__body {
   margin: 0 auto;
   max-width: 1180px;
@@ -21,7 +22,6 @@
   display: flex;
   gap: $space-lg;
   min-height: 3.5rem;
-  position: relative;
 }
 
 .app-shell__bar .brand-lockup {
@@ -56,9 +56,10 @@
   box-shadow: $shadow-lg;
   min-width: 16rem;
   padding: $space-md;
-  position: absolute;
+  position: fixed;
   right: 0;
-  top: calc(100% + $space-md);
+  top: 5.5rem;
+  bottom: 0;
   z-index: $z-dropdown;
 }
 
@@ -140,4 +141,5 @@
   .app-shell__header { padding: $space-sm $space-md; }
   .app-shell__bar { flex-wrap: wrap; gap: $space-sm $space-md; }
   .app-shell__body { padding: $space-lg $space-md; }
+  .app-menu__drawer { top: 4.5rem; }
 }
