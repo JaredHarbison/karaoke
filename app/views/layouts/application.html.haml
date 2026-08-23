@@ -9,20 +9,37 @@
     = csp_meta_tag
     = stylesheet_link_tag "application", "data-turbo-track": "reload"
     = javascript_importmap_tags
-  %body{ class: ('auth-screen' if controller_path.start_with?('devise/')) }
-    %header.app-header{ class: ('app-header--songs' if content_for?(:songs_app_header)) }
-      .app-header__bar
-        - if content_for?(:songs_app_header)
-          = yield :songs_app_header
-        - else
-          = render 'shared/brand_lockup'
+  - auth_surface = controller_path.match?(/\A(devise|users\/(sessions|registrations))/)
+  - legacy_queue_surface = controller_path == 'songs'
+  %body{ class: ('auth-screen' if auth_surface) }
+    - if auth_surface || legacy_queue_surface
+      %header.app-header{ class: ('app-header--songs' if content_for?(:songs_app_header)) }
+        .app-header__bar
+          - if content_for?(:songs_app_header)
+            = yield :songs_app_header
+          - else
+            = render 'shared/brand_lockup'
+            - if Current.venue.present?
+              .app-header__venue-name= Current.venue.name
+            - if content_for?(:app_header_actions)
+              .app-header__actions
+                = yield :app_header_actions
+        - if notice.present?
+          %p.notice{ role: 'status', data: { controller: 'flash' } }= notice
+        - if alert.present?
+          %p.alert{ role: 'alert' }= alert
+      = yield
+    - else
+      %a.skip-link{ href: '#main-content' } Skip to main content
+      .app-shell
+        = render 'shared/application_shell'
+        .app-shell__body
           - if Current.venue.present?
-            .app-header__venue-name= Current.venue.name
-          - if content_for?(:app_header_actions)
-            .app-header__actions
-              = yield :app_header_actions
-      - if notice.present?
-        %p.notice{ role: 'status', data: { controller: 'flash' } }= notice
-      - if alert.present?
-        %p.alert{ role: 'alert' }= alert
-    = yield
+            = render 'shared/venue_sidebar'
+          .app-shell__content#main-content
+            .app-flash{ aria: { live: 'polite' } }
+              - if notice.present?
+                %p.app-flash__message.app-flash__message--notice{ role: 'status', data: { controller: 'flash' } }= notice
+              - if alert.present?
+                %p.app-flash__message.app-flash__message--alert{ role: 'alert' }= alert
+            = yield

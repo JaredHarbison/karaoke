@@ -1,0 +1,14 @@
+%header.app-shell__header
+  .app-shell__bar
+    = render 'shared/brand_lockup'
+    - if Current.venue.present?
+      = link_to Current.venue.name, venue_events_path(Current.venue.slug), class: 'app-shell__venue'
+    %nav.app-shell__nav{ aria: { label: 'Application navigation' } }
+      = link_to 'Events', (Current.venue ? venue_events_path(Current.venue.slug) : discover_venues_path), class: 'app-shell__nav-link'
+      = link_to 'Help', help_path, class: 'app-shell__nav-link'
+      - if Current.venue&.owner?(current_user)
+        = link_to 'Venue settings', venue_settings_path(Current.venue.slug), class: 'app-shell__nav-link'
+      - if user_signed_in?
+        = button_to 'Sign out', destroy_user_session_path, method: :delete, class: 'app-shell__sign-out'
+      - else
+        = link_to 'Sign in', new_user_session_path, class: 'app-shell__nav-link'

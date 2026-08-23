@@ -23,7 +23,7 @@ RSpec.describe 'Events', type: :request do
       get venue_events_path(venue.slug)
 
       expect(response).to be_successful
-      expect(response.body).to include('Events', 'Friday Karaoke')
+      expect(response.body).to include('Events', 'Friday Karaoke', 'Venue menu', 'Skip to main content')
     end
 
     it 'requires authentication' do

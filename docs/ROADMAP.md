@@ -140,7 +140,10 @@ reviewable, manually testable, and documented in the same commit.
 
 #### 6.2 Presentation reset and shared shell
 
-- [Planned] Replace the current page-by-page presentation layer with one shared
+- [Initial slice complete] Establish one shared application shell for event,
+  venue-management, theme, and recurring-event surfaces; queue and auth
+  surfaces remain intentionally scoped follow-ups.
+- [In progress] Replace the current page-by-page presentation layer with one shared
   application shell, responsive container, navigation, page header, cards,
   forms, buttons, links, alerts, and status treatments.
 - [Planned] Define one shared alert/warning/success strategy, including
