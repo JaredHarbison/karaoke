@@ -12,7 +12,7 @@
 .welcome-header {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
-  align-items: flex-end;
+  align-items: stretch;
   width: calc(100% - 2rem);
   max-width: 1120px;
   margin: 0 auto;
@@ -49,10 +49,13 @@
   min-width: 0;
   flex-direction: column;
   gap: $space-xs;
+  height: 100%;
+  justify-content: space-between;
   padding: $space-md;
   border: 1px solid rgba($cyan, 0.5);
   border-radius: $radius-xl;
   background: rgba($cyan, 0.1);
+  box-sizing: border-box;
 
   strong {
     color: $beige;

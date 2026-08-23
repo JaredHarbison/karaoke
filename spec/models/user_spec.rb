@@ -80,6 +80,12 @@ RSpec.describe User, type: :model do
 
       expect(user.display_name).to eq('Jared Harbison')
     end
+
+    it 'ignores plus-addressing tags when deriving a readable name' do
+      user = build(:user, email: 'jared.harbison+host@example.com')
+
+      expect(user.display_name).to eq('Jared Harbison')
+    end
   end
 
   describe '#platform_operator?' do

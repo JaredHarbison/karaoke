@@ -52,7 +52,7 @@ class User < ApplicationRecord
   end
 
   def display_name
-    email.to_s.split('@').first.tr('._-', ' ').titleize
+    email.to_s.split('@').first.to_s.split('+').first.tr('._-', ' ').titleize
   end
 
   private

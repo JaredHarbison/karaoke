@@ -38,6 +38,7 @@ result. Do not include real user passwords, private tokens, or personal data.
 | QA-028 | Shared/Auth | Flash message layering | Translucent flash backgrounds allowed underlying page content to show through the message surface | Set alert and notice surfaces to a near-opaque midnight background while retaining their magenta/green semantic borders | 2026-08-23 | Implemented; visual recheck pending |
 | QA-029 | Shared | Shell border hierarchy | The drawer contained a redundant internal line, its first action sat below the close control, and shell/component border weights were not clearly separated | Removed the drawer's internal rule, aligned its first action with `×`, and standardized `2px` for page-level shell boundaries versus `1px` for inner cards | 2026-08-23 | Implemented; visual recheck pending |
 | QA-030 | Shared | Shell navigation labels | The role menu mixed title case and sentence case (`Sign Out` / `Sign in`) | Standardized navigation labels to title case | 2026-08-23 | Implemented; visual recheck pending |
+| QA-031 | Discovery | Resume card and host identity | The resume card did not fill the discovery header row, and plus-addressing tags leaked into host-facing names | Stretched the resume card with space-between layout and stripped plus-addressing tags from the email-derived display-name fallback | 2026-08-23 | Implemented; visual recheck pending |
 
 ## Resolved findings
 
