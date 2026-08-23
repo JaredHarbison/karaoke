@@ -23,11 +23,11 @@ RSpec.describe 'Welcome page', type: :request do
     expect(response.body).not_to include('Hidden Karaoke')
   end
 
-  it 'labels the resume action with the last venue name' do
+  it 'uses the shared event label for the resume action' do
     get venue_event_path(venue.slug, event)
     get root_path
 
-    expect(response.body).to include("Go to #{venue.name}")
+    expect(response.body).to include('Go to event')
     expect(response.body).to include(venue_event_path(venue.slug, event))
   end
 

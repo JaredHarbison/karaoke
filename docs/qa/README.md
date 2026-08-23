@@ -107,3 +107,6 @@ to the same content edge. The resume card should match the venue-card content
 and spacing exactly, with only its “Continue where you left off” eyebrow added
 above the venue name. Its CTA should read “Go to event,” matching the shared
 event-entry action.
+
+The resume CTA and discovery CTA share the same event-entry wording; keep this
+assertion aligned if the label changes.
