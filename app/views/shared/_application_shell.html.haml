@@ -22,3 +22,9 @@
             = button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'app-menu__sign-out'
           - else
             = link_to 'Sign in', new_user_session_path, class: 'app-menu__link'
+  .app-shell__flash
+    .app-flash{ aria: { live: 'polite' } }
+      - if notice.present?
+        %p.app-flash__message.app-flash__message--notice{ role: 'status', data: { controller: 'flash' } }= notice
+      - if alert.present?
+        %p.app-flash__message.app-flash__message--alert{ role: 'alert', data: { controller: 'flash' } }= alert

@@ -35,9 +35,4 @@
         = render 'shared/application_shell'
         .app-shell__body
           .app-shell__content#main-content
-            .app-flash{ aria: { live: 'polite' } }
-              - if notice.present?
-                %p.app-flash__message.app-flash__message--notice{ role: 'status', data: { controller: 'flash' } }= notice
-              - if alert.present?
-                %p.app-flash__message.app-flash__message--alert{ role: 'alert' }= alert
             = yield
