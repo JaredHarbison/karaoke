@@ -914,42 +914,19 @@
   text-decoration: none;
   cursor: pointer;
 
-  &--play { color: $magenta; border-color: rgba($magenta, 0.7); }
-  &--open { color: $cyan; border-color: rgba($cyan, 0.7); }
-  &--pause { color: $cyan; border-color: rgba($cyan, 0.7); }
-  &--unpause { color: $cyan; border-color: rgba($cyan, 0.7); }
-  &--cancel { color: $cyan; border-color: rgba($cyan, 0.7); }
-  &--requeue { color: $cyan; border-color: rgba($cyan, 0.7); }
-  &--skip { color: $cyan; border-color: rgba($cyan, 0.7); }
-  &--edit { color: $cyan; border-color: rgba($cyan, 0.7); }
-  &--remove { color: $yellow; border-color: rgba($yellow, 0.7); }
+  &--play { @include song-action-tone($magenta); }
+  &--open,
+  &--pause,
+  &--unpause,
+  &--cancel,
+  &--requeue,
+  &--skip,
+  &--edit,
+  &--more { @include song-action-tone($cyan); }
+  &--remove { @include song-action-tone($yellow); }
 
   &:hover,
-  &:focus-visible {
-    color: $midnight;
-    text-decoration: none;
-  }
-
-  &--play:hover,
-  &--play:focus-visible { background: $magenta; }
-
-  &--open:hover,
-  &--open:focus-visible,
-  &--requeue:hover,
-  &--requeue:focus-visible,
-  &--edit:hover,
-  &--edit:focus-visible { background: $cyan; }
-
-  &--pause:hover,
-  &--pause:focus-visible,
-  &--skip:hover,
-  &--skip:focus-visible { background: $cyan; }
-
-  &--remove:hover,
-  &--remove:focus-visible { color: $midnight; background: $yellow; }
-
-  &--cancel:hover,
-  &--cancel:focus-visible { color: $midnight; background: $cyan; }
+  &:focus-visible { text-decoration: none; }
 
 }
 
@@ -973,8 +950,6 @@
 }
 
 .song-action--more {
-  color: $cyan;
-  border-color: rgba($cyan, 0.7);
   list-style: none;
 
   &::-webkit-details-marker {

@@ -12,3 +12,14 @@
     outline: none;
   }
 }
+
+@mixin song-action-tone($color) {
+  border-color: rgba($color, 0.7);
+  color: $color;
+
+  &:hover,
+  &:focus-visible {
+    background: $color;
+    color: $midnight;
+  }
+}

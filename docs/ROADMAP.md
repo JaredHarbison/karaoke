@@ -197,7 +197,8 @@ reviewable, manually testable, and documented in the same commit.
   still planned.
 - [In progress] Use one queue-card hierarchy: performer name in yellow, song
   title in ivory, and no redundant category pill; map operational actions to
-  the shared cyan, magenta, and yellow semantics.
+  the shared cyan, magenta, and yellow semantics. Secondary actions share one
+  Sass interaction rule across hover, focus, and disclosure-open states.
 - [Initial slice complete] Normalize provider-style song titles for queue
   display without changing stored metadata or using the provider URL as the
   visible song name.
