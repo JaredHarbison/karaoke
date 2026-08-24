@@ -45,6 +45,8 @@ over `523 Franklin Ave`.
      its inactive labels and outline are cyan, and its selected tab is cyan-filled.
    - Action labels are ivory while their icons retain the semantic action colors;
      mobile action controls are square and do not overflow the card.
+   - The pause dialog keeps compact Cancel/Pause buttons, and its close icon
+     shows a square magenta hover/focus target.
 3. Toggle Fair Queue off and on.
    - FIFO behavior and the explanation are shown when disabled.
 4. Inspect the Fair Queue override audit.

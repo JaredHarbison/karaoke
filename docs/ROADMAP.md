@@ -211,7 +211,8 @@ reviewable, manually testable, and documented in the same commit.
   queue records with missing titles; it requires `YOUTUBE_API_KEY` and skips
   records whose provider metadata cannot be retrieved.
 - [Initial slice complete] Simplify the pause dialog copy and spacing while
-  preserving the shared 1px yellow modal treatment.
+  preserving the shared 1px yellow modal treatment; keep its actions compact
+  and its close control square on hover/focus.
 - [In progress] Keep the mobile shell compact and stable: preserve a usable
   keyboard skip link without a persistent success banner, keep brand and role
   menu controls on one row, and prevent drawer/page animation from shifting
