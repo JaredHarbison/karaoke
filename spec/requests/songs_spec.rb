@@ -116,6 +116,22 @@ RSpec.describe 'Songs', type: :request do
       expect(card.at_css('.song-category')).to be_nil
     end
 
+    it 'reveals larger queues in pages of ten' do
+      sign_out user
+      sign_in venue.owner
+      11.times { |index| create(:performance, venue: venue, user: nil, performer: "Singer #{index}", title: "Song #{index}") }
+
+      get "/#{venue.slug}/songs"
+
+      page = Nokogiri::HTML(response.body)
+      expect(page.css('.song-queue-card').length).to eq(10)
+      expect(page.at_css('.songs-more-button').text).to include('More')
+
+      get "/#{venue.slug}/songs", params: { page: 2 }
+
+      expect(Nokogiri::HTML(response.body).css('.song-queue-card').length).to eq(11)
+    end
+
     it 'shows a normalized song name instead of a provider URL or karaoke descriptors' do
       sign_out user
       sign_in venue.owner

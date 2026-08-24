@@ -26,17 +26,9 @@
                     %span.songs-heading__mobile-hide Performers
                   %span.songs-count
                     %span In Line
-                    %span= @upcoming.count
+                    %span= @upcoming_total
 
-              - if @upcoming.any?
-                .song-card-list
-                  - @upcoming.each_with_index do |song, index|
-                    = render "queue_song_card", song: song, position: index + 1, next_song: index.zero?, can_manage_queue: can_manage_queue
-              - else
-                .songs-empty
-                  %span.songs-empty__icon 🎤
-                  %h3 The queue is open
-                  %p Add the first song and get tonight started.
+              = render "upcoming_list", upcoming: @upcoming, upcoming_page: @upcoming_page, upcoming_has_more: @upcoming_has_more
 
               - if @theme_review.any?
                 %section.songs-panel.songs-panel--theme-review{ aria: { labelledby: "theme-review-heading" } }
@@ -85,17 +77,9 @@
                       %span.songs-heading__mobile-hide Performers
                     %span.songs-count
                       %span In Line
-                      %span= @upcoming.count
+                      %span= @upcoming_total
 
-                - if @upcoming.any?
-                  .song-card-list
-                    - @upcoming.each_with_index do |song, index|
-                      = render "queue_song_card", song: song, position: index + 1, next_song: index.zero?, can_manage_queue: can_manage_queue
-                - else
-                  .songs-empty
-                    %span.songs-empty__icon 🎤
-                    %h3 The queue is open
-                    %p Add the first song and get tonight started.
+                = render "upcoming_list", upcoming: @upcoming, upcoming_page: @upcoming_page, upcoming_has_more: @upcoming_has_more
 
                 - if @skipped.any?
                   .songs-subsection

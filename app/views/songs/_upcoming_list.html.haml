@@ -1,0 +1,13 @@
+- if upcoming.any?
+  .song-card-list
+    - upcoming.each_with_index do |song, index|
+      = render "queue_song_card", song: song, position: index + 1, next_song: index.zero?, can_manage_queue: @can_manage_queue
+  - if upcoming_has_more
+    = link_to venue_songs_path(Current.venue.slug, event_id: @current_event&.id, page: upcoming_page + 1), class: "songs-more-button" do
+      %span.songs-more-button__icon{ aria: { hidden: "true" } } +
+      %span More
+- else
+  .songs-empty
+    %span.songs-empty__icon 🎤
+    %h3 The queue is open
+    %p Add the first song and get tonight started.

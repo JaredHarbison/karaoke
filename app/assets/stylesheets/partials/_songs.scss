@@ -807,6 +807,31 @@
   gap: $space-sm;
 }
 
+.songs-more-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-xs;
+  width: fit-content;
+  margin: $space-md auto 0;
+  padding: $space-xs $space-md;
+  border: 1px solid $magenta;
+  border-radius: $radius-md;
+  color: $magenta;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    background: $magenta;
+    color: $midnight;
+  }
+}
+
+.songs-more-button__icon {
+  font-size: 1.2em;
+  line-height: 1;
+}
+
 .song-queue-card {
   display: grid;
   grid-template-columns: 64px minmax(0, 1fr) auto;

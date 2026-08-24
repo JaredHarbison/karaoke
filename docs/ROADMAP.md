@@ -195,10 +195,12 @@ reviewable, manually testable, and documented in the same commit.
   place song selection before the QR card and finished performers below it.
   Queue-specific behavior and the remaining mobile interaction polish are
   still planned.
-- [In progress] Use one queue-card hierarchy: performer name in yellow, song
-  first name plus last-name initial in yellow, song title in ivory, and no redundant category pill; map operational actions to
+- [In progress] Use one queue-card hierarchy: performer first name plus
+  last-name initial in yellow, song title in ivory, and no redundant category pill; map operational actions to
   the shared cyan, magenta, and yellow semantics. Secondary actions share one
   Sass interaction rule across hover, focus, and disclosure-open states.
+- [Planned] Paginate long queues without nested mobile scrolling; reveal more
+  entries through a consistent pink outlined control while preserving fair order.
 - [Initial slice complete] Normalize provider-style song titles for queue
   display without changing stored metadata or using the provider URL as the
   visible song name.

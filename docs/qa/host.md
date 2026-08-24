@@ -30,6 +30,8 @@ over `523 Franklin Ave`.
    - Each action succeeds and the queue reflects it.
    - Skipped songs do not count as completed turns.
    - Queue cards show the performer’s first name and last-name initial only.
+   - Queues larger than ten entries show a pink outlined `+ More` control and
+     reveal the next page without changing queue order.
    - On mobile, every activity button has the same height; hover, keyboard focus,
      and the open More menu use the cyan secondary-action state.
 3. Toggle Fair Queue off and on.

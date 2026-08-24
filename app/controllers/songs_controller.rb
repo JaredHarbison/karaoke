@@ -211,11 +211,15 @@ class SongsController < ApplicationController
     @skipped = queue.skipped
     @theme_review = queue.theme_review.order(:created_at)
     @songs = queue
-    @upcoming = if @current_event&.fair_queue_enabled?
-                  SongQueue::FairOrder.new(queue.upcoming, event: @current_event).call
-                else
-                  queue.upcoming.order(:updated_at)
-                end
+    ordered_upcoming = if @current_event&.fair_queue_enabled?
+                         SongQueue::FairOrder.new(queue.upcoming, event: @current_event).call
+                       else
+                         queue.upcoming.order(:updated_at).to_a
+                       end
+    @upcoming_total = ordered_upcoming.length
+    @upcoming_page = [params.fetch(:page, 1).to_i, 1].max
+    @upcoming = ordered_upcoming.first(@upcoming_page * 10)
+    @upcoming_has_more = @upcoming.length < @upcoming_total
     set_queue_access
   end
 
