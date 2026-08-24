@@ -31,7 +31,8 @@ over `523 Franklin Ave`.
 2. Finish, skip, pause, unpause, and requeue entries.
    - Each action succeeds and the queue reflects it.
    - Skipped songs do not count as completed turns.
-   - Queue cards show the performer’s first name and last-name initial only.
+   - Queue cards show the performer’s first name and last-name initial only,
+     with the performer and song title using the ivory text treatment.
    - Queues larger than ten entries show a pink outlined `+ More` control and
      reveal the next page without changing queue order.
    - On mobile, every activity button has the same height; hover, keyboard focus,

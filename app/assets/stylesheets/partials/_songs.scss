@@ -917,11 +917,11 @@
   flex-wrap: wrap;
   gap: $space-sm;
 
-  h3 {
-    margin: 0;
-    color: $yellow;
-    font-size: 1rem;
-    text-align: left;
+    h3 {
+      margin: 0;
+      color: $beige;
+      font-size: 1rem;
+      text-align: left;
   }
 }
 
@@ -937,7 +937,7 @@
 
 .song-queue-card__meta {
   margin: $space-xs 0 0;
-  color: rgba(242, 238, 226, 0.54);
+  color: $beige;
   font-size: 0.76rem;
 }
 
@@ -1567,6 +1567,7 @@
 
   .song-queue-card__position {
     width: auto;
+    align-self: center;
     padding-top: 1px;
   }
 
