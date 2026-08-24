@@ -90,6 +90,20 @@ RSpec.describe 'Songs', type: :request do
       expect(page.css('.song-queue-card__meta').text).to include('Black Velvet')
     end
 
+    it 'uses a simple performer and song hierarchy without category pills' do
+      sign_out user
+      sign_in venue.owner
+      create(:performance, venue: venue, performer: 'Jared Harbison', title: 'Black Velvet', category: 'QA')
+
+      get "/#{venue.slug}/songs"
+
+      page = Nokogiri::HTML(response.body)
+      card = page.css('.song-queue-card').last
+      expect(card.at_css('.song-queue-card__title-row h3').text).to include('Jared Harbison')
+      expect(card.at_css('.song-queue-card__meta').text).to include('Black Velvet')
+      expect(card.at_css('.song-category')).to be_nil
+    end
+
     it 'shows archive management actions to owners' do
       sign_out user
       sign_in venue.owner

@@ -195,6 +195,9 @@ reviewable, manually testable, and documented in the same commit.
   place song selection before the QR card and finished performers below it.
   Queue-specific behavior and the remaining mobile interaction polish are
   still planned.
+- [In progress] Use one queue-card hierarchy: performer name in yellow, song
+  title in ivory, and no redundant category pill; map operational actions to
+  the shared cyan, magenta, and yellow semantics.
 - [Planned] Improve add-song feedback, validation errors, duplicate-submission
   messaging, retry states, and event-context preservation.
 - [In progress] Keep event presence recovery visible and focused when a

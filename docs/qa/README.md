@@ -153,6 +153,11 @@ secondary column. The QR card should have one outer card padding treatment, not
 an extra nested panel inset. The redundant Fair Queue explanatory sentence
 should not appear on the queue surface.
 
+Queue cards should present the performer name once in yellow and the song title
+once in ivory, without a redundant category pill. Play may remain magenta;
+Pause, Skip, and More use cyan; Remove uses yellow. Confirm opening the role
+drawer does not animate or shift the queue content itself.
+
 ## Accessibility smoke checks
 
 On sign-in, sign-up, and discovery, verify there is one labeled main landmark

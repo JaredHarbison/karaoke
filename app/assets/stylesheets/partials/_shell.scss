@@ -61,6 +61,7 @@
   animation: slideInRight $transition-base;
   background: $midnight;
   border: 2px solid $yellow;
+  contain: layout paint;
   box-shadow: $shadow-lg;
   min-width: 16rem;
   min-height: calc(100vh - 6rem);
@@ -69,6 +70,7 @@
   right: 0;
   top: 100%;
   z-index: $z-sticky;
+  will-change: transform;
 }
 
 .app-menu__close {
