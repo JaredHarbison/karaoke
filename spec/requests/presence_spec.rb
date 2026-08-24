@@ -21,7 +21,7 @@ RSpec.describe 'Presence access', type: :request do
 
     get event_presence_path(presence.token)
 
-    expect(response).to redirect_to(venue_songs_path(venue.slug, event_id: event.id))
+    expect(response).to redirect_to(venue_event_queue_path(venue.slug, event_slug: event.slug))
   end
 
   it 'resolves an active event presence short code case-insensitively' do
@@ -30,7 +30,7 @@ RSpec.describe 'Presence access', type: :request do
 
     get event_presence_code_path(short_code: presence.short_code.downcase)
 
-    expect(response).to redirect_to(venue_songs_path(venue.slug, event_id: event.id))
+    expect(response).to redirect_to(venue_event_queue_path(venue.slug, event_slug: event.slug))
   end
 
   it 'accepts readable spacing and hyphen formatting for an event code' do
@@ -40,7 +40,7 @@ RSpec.describe 'Presence access', type: :request do
 
     get event_presence_code_path(short_code: formatted_code)
 
-    expect(response).to redirect_to(venue_songs_path(venue.slug, event_id: event.id))
+    expect(response).to redirect_to(venue_event_queue_path(venue.slug, event_slug: event.slug))
   end
 
   it 'rejects an expired event presence short code' do

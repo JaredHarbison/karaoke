@@ -2,24 +2,34 @@
   .songs-panel__heading
     %div
       %h2 Queue a Song
-  %details.songs-instructions
-    %summary How to queue a song
-    .songs-guide
-      .songs-guide__step
-        %span 1
-        %p Search by song title or artist.
-      .songs-guide__step
-        %span 2
-        %p Select a karaoke video from the results.
-      .songs-guide__step
-        %span 3
-        %p Your name joins the lineup. Hosts manage the order.
-  - if @current_event
-    %details.songs-access-code{ open: true }
-      %summary Enter event access code
-      %p Enter the six-character code shown on the venue display before queueing into this event.
-      = form_with url: event_presence_code_path, method: :get, local: true do |form|
-        = form.label :short_code, "Event access code"
-        = form.text_field :short_code, maxlength: 6, autocomplete: "one-time-code", autocapitalize: "characters", spellcheck: false, autofocus: (@current_event && !@can_manage_queue && !@event_presence_active)
-        = form.submit "Join event"
+    .songs-help{ data: { controller: "dialog" } }
+      %button.songs-help__trigger{ type: "button", data: { action: "dialog#open" } }
+        %span.songs-help__icon{ aria: { hidden: "true" } } ?
+        %span How to queue
+      %dialog.pause-dialog.songs-help-dialog{ aria: { labelledby: "songs-help-heading" }, data: { dialog_target: "dialog", action: "click->dialog#closeOnBackdrop" } }
+        .pause-dialog__content
+          .pause-dialog__heading
+            %h2#songs-help-heading How to queue a song
+            %button.pause-dialog__close{ type: "button", aria: { label: "Close queue instructions" }, data: { action: "dialog#close" } } ×
+          .songs-guide
+            .songs-guide__step
+              %span 1
+              %p Search by song title or artist.
+            .songs-guide__step
+              %span 2
+              %p Select a karaoke video from the results.
+            .songs-guide__step
+              %span 3
+              %p Your name joins the lineup. Hosts manage the order.
+  - if @current_event&.live? && !@can_manage_queue && !@event_presence_active
+    .songs-access{ data: { controller: "dialog" } }
+      %dialog.pause-dialog.songs-access-dialog{ open: true, aria: { labelledby: "event-access-heading" }, data: { dialog_target: "dialog" } }
+        .pause-dialog__content
+          .pause-dialog__heading
+            %h2#event-access-heading Enter event access code
+          %p Enter the six-character code shown on the venue display to join this event queue.
+          = form_with url: event_presence_code_path(venue_slug: Current.venue.slug, event_slug: @current_event.slug), method: :get, local: true, class: "songs-access__form" do |form|
+            = form.label :short_code, "Event access code"
+            = form.text_field :short_code, maxlength: 6, autocomplete: "one-time-code", autocapitalize: "characters", spellcheck: false, autofocus: true
+            = form.submit "Join Event", class: "btn btn-primary"
   = render "form", song: song, index_page: true

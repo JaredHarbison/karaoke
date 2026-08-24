@@ -28,7 +28,7 @@ RSpec.describe 'Songs', type: :request do
       expect(page.css('[role="tab"]').map(&:text).map(&:strip)).to eq(['Queue', 'Add Song'])
       expect(page.css('[role="tabpanel"]').map { |panel| panel['id'] }).to eq(['queue-panel', 'add-panel'])
       expect(page.css('.songs-tab-panels > [role="tabpanel"]').length).to eq(2)
-      expect(response.body).to include('songs-instructions')
+      expect(response.body).to include('songs-help-dialog')
       expect(response.body).to include('songs-panel--finished')
       expect(response.body).to include('app-shell__header', 'app-menu__summary')
       expect(response.body).not_to include('Fair Queue favors performers')
@@ -48,6 +48,7 @@ RSpec.describe 'Songs', type: :request do
       page = Nokogiri::HTML(response.body)
       expect(page.at_css('input#song_url')['name']).to eq('song[url]')
       expect(page.at_css('input#song_title')['name']).to eq('song[title]')
+      expect(page.at_css('form[data-controller="youtube-search"]')['data-action']).to include('submit->youtube-search#submit')
     end
 
     it 'opens the event access-code step for an event queue' do
@@ -55,7 +56,8 @@ RSpec.describe 'Songs', type: :request do
 
       get "/#{venue.slug}/songs", params: { event_id: event.id }
 
-      expect(Nokogiri::HTML(response.body).at_css('details.songs-access-code').has_attribute?('open')).to be(true)
+      dialog = Nokogiri::HTML(response.body).at_css('dialog.songs-access-dialog')
+      expect(dialog).to have_attribute('open')
     end
 
     it 'shows Play only for the next queued song' do
@@ -201,7 +203,7 @@ RSpec.describe 'Songs', type: :request do
 
       post "/#{venue.slug}/songs", params: { song: { performer: 'Event Singer', url: 'https://youtube.com/event', event_id: event.id } }
 
-      expect(response).to redirect_to("/#{venue.slug}/songs?event_id=#{event.id}")
+      expect(response).to redirect_to(venue_event_queue_path(venue.slug, event_slug: event.slug))
       expect(Performance.last.event).to eq(event)
       expect(Performance.last).to have_attributes(metadata_status: 'eligible', duration_seconds: 180, duration_source: 'provider')
     end
@@ -217,7 +219,7 @@ RSpec.describe 'Songs', type: :request do
 
       expect { post "/#{venue.slug}/songs", params: params }.to change(Performance, :count).by(1)
       expect { post "/#{venue.slug}/songs", params: params }.not_to change(Performance, :count)
-      expect(response).to redirect_to("/#{venue.slug}/songs?event_id=#{event.id}")
+      expect(response).to redirect_to(venue_event_queue_path(venue.slug, event_slug: event.slug))
       expect(flash[:notice]).to include('already queued')
     end
 
@@ -291,8 +293,35 @@ RSpec.describe 'Songs', type: :request do
 
       expect(response).to have_http_status(422)
       expect(response.body).to include('Enter the event access code before queueing a song.')
-      expect(response.body).to include('Enter the six-character code shown on the venue display before queueing into this event.')
+      expect(response.body).to include('Enter the six-character code shown on the venue display to join this event queue.')
       expect(Nokogiri::HTML(response.body).at_css('input[name="short_code"]').has_attribute?('autofocus')).to be(true)
+    end
+
+    it 'keeps an event queue validation error on the canonical event queue path' do
+      event = create(:event, venue: venue, status: :live)
+
+      post venue_event_queue_path(venue.slug, event_slug: event.slug), params: {
+        song: { performer: 'Remote Singer', url: 'https://youtube.com/remote' }
+      }
+
+      expect(response).to have_http_status(422)
+      expect(request.path).to eq(venue_event_queue_path(venue.slug, event_slug: event.slug))
+      expect(response.body).to include('Enter the event access code before queueing a song.')
+    end
+
+    it 'allows a venue owner to queue for a live event without an access code' do
+      event = create(:event, venue: venue, status: :live)
+      sign_out user
+      sign_in venue.owner
+      allow(YoutubeService).to receive(:validate_karaoke_video).and_return(
+        { video_id: 'owner-video', verified_karaoke: true, explicit_lyrics: false, duration_seconds: 180 }
+      )
+
+      expect do
+        post "/#{venue.slug}/songs", params: { song: { performer: 'Host Singer', url: 'https://youtube.com/owner', event_id: event.id } }
+      end.to change(Performance, :count).by(1)
+
+      expect(response).to redirect_to(venue_event_queue_path(venue.slug, event_slug: event.slug))
     end
 
     it 'rejects queueing after an event is completed even during presence grace' do

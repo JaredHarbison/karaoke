@@ -11,7 +11,7 @@
       %h3= queue_performer_name(song)
     %p.song-queue-card__meta
       = display_song_title(song)
-  .song-queue-card__actions{ data: { controller: "pause-dialog" } }
+  .song-queue-card__actions{ data: { controller: "dialog" } }
     - if can_manage_queue && song.finished
       = button_to requeue_song_venue_song_path(Current.venue.slug, song), method: :patch, class: "song-action song-action--requeue", title: "Return song to queue", form: { data: { turbo: false } } do
         %span.song-action__icon ↩
@@ -32,15 +32,15 @@
           %span.song-action__icon ↟
           %span Unpause
       - else
-        %button.song-action.song-action--pause{ type: "button", title: "Pause song", data: { action: "pause-dialog#open" } }
+        %button.song-action.song-action--pause{ type: "button", title: "Pause song", data: { action: "dialog#open" } }
           %span.song-action__icon ‖
           %span Pause
 
-      %dialog.pause-dialog{ data: { pause_dialog_target: "dialog", action: "click->pause-dialog#closeOnBackdrop" } }
+      %dialog.pause-dialog{ data: { dialog_target: "dialog", action: "click->dialog#closeOnBackdrop" } }
         .pause-dialog__content
           .pause-dialog__heading
             %h2 Pause this song?
-            %button.pause-dialog__close{ type: "button", aria: { label: "Close pause dialog" }, data: { action: "pause-dialog#close" } } ×
+            %button.pause-dialog__close{ type: "button", aria: { label: "Close pause dialog" }, data: { action: "dialog#close" } } ×
           %p Pause #{song.performer}'s song and choose how many queue positions to move it back.
           = form_with url: pause_song_venue_song_path(Current.venue.slug, song), method: :patch, class: "pause-dialog__form", data: { turbo: false } do |form|
             .pause-dialog__field
@@ -48,7 +48,7 @@
               .pause-dialog__input
                 = form.number_field :spots_back, value: 1, min: 1, max: [@upcoming.length - 1, 1].max, required: true
             .pause-dialog__actions
-              %button.song-action.song-action--cancel{ type: "button", data: { action: "pause-dialog#close" } } Cancel
+              %button.song-action.song-action--cancel{ type: "button", data: { action: "dialog#close" } } Cancel
               %button.song-action.song-action--pause{ type: "submit" } Pause
     - if can_manage_song && !song.finished
       - if can_manage_queue

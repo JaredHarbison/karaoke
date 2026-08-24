@@ -50,6 +50,14 @@ export default class extends Controller {
   getCsrfToken() {
     return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
   }
+
+  submit(event) {
+    const urlInput = document.getElementById('song_url')
+    if (urlInput?.value) return
+
+    event.preventDefault()
+    this.search(event)
+  }
   
   async search(event) {
     event.preventDefault()
@@ -139,7 +147,7 @@ export default class extends Controller {
         
         html += '<div class="youtube-result-item"><div class="result-thumbnail"><img src="' + this.escapeHtml(thumb) + '" alt="" loading="lazy" /></div>'
         html += '<div class="result-details"><h5 class="result-title">' + this.escapeHtml(title) + '</h5>'
-        html += '<p class="result-channel">YouTube · ' + this.escapeHtml(channel) + '</p>'
+        html += '<p class="result-channel">' + this.escapeHtml(channel) + '</p>'
         html += '</div>'
         html += '<button type="button" class="result-select-btn" data-video-url="' + this.escapeHtml(url) + '" data-video-title="' + this.escapeHtml(title) + '"><span aria-hidden="true">▶</span><span>Select video</span></button>'
         html += '</div>'
@@ -171,8 +179,7 @@ export default class extends Controller {
       }
 
       const form = urlInput.closest('form')
-      const submitButton = form?.querySelector('input[type="submit"], button[type="submit"]')
-      submitButton?.focus()
+      form?.requestSubmit()
     }
   }
   

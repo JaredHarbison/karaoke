@@ -58,6 +58,6 @@ class PresenceController < ApplicationController
 
   def redirect_to_event_presence(event)
     session[:venue_slug] = event.venue.slug
-    redirect_to venue_songs_path(event.venue.slug, event_id: event.id)
+    redirect_to venue_event_queue_path(event.venue.slug, event_slug: event.slug)
   end
 end

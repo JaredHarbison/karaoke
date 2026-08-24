@@ -204,7 +204,6 @@ class SongsController < ApplicationController
   private
 
   def load_queue
-    @available_events = Current.venue.events.where(status: %i[scheduled live]).order(:starts_at)
     ThemeAdmissionRelease.call(event: @current_event) if @current_event
     queue = @current_event ? Performance.where(event: @current_event) : Performance.all
     @finished = queue.finished.order(updated_at: :desc)
@@ -245,14 +244,17 @@ class SongsController < ApplicationController
     attributes = song_params
     event_id = attributes.delete(:event_id)
     @song.assign_attributes(attributes)
-    return if event_id.blank?
+    @song.event = @current_event if event_id.blank? && @current_event
+    return if event_id.blank? || @song.event.present?
 
     @song.event = Event.find_by(id: event_id)
   end
 
   def queue_path
     event = @current_event || @song&.event
-    venue_songs_path(Current.venue.slug, event_id: event&.id)
+    return venue_event_queue_path(Current.venue.slug, event_slug: event.slug) if event
+
+    venue_songs_path(Current.venue.slug)
   end
 
   def set_song
@@ -312,6 +314,7 @@ class SongsController < ApplicationController
     unless event.live?
       return event.scheduled? ? 'This event has not started yet.' : 'This event is closed to new queue submissions.'
     end
+    return if event.host_authorized?(current_user)
     return 'Enter the event access code before queueing a song.' unless active_event_presence_for?(event)
 
     nil

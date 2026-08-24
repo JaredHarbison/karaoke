@@ -221,9 +221,15 @@ reviewable, manually testable, and documented in the same commit.
   messaging, retry states, and event-context preservation.
 - [In progress] Keep event presence recovery visible and focused when a
   performer attempts admission without an active event session.
-- [Planned] Remove the redundant event selector from the performer queue.
-- [Planned] Present search results as horizontally browsable selection cards on
-  mobile, with an accessible wider treatment on desktop.
+- [Initial slice complete] Send event-entry and event-queue submissions through
+  the canonical event queue URL; require an access code only for performers,
+  while venue owners and temporary hosts bypass it.
+- [Initial slice complete] Remove the redundant event selector and explicit
+  queue CTA from the event queue; Enter searches, and selecting a verified
+  video queues it directly.
+- [Initial slice complete] Present search results as horizontally browsable,
+  vertically structured selection cards, with the next result visible on
+  mobile.
 - [Initial slice complete] Use the same Queue and Add Song tab
   structure on desktop and mobile so desktop no longer reserves a permanent
   add-song sidebar; keep QR access in presentation and host contexts.
