@@ -8,7 +8,7 @@
       %span.song-position= "##{position}"
   .song-queue-card__details
     .song-queue-card__title-row
-      %h3= song.performer
+      %h3= queue_performer_name(song)
     %p.song-queue-card__meta
       = display_song_title(song)
   .song-queue-card__actions{ data: { controller: "pause-dialog" } }

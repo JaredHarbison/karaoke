@@ -196,7 +196,7 @@ reviewable, manually testable, and documented in the same commit.
   Queue-specific behavior and the remaining mobile interaction polish are
   still planned.
 - [In progress] Use one queue-card hierarchy: performer name in yellow, song
-  title in ivory, and no redundant category pill; map operational actions to
+  first name plus last-name initial in yellow, song title in ivory, and no redundant category pill; map operational actions to
   the shared cyan, magenta, and yellow semantics. Secondary actions share one
   Sass interaction rule across hover, focus, and disclosure-open states.
 - [Initial slice complete] Normalize provider-style song titles for queue
