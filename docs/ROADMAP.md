@@ -235,6 +235,8 @@ reviewable, manually testable, and documented in the same commit.
 - [Initial slice complete] Keep action labels ivory while preserving semantic
   icon colors, and make mobile action controls square without changing the
   desktop/tablet row treatment.
+- [Initial slice complete] Keep the Next card’s cyan border and surface
+  treatment consistent across desktop, tablet, and mobile.
 - [Planned] Make selection state and the immediate queue action explicit.
 
 #### 6.6 Host and owner operations

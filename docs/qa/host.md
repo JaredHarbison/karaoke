@@ -39,6 +39,8 @@ over `523 Franklin Ave`.
      and the open More menu use the cyan secondary-action state.
    - The Next card uses one row of four equal icon-over-label actions; other
      cards fit Open, Pause, and More on one row without reducing touch-target height.
+   - The Next card uses the same cyan border and surface treatment on desktop,
+     tablet, and mobile.
    - The Queue/Add Song toggle is centered and bounded at every viewport size;
      its inactive labels and outline are cyan, and its selected tab is cyan-filled.
    - Action labels are ivory while their icons retain the semantic action colors;
