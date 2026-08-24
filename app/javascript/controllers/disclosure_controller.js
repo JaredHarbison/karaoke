@@ -1,6 +1,14 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
+  toggle() {
+    if (this.element.open) {
+      this.element.querySelector("button, a")?.focus()
+    } else {
+      this.element.querySelector("summary")?.focus()
+    }
+  }
+
   close() {
     this.element.open = false
   }

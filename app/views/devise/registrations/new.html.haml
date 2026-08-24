@@ -1,6 +1,6 @@
-.auth-page
+%main.auth-page{ aria: { labelledby: 'sign-up-heading' } }
   .auth-card
-    %h1 create your account
+    %h1#sign-up-heading create your account
     %p.auth-support Continue as a performer, venue owner, or invited host.
 
     = render 'devise/shared/google_button'

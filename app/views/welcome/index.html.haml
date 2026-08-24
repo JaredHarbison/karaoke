@@ -1,7 +1,7 @@
-.welcome-page{ data: { controller: "cta-size time-of-day cta-state" } }
+%main.welcome-page{ data: { controller: "cta-size time-of-day cta-state" }, aria: { labelledby: 'welcome-heading' } }
   %header.welcome-header
     .welcome-header__copy
-      %h1 Where Are You Singing <span data-time-of-day-target="label">Tonight</span>?
+      %h1#welcome-heading Where Are You Singing <span data-time-of-day-target="label">Tonight</span>?
       %p Browse public karaoke venues, join a queue, and come back to your last spot whenever you need to.
     - if @last_venue
       - resume_host = @last_venue.hosts.first || @last_venue.owner
@@ -26,7 +26,7 @@
           - resume_cta = last_event.nil? ? "View events" : (last_event.accepting_signups? ? "Go to queue" : "Go to event")
           = link_to resume_cta, event_entry_path(@last_venue, last_event), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
 
-  %main.welcome-main
+  .welcome-main
     .welcome-toolbar
       = form_with url: root_path, method: :get, local: true, class: "venue-search" do |form|
         = form.search_field :search, value: params[:search], placeholder: "search venues or locations", aria: { label: "Search public venues" }

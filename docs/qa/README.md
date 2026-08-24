@@ -137,3 +137,15 @@ as discovery cards.
 
 Verify the role menu slides in from the right below the navbar, while flash
 messages slide down from the navbar using the same brief timing and easing.
+
+## Accessibility smoke checks
+
+On sign-in, sign-up, and discovery, verify there is one labeled main landmark
+and that the page heading identifies the current surface. On an invalid sign-up,
+verify the error summary is announced to assistive technology and remains
+visible without requiring a visual-only cue.
+
+Open the role menu with the keyboard. Focus should move into the drawer; close
+it with the close control or Escape and verify focus returns to the menu opener.
+Repeat this check at mobile/tablet and desktop widths. A live axe scan and full
+screen-reader pass remain pending until browser tooling is available.

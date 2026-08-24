@@ -160,6 +160,10 @@ reviewable, manually testable, and documented in the same commit.
   moves to the shared system.
 - [In progress] Apply the shared shell and motion rules to authentication
   pages while keeping the existing sign-in/sign-up form behavior stable.
+- [Initial slice complete] Add semantic main landmarks to authentication and
+  discovery pages, announce registration errors, and improve keyboard focus
+  when opening and closing the role menu. A live browser/assistive-technology
+  audit remains a follow-up when browser tooling is available.
 
 #### 6.3 Event index and state-aware event workspace
 

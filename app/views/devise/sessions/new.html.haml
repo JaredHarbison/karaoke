@@ -1,6 +1,6 @@
-.auth-page
+%main.auth-page{ aria: { labelledby: 'sign-in-heading' } }
   .auth-card
-    %h1 sign in to continue
+    %h1#sign-in-heading sign in to continue
 
     = render 'devise/shared/google_button', autofocus: true
 

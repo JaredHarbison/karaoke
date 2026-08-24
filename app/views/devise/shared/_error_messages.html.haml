@@ -1,5 +1,5 @@
 - if resource.errors.any?
-  #error_explanation{"data-turbo-cache" => "false"}
+  #error_explanation{ role: 'alert', aria: { live: 'assertive' }, "data-turbo-cache" => "false" }
     %h2
       = I18n.t("errors.messages.not_saved",                 |
         count: resource.errors.count,                       |
