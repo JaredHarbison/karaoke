@@ -162,6 +162,11 @@ When a selected video has a provider-style title, verify the queue displays the
 recognizable song name without a YouTube URL or obvious karaoke/instrumental/key
 descriptors. A missing title should display “Untitled song,” never the raw URL.
 
+Open Pause on a queued song. The dialog should use concise possessive copy,
+show “Move back by” beside a single number input with no trailing “spots,” and
+leave visible separation between the field and Cancel/Pause actions. Preserve a
+thin yellow modal outline and compact, balanced padding.
+
 ## Accessibility smoke checks
 
 On sign-in, sign-up, and discovery, verify there is one labeled main landmark

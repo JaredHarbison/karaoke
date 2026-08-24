@@ -67,6 +67,18 @@ RSpec.describe 'Songs', type: :request do
       expect(Nokogiri::HTML(response.body).css('.song-action--play').count).to eq(1)
     end
 
+    it 'uses concise possessive copy in the pause dialog' do
+      sign_out user
+      sign_in venue.owner
+      create(:performance, venue: venue, performer: 'Jared Harbison', title: 'Black Velvet')
+
+      get "/#{venue.slug}/songs"
+
+      expect(response.body).to include("Pause Jared Harbison's song")
+      expect(response.body).to include('Move back by')
+      expect(response.body).not_to include('>spots<')
+    end
+
     it 'offers a direct video link for queue managers' do
       sign_out user
       sign_in venue.owner
