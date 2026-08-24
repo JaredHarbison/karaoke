@@ -27,13 +27,12 @@ venue.update!(name: 'Demo Karaoke', public: true, owner: owner, time_zone: 'Amer
 venue.add_host(host)
 
 [
-  ['Alex', 'https://www.youtube.com/watch?v=demo-alex', performer],
-  ['Jamie', 'https://www.youtube.com/watch?v=demo-jamie', performer]
-].each do |performer_name, url, user|
-  venue.performances.find_or_create_by!(performer: performer_name, url: url) do |song|
-    song.user = user
-    song.category = 'pop'
-  end
+  ['Alex', 'Take On Me', 'https://www.youtube.com/watch?v=demo-alex', performer],
+  ['Jamie', 'Dreams', 'https://www.youtube.com/watch?v=demo-jamie', performer]
+].each do |performer_name, title, url, user|
+  song = venue.performances.find_or_initialize_by(performer: performer_name, url: url)
+  song.assign_attributes(user: user, category: 'pop', title: title)
+  song.save!
 end
 
 puts <<~MESSAGE
@@ -69,13 +68,12 @@ if ENV['KARAOKE_QA_FIXTURE'] == 'franklin'
   qa_event.save!
 
   [
-    ['QA Performer Song', 'https://www.youtube.com/watch?v=qa-performer-song', qa_performer],
-    ['QA Guest Song', 'https://www.youtube.com/watch?v=qa-guest-song', nil]
-  ].each do |performer_name, url, user|
-    qa_venue.performances.find_or_create_by!(event: qa_event, performer: performer_name, url: url) do |performance|
-      performance.user = user
-      performance.category = 'qa'
-    end
+    ['QA Performer', 'Faithfully - Journey', 'https://www.youtube.com/watch?v=qa-performer-song', qa_performer],
+    ['QA Guest', 'Dream On - Aerosmith', 'https://www.youtube.com/watch?v=qa-guest-song', nil]
+  ].each do |performer_name, title, url, user|
+    performance = qa_venue.performances.find_or_initialize_by(event: qa_event, performer: performer_name, url: url)
+    performance.assign_attributes(user: user, category: 'qa', title: title)
+    performance.save!
   end
 
   puts <<~MESSAGE

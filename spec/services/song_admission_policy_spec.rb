@@ -17,12 +17,13 @@ RSpec.describe SongAdmissionPolicy, type: :service do
 
   it 'admits eligible metadata and snapshots provider duration' do
     song = build(:performance, venue: venue, event: event)
+    allow(YoutubeService).to receive(:validate_karaoke_video).and_return(metadata(title: 'Provider Song'))
 
     result = described_class.call(song: song, venue: venue)
 
     expect(result).to be_eligible
     expect(song).to have_attributes(
-      metadata_status: 'eligible', provider_video_id: 'video-1', duration_seconds: 180,
+      metadata_status: 'eligible', provider_video_id: 'video-1', title: 'Provider Song', duration_seconds: 180,
       effective_duration_seconds: 180, duration_source: 'provider'
     )
     expect(song.song_identity).to have_attributes(provider_video_id: 'video-1', verified_karaoke: true)

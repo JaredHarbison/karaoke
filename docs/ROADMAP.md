@@ -201,6 +201,9 @@ reviewable, manually testable, and documented in the same commit.
 - [Initial slice complete] Normalize provider-style song titles for queue
   display without changing stored metadata or using the provider URL as the
   visible song name.
+- [Initial slice complete] Ensure provider metadata and local QA fixtures save
+  an explicit song title; legacy records without metadata remain identifiable
+  for future backfill rather than silently using their URL as a title.
 - [Initial slice complete] Simplify the pause dialog copy and spacing while
   preserving the shared 1px yellow modal treatment.
 - [Planned] Improve add-song feedback, validation errors, duplicate-submission

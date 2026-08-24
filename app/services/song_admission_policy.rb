@@ -55,7 +55,7 @@ class SongAdmissionPolicy
     @song.provider = 'youtube'
     @song.provider_video_id = metadata[:video_id]
     @song.metadata_status = decision.status
-    @song.title = metadata[:title] if @song.title.blank? && metadata[:title].present?
+    @song.title = metadata[:title] if metadata[:title].present?
     @song.explicit_lyrics = metadata[:explicit_lyrics]
     @song.metadata_checked_at = Time.current
   end

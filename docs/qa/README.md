@@ -162,6 +162,11 @@ When a selected video has a provider-style title, verify the queue displays the
 recognizable song name without a YouTube URL or obvious karaoke/instrumental/key
 descriptors. A missing title should display “Untitled song,” never the raw URL.
 
+After reseeding the local QA fixture, verify the seeded queue entries have
+distinct performer names and song titles. When selecting a new provider video,
+verify its provider title is persisted to the queue entry even if the hidden
+title field is blank or stale.
+
 Open Pause on a queued song. The dialog should use concise possessive copy,
 show “Move back by” beside a single number input with no trailing “spots,” and
 leave visible separation between the field and Cancel/Pause actions. Preserve a
