@@ -1565,6 +1565,7 @@
   .song-queue-card__actions {
     display: grid;
     grid-column: 1 / -1;
+    grid-auto-rows: minmax(3.5rem, 1fr);
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: $space-xs;
     margin-top: $space-xs;
@@ -1573,8 +1574,12 @@
     .song-action {
       min-width: 0;
       width: 100%;
+      min-height: 3.5rem;
       height: 100%;
     }
+
+    .song-actions-secondary,
+    .song-actions-secondary > summary { height: 100%; }
   }
 
   .songs-page--performer .song-queue-card__actions {

@@ -4,18 +4,21 @@
 
 // Skip link - allow users to skip to main content
 .skip-link {
-  position: absolute;
-  top: -40px;
-  left: 0;
-  background: $status-success;
-  color: white;
-  padding: $space-sm $space-md;
+  position: fixed;
+  top: $space-sm;
+  left: $space-md;
   z-index: $z-tooltip;
-  text-decoration: none;
+  padding: $space-xs $space-sm;
+  border: 1px solid $cyan;
   border-radius: $radius-md;
-  
+  color: $cyan;
+  background: $midnight;
+  transform: translateY(-150%);
+  text-decoration: none;
+  transition: transform $transition-fast;
+
   &:focus {
-    top: 0;
+    transform: translateY(0);
   }
 }
 

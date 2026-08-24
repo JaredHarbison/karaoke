@@ -58,7 +58,6 @@
 .app-menu[open] .app-menu__summary::before { transform: rotate(90deg); }
 
 .app-menu__drawer {
-  animation: slideInRight $transition-base;
   background: $midnight;
   border: 2px solid $yellow;
   contain: layout paint;
@@ -173,7 +172,16 @@
 
 @media (max-width: $breakpoint-sm) {
   .app-shell__header { padding: $space-sm $space-md; }
-  .app-shell__bar { flex-wrap: wrap; gap: $space-sm $space-md; }
+  .app-shell__bar { flex-wrap: nowrap; gap: $space-sm; }
+  .app-shell__venue { display: none; }
   .app-shell__body { padding: $space-lg $space-md; }
-  .app-menu__drawer { min-height: calc(100vh - 5rem); }
+  .app-menu__drawer {
+    left: 0;
+    right: 0;
+    width: 100%;
+    min-width: 0;
+    min-height: calc(100vh - 4.5rem);
+    border-right: 0;
+    border-left: 0;
+  }
 }

@@ -167,6 +167,11 @@ distinct performer names and song titles. When selecting a new provider video,
 verify its provider title is persisted to the queue entry even if the hidden
 title field is blank or stale.
 
+For legacy records, run `YOUTUBE_API_KEY=... bin/rails songs:backfill_titles` in
+development and verify only records with retrievable provider metadata receive
+titles; records that cannot be retrieved remain unchanged and are reported as
+skipped.
+
 Open Pause on a queued song. The dialog should use concise possessive copy,
 show “Move back by” beside a single number input with no trailing “spots,” and
 leave visible separation between the field and Cancel/Pause actions. Preserve a
@@ -183,3 +188,8 @@ Open the role menu with the keyboard. Focus should move into the drawer; close
 it with the close control or Escape and verify focus returns to the menu opener.
 Repeat this check at mobile/tablet and desktop widths. A live axe scan and full
 screen-reader pass remain pending until browser tooling is available.
+
+At mobile width, verify the skip link is hidden until keyboard focus and does
+not appear as a large green banner. The brand and role-menu opener should stay
+on one compact navbar row; opening the drawer should not animate or shift the
+queue content. Queue action buttons should have equal heights in each row.
