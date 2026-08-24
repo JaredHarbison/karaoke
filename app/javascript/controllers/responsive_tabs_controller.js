@@ -44,8 +44,6 @@ export default class extends Controller {
   }
 
   update() {
-    const tabMode = this.mediaQuery.matches
-
     this.tabTargets.forEach(tab => {
       const active = tab.dataset.tabName === this.activeName
       tab.setAttribute("aria-selected", String(active))
@@ -54,8 +52,8 @@ export default class extends Controller {
 
     this.panelTargets.forEach(panel => {
       const active = panel.dataset.tabName === this.activeName
-      panel.hidden = tabMode && !active
-      panel.tabIndex = tabMode && active ? 0 : -1
+      panel.hidden = !active
+      panel.tabIndex = active ? 0 : -1
     })
   }
 }

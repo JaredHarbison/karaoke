@@ -718,15 +718,40 @@
 }
 
 .songs-tabs {
-  display: none;
+  display: flex;
+  gap: 3px;
+  margin-bottom: $space-md;
+  padding: 3px;
+  border: 1px solid rgba($cyan, 0.38);
+  border-radius: $radius-lg;
+  background: rgba($beige, 0.06);
 }
 
-.songs-tab-panel {
+.songs-tab {
+  min-height: 44px;
+  padding: $space-sm $space-lg;
+  border: 0;
+  border-radius: calc(#{$radius-lg} - 3px);
+  color: rgba($beige, 0.68);
+  background: transparent;
+  font-size: 0.78rem;
+  font-weight: 900;
+  cursor: pointer;
+
+  &[aria-selected="true"] {
+    color: rgba($beige, 0.96);
+    background: rgba($cyan, 0.22);
+    box-shadow: inset 0 0 0 1px rgba($cyan, 0.38);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $yellow;
+    outline-offset: 2px;
+  }
+}
+
+.songs-tab-panels {
   display: block;
-}
-
-.songs-page--manager .songs-tab-panel--qr {
-  order: -1;
 }
 
 .songs-primary,

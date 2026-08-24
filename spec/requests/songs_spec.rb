@@ -17,7 +17,7 @@ RSpec.describe 'Songs', type: :request do
       expect(response).to be_successful
     end
 
-    it 'provides responsive queue, add-song, and QR tabs for owners' do
+    it 'provides shared queue, add-song, and QR tabs for owners' do
       sign_out user
       sign_in venue.owner
 
@@ -27,6 +27,7 @@ RSpec.describe 'Songs', type: :request do
       expect(response.body).to include('songs-page--manager')
       expect(page.css('[role="tab"]').map(&:text).map(&:strip)).to eq(['Queue', 'Add Song', 'QR Code'])
       expect(page.css('[role="tabpanel"]').map { |panel| panel['id'] }).to eq(['queue-panel', 'add-panel', 'qr-panel'])
+      expect(page.css('.songs-tab-panels > [role="tabpanel"]').length).to eq(3)
       expect(response.body).to include('songs-instructions')
       expect(response.body).to include('songs-panel--finished')
       expect(response.body).to include('app-shell__header', 'app-menu__summary')

@@ -223,6 +223,9 @@ reviewable, manually testable, and documented in the same commit.
 - [Planned] Remove the redundant event selector from the performer queue.
 - [Planned] Present search results as horizontally browsable selection cards on
   mobile, with an accessible wider treatment on desktop.
+- [Initial slice complete] Use the same Queue, Add Song, and QR Code tab
+  structure on desktop and mobile so desktop no longer reserves a permanent
+  add-song or QR sidebar.
 - [Planned] Make selection state and the immediate queue action explicit.
 
 #### 6.6 Host and owner operations
