@@ -104,6 +104,19 @@ RSpec.describe 'Songs', type: :request do
       expect(card.at_css('.song-category')).to be_nil
     end
 
+    it 'shows a normalized song name instead of a provider URL or karaoke descriptors' do
+      sign_out user
+      sign_in venue.owner
+      create(:performance, venue: venue, performer: 'Jared Harbison', title: 'Faithfully - Journey (Full Band Karaoke) Female Key - Instrumental')
+
+      get "/#{venue.slug}/songs"
+
+      card = Nokogiri::HTML(response.body).css('.song-queue-card').last
+      title = card.at_css('.song-queue-card__meta').text.strip
+      expect(title).to eq('Faithfully - Journey')
+      expect(title).not_to include('youtube.com', 'Karaoke', 'Instrumental')
+    end
+
     it 'shows archive management actions to owners' do
       sign_out user
       sign_in venue.owner

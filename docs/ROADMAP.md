@@ -198,6 +198,9 @@ reviewable, manually testable, and documented in the same commit.
 - [In progress] Use one queue-card hierarchy: performer name in yellow, song
   title in ivory, and no redundant category pill; map operational actions to
   the shared cyan, magenta, and yellow semantics.
+- [Initial slice complete] Normalize provider-style song titles for queue
+  display without changing stored metadata or using the provider URL as the
+  visible song name.
 - [Planned] Improve add-song feedback, validation errors, duplicate-submission
   messaging, retry states, and event-context preservation.
 - [In progress] Keep event presence recovery visible and focused when a

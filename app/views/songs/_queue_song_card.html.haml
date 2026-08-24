@@ -10,7 +10,7 @@
     .song-queue-card__title-row
       %h3= song.performer
     %p.song-queue-card__meta
-      = song.title.presence || song.url || "Untitled song"
+      = display_song_title(song)
   .song-queue-card__actions{ data: { controller: "pause-dialog" } }
     - if can_manage_queue && song.finished
       = button_to requeue_song_venue_song_path(Current.venue.slug, song), method: :patch, class: "song-action song-action--requeue", title: "Return song to queue", form: { data: { turbo: false } } do

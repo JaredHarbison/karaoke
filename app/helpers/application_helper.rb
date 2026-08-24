@@ -7,6 +7,16 @@ module ApplicationHelper
     value&.in_time_zone&.strftime('%Y-%m-%dT%H:%M')
   end
 
+  def display_song_title(song)
+    title = song.title.to_s.strip
+    return 'Untitled song' if title.blank?
+
+    title = title.gsub(/\s*[\[(][^\])]*(?:karaoke|instrumental|backing track|lyrics|cover)[^\])]*[\])]/i, '')
+    title = title.sub(/\s*(?:[-|:]\s*)?(?:female|male)?\s*key\b.*\z/i, '')
+    title = title.sub(/\s*(?:[-|:]\s*)?(?:karaoke|instrumental|backing track|lyrics|cover)\b.*\z/i, '')
+    title.gsub(/\s+/, ' ').strip.sub(/\s+[-|:]\s*\z/, '').presence || 'Untitled song'
+  end
+
   def auth_return_to
     candidate = session[:user_return_to] || session['user_return_to'] || params[:return_to]
     return unless candidate.present?

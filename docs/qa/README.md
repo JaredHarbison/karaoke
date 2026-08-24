@@ -158,6 +158,10 @@ once in ivory, without a redundant category pill. Play may remain magenta;
 Pause, Skip, and More use cyan; Remove uses yellow. Confirm opening the role
 drawer does not animate or shift the queue content itself.
 
+When a selected video has a provider-style title, verify the queue displays the
+recognizable song name without a YouTube URL or obvious karaoke/instrumental/key
+descriptors. A missing title should display “Untitled song,” never the raw URL.
+
 ## Accessibility smoke checks
 
 On sign-in, sign-up, and discovery, verify there is one labeled main landmark
