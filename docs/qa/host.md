@@ -36,8 +36,8 @@ over `523 Franklin Ave`.
      reveal the next page without changing queue order.
    - On mobile, every activity button has the same height; hover, keyboard focus,
      and the open More menu use the cyan secondary-action state.
-   - The Next card uses four equal action columns; other cards fit Open, Pause,
-     and More on one row without reducing touch-target height.
+   - The Next card uses one row of four equal icon-over-label actions; other
+     cards fit Open, Pause, and More on one row without reducing touch-target height.
 3. Toggle Fair Queue off and on.
    - FIFO behavior and the explanation are shown when disabled.
 4. Inspect the Fair Queue override audit.

@@ -287,7 +287,7 @@
   gap: $space-sm;
   margin-top: $space-md;
 
-  .song-action {
+  .song-queue-card__actions .song-action {
     width: 7rem;
   }
 }
@@ -1668,6 +1668,23 @@
 
   .song-action {
     padding: $space-sm;
+    flex-direction: column;
+    gap: 2px;
+    min-height: 3.5rem;
+    text-align: center;
+  }
+
+  .song-action__icon {
+    width: auto;
+    font-size: 1rem;
+  }
+
+  .song-queue-card__actions {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .song-queue-card:not(.song-queue-card--next) .song-queue-card__actions {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .songs-panel__queue-title {
