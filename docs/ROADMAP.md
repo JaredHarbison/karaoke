@@ -229,6 +229,12 @@ reviewable, manually testable, and documented in the same commit.
 - [Initial slice complete] Tighten desktop queue spacing and use compact
   icon-over-label mobile action rows: four columns for the Next card and three
   columns for ordinary cards while preserving accessible control sizes.
+- [Initial slice complete] Use one centered, bounded Queue/Add Song toggle at
+  every responsive tier; keep its inactive labels and outline cyan, its active
+  tab cyan-filled, and its action groups right-aligned within a shared maximum.
+- [Initial slice complete] Keep action labels ivory while preserving semantic
+  icon colors, and make mobile action controls square without changing the
+  desktop/tablet row treatment.
 - [Planned] Make selection state and the immediate queue action explicit.
 
 #### 6.6 Host and owner operations

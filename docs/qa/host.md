@@ -39,6 +39,10 @@ over `523 Franklin Ave`.
      and the open More menu use the cyan secondary-action state.
    - The Next card uses one row of four equal icon-over-label actions; other
      cards fit Open, Pause, and More on one row without reducing touch-target height.
+   - The Queue/Add Song toggle is centered and bounded at every viewport size;
+     its inactive labels and outline are cyan, and its selected tab is cyan-filled.
+   - Action labels are ivory while their icons retain the semantic action colors;
+     mobile action controls are square and do not overflow the card.
 3. Toggle Fair Queue off and on.
    - FIFO behavior and the explanation are shown when disabled.
 4. Inspect the Fair Queue override audit.

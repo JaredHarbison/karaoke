@@ -11,6 +11,8 @@ Start: `/523-franklin-ave/songs`
 3. Open the scheduled event queue.
    - Confirm the Queue and Add Song tabs behave the same on desktop and mobile,
      without a permanent sidebar panel.
+   - Confirm the centered toggle remains bounded, with a cyan outline and
+     cyan inactive labels; the selected tab is cyan-filled.
    - The page explains that submissions open when the host starts the event.
    - If the event is live but you lack presence, the access-code step is visible
      and focused before queue submission.
@@ -24,6 +26,8 @@ Start: `/523-franklin-ave/songs`
 
 1. Add a valid karaoke YouTube selection.
    - The song appears once with your performer identity.
+   - On mobile, the action controls remain square and readable without
+     horizontal overflow.
 2. Retry or double-submit the same request.
    - Only one queue entry exists and the retry is explained.
 3. Select the same eligible video again.

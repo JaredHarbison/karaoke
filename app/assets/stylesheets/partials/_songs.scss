@@ -454,11 +454,11 @@
   width: calc(100% - 2rem);
   max-width: 1180px;
   margin: 0 auto;
-  padding: $space-2xl 0 $space-3xl;
+  padding: $space-md 0 $space-3xl;
 }
 
 .songs-page--manager .songs-main {
-  padding-top: $space-xl;
+  padding-top: $space-md;
 }
 
 .songs-stat {
@@ -723,20 +723,23 @@
 
 .songs-tabs {
   display: flex;
+  width: 100%;
+  max-width: 42rem;
   gap: 3px;
-  margin-bottom: $space-md;
+  margin: 0 auto $space-md;
   padding: 3px;
-  border: 1px solid rgba($cyan, 0.38);
+  border: 1px solid $cyan;
   border-radius: $radius-lg;
   background: rgba($beige, 0.06);
 }
 
 .songs-tab {
+  flex: 1 1 0;
   min-height: 44px;
   padding: $space-sm $space-lg;
   border: 0;
   border-radius: calc(#{$radius-lg} - 3px);
-  color: rgba($beige, 0.68);
+  color: $cyan;
   background: transparent;
   font-size: 0.78rem;
   font-weight: 900;
@@ -969,6 +972,8 @@
   gap: 0.35rem;
   text-decoration: none;
   cursor: pointer;
+
+  > :not(.song-action__icon) { color: $beige; }
 
   &--play { @include song-action-tone($magenta); }
   &--open,
@@ -1443,41 +1448,12 @@
   }
 
   .songs-main {
-    padding-top: $space-lg;
-  }
-
-  .songs-tabs {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 3px;
-    margin-bottom: $space-md;
-    padding: 3px;
-    border: 1px solid rgba($cyan, 0.38);
-    border-radius: $radius-lg;
-    background: rgba($beige, 0.06);
+    padding-top: $space-md;
   }
 
   .songs-tab {
     min-height: 44px;
     padding: $space-sm;
-    border: 0;
-    border-radius: calc(#{$radius-lg} - 3px);
-    color: rgba($beige, 0.68);
-    background: transparent;
-    font-size: 0.78rem;
-    font-weight: 900;
-    cursor: pointer;
-
-    &[aria-selected="true"] {
-      color: rgba($beige, 0.96);
-      background: rgba($cyan, 0.22);
-      box-shadow: inset 0 0 0 1px rgba($cyan, 0.38);
-    }
-
-    &:focus-visible {
-      outline: 2px solid $yellow;
-      outline-offset: 2px;
-    }
   }
 
   .songs-tab-panel {
@@ -1665,10 +1641,6 @@
     padding-top: $space-md;
   }
 
-  .song-queue-card__actions {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .song-action {
     padding: $space-sm;
     flex-direction: column;
@@ -1683,12 +1655,7 @@
   }
 
   .song-queue-card__actions {
-    max-width: 100%;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .song-queue-card:not(.song-queue-card--next) .song-queue-card__actions {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: 34rem;
   }
 
   .songs-panel__queue-title {
@@ -1700,7 +1667,47 @@
 }
 
 @media (max-width: $breakpoint-sm) {
+  .song-queue-card__actions {
+    max-width: 100%;
+    grid-auto-rows: auto;
+  }
+
+  .song-queue-card__actions > *,
+  .song-queue-card__actions .song-action,
+  .song-queue-card__actions .song-actions-secondary,
+  .song-queue-card__actions .song-actions-secondary > summary {
+    height: auto;
+    min-height: 44px;
+    aspect-ratio: 1;
+  }
+
   .songs-heading__mobile-hide {
     display: none;
+  }
+}
+
+@media (min-width: $breakpoint-sm + 1px) and (max-width: 1000px) {
+  .song-queue-card {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .song-queue-card__actions {
+    display: flex;
+    grid-column: auto;
+    width: auto;
+    margin-top: 0;
+  }
+
+  .song-queue-card__actions > *,
+  .song-queue-card__actions .song-action {
+    width: auto;
+    flex: 0 0 auto;
+  }
+
+  .song-queue-card__actions .song-action {
+    flex-direction: row;
+    min-height: 3.5rem;
+    aspect-ratio: auto;
   }
 }
