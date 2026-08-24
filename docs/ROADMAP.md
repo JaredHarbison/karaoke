@@ -223,9 +223,9 @@ reviewable, manually testable, and documented in the same commit.
 - [Planned] Remove the redundant event selector from the performer queue.
 - [Planned] Present search results as horizontally browsable selection cards on
   mobile, with an accessible wider treatment on desktop.
-- [Initial slice complete] Use the same Queue, Add Song, and QR Code tab
+- [Initial slice complete] Use the same Queue and Add Song tab
   structure on desktop and mobile so desktop no longer reserves a permanent
-  add-song or QR sidebar.
+  add-song sidebar; keep QR access in presentation and host contexts.
 - [Initial slice complete] Tighten desktop queue spacing and use compact
   icon-over-label mobile action rows: four columns for the Next card and three
   columns for ordinary cards while preserving accessible control sizes.

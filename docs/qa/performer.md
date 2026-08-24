@@ -9,8 +9,8 @@ Start: `/523-franklin-ave/songs`
 2. Open `/523-franklin-ave/events`.
    - Upcoming events are visible without host-management controls.
 3. Open the scheduled event queue.
-   - Confirm the Queue, Add Song, and QR Code tabs behave the same on desktop and
-     mobile, without a permanent sidebar panel.
+   - Confirm the Queue and Add Song tabs behave the same on desktop and mobile,
+     without a permanent sidebar panel.
    - The page explains that submissions open when the host starts the event.
    - If the event is live but you lack presence, the access-code step is visible
      and focused before queue submission.

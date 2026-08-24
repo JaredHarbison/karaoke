@@ -25,9 +25,9 @@ RSpec.describe 'Songs', type: :request do
 
       page = Nokogiri::HTML(response.body)
       expect(response.body).to include('songs-page--manager')
-      expect(page.css('[role="tab"]').map(&:text).map(&:strip)).to eq(['Queue', 'Add Song', 'QR Code'])
-      expect(page.css('[role="tabpanel"]').map { |panel| panel['id'] }).to eq(['queue-panel', 'add-panel', 'qr-panel'])
-      expect(page.css('.songs-tab-panels > [role="tabpanel"]').length).to eq(3)
+      expect(page.css('[role="tab"]').map(&:text).map(&:strip)).to eq(['Queue', 'Add Song'])
+      expect(page.css('[role="tabpanel"]').map { |panel| panel['id'] }).to eq(['queue-panel', 'add-panel'])
+      expect(page.css('.songs-tab-panels > [role="tabpanel"]').length).to eq(2)
       expect(response.body).to include('songs-instructions')
       expect(response.body).to include('songs-panel--finished')
       expect(response.body).to include('app-shell__header', 'app-menu__summary')
@@ -36,10 +36,10 @@ RSpec.describe 'Songs', type: :request do
       expect(response.body).to include('song-player__viewport')
     end
 
-    it 'prioritizes add-song controls before the QR panel for performers' do
+    it 'prioritizes add-song controls before the queue for performers' do
       get "/#{venue.slug}/songs"
 
-      expect(response.body.index('songs-panel--add')).to be < response.body.index('songs-panel--qr')
+      expect(response.body.index('songs-panel--add')).to be < response.body.index('songs-panel--queue')
     end
 
     it 'renders fields for the YouTube selector to populate' do

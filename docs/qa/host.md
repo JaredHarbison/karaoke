@@ -25,7 +25,7 @@ over `523 Franklin Ave`.
 ## Queue management
 
 1. Open the event queue with several pending entries.
-   - On desktop and mobile, Queue, Add Song, and QR Code use the same tab structure;
+   - On desktop and mobile, Queue and Add Song use the same tab structure;
      only the selected panel is visible.
    - Fair Queue favors fewer completed turns and keeps stable tie-breaking.
 2. Finish, skip, pause, unpause, and requeue entries.

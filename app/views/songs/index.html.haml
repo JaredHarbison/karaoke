@@ -1,6 +1,5 @@
 - can_manage_queue = @can_manage_queue
 - performer_view = !can_manage_queue
-- queue_url = venue_presence_url(Current.venue.presence_token)
 - next_performer = @upcoming.first&.performer
 - active_tab = performer_view ? "add" : (@song.errors.any? ? "add" : "queue")
 
@@ -13,7 +12,6 @@
       .songs-tabs{ role: "tablist", aria: { label: "Venue queue sections" } }
         %button.songs-tab{ id: "queue-tab", type: "button", role: "tab", tabindex: (active_tab == "queue" ? "0" : "-1"), aria: { controls: "queue-panel", selected: (active_tab == "queue").to_s }, data: { responsive_tabs_target: "tab", tab_name: "queue", action: "click->responsive-tabs#select keydown->responsive-tabs#navigate" } } Queue
         %button.songs-tab{ id: "add-tab", type: "button", role: "tab", tabindex: (active_tab == "add" ? "0" : "-1"), aria: { controls: "add-panel", selected: (active_tab == "add").to_s }, data: { responsive_tabs_target: "tab", tab_name: "add", action: "click->responsive-tabs#select keydown->responsive-tabs#navigate" } } Add Song
-        %button.songs-tab{ id: "qr-tab", type: "button", role: "tab", tabindex: "-1", aria: { controls: "qr-panel", selected: "false" }, data: { responsive_tabs_target: "tab", tab_name: "qr", action: "click->responsive-tabs#select keydown->responsive-tabs#navigate" } } QR Code
 
       - if can_manage_queue
         .songs-tab-panels
@@ -58,8 +56,6 @@
             = render "finished_panel"
           .songs-tab-panel.songs-tab-panel--add{ id: "add-panel", role: "tabpanel", aria: { labelledby: "add-tab" }, data: { responsive_tabs_target: "panel", tab_name: "add" } }
             = render "add_song_panel", song: @song
-          .songs-tab-panel.songs-tab-panel--qr{ id: "qr-panel", role: "tabpanel", aria: { labelledby: "qr-tab" }, data: { responsive_tabs_target: "panel", tab_name: "qr" } }
-            = render "qr_panel", queue_url: queue_url
       - else
         .songs-tab-panels.songs-tab-panels--performer
           .songs-tab-panel.songs-tab-panel--add{ id: "add-panel", role: "tabpanel", aria: { labelledby: "add-tab" }, data: { responsive_tabs_target: "panel", tab_name: "add" } }
@@ -86,8 +82,6 @@
                     - @skipped.each do |song|
                       = render "queue_song_card", song: song, position: nil, next_song: false, can_manage_queue: can_manage_queue
             = render "finished_panel"
-          .songs-tab-panel.songs-tab-panel--qr{ id: "qr-panel", role: "tabpanel", aria: { labelledby: "qr-tab" }, data: { responsive_tabs_target: "panel", tab_name: "qr" } }
-            = render "qr_panel", queue_url: queue_url
 
   - if can_manage_queue
     .song-player{ hidden: true, role: "dialog", aria: { modal: "true", label: "Now playing" }, data: { youtube_player_target: "overlay", action: "fullscreenchange@document->youtube-player#fullscreenChanged" } }
