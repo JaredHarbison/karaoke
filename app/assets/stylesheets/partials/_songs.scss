@@ -740,8 +740,8 @@
   padding: $space-lg;
   border: 1px solid rgba($cyan, 0.28);
   border-radius: $radius-xl;
-  background: rgba($beige, 0.055);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+  background: $midnight;
+  box-shadow: none;
 }
 
 .songs-panel__heading {
@@ -753,7 +753,7 @@
 
   h2 {
     margin: $space-xs 0 0;
-    color: $beige;
+    color: $yellow;
     font-size: 1.35rem;
     text-align: left;
   }
@@ -864,7 +864,7 @@
 
   h3 {
     margin: 0;
-    color: $beige;
+    color: $yellow;
     font-size: 1rem;
     text-align: left;
   }
@@ -1073,6 +1073,39 @@
     display: none;
   }
 
+  .youtube-results-container {
+    display: flex;
+    gap: $space-md;
+    margin: $space-lg 0 0;
+    overflow-x: auto;
+    padding: 0 0 $space-sm;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+  }
+
+  .youtube-result {
+    display: flex;
+    flex: 0 0 18rem;
+    max-width: 82vw;
+    flex-direction: column;
+    gap: $space-sm;
+    margin: 0;
+    padding: $space-md;
+    border: 1px solid rgba($cyan, 0.32);
+    border-radius: $radius-xl;
+    background: $midnight;
+    scroll-snap-align: start;
+
+    img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+    }
+
+    .youtube-result-info h4 { color: $yellow; }
+    .youtube-result-info .channel { color: $beige; }
+  }
+
   .search-input-group label,
 
   .search-input-group .input-row {
@@ -1105,6 +1138,7 @@
 .songs-panel--qr {
   max-width: none;
   margin: 0;
+  padding: 0;
 
   .songs-panel__summary-action {
     color: $magenta;
@@ -1114,7 +1148,7 @@
 .songs-qr {
   display: flex;
   justify-content: center;
-  padding: $space-sm;
+  padding: $space-md;
   border-radius: $radius-lg;
   background: $midnight;
 

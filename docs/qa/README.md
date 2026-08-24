@@ -140,6 +140,19 @@ as discovery cards.
 Verify the role menu slides in from the right below the navbar, while flash
 messages slide down from the navbar using the same brief timing and easing.
 
+## Queue surface checks
+
+On the queue page, verify the shared navbar and role menu are present for the
+current user. Confirm the queue, Queue a Song, scan-to-join, and Finished
+Performers sections use the shared card border, background, padding, and yellow
+section-heading treatment. The song selector should show results as horizontal
+cards that can be keyboard-focused and scrolled on narrow screens.
+
+Confirm the order is Queue a Song, scan to join, then Finished Performers in the
+secondary column. The QR card should have one outer card padding treatment, not
+an extra nested panel inset. The redundant Fair Queue explanatory sentence
+should not appear on the queue surface.
+
 ## Accessibility smoke checks
 
 On sign-in, sign-up, and discovery, verify there is one labeled main landmark

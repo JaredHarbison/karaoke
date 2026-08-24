@@ -29,6 +29,8 @@ RSpec.describe 'Songs', type: :request do
       expect(page.css('[role="tabpanel"]').map { |panel| panel['id'] }).to eq(['queue-panel', 'add-panel', 'qr-panel'])
       expect(response.body).to include('songs-instructions')
       expect(response.body).to include('songs-panel--finished')
+      expect(response.body).to include('app-shell__header', 'app-menu__summary')
+      expect(response.body).not_to include('Fair Queue favors performers')
       expect(page.at_css('.songs-page')['data-controller']).to eq('youtube-player')
       expect(response.body).to include('song-player__viewport')
     end

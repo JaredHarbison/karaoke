@@ -158,8 +158,8 @@ reviewable, manually testable, and documented in the same commit.
   through desktop, and make display mode desktop-oriented.
 - [Planned] Delete obsolete page-specific styles and templates as each surface
   moves to the shared system.
-- [In progress] Apply the shared shell and motion rules to authentication
-  pages while keeping the existing sign-in/sign-up form behavior stable.
+- [In progress] Apply the shared shell and motion rules to authentication and
+  queue pages while keeping existing sign-in/sign-up and queue behavior stable.
 - [Initial slice complete] Add semantic main landmarks to authentication and
   discovery pages, announce registration errors, and improve keyboard focus
   when opening and closing the role menu. A live browser/assistive-technology
@@ -191,6 +191,10 @@ reviewable, manually testable, and documented in the same commit.
 
 #### 6.5 Performer queue UX
 
+- [Initial slice complete] Move the queue onto the shared navbar and role menu;
+  place song selection before the QR card and finished performers below it.
+  Queue-specific behavior and the remaining mobile interaction polish are
+  still planned.
 - [Planned] Improve add-song feedback, validation errors, duplicate-submission
   messaging, retry states, and event-context preservation.
 - [In progress] Keep event presence recovery visible and focused when a

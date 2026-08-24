@@ -1,0 +1,12 @@
+%details.songs-panel.songs-panel--finished
+  %summary.songs-panel__summary
+    %h2#finished-heading Finished Performers
+    %span.songs-panel__summary-action
+      %span.songs-panel__summary-label= "Show (#{@finished.count})"
+  .songs-panel__collapsible
+    - if @finished.any?
+      .song-card-list.song-card-list--finished
+        - @finished.each do |song|
+          = render "queue_song_card", song: song, position: nil, next_song: false, can_manage_queue: @can_manage_queue
+    - else
+      %p.songs-muted No finished songs yet. They’ll appear here after performances.
