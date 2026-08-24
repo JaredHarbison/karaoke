@@ -8,6 +8,9 @@ coverage and checks for its risk. Before handoff, review:
 
 - Accessibility: semantic structure, keyboard use, focus, labels, contrast, and
   screen-reader behavior where UI changes are involved.
+- Every HTML or template change requires an accessibility check in the same
+  change: inspect landmarks, names/labels, keyboard focus and interaction,
+  status/error announcements, and responsive behavior as applicable.
 - Database polish: constraints, indexes, safe/reversible migrations, and schema
   consistency where data changes are involved.
 - Performance: query count, scoping, indexes, and avoidable work on hot paths.

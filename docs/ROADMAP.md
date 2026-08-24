@@ -164,6 +164,9 @@ reviewable, manually testable, and documented in the same commit.
   discovery pages, announce registration errors, and improve keyboard focus
   when opening and closing the role menu. A live browser/assistive-technology
   audit remains a follow-up when browser tooling is available.
+- [In progress] Keep primary CTA link states readable across hover, focus,
+  active, and visited states; transient feedback must never produce
+  magenta-on-magenta text.
 
 #### 6.3 Event index and state-aware event workspace
 

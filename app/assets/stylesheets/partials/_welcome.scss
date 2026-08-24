@@ -123,20 +123,27 @@
     background: $magenta;
     @include pink-interaction($radius-md);
 
+    &:link,
+    &:visited,
     &:hover,
+    &:focus,
     &:focus-visible {
       color: $beige;
-      background: darken($magenta, 8%);
       text-decoration: none;
     }
 
-    &:visited {
+    &:hover,
+    &:focus-visible {
+      background: darken($magenta, 8%);
+    }
+
+    &:active {
       color: $beige;
     }
 
     &.welcome-button--visited {
       color: $magenta;
-      border-color: $magenta;
+      border: 1px solid $magenta;
       background: $beige;
     }
   }

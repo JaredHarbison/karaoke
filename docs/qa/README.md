@@ -125,7 +125,9 @@ discovery until the event lobby/recap surface is ready.
 
 Activated primary CTAs should remain readable briefly: magenta text uses an
 ivory background and thin magenta border rather than magenta-on-magenta, then
-the CTA returns to its normal state.
+the CTA returns to its normal state. Repeat after revisiting the page and after
+keyboard focus; browser link-state styling must not turn the CTA text magenta
+while its background remains magenta.
 
 The resume card follows the venue saved in the current session. If two venues
 share a display name, verify the address and event name before treating their
