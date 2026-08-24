@@ -457,6 +457,10 @@
   padding: $space-2xl 0 $space-3xl;
 }
 
+.songs-page--manager .songs-main {
+  padding-top: $space-xl;
+}
+
 .songs-stat {
   display: flex;
   min-width: 100px;
@@ -1605,6 +1609,10 @@
 
     .song-actions-secondary,
     .song-actions-secondary > summary { height: 100%; }
+  }
+
+  .song-queue-card:not(.song-queue-card--next) .song-queue-card__actions {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .songs-page--performer .song-queue-card__actions {

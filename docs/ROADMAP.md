@@ -226,6 +226,8 @@ reviewable, manually testable, and documented in the same commit.
 - [Initial slice complete] Use the same Queue, Add Song, and QR Code tab
   structure on desktop and mobile so desktop no longer reserves a permanent
   add-song or QR sidebar.
+- [Initial slice complete] Tighten desktop queue spacing and use a three-column
+  mobile action row for non-current cards while preserving accessible control sizes.
 - [Planned] Make selection state and the immediate queue action explicit.
 
 #### 6.6 Host and owner operations
