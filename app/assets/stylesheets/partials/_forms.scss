@@ -168,6 +168,56 @@ input[ type = text ], input[ type = email ], input[ type = password ] {
   &__actions { display: flex; justify-content: flex-end; }
 }
 
+.backoffice-form [hidden] { display: none !important; }
+
+.recurrence-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: $space-sm;
+  max-width: none;
+  padding: $space-sm 0;
+  cursor: pointer;
+}
+
+.recurrence-toggle input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.recurrence-toggle__track {
+  position: relative;
+  display: block;
+  width: 42px;
+  height: 24px;
+  flex: 0 0 auto;
+  margin-top: 2px;
+  border-radius: $radius-full;
+  background: rgba($beige, .36);
+  transition: background $transition-base;
+
+  &::after {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: $beige;
+    content: '';
+    transition: transform $transition-base;
+  }
+}
+
+.recurrence-toggle input:checked + .recurrence-toggle__track { background: $cyan; }
+.recurrence-toggle input:checked + .recurrence-toggle__track::after { transform: translateX(18px); }
+.recurrence-toggle input:focus-visible + .recurrence-toggle__track { outline: 3px solid rgba($cyan, .48); outline-offset: 3px; }
+
+.recurrence-toggle__copy { display: grid; gap: 2px; }
+.recurrence-toggle__copy strong { color: $beige; font-size: 1rem; }
+.recurrence-toggle__copy small { color: rgba($beige, .72); line-height: 1.4; }
+
 .container-home {
   display:flex; 
   flex-direction:row; 

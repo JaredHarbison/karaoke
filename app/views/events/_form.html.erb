@@ -24,11 +24,14 @@
   <% if !@event.persisted? %>
     <fieldset class="backoffice-form__fieldset">
       <legend>Recurrence</legend>
-      <div class="backoffice-form__check">
+      <label class="recurrence-toggle" for="recurrence_enabled">
         <%= check_box_tag 'recurrence[enabled]', '1', @recurrence[:enabled], id: 'recurrence_enabled', data: { event_recurrence_target: 'toggle', action: 'event-recurrence#update' } %>
-        <%= label_tag 'recurrence_enabled', 'Repeats' %>
-        <small>Turn this on to make this event part of a recurring schedule.</small>
-      </div>
+        <span class="recurrence-toggle__track" aria-hidden="true"></span>
+        <span class="recurrence-toggle__copy">
+          <strong>Repeats</strong>
+          <small>Turn this on to make this event part of a recurring schedule.</small>
+        </span>
+      </label>
       <div data-event-recurrence-target="details">
         <div class="backoffice-form__check">
           <%= radio_button_tag 'recurrence[mode]', 'new', @recurrence[:mode] == 'new', id: 'recurrence_mode_new', data: { action: 'event-recurrence#update' } %>
