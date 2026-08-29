@@ -7,6 +7,9 @@ Apply these checks while completing each role journey.
 - Test narrow mobile and desktop widths for discovery, queue, event, theme,
   presence-code, and host screens.
 - Navigate primary actions with the keyboard only.
+- On the queue workspace, Tab through every queue tab in source order; Arrow
+  keys must select the corresponding panel without removing it from the
+  accessibility tree.
 - Confirm visible focus, useful labels, associated validation errors, semantic
   headings, status announcements, and readable contrast.
 - Confirm dialogs, alerts, and redirects explain what happened and how to

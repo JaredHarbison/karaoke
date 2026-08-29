@@ -35,7 +35,7 @@ RSpec.describe 'Queue keyboard navigation', type: :system do
 
     expect(page.evaluate_script('document.activeElement.id')).to eq('themes-tab')
     expect(find('#themes-tab')['aria-selected']).to eq('true')
-    expect(find('#themes-panel', visible: :all)[:hidden]).to be_nil
+    expect(page.evaluate_script('document.querySelector("#themes-panel").hidden')).to be(false)
   end
 end
 # rubocop:enable Metrics/BlockLength
