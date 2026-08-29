@@ -15,6 +15,6 @@
     %span
       = render "components/icons/edit"
 - else 
-  = button_to venue_song_path(Current.venue.slug, song), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn discreet", title: action do
+  = button_to venue_song_path(Current.venue.slug, song), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn discreet", title: action, form: { data: { turbo: false } } do
     %span 
       = render "components/icons/destroy"

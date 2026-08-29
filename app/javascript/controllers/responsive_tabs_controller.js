@@ -6,6 +6,7 @@ export default class extends Controller {
 
   connect() {
     this.activeName = this.tabTargets.find(tab => tab.getAttribute("aria-selected") === "true")?.dataset.tabName || "queue"
+    this.activeName = this.savedTabName() || this.activeName
     this.mediaQuery = window.matchMedia(`(max-width: ${this.breakpointValue}px)`)
     this.handleViewportChange = this.handleViewportChange.bind(this)
     this.mediaQuery.addEventListener("change", this.handleViewportChange)
@@ -18,6 +19,7 @@ export default class extends Controller {
 
   select(event) {
     this.activeName = event.currentTarget.dataset.tabName
+    this.saveTabName()
     this.update()
   }
 
@@ -35,6 +37,7 @@ export default class extends Controller {
 
     const nextTab = this.tabTargets[nextIndex]
     this.activeName = nextTab.dataset.tabName
+    this.saveTabName()
     this.update()
     nextTab.focus()
   }
@@ -55,5 +58,18 @@ export default class extends Controller {
       panel.hidden = !active
       panel.tabIndex = active ? 0 : -1
     })
+  }
+
+  savedTabName() {
+    const savedName = window.sessionStorage.getItem(this.storageKey)
+    if (this.tabTargets.some(tab => tab.dataset.tabName === savedName)) return savedName
+  }
+
+  saveTabName() {
+    window.sessionStorage.setItem(this.storageKey, this.activeName)
+  }
+
+  get storageKey() {
+    return `responsive-tabs:${window.location.pathname}`
   }
 }

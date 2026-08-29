@@ -7,6 +7,53 @@
   color: $beige;
 }
 
+.songs-tab__badge { background: $magenta; border-radius: 999px; color: $midnight; display: inline-grid; font-size: .7rem; font-weight: 700; margin-left: $space-xs; min-width: 1.3rem; padding: .08rem .3rem; place-items: center; }
+
+.event-operations__panel { padding-top: $space-lg; }
+.event-operations__section-heading, .event-operations__list-row, .event-operations__review-item, .event-operations__review-actions { align-items: center; display: flex; gap: $space-md; justify-content: space-between; }
+.event-operations__section-heading { align-items: flex-start; margin-bottom: $space-lg; }
+.event-operations__section-heading h2, .event-operations__card h2 { color: $beige; }
+.event-operations__section-heading h2, .event-operations__card h3 { margin: 0; }
+.event-operations__section-heading p, .event-operations__empty, .event-operations__list-row span, .event-operations__review-item span, .event-operations__review-item small { color: rgba($beige, .7); }
+.event-operations__section-heading p { margin: $space-xs 0 0; }
+.event-operations__review-summary { color: $yellow; font-size: .85rem; }
+.event-operations__grid { display: grid; gap: $space-lg; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: $space-lg 0; }
+.event-operations__card, .event-operations__reconciliation { background: rgba($beige, .05); border: 1px solid rgba($cyan, .32); border-radius: $radius-lg; margin: $space-lg 0; padding: $space-lg; }
+.event-operations__card > h3 { color: $yellow; margin-bottom: $space-md; }
+.event-operations__form-card > h3,
+.event-operations__form-card > p { margin-left: auto; margin-right: auto; max-width: 36rem; }
+.event-operations__form { display: grid; gap: $space-sm; margin: 0 auto; max-width: 36rem; }
+.event-operations__form label { color: $beige; font-size: .85rem; }
+.event-operations__form input, .event-operations__form select { box-sizing: border-box; max-width: 100%; min-height: 42px; }
+.event-operations__form select { border: 1px solid $beige; border-radius: $radius-sm; padding: 0 $space-sm; }
+.event-operations__primary-action, .event-operations__text-action { cursor: pointer; font: inherit; padding: $space-xs $space-md; }
+.event-operations__form input.event-operations__primary-action,
+.event-operations__primary-action { background: $magenta; border: 1px solid $magenta; color: $midnight; justify-self: end; max-width: 100%; width: 16rem; }
+.event-operations__text-action { background: transparent; border: 1px solid $yellow; color: $yellow; }
+.event-operations__card > .button_to { display: flex; justify-content: flex-end; }
+.event-operations__card > .button_to .song-action { max-width: 100%; width: 16rem; }
+.event-operations__revoke-code { margin: $space-md 0 $space-lg auto; }
+.event-operations__status-action { display: flex; justify-content: flex-end; }
+.event-operations__status-action .song-action { max-width: 100%; width: 16rem; }
+.event-operations__list, .event-operations__review-list { list-style: none; margin: 0; padding: 0; }
+.event-operations__list-row, .event-operations__review-item { border-top: 1px solid rgba($beige, .16); padding: $space-md 0; }
+.event-operations__list-row > div, .event-operations__review-item > div { display: grid; gap: $space-xs; }
+.event-operations__reconciliation { border-color: rgba($magenta, .68); }
+.event-operations__review-actions { flex-wrap: wrap; justify-content: flex-end; }
+.event-operations__new-theme-fields { color: rgba($beige, .76); display: grid; gap: $space-sm; }
+.event-operations__new-theme-fields[hidden] { display: none; }
+.event-operations__new-theme-fields p { font-size: .8rem; margin: 0; }
+.event-operations__status-list { display: grid; gap: $space-md; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); margin: 0 0 $space-lg; }
+.event-operations__status-list div { border-left: 2px solid rgba($cyan, .45); padding-left: $space-sm; }
+.event-operations__status-list dt { color: rgba($beige, .66); font-size: .75rem; text-transform: uppercase; }
+.event-operations__status-list dd { color: $beige; margin: $space-xs 0 0; }
+
+@media (max-width: $breakpoint-sm) {
+  .event-operations__section-heading, .event-operations__list-row, .event-operations__review-item { align-items: flex-start; flex-direction: column; }
+  .event-operations__grid { grid-template-columns: 1fr; }
+  .event-operations__review-actions { justify-content: flex-start; }
+}
+
 .app-header.app-header--songs {
   position: relative;
   z-index: $z-dropdown;
@@ -739,6 +786,8 @@
   background: rgba($beige, 0.06);
 }
 
+.songs-page--manager .songs-tabs { max-width: 58rem; }
+
 .songs-tab {
   flex: 1 1 0;
   min-height: 44px;
@@ -1087,6 +1136,7 @@
 }
 
 .songs-subsection__heading {
+  align-items: center;
   display: flex;
   justify-content: space-between;
   margin-bottom: $space-md;
@@ -1131,6 +1181,24 @@
 }
 
 .songs-panel--add {
+  .songs-active-themes {
+    display: grid;
+    gap: $space-xs;
+    margin: $space-sm 0 $space-lg;
+  }
+
+  .songs-active-theme {
+    align-items: baseline;
+    border-left: 2px solid $yellow;
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-sm;
+    padding-left: $space-sm;
+
+    strong { color: $yellow; }
+    span { color: rgba($beige, .72); font-size: .85rem; }
+  }
+
   .songs-panel__intro {
     margin: -$space-sm 0 $space-lg;
     color: rgba(242, 238, 226, 0.66);
@@ -1153,7 +1221,8 @@
     gap: $space-md;
     margin: $space-lg 0 0;
     overflow-x: auto;
-    padding: $space-sm 0 $space-md;
+    // Leave room for the scaled edge cards as well as cards within the rail.
+    padding: $space-sm $space-sm $space-md;
     scroll-snap-type: x proximity;
     scrollbar-width: thin;
   }
@@ -1257,6 +1326,10 @@
     }
   }
 }
+
+.song-queue-card__title-row { align-items: center; display: flex; gap: $space-xs; }
+.song-theme-deferred__trigger { align-items: center; background: $magenta; border: 0; border-radius: 999px; color: $midnight; cursor: pointer; display: inline-flex; font: inherit; font-size: .7rem; font-weight: 800; height: 1.25rem; justify-content: center; padding: 0; width: 1.25rem; }
+.song-theme-deferred__trigger:focus-visible { box-shadow: 0 0 0 3px $magenta-light; outline: none; }
 
 .songs-panel--qr {
   max-width: none;

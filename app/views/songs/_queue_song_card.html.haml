@@ -9,6 +9,16 @@
   .song-queue-card__details
     .song-queue-card__title-row
       %h3= queue_performer_name(song)
+      - if song.theme_admission_status == "deferred"
+        .song-theme-deferred{ data: { controller: "dialog" } }
+          %button.song-theme-deferred__trigger{ type: "button", aria: { label: "Why this song is scheduled after the theme" }, data: { action: "dialog#open" } } ?
+          %dialog.pause-dialog{ aria: { labelledby: "post-theme-#{song.id}-heading" }, data: { dialog_target: "dialog", action: "click->dialog#closeOnBackdrop" } }
+            .pause-dialog__content
+              .pause-dialog__heading
+                %h2{ id: "post-theme-#{song.id}-heading" } Scheduled after theme
+                %button.pause-dialog__close{ type: "button", aria: { label: "Close" }, data: { action: "dialog#close" } } ×
+              %p This song did not fit the active theme and will return to the playable queue when that theme window ends.
+              %p= song.theme_admission_reason
     %p.song-queue-card__meta
       = display_song_title(song)
   .song-queue-card__actions{ data: { controller: "dialog" } }
@@ -16,7 +26,7 @@
       = button_to requeue_song_venue_song_path(Current.venue.slug, song), method: :patch, class: "song-action song-action--requeue", title: "Return song to queue", form: { data: { turbo: false } } do
         %span.song-action__icon ↩
         %span Requeue
-      = button_to venue_song_path(Current.venue.slug, song), method: :delete, class: "song-action song-action--remove", title: "Remove archived performance", data: { turbo_confirm: "Permanently remove #{song.performer}'s archived performance?" } do
+      = button_to venue_song_path(Current.venue.slug, song), method: :delete, class: "song-action song-action--remove", title: "Remove archived performance", data: { turbo_confirm: "Permanently remove #{song.performer}'s archived performance?" }, form: { data: { turbo: false } } do
         %span.song-action__icon ×
         %span Remove
     - if can_manage_queue && !song.finished
@@ -63,7 +73,7 @@
             = link_to edit_venue_song_path(Current.venue.slug, song), class: "song-action song-action--edit", title: "Edit song" do
               %span.song-action__icon ✎
               %span Edit
-            = button_to venue_song_path(Current.venue.slug, song), method: :delete, class: "song-action song-action--remove", title: "Remove song", data: { turbo_confirm: "Remove #{song.performer}'s song from the queue?" } do
+            = button_to venue_song_path(Current.venue.slug, song), method: :delete, class: "song-action song-action--remove", title: "Remove song", data: { turbo_confirm: "Remove #{song.performer}'s song from the queue?" }, form: { data: { turbo: false } } do
               %span.song-action__icon ×
               %span Remove
       - else
@@ -75,6 +85,6 @@
             = link_to edit_venue_song_path(Current.venue.slug, song), class: "song-action song-action--edit", title: "Edit song" do
               %span.song-action__icon ✎
               %span Edit
-            = button_to venue_song_path(Current.venue.slug, song), method: :delete, class: "song-action song-action--remove", title: "Remove song", data: { turbo_confirm: "Remove #{song.performer}'s song from the queue?" } do
+            = button_to venue_song_path(Current.venue.slug, song), method: :delete, class: "song-action song-action--remove", title: "Remove song", data: { turbo_confirm: "Remove #{song.performer}'s song from the queue?" }, form: { data: { turbo: false } } do
               %span.song-action__icon ×
               %span Remove

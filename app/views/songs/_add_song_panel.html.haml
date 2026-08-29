@@ -21,6 +21,14 @@
             .songs-guide__step
               %span 3
               %p Your name joins the lineup. Hosts manage the order.
+  - if @active_theme_applications.any?
+    .songs-active-themes{ aria: { label: "Active themes" } }
+      - @active_theme_applications.each do |application|
+        .songs-active-theme
+          %strong= application.theme.name
+          %span= application.starts_at ? "#{l(application.starts_at, format: :short)}–#{l(application.ends_at, format: :short)}" : "Entire event"
+          - if application.theme.description.present?
+            %small= application.theme.description
   - if @current_event&.live? && !@can_manage_queue && !@event_presence_active
     .songs-access{ data: { controller: "dialog" } }
       %dialog.pause-dialog.songs-access-dialog{ open: true, aria: { labelledby: "event-access-heading" }, data: { dialog_target: "dialog" } }

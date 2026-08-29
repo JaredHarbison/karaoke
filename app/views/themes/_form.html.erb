@@ -22,17 +22,17 @@
     <%= form.check_box :active %>
   </div>
   <fieldset>
-    <legend>Song admission rules</legend>
-    <p>Enter comma-separated words. Metadata must include every required word and none of the blocked words.</p>
+    <legend>Help the queue recognize the theme</legend>
+    <p>Use familiar songs or artists as examples. A clear match joins the queue; uncertain songs go to a host for a quick decision.</p>
     <div>
-      <%= form.label :required_keywords_text, "Required keywords" %>
-      <%= form.text_field :required_keywords_text, placeholder: "disco, classics" %>
+      <%= form.label :match_examples_text, "Songs or artists that fit" %>
+      <%= form.text_field :match_examples_text, placeholder: "Adele, Someone Like You, Celine Dion" %>
     </div>
     <div>
-      <%= form.label :blocked_keywords_text, "Blocked keywords" %>
-      <%= form.text_field :blocked_keywords_text, placeholder: "explicit, live" %>
+      <%= form.label :blocked_keywords_text, "Avoid" %>
+      <%= form.text_field :blocked_keywords_text, placeholder: "upbeat, dance remix" %>
     </div>
   </fieldset>
-  <p>When metadata is unavailable, the song goes to host review.</p>
+  <p>Nothing is rejected automatically for theme fit. Hosts can approve, place it after the theme, or reject it completely.</p>
   <%= form.submit %>
 <% end %>

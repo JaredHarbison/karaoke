@@ -1,0 +1,10 @@
+- if post_theme.any?
+  .songs-subsection.songs-subsection--post-theme
+    .songs-subsection__heading
+      %div
+        %h3 After theme
+        %p.songs-muted These performances are scheduled to return when their theme window ends.
+      %span.songs-count= post_theme.count
+    .song-card-list
+      - post_theme.each do |song|
+        = render "queue_song_card", song: song, position: nil, next_song: false, can_manage_queue: can_manage_queue

@@ -12,6 +12,14 @@
       .songs-tabs{ role: "tablist", aria: { label: "Venue queue sections" } }
         %button.songs-tab{ id: "queue-tab", type: "button", role: "tab", tabindex: (active_tab == "queue" ? "0" : "-1"), aria: { controls: "queue-panel", selected: (active_tab == "queue").to_s }, data: { responsive_tabs_target: "tab", tab_name: "queue", action: "click->responsive-tabs#select keydown->responsive-tabs#navigate" } } Queue
         %button.songs-tab{ id: "add-tab", type: "button", role: "tab", tabindex: (active_tab == "add" ? "0" : "-1"), aria: { controls: "add-panel", selected: (active_tab == "add").to_s }, data: { responsive_tabs_target: "tab", tab_name: "add", action: "click->responsive-tabs#select keydown->responsive-tabs#navigate" } } Add Song
+        - if can_manage_queue && @current_event
+          %button.songs-tab{ id: "themes-tab", type: "button", role: "tab", tabindex: "-1", aria: { controls: "themes-panel", selected: "false" }, data: { responsive_tabs_target: "tab", tab_name: "themes", action: "click->responsive-tabs#select keydown->responsive-tabs#navigate" } }
+            Themes
+            - if @theme_review.any?
+              %span.songs-tab__badge{ aria: { label: "#{pluralize(@theme_review.count, 'performance')} needs theme review" } }= @theme_review.count
+          - if Current.venue.is_admin?(current_user)
+            %button.songs-tab{ id: "hosts-tab", type: "button", role: "tab", tabindex: "-1", aria: { controls: "hosts-panel", selected: "false" }, data: { responsive_tabs_target: "tab", tab_name: "hosts", action: "click->responsive-tabs#select keydown->responsive-tabs#navigate" } } Temporary Hosts
+          %button.songs-tab{ id: "event-tab", type: "button", role: "tab", tabindex: "-1", aria: { controls: "event-panel", selected: "false" }, data: { responsive_tabs_target: "tab", tab_name: "event", action: "click->responsive-tabs#select keydown->responsive-tabs#navigate" } } Event
 
       - if can_manage_queue
         .songs-tab-panels
@@ -27,6 +35,7 @@
                     %span= @upcoming_total
 
               = render "upcoming_list", upcoming: @upcoming, upcoming_page: @upcoming_page, upcoming_has_more: @upcoming_has_more
+              = render "post_theme_list", post_theme: @post_theme, can_manage_queue: can_manage_queue
 
               - if @theme_review.any?
                 %section.songs-panel.songs-panel--theme-review{ aria: { labelledby: "theme-review-heading" } }
@@ -56,6 +65,8 @@
             = render "finished_panel"
           .songs-tab-panel.songs-tab-panel--add{ id: "add-panel", role: "tabpanel", aria: { labelledby: "add-tab" }, data: { responsive_tabs_target: "panel", tab_name: "add" } }
             = render "add_song_panel", song: @song
+          - if @current_event
+            = render "manager_event_panels"
       - else
         .songs-tab-panels.songs-tab-panels--performer
           .songs-tab-panel.songs-tab-panel--add{ id: "add-panel", role: "tabpanel", aria: { labelledby: "add-tab" }, data: { responsive_tabs_target: "panel", tab_name: "add" } }
@@ -72,6 +83,7 @@
                     %span= @upcoming_total
 
               = render "upcoming_list", upcoming: @upcoming, upcoming_page: @upcoming_page, upcoming_has_more: @upcoming_has_more
+              = render "post_theme_list", post_theme: @post_theme, can_manage_queue: can_manage_queue
 
               - if @skipped.any?
                 .songs-subsection

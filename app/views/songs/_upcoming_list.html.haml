@@ -3,7 +3,8 @@
     - upcoming.each_with_index do |song, index|
       = render "queue_song_card", song: song, position: index + 1, next_song: index.zero?, can_manage_queue: @can_manage_queue
   - if upcoming_has_more
-    = link_to venue_songs_path(Current.venue.slug, event_id: @current_event&.id, page: upcoming_page + 1), class: "songs-more-button" do
+    - more_path = @current_event ? venue_event_queue_path(Current.venue.slug, event_slug: @current_event.slug, page: upcoming_page + 1) : venue_songs_path(Current.venue.slug, page: upcoming_page + 1)
+    = link_to more_path, class: "songs-more-button" do
       %span.songs-more-button__icon{ aria: { hidden: "true" } } +
       %span More
 - else

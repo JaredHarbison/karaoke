@@ -68,7 +68,7 @@
       </ul>
     </section>
   <% end %>
-  <p><%= link_to "View event queue", venue_songs_path(Current.venue.slug, event_id: @event.id) %></p>
+  <p><%= link_to "View event queue", venue_event_queue_path(Current.venue.slug, event_slug: @event.slug) %></p>
   <% if Current.venue.is_admin?(current_user) %>
     <section aria-labelledby="presence-heading">
       <h2 id="presence-heading">Event access</h2>

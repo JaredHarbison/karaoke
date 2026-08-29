@@ -184,7 +184,8 @@ reviewable, manually testable, and documented in the same commit.
 - [Initial slice complete] Add manager-only queue tabs for Themes, Temporary
   Hosts, and Event access/activity: venue admins can create, apply, and manage
   reusable themes and temporary hosts; active temporary hosts can reconcile
-  held theme entries. The Themes toggle displays the number awaiting review.
+  held theme entries. The Themes toggle displays the number awaiting review,
+  and the selected manager tab persists through queue actions and redirects.
 - [Planned] Consolidate event name, timing, recurrence, queue policy, and
   occurrence editing into a focused configuration workflow.
 - [Planned] Keep theme application, temporary host delegation, and presence

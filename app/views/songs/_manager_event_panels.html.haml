@@ -1,0 +1,140 @@
+- can_configure_event = Current.venue.is_admin?(current_user)
+
+%section.songs-tab-panel.event-operations__panel{ id: "themes-panel", role: "tabpanel", tabindex: "-1", aria: { labelledby: "themes-tab" }, data: { responsive_tabs_target: "panel", tab_name: "themes" }, hidden: true }
+  - if @theme_applications.any?
+    %section.event-operations__card
+      %h3 Applied themes
+      %ul.event-operations__list
+        - @theme_applications.each do |application|
+          %li.event-operations__list-row
+            %div
+              %strong= application.theme.name
+              %span= application.starts_at && application.ends_at ? "#{l(application.starts_at, format: :short)}–#{l(application.ends_at, format: :short)}" : "Entire event"
+            - if can_configure_event
+              = button_to "Remove", venue_event_theme_application_path(Current.venue.slug, application), method: :delete, class: "song-action song-action--remove"
+  - if can_configure_event
+    %section.event-operations__card.event-operations__form-card
+      %h3 Use or create a theme
+      = form_with url: venue_event_theme_applications_path(Current.venue.slug), scope: :event_theme_application, local: true, class: "event-operations__form", data: { controller: "theme-picker", theme_picker_existing_names_value: @themes.map(&:name) } do |form|
+        = form.hidden_field :event_id, value: @current_event.id
+        = form.label :theme_name, "Theme"
+        = form.text_field :theme_name, list: "venue-themes", placeholder: "Type a new theme or choose an existing one", required: true, data: { theme_picker_target: "name", action: "input->theme-picker#update change->theme-picker#update" }
+        %datalist#venue-themes
+          - @themes.each do |theme|
+            %option{ value: theme.name }
+        .event-operations__new-theme-fields{ hidden: true, data: { theme_picker_target: "newThemeFields" } }
+          %p Give performers a clear cue. Hosts can still decide any uncertain song in one tap.
+          = form.label :description, "What belongs? (optional)"
+          = form.text_field :description, placeholder: "Heartbreak ballads and melancholy anthems"
+          = form.label :match_examples_text, "Songs or artists that fit (optional)"
+          = form.text_field :match_examples_text, placeholder: "Adele, Someone Like You, Celine Dion"
+          = form.label :blocked_keywords_text, "Avoid (optional)"
+          = form.text_field :blocked_keywords_text, placeholder: "upbeat, dance remix"
+        = form.label :starts_at, "Starts (optional)"
+        = form.datetime_local_field :starts_at
+        = form.label :ends_at, "Ends (optional)"
+        = form.datetime_local_field :ends_at
+        = form.submit "Apply theme", class: "event-operations__primary-action"
+  - if @theme_review.any?
+    %section.event-operations__reconciliation
+      .songs-panel__heading
+        %h2 Theme reconciliation
+        %span.songs-count= @theme_review.count
+      %ul.event-operations__review-list
+        - @theme_review.each do |performance|
+          - content_policy_review = performance.theme_admission_reason.to_s.start_with?("content policy:")
+          %li.event-operations__review-item
+            %div
+              %strong= performance.performer
+              %span= display_song_title(performance)
+              %small= performance.theme_admission_reason
+            .event-operations__review-actions
+              - if content_policy_review
+                = button_to "Reject for content policy", review_theme_venue_song_path(Current.venue.slug, performance), method: :patch, params: { decision: "reject", rejection_reason: "content_policy" }, class: "song-action song-action--remove"
+              - else
+                = button_to "Approve", review_theme_venue_song_path(Current.venue.slug, performance), method: :patch, params: { decision: "approve" }, class: "song-action song-action--play"
+                - if performance.theme_application.ends_at
+                  = button_to "Queue after theme", review_theme_venue_song_path(Current.venue.slug, performance), method: :patch, params: { decision: "defer" }, class: "song-action song-action--requeue"
+                = button_to "Reject completely", review_theme_venue_song_path(Current.venue.slug, performance), method: :patch, params: { decision: "reject", rejection_reason: "theme" }, class: "song-action song-action--remove"
+
+- if can_configure_event
+  %section.songs-tab-panel.event-operations__panel{ id: "hosts-panel", role: "tabpanel", tabindex: "-1", aria: { labelledby: "hosts-tab" }, data: { responsive_tabs_target: "panel", tab_name: "hosts" }, hidden: true }
+    .event-operations__grid
+      .event-operations__card.event-operations__form-card
+        %h3 Delegate host authority
+        = form_with url: venue_event_host_delegations_path(Current.venue.slug), scope: :event_host_delegation, local: true, class: "event-operations__form", data: { controller: "delegation-window", delegation_window_event_starts_at_value: datetime_local_value(@current_event.starts_at), delegation_window_event_ends_at_value: datetime_local_value(@current_event.ends_at), action: "submit->delegation-window#validate" } do |form|
+          = hidden_field_tag :event_id, @current_event.id
+          = form.label :delegated_user_id, "Checked-in performer or venue member"
+          = form.collection_select :delegated_user_id, @delegation_candidates, :id, :display_name, { include_blank: "Choose a checked-in performer or venue member" }, required: true
+          = form.label :starts_at, "Starts"
+          = form.datetime_local_field :starts_at, value: datetime_local_value(@current_event.starts_at), min: datetime_local_value(@current_event.starts_at), max: datetime_local_value(@current_event.ends_at), required: true, data: { delegation_window_target: "startsAt", action: "input->delegation-window#update change->delegation-window#update" }
+          = form.label :ends_at, "Ends"
+          = form.datetime_local_field :ends_at, value: datetime_local_value(@current_event.ends_at || @current_event.starts_at + 4.hours), min: datetime_local_value(@current_event.starts_at), max: datetime_local_value(@current_event.ends_at), required: true, data: { delegation_window_target: "endsAt", action: "input->delegation-window#update change->delegation-window#update" }
+          = form.submit "Delegate host", class: "event-operations__primary-action"
+      %section.event-operations__card
+        %h3 Temporary hosts
+        - if @event_host_delegations.any?
+          %ul.event-operations__list
+            - @event_host_delegations.each do |delegation|
+              %li.event-operations__list-row
+                %div
+                  %strong= delegation.delegated_user.display_name
+                  %span #{l(delegation.starts_at, format: :short)}–#{l(delegation.ends_at, format: :short)}#{" · revoked" if delegation.revoked_at?}
+                - unless delegation.revoked_at?
+                  = button_to "Revoke", venue_event_host_delegation_path(Current.venue.slug, delegation), method: :delete, class: "song-action song-action--remove"
+        - else
+          %p.event-operations__empty No temporary hosts are scheduled.
+
+%section.songs-tab-panel.event-operations__panel{ id: "event-panel", role: "tabpanel", tabindex: "-1", aria: { labelledby: "event-tab" }, data: { responsive_tabs_target: "panel", tab_name: "event" }, hidden: true }
+  %section.event-operations__card
+    %h3 Status
+    %dl.event-operations__status-list
+      %div
+        %dt State
+        %dd= @current_event.status.humanize
+      %div
+        %dt Queue
+        %dd #{pluralize(@upcoming_total, "playable performance")} · #{pluralize(@theme_review.count, "awaiting theme review")}
+      %div
+        %dt Projected queue end
+        %dd= l(@queue_projected_completion_at, format: :short)
+      - if @current_event.ends_at
+        %div
+          %dt Scheduled end
+          %dd= l(@current_event.ends_at, format: :short)
+      %div
+        %dt Queue policy
+        %dd= @current_event.allow_queue_overrun? ? "Overrun allowed" : "Stops at scheduled end"
+    - if @current_event.scheduled? && can_configure_event
+      .event-operations__status-action
+        = button_to "Start event", start_venue_event_path(Current.venue.slug, @current_event), method: :patch, class: "song-action song-action--play"
+    - elsif @current_event.live?
+      .event-operations__status-action
+        = button_to "Complete event", complete_venue_event_path(Current.venue.slug, @current_event), method: :patch, class: "song-action song-action--remove"
+  - if can_configure_event
+    %section.event-operations__card.event-operations__form-card
+      %h3 Performer access
+      - if @active_presence_session
+        %p Event access code: #{@active_presence_session.short_code} · expires #{l(@active_presence_session.expires_at, format: :short)}
+        = button_to "Revoke code", venue_event_presence_session_path(Current.venue.slug, @active_presence_session), method: :delete, class: "song-action song-action--remove", form: { class: "event-operations__revoke-code" }
+      - else
+        %p.event-operations__empty No active access code.
+      = form_with url: venue_event_presence_sessions_path(Current.venue.slug), scope: :event_presence_session, local: true, class: "event-operations__form" do |form|
+        = hidden_field_tag :event_id, @current_event.id
+        = form.label :expires_at, "Expires (optional)"
+        = form.datetime_local_field :expires_at, value: datetime_local_value(@current_event.ends_at && (@current_event.ends_at + EventPresenceSession::GRACE_PERIOD))
+        = form.submit(@current_event.live? ? "Rotate access code" : "Generate access code", class: "event-operations__primary-action")
+  - if @queue_overrides.any? || @queue_setting_changes.any?
+    %section.event-operations__card
+      %h3 Activity
+      %ul.event-operations__list
+        - @queue_overrides.each do |override|
+          %li.event-operations__list-row
+            %div
+              %strong= override.action.humanize
+              %span #{override.performance.performer} · #{override.user.display_name} · #{l(override.created_at, format: :short)}
+        - @queue_setting_changes.each do |change|
+          %li.event-operations__list-row
+            %div
+              %strong= change.setting.humanize
+              %span #{change.previous_value ? "allowed" : "blocked"} → #{change.new_value ? "allowed" : "blocked"} · #{change.user.display_name} · #{l(change.created_at, format: :short)}
