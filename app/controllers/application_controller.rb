@@ -94,6 +94,7 @@ class ApplicationController < ActionController::Base
     event_sessions = session[:event_presence_session_ids].to_h
     event_sessions[presence.event_id.to_s] = presence.id
     session[:event_presence_session_ids] = event_sessions
+    EventCheckIn.find_or_create_by!(event: presence.event, user: current_user) if current_user
   end
 
   def active_event_presence_for?(event)

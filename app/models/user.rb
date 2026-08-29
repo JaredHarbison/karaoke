@@ -11,6 +11,7 @@ class User < ApplicationRecord
            class_name: 'EventHostDelegation', dependent: :restrict_with_exception,
            foreign_key: :delegated_by_user_id
   has_many :event_presence_sessions, dependent: :restrict_with_exception, foreign_key: :created_by_user_id
+  has_many :event_check_ins, dependent: :destroy
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable

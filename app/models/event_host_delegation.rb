@@ -12,7 +12,7 @@ class EventHostDelegation < ApplicationRecord
 
   validates :starts_at, :ends_at, presence: true
   validates :ends_at, comparison: { greater_than: :starts_at }
-  validate :users_belong_to_event_venue
+  validate :delegated_user_is_eligible
   validate :delegation_is_within_event
   validate :delegated_user_is_not_delegator
   validate :delegator_is_authorized
@@ -23,14 +23,11 @@ class EventHostDelegation < ApplicationRecord
 
   private
 
-  def users_belong_to_event_venue
-    return unless event
+  def delegated_user_is_eligible
+    return unless event && delegated_user
+    return if event.eligible_for_temporary_host?(delegated_user)
 
-    [delegated_user, delegated_by_user].compact.each do |user|
-      next if event.venue.members.exists?(user.id)
-
-      errors.add(:base, 'delegation users must belong to the event venue')
-    end
+    errors.add(:delegated_user, 'must be checked in, a performer at this event, or a venue member')
   end
 
   def delegation_is_within_event

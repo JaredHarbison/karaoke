@@ -42,10 +42,11 @@ during the shared journey before continuing here.
 
 ## Theme and queue setup
 
-1. Open `/523-franklin-ave/themes`.
-   - Create a reusable theme with required and blocked comma-separated words.
-   - Edit it and confirm the values persist normalized.
-   - Theme setup and application controls should be discoverable from the event-management workflow.
+1. From the event queue, open the **Themes** toggle.
+   - Create a reusable theme with required and blocked comma-separated words,
+     apply it to the event, and edit it from the managed-theme list.
+   - Confirm the values persist normalized and the theme controls stay within
+     the event workflow.
    - Bounded theme windows must stay inside the event start/end window.
 2. Apply the theme to an event.
    - Bounded windows must stay inside the event.
@@ -64,7 +65,8 @@ during the shared journey before continuing here.
 2. Open the access link and confirm it reaches the event's queue context.
 3. Rotate the code.
    - The prior code/session is revoked; the permanent venue entry point remains.
-4. Delegate a venue member for a time inside the event.
+4. Open the **Temporary Hosts** toggle and delegate a
+   venue member for a time inside the event.
    - The owner may delegate to another venue member; a delegator cannot delegate to themself.
    - The event lists the delegation and its expiry.
    - Revoke it and confirm authority is removed.

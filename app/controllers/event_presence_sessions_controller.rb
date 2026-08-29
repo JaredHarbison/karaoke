@@ -10,14 +10,17 @@ class EventPresenceSessionsController < ApplicationController
 
   def create
     rotate_presence_session
-    redirect_to venue_event_path(Current.venue.slug, @event), notice: 'Event access code generated.'
+    redirect_to venue_event_queue_path(Current.venue.slug, event_slug: @event.slug),
+                notice: 'Event access code generated.'
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to venue_event_path(Current.venue.slug, @event), alert: e.record.errors.full_messages.to_sentence
+    redirect_to venue_event_queue_path(Current.venue.slug, event_slug: @event.slug),
+                alert: e.record.errors.full_messages.to_sentence
   end
 
   def destroy
     @presence_session.update!(revoked_at: Time.current)
-    redirect_to venue_event_path(Current.venue.slug, @event), notice: 'Event access code revoked.'
+    redirect_to venue_event_queue_path(Current.venue.slug, event_slug: @event.slug),
+                notice: 'Event access code revoked.'
   end
 
   private

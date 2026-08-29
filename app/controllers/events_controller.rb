@@ -51,6 +51,7 @@ class EventsController < ApplicationController
 
   def start
     if @event.start!
+      @event.ensure_active_presence_session!(created_by_user: @event.venue.owner)
       redirect_to venue_event_path(Current.venue.slug, @event), notice: 'Event started. Performers may now queue songs.'
     else
       redirect_to venue_event_path(Current.venue.slug, @event), alert: 'Only scheduled events can be started.'
@@ -89,8 +90,15 @@ class EventsController < ApplicationController
                                     .includes(:delegated_user, :delegated_by_user)
                                     .order(starts_at: :desc)
     @delegation_candidates = Current.venue.members.order(:email)
+    ensure_live_event_access_code
     @presence_sessions = @event.event_presence_sessions.order(created_at: :desc)
     @active_presence_session = @presence_sessions.find { |presence| @event.live? && presence.active_at? }
+  end
+
+  def ensure_live_event_access_code
+    return unless @event.live? && Current.venue.admin?(current_user)
+
+    @event.ensure_active_presence_session!(created_by_user: current_user)
   end
 
   def set_event

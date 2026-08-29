@@ -12,15 +12,18 @@ class EventHostDelegationsController < ApplicationController
     @delegation = new_delegation
 
     if @delegation.save
-      redirect_to venue_event_path(Current.venue.slug, @event), notice: 'Temporary host delegation created.'
+      redirect_to venue_event_queue_path(Current.venue.slug, event_slug: @event.slug),
+                  notice: 'Temporary host delegation created.'
     else
-      redirect_to venue_event_path(Current.venue.slug, @event), alert: @delegation.errors.full_messages.to_sentence
+      redirect_to venue_event_queue_path(Current.venue.slug, event_slug: @event.slug),
+                  alert: @delegation.errors.full_messages.to_sentence
     end
   end
 
   def destroy
     @delegation.update!(revoked_at: Time.current)
-    redirect_to venue_event_path(Current.venue.slug, @event), notice: 'Temporary host delegation revoked.'
+    redirect_to venue_event_queue_path(Current.venue.slug, event_slug: @event.slug),
+                notice: 'Temporary host delegation revoked.'
   end
 
   private
@@ -35,8 +38,12 @@ class EventHostDelegationsController < ApplicationController
 
   def delegation_params
     attributes = params.require(:event_host_delegation).permit(:delegated_user_id, :starts_at, :ends_at)
-    attributes[:delegated_user_id] = Current.venue.members.find_by(id: attributes[:delegated_user_id])&.id
+    attributes[:delegated_user_id] = delegation_candidates.find_by(id: attributes[:delegated_user_id])&.id
     attributes
+  end
+
+  def delegation_candidates
+    @event.temporary_host_candidates
   end
 
   def new_delegation

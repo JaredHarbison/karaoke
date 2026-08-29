@@ -29,6 +29,13 @@ class EventPresenceSession < ApplicationRecord
     end
   end
 
+  def self.ensure_active_for!(event:, created_by_user:, expires_at:)
+    event.with_lock do
+      event.event_presence_sessions.active_at.order(created_at: :desc).first ||
+        event.event_presence_sessions.create!(created_by_user: created_by_user, expires_at: expires_at)
+    end
+  end
+
   private
 
   def generate_credentials

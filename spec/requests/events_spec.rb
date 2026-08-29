@@ -35,6 +35,17 @@ RSpec.describe 'Events', type: :request do
   end
 
   describe 'GET /:venue_slug/events/:id' do
+    it 'creates an access code when an owner opens a live event with none' do
+      event = create(:event, venue: venue, status: :live, starts_at: 1.hour.ago)
+      sign_in owner
+
+      expect do
+        get venue_event_path(venue.slug, event)
+      end.to change { event.event_presence_sessions.active_at.count }.from(0).to(1)
+
+      expect(response.body).to include('Event access code:')
+    end
+
     it 'shows the active performer access code without exposing stale codes' do
       event = create(:event, venue: venue, status: :live)
       active_session = create(:event_presence_session, event: event, created_by_user: owner, expires_at: event.ends_at)
@@ -47,6 +58,51 @@ RSpec.describe 'Events', type: :request do
       expect(response).to be_successful
       expect(response.body).to include("Event access code: #{active_session.short_code}", 'Access-code history')
       expect(response.body).not_to include(event_presence_url(stale_session.token))
+    end
+  end
+
+  describe 'GET /:venue_slug/events/:slug/queue' do
+    it 'puts manager theme controls and reconciliation in queue tabs' do
+      event = create(:event, venue: venue, status: :live, starts_at: 1.hour.ago)
+      theme = create(:theme, venue: venue, name: 'Disco Night')
+      application = create(:event_theme_application, event: event, theme: theme)
+      create(
+        :performance,
+        venue: venue,
+        event: event,
+        performer: 'Theme Singer',
+        theme_admission_status: 'review',
+        theme_admission_reason: 'title does not match required theme keywords',
+        theme_application: application
+      )
+      sign_in owner
+
+      get venue_event_queue_path(venue.slug, event_slug: event.slug)
+
+      expect(response).to be_successful
+      expect(response.body).to include(
+        'Queue', 'Themes', 'Temporary Hosts', 'Event', 'Theme reconciliation', 'Theme Singer'
+      )
+      expect(response.body).to include('1 performance needs theme review')
+      delegation_form = Nokogiri::HTML(response.body).at_css('form[data-controller~="delegation-window"]')
+      expect(delegation_form['data-action']).to include('submit->delegation-window#validate')
+      expect(delegation_form.at_css('#event_host_delegation_starts_at')['min']).to be_present
+      expect(delegation_form.at_css('#event_host_delegation_ends_at')['max']).to be_present
+    end
+
+    it 'allows an active temporary host to reconcile themes without exposing configuration controls' do
+      event = create(:event, venue: venue, status: :live, starts_at: 1.hour.ago)
+      delegated_host = create(:user)
+      venue.venue_memberships.create!(user: delegated_host, role: :performer)
+      EventHostDelegation.create!(event: event, delegated_user: delegated_host, delegated_by_user: owner,
+                                  starts_at: 30.minutes.ago, ends_at: 1.hour.from_now)
+      sign_in delegated_host
+
+      get venue_event_queue_path(venue.slug, event_slug: event.slug)
+
+      expect(response).to be_successful
+      expect(response.body).to include('Themes')
+      expect(response.body).not_to include('Create a theme', 'Temporary Hosts')
     end
   end
 
@@ -136,6 +192,7 @@ RSpec.describe 'Events', type: :request do
 
       expect(response).to redirect_to(venue_event_path(venue.slug, event))
       expect(event.reload).to be_live
+      expect(event.event_presence_sessions.active_at).to exist
     end
 
     it 'does not allow a performer to start an event' do
@@ -176,8 +233,42 @@ RSpec.describe 'Events', type: :request do
           ends_at: event.ends_at
         }
       }
-      expect(response).to redirect_to(venue_event_path(venue.slug, event))
+      expect(response).to redirect_to(venue_event_queue_path(venue.slug, event_slug: event.slug))
       expect(EventHostDelegation.last.delegated_user).to eq(delegated_host)
+    end
+
+    it 'lets a venue host delegate event queue authority to an event performer' do
+      event = create(
+        :event, venue: venue, starts_at: 1.hour.from_now.change(sec: 0), ends_at: 3.hours.from_now.change(sec: 0)
+      )
+      performer = create(:user)
+      create(:performance, event: event, venue: venue, user: performer)
+      sign_in owner
+
+      post venue_event_host_delegations_path(venue.slug), params: {
+        event_id: event.id,
+        event_host_delegation: { delegated_user_id: performer.id, starts_at: event.starts_at, ends_at: event.ends_at }
+      }
+
+      expect(response).to redirect_to(venue_event_queue_path(venue.slug, event_slug: event.slug))
+      expect(EventHostDelegation.last.delegated_user).to eq(performer)
+    end
+
+    it 'lets a venue host delegate event queue authority to a checked-in performer' do
+      event = create(
+        :event, venue: venue, starts_at: 1.hour.from_now.change(sec: 0), ends_at: 3.hours.from_now.change(sec: 0)
+      )
+      performer = create(:user)
+      EventCheckIn.create!(event: event, user: performer, checked_in_at: Time.current)
+      sign_in owner
+
+      post venue_event_host_delegations_path(venue.slug), params: {
+        event_id: event.id,
+        event_host_delegation: { delegated_user_id: performer.id, starts_at: event.starts_at, ends_at: event.ends_at }
+      }
+
+      expect(response).to redirect_to(venue_event_queue_path(venue.slug, event_slug: event.slug))
+      expect(EventHostDelegation.last.delegated_user).to eq(performer)
     end
 
     it 'does not allow a performer to create a delegation' do

@@ -7,6 +7,7 @@ class Event < ApplicationRecord
   has_many :performances, dependent: :nullify
   has_many :song_queue_overrides, dependent: :destroy
   has_many :event_host_delegations, dependent: :destroy
+  has_many :event_check_ins, dependent: :destroy
   has_many :event_presence_sessions, dependent: :destroy
   has_many :event_setting_changes, dependent: :destroy
   has_many :event_theme_applications, dependent: :destroy
@@ -38,8 +39,27 @@ class Event < ApplicationRecord
     event_host_delegations.active_at(at).where(delegated_user_id: user.id).exists?
   end
 
+  def temporary_host_candidates
+    venue_member_ids = venue.members.select(:id)
+    performer_ids = performances.where.not(user_id: nil).select(:user_id)
+    checked_in_user_ids = event_check_ins.select(:user_id)
+    User.where(id: venue_member_ids).or(User.where(id: performer_ids)).or(User.where(id: checked_in_user_ids))
+  end
+
+  def eligible_for_temporary_host?(user)
+    user.present? && temporary_host_candidates.exists?(id: user.id)
+  end
+
   def accepting_signups?(at: Time.current)
     live? && starts_at <= at && (ends_at.nil? || ends_at > at)
+  end
+
+  def ensure_active_presence_session!(created_by_user:)
+    EventPresenceSession.ensure_active_for!(
+      event: self,
+      created_by_user: created_by_user,
+      expires_at: ends_at || starts_at + 4.hours
+    )
   end
 
   def start!

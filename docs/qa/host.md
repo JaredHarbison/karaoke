@@ -7,7 +7,7 @@ Prerequisite: complete the owner journey’s “Add an existing user as a host�
 step. Before that action, this account is authenticated but has no authority
 over `523 Franklin Ave`.
 
-## Event operations
+## Event access and queue management
 
 1. Open the event list and event detail page.
    - Upcoming events are visible.
@@ -61,6 +61,7 @@ over `523 Franklin Ave`.
    - Theme-ineligible/uncertain entries enter Theme review.
    - Disallowed explicit content is reject-only and never releases on expiry.
 2. Approve or reject a theme review entry.
+   - The Themes toggle shows the number of performances awaiting reconciliation.
    - Approval makes it queue-eligible.
    - Rejection records the reason and keeps it out.
 3. Leave a non-policy review unresolved until the theme window ends.

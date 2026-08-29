@@ -181,6 +181,10 @@ reviewable, manually testable, and documented in the same commit.
 
 #### 6.4 Event configuration and secondary operations
 
+- [Initial slice complete] Add manager-only queue tabs for Themes, Temporary
+  Hosts, and Event access/activity: venue admins can create, apply, and manage
+  reusable themes and temporary hosts; active temporary hosts can reconcile
+  held theme entries. The Themes toggle displays the number awaiting review.
 - [Planned] Consolidate event name, timing, recurrence, queue policy, and
   occurrence editing into a focused configuration workflow.
 - [Planned] Keep theme application, temporary host delegation, and presence
