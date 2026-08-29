@@ -15,6 +15,7 @@ class YoutubeVideoPolicy
 
   def call
     return review('provider metadata is unavailable') unless @video
+    return reject('video cannot be played in the embedded player') if @video[:embeddable] == false
     return review('karaoke status is not verified') unless verified_karaoke?
     return reject('explicit lyrics are not allowed at this venue') if explicit? && !@explicit_lyrics_allowed
     return review('explicit lyrics status is unknown') if explicit?.nil?

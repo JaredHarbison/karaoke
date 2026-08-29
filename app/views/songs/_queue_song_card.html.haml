@@ -1,8 +1,11 @@
 - can_manage_song = can_manage_queue || performer_song_for_current_user?(song)
+- performing_song = local_assigns[:performing_song] || false
 
-%article.song-queue-card{ class: (next_song ? "song-queue-card--next" : "") }
+%article.song-queue-card{ class: [("song-queue-card--next" if next_song), ("song-queue-card--performing" if performing_song)] }
   .song-queue-card__position
-    - if next_song
+    - if performing_song
+      %span.song-position Now
+    - elsif next_song
       %span.song-next-badge Next
     - elsif position
       %span.song-position= "##{position}"
@@ -31,7 +34,7 @@
         %span Remove
     - if can_manage_queue && !song.finished
       - if next_song
-        %button.song-action.song-action--play{ type: "button", title: "Play next song fullscreen", data: { action: "youtube-player#play", youtube_player_url_param: song.url, youtube_player_finish_url_param: finish_song_venue_song_path(Current.venue.slug, song), youtube_player_performer_param: song.performer } }
+        %button.song-action.song-action--play{ type: "button", title: "Play next song fullscreen", data: { action: "youtube-player#play", youtube_player_url_param: song.url, youtube_player_start_url_param: start_song_venue_song_path(Current.venue.slug, song), youtube_player_finish_url_param: finish_song_venue_song_path(Current.venue.slug, song), youtube_player_stop_url_param: stop_song_venue_song_path(Current.venue.slug, song), youtube_player_performer_param: song.performer } }
           %span.song-action__icon ▶
           %span Play
       = link_to song.url, class: "song-action song-action--open", title: "Open video in a new tab", target: "_blank", rel: "noopener noreferrer" do

@@ -40,7 +40,7 @@ class YoutubeService
     
     url = URI("#{BASE_URL}/videos")
     params = {
-      part: 'snippet,contentDetails',
+      part: 'snippet,contentDetails,status',
       id: video_id,
       key: API_KEY
     }
@@ -104,6 +104,7 @@ class YoutubeService
       has_karaoke: has_karaoke,
       has_lyrics: has_lyrics,
       verified_karaoke: has_karaoke,
+      embeddable: video.dig('status', 'embeddable'),
       explicit_lyrics: explicit_lyrics,
       duration_seconds: parse_duration(video.dig('contentDetails', 'duration')),
       thumbnail: video.dig('snippet', 'thumbnails', 'medium', 'url')

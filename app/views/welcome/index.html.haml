@@ -63,8 +63,8 @@
         %span.venue-empty__icon 🎤
         %h3 No public venues found
         %p Try a different search, or ask the venue owner for a direct link.
-        = link_to "Clear search", root_path, class: "welcome-button welcome-button--secondary" if params[:search].present?
+        = link_to "Clear Search", root_path, class: "welcome-button welcome-button--secondary" if params[:search].present?
 
   %footer.welcome-footer
     %span More venue discovery options are coming soon.
-    = button_to "Sign out", destroy_user_session_path, method: :delete, class: "welcome-footer__signout"
+    = button_to "Sign Out", destroy_user_session_path, method: :delete, class: "welcome-footer__signout"

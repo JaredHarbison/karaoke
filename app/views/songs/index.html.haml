@@ -3,7 +3,7 @@
 - next_performer = @upcoming.first&.performer
 - active_tab = performer_view ? "add" : (@song.errors.any? ? "add" : "queue")
 
-.songs-page{ class: [("songs-page--manager" if can_manage_queue), ("songs-page--performer" if performer_view)], data: ({ controller: "youtube-player" } if can_manage_queue) }
+.songs-page{ class: [("songs-page--manager" if can_manage_queue), ("songs-page--performer" if performer_view)], data: ({ controller: [can_manage_queue ? "youtube-player" : nil, (@queue_state_url ? "queue-refresh" : nil)].compact.join(" "), queue_refresh_url_value: @queue_state_url, queue_refresh_version_value: @queue_version } if can_manage_queue || @queue_state_url) }
   %main.songs-main
     - if @current_event
       - unless @current_event.live?
@@ -34,7 +34,7 @@
                     %span In Line
                     %span= @upcoming_total
 
-              = render "upcoming_list", upcoming: @upcoming, upcoming_page: @upcoming_page, upcoming_has_more: @upcoming_has_more
+              = render "upcoming_list", upcoming: @upcoming, upcoming_page: @upcoming_page, upcoming_has_more: @upcoming_has_more, performing_song: @performing_song
               = render "post_theme_list", post_theme: @post_theme, can_manage_queue: can_manage_queue
 
               - if @theme_review.any?
@@ -49,10 +49,10 @@
                         %span= song.title.presence || song.url
                         %small= song.theme_admission_reason
                         - if content_policy_review
-                          = button_to "Reject for content policy", review_theme_venue_song_path(Current.venue.slug, song), method: :patch, params: { decision: "reject", rejection_reason: "content_policy" }
+                          = button_to "Reject for Content Policy", review_theme_venue_song_path(Current.venue.slug, song), method: :patch, params: { decision: "reject", rejection_reason: "content_policy" }
                         - else
-                          = button_to "Approve theme fit", review_theme_venue_song_path(Current.venue.slug, song), method: :patch, params: { decision: "approve" }
-                          = button_to "Reject theme fit", review_theme_venue_song_path(Current.venue.slug, song), method: :patch, params: { decision: "reject", rejection_reason: "theme" }
+                          = button_to "Approve Theme Fit", review_theme_venue_song_path(Current.venue.slug, song), method: :patch, params: { decision: "approve" }
+                          = button_to "Reject Theme Fit", review_theme_venue_song_path(Current.venue.slug, song), method: :patch, params: { decision: "reject", rejection_reason: "theme" }
 
               - if @skipped.any?
                 .songs-subsection
@@ -82,7 +82,7 @@
                     %span In Line
                     %span= @upcoming_total
 
-              = render "upcoming_list", upcoming: @upcoming, upcoming_page: @upcoming_page, upcoming_has_more: @upcoming_has_more
+              = render "upcoming_list", upcoming: @upcoming, upcoming_page: @upcoming_page, upcoming_has_more: @upcoming_has_more, performing_song: @performing_song
               = render "post_theme_list", post_theme: @post_theme, can_manage_queue: can_manage_queue
 
               - if @skipped.any?
@@ -100,9 +100,10 @@
       .song-player__toolbar
         %div
           %h2{ data: { youtube_player_target: "title" } }
-        %button.song-player__close{ type: "button", data: { action: "youtube-player#close", youtube_player_target: "closeButton" } }
-          %span{ aria: { hidden: "true" } } ×
-          %span End playback
+        .song-player__toolbar-actions
+          %button.song-player__close{ type: "button", data: { action: "youtube-player#endAndAdvance", youtube_player_target: "closeButton" } }
+            %span{ aria: { hidden: "true" } } ×
+            %span End & Advance
       .song-player__viewport
         %div.song-player__mount{ data: { youtube_player_target: "mount" } }
       %p.song-player__status{ role: "status", aria: { live: "polite" }, data: { youtube_player_target: "status" } }

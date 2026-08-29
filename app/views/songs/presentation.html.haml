@@ -1,55 +1,5 @@
-- queue_url = venue_presence_url(Current.venue.presence_token)
-
-.songs-page.songs-page--presentation{ data: { controller: "youtube-player" } }
+.songs-page.songs-page--presentation{ data: { controller: "youtube-player queue-refresh", queue_refresh_url_value: @queue_state_url, queue_refresh_version_value: @queue_version } }
   %main.songs-presentation
-    %aside.songs-presentation__drawer
-      %section.songs-panel.songs-panel--presentation-meta
-        .songs-panel__heading
-          %div
-            %h2 Event Details
-          %span.songs-presentation__live-pill Live
-
-        %dl.songs-presentation__meta-list
-          %div.songs-presentation__meta-item
-            %dt Event
-            %dd= @presentation_event_name
-          - if Current.venue.location.present?
-            %div.songs-presentation__meta-item
-              %dt Location
-              %dd= Current.venue.location
-          %div.songs-presentation__meta-item
-            %dt Time
-            %dd= @presentation_time.strftime("%A, %B %-d")
-            %dd= @presentation_time.strftime("%-I:%M %p")
-          - if @presentation_theme.present?
-            %div.songs-presentation__meta-item
-              %dt Theme
-              %dd= @presentation_theme
-          - if @presentation_event_code.present?
-            %div.songs-presentation__meta-item
-              %dt Event code
-              %dd{ aria: { label: "Event access code" } }= @presentation_event_code
-
-      %section.songs-panel.songs-panel--presentation-queue
-        .songs-panel__heading
-          %div
-            %h2 Queue Snapshot
-          %span.songs-role-pill.songs-role-pill--presentation
-            %span= "In Line"
-            %span= @upcoming.count
-        - if @presentation_next_song
-          .songs-presentation__next
-            %span.songs-next-badge Next
-            %h3= @presentation_next_song.performer
-            %p.songs-muted Tap play in the right column to start full-screen video.
-        - else
-          .songs-presentation__next
-            %span.songs-next-badge Next
-            %h3 Nothing queued
-            %p.songs-muted Tap play in the right column after a song is added.
-
-      = render "qr_panel", queue_url: queue_url
-
     %section.songs-presentation__stage
       .songs-presentation__screen
         - if @presentation_next_song
@@ -57,22 +7,38 @@
             %span.songs-presentation__screen-eyebrow UP NEXT
             %h1= @presentation_next_song.performer
             %div.songs-presentation__screen-actions
-              %button.song-action.song-action--play{ type: "button", title: "Play next song fullscreen", data: { action: "youtube-player#play", youtube_player_url_param: @presentation_next_song.url, youtube_player_finish_url_param: finish_song_venue_song_path(Current.venue.slug, @presentation_next_song), youtube_player_performer_param: @presentation_next_song.performer } }
+              %button.song-action.song-action--play{ type: "button", title: "Play next song", data: { action: "youtube-player#play", youtube_player_url_param: @presentation_next_song.url, youtube_player_start_url_param: start_song_venue_song_path(Current.venue.slug, @presentation_next_song), youtube_player_finish_url_param: finish_song_venue_song_path(Current.venue.slug, @presentation_next_song), youtube_player_stop_url_param: stop_song_venue_song_path(Current.venue.slug, @presentation_next_song), youtube_player_performer_param: @presentation_next_song.performer, youtube_player_up_next_performer_param: @presentation_second_song&.performer, youtube_player_up_next_title_param: (@presentation_second_song && display_song_title(@presentation_second_song)), youtube_player_up_second_performer_param: @presentation_third_song&.performer, youtube_player_up_second_title_param: (@presentation_third_song && display_song_title(@presentation_third_song)) } }
                 %span.song-action__icon ▶
                 %span Play Next Song
         - else
           .songs-presentation__screen-content
             %span.songs-presentation__screen-eyebrow Ready
             %h1 Ready for the first song
-            %p.songs-presentation__screen-copy Use the performer view to add a song, then return here to launch it full-screen.
+            %p.songs-presentation__screen-copy Use the performer view to add a song, then return here to launch it on the presentation stage.
 
-    .song-player{ hidden: true, role: "dialog", aria: { modal: "true", label: "Now playing" }, data: { youtube_player_target: "overlay", action: "fullscreenchange@document->youtube-player#fullscreenChanged" } }
-      .song-player__toolbar
-        %div
-          %h2{ data: { youtube_player_target: "title" } }
-        %button.song-player__close{ type: "button", data: { action: "youtube-player#close", youtube_player_target: "closeButton" } }
-          %span{ aria: { hidden: "true" } } ×
-          %span End playback
-      .song-player__viewport
-        %div.song-player__mount{ data: { youtube_player_target: "mount" } }
-      %p.song-player__status{ role: "status", aria: { live: "polite" }, data: { youtube_player_target: "status" } }
+      .song-player{ hidden: true, role: "dialog", aria: { modal: "true", label: "Now playing" }, data: { youtube_player_target: "overlay", action: "fullscreenchange@document->youtube-player#fullscreenChanged" } }
+        .song-player__toolbar
+          %div
+            %h2{ data: { youtube_player_target: "title" } }
+          .song-player__toolbar-actions
+            %button.song-player__close{ type: "button", data: { action: "youtube-player#endAndAdvance", youtube_player_target: "closeButton" } }
+              %span{ aria: { hidden: "true" } } ×
+              %span End & Advance
+            %button.song-player__close.song-player__close--secondary{ type: "button", data: { action: "youtube-player#close" } }
+              %span End Without Progressing
+        .song-player__viewport
+          %div.song-player__mount{ data: { youtube_player_target: "mount" } }
+        %p.song-player__status{ role: "status", aria: { live: "polite" }, data: { youtube_player_target: "status" } }
+
+    %footer.songs-presentation__footer
+      %div.songs-presentation__footer-item.songs-presentation__footer-item--code
+        %span.songs-presentation__footer-label Event access code
+        %strong{ aria: { label: "Event access code" } }= @presentation_event_code.presence || "—"
+      %div.songs-presentation__footer-item
+        %span.songs-presentation__footer-label{ data: { youtube_player_target: "presentationNextLabel" } } Up next
+        %strong{ data: { youtube_player_target: "presentationNextPerformer" } }= @presentation_next_song&.performer || "Nothing queued"
+        %span{ data: { youtube_player_target: "presentationNextTitle" } }= @presentation_next_song ? display_song_title(@presentation_next_song) : "Add a song to begin"
+      %div.songs-presentation__footer-item
+        %span.songs-presentation__footer-label Up second
+        %strong{ data: { youtube_player_target: "presentationSecondPerformer" } }= @presentation_second_song&.performer || "—"
+        %span{ data: { youtube_player_target: "presentationSecondTitle" } }= @presentation_second_song ? display_song_title(@presentation_second_song) : ""

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_08_24_205000) do
+ActiveRecord::Schema[7.2].define(version: 2026_08_29_130000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -189,6 +189,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_24_205000) do
     t.bigint "theme_reviewed_by_id"
     t.datetime "theme_reviewed_at"
     t.bigint "song_identity_id"
+    t.boolean "performing", default: false, null: false
+    t.index ["event_id", "performing"], name: "index_songs_on_event_id_and_performing", where: "((finished = false) AND (skipped = false))"
     t.index ["event_id", "theme_admission_status"], name: "index_songs_on_event_id_and_theme_admission_status"
     t.index ["event_id"], name: "index_songs_on_event_id"
     t.index ["provider", "provider_video_id"], name: "index_songs_on_provider_and_provider_video_id"

@@ -22,6 +22,15 @@ RSpec.describe YoutubeVideoPolicy, type: :service do
     expect(result).to have_attributes(status: :rejected, reason: /explicit lyrics/)
   end
 
+  it 'rejects a video whose owner disabled embedded playback' do
+    result = described_class.call(
+      video: { embeddable: false, verified_karaoke: true, explicit_lyrics: false },
+      explicit_lyrics_allowed: true
+    )
+
+    expect(result).to have_attributes(status: :rejected, reason: /embedded player/)
+  end
+
   it 'allows explicit lyrics when the venue permits them' do
     result = described_class.call(
       video: { verified_karaoke: true, explicit_lyrics: true },

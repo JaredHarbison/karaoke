@@ -15,14 +15,14 @@
       .field
         = f.label :password, 'password'
         = f.password_field :password, autocomplete: 'current-password'
-        = link_to 'forgot password?', new_password_path(resource_name), class: 'auth-inline-link'
+        = link_to 'Forgot Password?', new_password_path(resource_name), class: 'auth-inline-link'
       - if devise_mapping.rememberable?
         .checkbox-field
           = f.check_box :remember_me
           = f.label :remember_me, 'remember me'
       .actions
-        = f.submit 'Sign in', class: 'auth-submit'
+        = f.submit 'Sign In', class: 'auth-submit'
 
     .auth-footer
       %span New here?
-      = link_to 'Create an account', new_user_registration_path(auth_link_options), class: 'auth-link'
+      = link_to 'Create an Account', new_user_registration_path(auth_link_options), class: 'auth-link'

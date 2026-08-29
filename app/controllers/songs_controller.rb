@@ -3,9 +3,9 @@ class SongsController < ApplicationController
   before_action :set_queue_event
   before_action :require_admin!, only: %i[ presentation ]
   protect_from_forgery with: :exception
-  before_action :set_song, only: %i[ destroy edit finish_song pause_song requeue_song review_theme show skip_song unpause_song update ]
+  before_action :set_song, only: %i[ destroy edit finish_song pause_song requeue_song review_theme show skip_song start_song stop_song unpause_song update ]
   before_action :authorize_manageable_song!, only: %i[ destroy edit update ]
-  before_action :authorize_admin_for_queue_actions, only: %i[ finish_song pause_song requeue_song review_theme skip_song unpause_song ]
+  before_action :authorize_admin_for_queue_actions, only: %i[ finish_song pause_song requeue_song review_theme skip_song start_song stop_song unpause_song ]
 
   # POST /:venue_slug/songs or /:venue_slug/songs.json
   def create
@@ -53,7 +53,7 @@ class SongsController < ApplicationController
 
   # PATCH /:venue_slug/songs/1/finish_song
   def finish_song 
-    if @song.update( finished: true ) 
+    if @song.update(finished: true, performing: false)
       respond_to do |format|
         format.html { redirect_to queue_path, notice: "#{ @song.performer } just finished a song." }
         format.turbo_stream
@@ -68,10 +68,32 @@ class SongsController < ApplicationController
     end
   end
 
+  # PATCH /:venue_slug/songs/1/start_song
+  def start_song
+    Performance.transaction do
+      active_scope = @song.event_id ? Performance.unscoped.where(event_id: @song.event_id) : Performance.unscoped.where(venue_id: @song.venue_id)
+      active_scope.where(performing: true).where.not(id: @song.id).update_all(performing: false, updated_at: Time.current)
+      @song.update!(performing: true, skipped: false) unless @song.finished?
+    end
+    head :no_content
+  end
+
+  # PATCH /:venue_slug/songs/1/stop_song
+  def stop_song
+    @song.update!(performing: false)
+    head :no_content
+  end
+
   # GET /:venue_slug/songs
   def index
     @song = Performance.new(event: @current_event)
     load_queue
+  end
+
+  # GET /:venue_slug/events/:event_slug/queue/state
+  def queue_state
+    queue = @current_event ? Performance.unscoped.where(event: @current_event) : Performance.unscoped.where(venue: Current.venue)
+    render json: { version: queue.maximum(:updated_at)&.iso8601(6) }
   end
 
   # PATCH /:venue_slug/songs/1/pause_song
@@ -89,17 +111,19 @@ class SongsController < ApplicationController
     redirect_to queue_path, alert: "#{@song.performer}'s song could not be paused."
   end
 
-  # GET /:venue_slug/songs/presentation
+  # GET /:venue_slug/events/:event_slug/presentation
   def presentation
+    @current_event ||= Current.venue.events.where(status: :live).order(starts_at: :desc).first
     load_queue
-    @presentation_time = Time.zone.now
     @presentation_next_song = @upcoming.first
-    @presentation_event_name = Current.venue.name
+    @presentation_second_song = @upcoming.second
+    @presentation_third_song = @upcoming.third
+    @presentation_event_name = @current_event&.name || Current.venue.name
     @presentation_event_code =
       if @current_event&.live?
         @current_event.event_presence_sessions.active_at.order(created_at: :desc).first&.short_code
       end
-    @presentation_theme = Current.venue.try(:theme).presence
+    @presentation_theme = @active_theme_applications&.map { |application| application.theme.name }&.to_sentence
   end
 
   # PATCH /:venue_slug/songs/1/requeue_song
@@ -231,6 +255,9 @@ class SongsController < ApplicationController
     @active_theme_applications = active_theme_applications
     queue = @current_event ? Performance.where(event: @current_event) : Performance.all
     @finished = queue.finished.order(updated_at: :desc)
+    @performing_song = queue.performing.order(updated_at: :desc).first
+    @queue_version = queue.maximum(:updated_at)&.iso8601(6)
+    @queue_state_url = venue_event_queue_state_path(Current.venue.slug, event_slug: @current_event.slug) if @current_event
     @skipped = queue.skipped
     @theme_review = queue.theme_review.order(:created_at)
     @post_theme = queue.where(theme_admission_status: 'deferred').order(:created_at)

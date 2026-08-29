@@ -1,0 +1,21 @@
+%details.app-menu.app-menu--presentation-queue
+  %summary.app-menu__summary
+    Queue
+    %span.songs-presentation__queue-pill= @upcoming_total
+  .app-menu__drawer
+    .songs-presentation__drawer-heading
+      %div
+        %span.songs-presentation__live-pill Live
+        %h2= @presentation_event_name
+      - if @presentation_theme.present?
+        %p= @presentation_theme
+    - if @upcoming.any?
+      %ol.songs-presentation__queue-list
+        - @upcoming.each_with_index do |song, index|
+          %li{ class: ("is-next" if index.zero?) }
+            %span.songs-presentation__queue-position= index.zero? ? "Next" : index + 1
+            %div
+              %strong= song.performer
+              %span= display_song_title(song)
+    - else
+      %p.songs-presentation__empty Nothing queued yet.

@@ -1,5 +1,5 @@
 <main class="container" aria-labelledby="new-event-heading">
-  <p><%= link_to "Back to events", venue_events_path(Current.venue.slug) %></p>
+  <p><%= link_to "Back to Events", venue_events_path(Current.venue.slug) %></p>
   <h1 id="new-event-heading">Create event</h1>
   <%= render "form", form_url: venue_events_path(Current.venue.slug), form_method: :post %>
 </main>

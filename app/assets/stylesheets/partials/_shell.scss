@@ -38,6 +38,9 @@
 
 .app-menu { margin-left: auto; }
 
+.app-shell__bar .app-menu--presentation-queue { margin-left: auto; }
+.app-shell__bar .app-menu--presentation-queue + .app-menu { margin-left: 0; }
+
 .app-menu__summary {
   color: $cyan;
   cursor: pointer;
@@ -70,6 +73,14 @@
   top: 100%;
   z-index: $z-sticky;
   will-change: transform;
+}
+
+.app-menu--presentation-queue .app-menu__drawer {
+  max-height: calc(100vh - 8rem);
+  min-height: 0;
+  overflow-y: auto;
+  padding: $space-lg;
+  width: 24rem;
 }
 
 .app-menu__close {

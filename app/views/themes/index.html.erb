@@ -1,8 +1,8 @@
 <main class="container" aria-labelledby="themes-heading">
-  <p><%= link_to "Back to queue", venue_songs_path(Current.venue.slug) %></p>
+  <p><%= link_to "Back to Queue", venue_songs_path(Current.venue.slug) %></p>
   <h1 id="themes-heading">Themes</h1>
   <p>Themes are reusable definitions with optional deterministic song admission rules.</p>
-  <p><%= link_to "Create theme", new_venue_theme_path(Current.venue.slug) %></p>
+  <p><%= link_to "Create Theme", new_venue_theme_path(Current.venue.slug) %></p>
   <% if @themes.any? %>
     <ul>
       <% @themes.each do |theme| %>

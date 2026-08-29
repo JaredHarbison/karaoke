@@ -17,7 +17,8 @@ class Performance < ApplicationRecord
 
   scope :queued, -> { where(finished: false, skipped: false, postponed: false).queue_eligible }
   scope :finished, -> { where(finished: true) }
-  scope :upcoming, -> { where(finished: false, skipped: false).queue_eligible }
+  scope :upcoming, -> { where(finished: false, skipped: false, performing: false).queue_eligible }
+  scope :performing, -> { where(finished: false, skipped: false, performing: true).queue_eligible }
   scope :postponed, -> { where(finished: false, postponed: true) }
   scope :skipped, -> { where(finished: false, skipped: true) }
   scope :queue_eligible, -> { where(theme_admission_status: QUEUE_ELIGIBLE_THEME_STATUSES) }

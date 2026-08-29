@@ -1,5 +1,5 @@
 <main class="container" aria-labelledby="edit-event-series-heading">
-  <p><%= link_to "Back to series", venue_event_series_index_path(Current.venue.slug) %></p>
+  <p><%= link_to "Back to Series", venue_event_series_index_path(Current.venue.slug) %></p>
   <h1 id="edit-event-series-heading">Edit recurring series</h1>
   <%= render "form", form_url: venue_event_series_path(Current.venue.slug, @event_series), form_method: :patch %>
 </main>

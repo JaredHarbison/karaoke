@@ -207,6 +207,29 @@ RSpec.describe 'Songs', type: :request do
     end
   end
 
+  describe 'GET /:venue_slug/events/:event_slug/presentation' do
+    it 'renders the active event display with a video stage, queue drawer, and footer' do
+      event = create(:event, venue: venue, status: :live, starts_at: 1.hour.ago, ends_at: 2.hours.from_now)
+      create(:event_presence_session, event: event, created_by_user: venue.owner, expires_at: event.ends_at)
+      first = create(:performance, venue: venue, event: event, performer: 'First Singer', title: 'First Song')
+      create(:performance, venue: venue, event: event, performer: 'Second Singer', title: 'Second Song')
+      sign_out user
+      sign_in venue.owner
+
+      get venue_event_presentation_path(venue.slug, event_slug: event.slug)
+
+      page = Nokogiri::HTML(response.body)
+      expect(response).to be_successful
+      expect(page.at_css('.songs-presentation__screen')).to be_present
+      expect(page.at_css('.app-menu--presentation-queue')).to be_present
+      expect(page.at_css('.songs-presentation__footer-item--code strong').text).to be_present
+      expect(page.at_css('.songs-presentation__footer').text).to include('First Singer', 'Second Singer')
+      expect(page.at_css('.app-menu--presentation-queue .songs-presentation__queue-list li.is-next strong').text).to include(first.performer)
+      expect(page.at_css('.songs-panel--presentation-meta')).to be_nil
+      expect(page.at_css('.songs-panel--qr')).to be_nil
+    end
+  end
+
   describe 'POST /venues/:venue_slug/songs' do
     it 'creates a new song', :critical do
       expect {

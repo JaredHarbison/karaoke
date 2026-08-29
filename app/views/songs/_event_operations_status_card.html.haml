@@ -19,7 +19,7 @@
       %dd= current_event.allow_queue_overrun? ? "Overrun allowed" : "Stops at scheduled end"
   - if current_event.scheduled? && can_configure_event
     .event-operations__status-action
-      = button_to "Start event", start_venue_event_path(Current.venue.slug, current_event), method: :patch, class: "song-action song-action--play"
+      = button_to "Start Event", start_venue_event_path(Current.venue.slug, current_event), method: :patch, class: "song-action song-action--play"
   - elsif current_event.live?
     .event-operations__status-action
-      = button_to "Complete event", complete_venue_event_path(Current.venue.slug, current_event), method: :patch, class: "song-action song-action--remove"
+      = button_to "Complete Event", complete_venue_event_path(Current.venue.slug, current_event), method: :patch, class: "song-action song-action--remove"

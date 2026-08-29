@@ -32,13 +32,12 @@ Rails.application.routes.draw do
     # Songs (queue management)
     resources :songs do
       collection do
-        get :presentation
-      end
-      collection do
         get :youtube_search
         get :validate_video
       end
       member do
+        patch :start_song
+        patch :stop_song
         patch :finish_song
         patch :pause_song
         patch :unpause_song
@@ -63,6 +62,8 @@ Rails.application.routes.draw do
       end
     end
     match '/events/:event_slug/queue', to: 'songs#index', via: :get, as: 'event_queue'
+    get '/events/:event_slug/presentation', to: 'songs#presentation', as: 'event_presentation'
+    get '/events/:event_slug/queue/state', to: 'songs#queue_state', as: 'event_queue_state'
     post '/events/:event_slug/queue', to: 'songs#create'
     resources :event_host_delegations, only: %i[create destroy]
     resources :event_presence_sessions, only: %i[create destroy]

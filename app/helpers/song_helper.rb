@@ -12,7 +12,7 @@ module SongHelper
   end
 
   def queue_performer_name(song)
-    name = song.user&.display_name.presence || song.performer.to_s
+    name = song.performer.presence || song.user&.display_name.to_s
     parts = name.split
     return name if parts.length < 2
 

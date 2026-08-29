@@ -1,7 +1,7 @@
 <div class="venue-settings">
   <header class="settings-header">
     <div>
-      <%= link_to "← Back to queue", venue_songs_path(@venue.slug), class: "settings-back-link" %>
+      <%= link_to "← Back to Queue", venue_songs_path(@venue.slug), class: "settings-back-link" %>
       <h1>Manage <%= @venue.name %></h1>
       <p class="settings-header__copy">Keep your venue details current and decide who can run the queue with you.</p>
     </div>
@@ -83,7 +83,7 @@
           </label>
 
           <div class="settings-form__actions">
-            <%= form.submit "Save venue details", class: "settings-button settings-button--primary" %>
+            <%= form.submit "Save Venue Details", class: "settings-button settings-button--primary" %>
           </div>
         <% end %>
       </section>
@@ -123,7 +123,7 @@
           <p>Enter the email address of an existing Karaoke user.</p>
           <%= form_with(local: true, url: venue_admins_path(@venue.slug), method: :post, class: "add-host__form") do %>
             <%= email_field_tag :email, nil, placeholder: "host@example.com", required: true, autocomplete: "email" %>
-            <%= submit_tag "Add host", class: "settings-button settings-button--secondary" %>
+            <%= submit_tag "Add Host", class: "settings-button settings-button--secondary" %>
           <% end %>
         </div>
       </section>

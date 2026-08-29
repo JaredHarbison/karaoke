@@ -9,6 +9,7 @@ import HelloController from "controllers/hello_controller"
 import InstructionsController from "controllers/instructions_controller"
 import PasswordStrengthController from "controllers/password_strength_controller"
 import ResponsiveTabsController from "controllers/responsive_tabs_controller"
+import QueueRefreshController from "controllers/queue_refresh_controller"
 import SongActionController from "controllers/song_action_controller"
 import TimeOfDayController from "controllers/time_of_day_controller"
 import ThemePickerController from "controllers/theme_picker_controller"
@@ -25,6 +26,7 @@ application.register("hello", HelloController)
 application.register("instructions", InstructionsController)
 application.register("password-strength", PasswordStrengthController)
 application.register("responsive-tabs", ResponsiveTabsController)
+application.register("queue-refresh", QueueRefreshController)
 application.register("song-action", SongActionController)
 application.register("time-of-day", TimeOfDayController)
 application.register("theme-picker", ThemePickerController)

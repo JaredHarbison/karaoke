@@ -1,7 +1,10 @@
-- if upcoming.any?
+- performing_song = local_assigns[:performing_song]
+- if performing_song || upcoming.any?
   .song-card-list
+    - if performing_song
+      = render "queue_song_card", song: performing_song, position: nil, next_song: false, performing_song: true, can_manage_queue: @can_manage_queue
     - upcoming.each_with_index do |song, index|
-      = render "queue_song_card", song: song, position: index + 1, next_song: index.zero?, can_manage_queue: @can_manage_queue
+      = render "queue_song_card", song: song, position: index + 1, next_song: index.zero?, performing_song: false, can_manage_queue: @can_manage_queue
   - if upcoming_has_more
     - more_path = @current_event ? venue_event_queue_path(Current.venue.slug, event_slug: @current_event.slug, page: upcoming_page + 1) : venue_songs_path(Current.venue.slug, page: upcoming_page + 1)
     = link_to more_path, class: "songs-more-button" do

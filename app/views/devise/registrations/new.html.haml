@@ -36,8 +36,8 @@
         = f.password_field :password_confirmation, autocomplete: 'new-password', data: { password_strength_target: 'confirmation', action: 'input->password-strength#update' }
         %small.password-match{ data: { password_strength_target: 'match' }, aria: { live: 'polite' } }
       .actions
-        = f.submit 'Create account', class: 'auth-submit'
+        = f.submit 'Create Account', class: 'auth-submit'
 
     .auth-footer
       %span Already have an account?
-      = link_to 'Sign in', new_user_session_path(auth_link_options), class: 'auth-link'
+      = link_to 'Sign In', new_user_session_path(auth_link_options), class: 'auth-link'

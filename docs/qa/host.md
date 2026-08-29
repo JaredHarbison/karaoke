@@ -19,7 +19,15 @@ over `523 Franklin Ave`.
    - The active six-character code is readable.
    - The previous code no longer grants presence after rotation.
 4. Open presentation mode.
-   - Now-playing/upcoming queue content and event access context are visible.
+   - The canonical event presentation URL is used and its Now, Up Next, and
+     Up Second performers match the queue page.
+   - Start a queued song from either surface and confirm it becomes Now on all
+     open queue/presentation screens without a manual reload.
+   - Let an embeddable YouTube video finish: the performance finishes once and
+     presentation remains open on the newly selected next performer.
+   - Use End & Advance and End Without Progressing. The former finishes the
+     performance; the latter restores the waiting state without a delayed
+     automatic advance.
    - Owner settings are not exposed.
 
 ## Queue management

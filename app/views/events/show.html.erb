@@ -1,5 +1,5 @@
 <main class="container" aria-labelledby="event-heading">
-  <p><%= link_to "Back to events", venue_events_path(Current.venue.slug) %></p>
+  <p><%= link_to "Back to Events", venue_events_path(Current.venue.slug) %></p>
   <h1 id="event-heading"><%= @event.name %></h1>
   <dl>
     <dt>Starts</dt>
@@ -20,9 +20,9 @@
     <% end %>
   </dl>
   <% if @event.scheduled? && Current.venue.is_admin?(current_user) %>
-    <%= button_to 'Start event', start_venue_event_path(Current.venue.slug, @event), method: :patch %>
+    <%= button_to 'Start Event', start_venue_event_path(Current.venue.slug, @event), method: :patch %>
   <% elsif @event.live? && @event.host_authorized?(current_user) %>
-    <%= button_to 'Complete event', complete_venue_event_path(Current.venue.slug, @event), method: :patch %>
+    <%= button_to 'Complete Event', complete_venue_event_path(Current.venue.slug, @event), method: :patch %>
   <% end %>
   <section aria-labelledby="themes-heading">
     <h2 id="themes-heading">Themes</h2>
@@ -54,7 +54,7 @@
         <%= datetime_local_field_tag 'event_theme_application[starts_at]' %>
         <%= label_tag 'event_theme_application_ends_at', 'Window ends (optional)' %>
         <%= datetime_local_field_tag 'event_theme_application[ends_at]' %>
-        <%= form.submit 'Apply theme' %>
+        <%= form.submit 'Apply Theme' %>
       <% end %>
     <% end %>
   </section>
@@ -68,15 +68,15 @@
       </ul>
     </section>
   <% end %>
-  <p><%= link_to "View event queue", venue_event_queue_path(Current.venue.slug, event_slug: @event.slug) %></p>
+  <p><%= link_to "View Event Queue", venue_event_queue_path(Current.venue.slug, event_slug: @event.slug) %></p>
   <% if Current.venue.is_admin?(current_user) %>
     <section aria-labelledby="presence-heading">
       <h2 id="presence-heading">Event access</h2>
       <% if @active_presence_session %>
         <p><strong>Event access code: <%= @active_presence_session.short_code %></strong></p>
         <p>Share this code with performers at the venue. It expires <%= l(@active_presence_session.expires_at, format: :short) %>.</p>
-        <p><%= link_to 'Open access link', event_presence_url(@active_presence_session.token) %></p>
-        <%= button_to 'Revoke active code', venue_event_presence_session_path(Current.venue.slug, @active_presence_session), method: :delete %>
+        <p><%= link_to 'Open Access Link', event_presence_url(@active_presence_session.token) %></p>
+        <%= button_to 'Revoke Active Code', venue_event_presence_session_path(Current.venue.slug, @active_presence_session), method: :delete %>
       <% elsif @presence_sessions.any? %>
         <p>No event access code is currently active. Generate a new code below.</p>
       <% else %>
@@ -99,7 +99,7 @@
         <%= hidden_field_tag :event_id, @event.id %>
         <%= form.label :expires_at, 'Expires (optional)' %>
         <%= form.datetime_local_field :expires_at, value: datetime_local_value(@event.ends_at && (@event.ends_at + EventPresenceSession::GRACE_PERIOD)) %>
-        <%= form.submit(@event.live? ? 'Rotate event access code' : 'Generate event access code') %>
+        <%= form.submit(@event.live? ? 'Rotate Event Access Code' : 'Generate Event Access Code') %>
       <% end %>
     </section>
   <% end %>
@@ -129,7 +129,7 @@
         <%= form.datetime_local_field :starts_at, value: datetime_local_value(@event.starts_at) %>
         <%= form.label :ends_at, 'Ends' %>
         <%= form.datetime_local_field :ends_at, value: datetime_local_value(@event.ends_at || @event.starts_at + 4.hours) %>
-        <%= form.submit 'Delegate host' %>
+        <%= form.submit 'Delegate Host' %>
       <% end %>
     </section>
   <% end %>
@@ -148,6 +148,6 @@
     </section>
   <% end %>
   <% if Current.venue.is_admin?(current_user) %>
-    <%= link_to "Edit event", edit_venue_event_path(Current.venue.slug, @event) %>
+    <%= link_to "Edit Event", edit_venue_event_path(Current.venue.slug, @event) %>
   <% end %>
 </main>
