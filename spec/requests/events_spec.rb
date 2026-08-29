@@ -136,11 +136,11 @@ RSpec.describe 'Events', type: :request do
       expect do
         post venue_events_path(venue.slug), params: {
           event: event_attributes,
-          recurrence: { enabled: '1', recurrence_rule: 'FREQ=WEEKLY;BYDAY=FR', ends_at: 2.months.from_now }
+          recurrence: { enabled: '1', mode: 'new', frequency: 'FREQ=WEEKLY', ends_at: 2.months.from_now }
         }
       end.to change(EventSeries, :count).by(1)
 
-      expect(Event.last.event_series).to have_attributes(name: 'Saturday Karaoke', recurrence_rule: 'FREQ=WEEKLY;BYDAY=FR')
+      expect(Event.last.event_series).to have_attributes(name: 'Saturday Karaoke', recurrence_rule: 'FREQ=WEEKLY')
     end
 
     it 'denies event creation to performers' do

@@ -109,7 +109,9 @@ class EventsController < ApplicationController
     series = @event.event_series
     @recurrence = {
       enabled: params.dig(:recurrence, :enabled) == '1',
-      recurrence_rule: params.dig(:recurrence, :recurrence_rule).presence || series&.recurrence_rule || 'FREQ=WEEKLY',
+      mode: params.dig(:recurrence, :mode).presence || (series ? 'existing' : 'new'),
+      frequency: params.dig(:recurrence, :frequency).presence || recurrence_frequency_for(series),
+      custom_rule: params.dig(:recurrence, :custom_rule).presence || recurrence_custom_rule_for(series),
       ends_at: params.dig(:recurrence, :ends_at).presence || series&.ends_at
     }
   end
@@ -117,6 +119,8 @@ class EventsController < ApplicationController
   def save_event_with_optional_recurrence
     Event.transaction do
       assign_event_attributes
+      return false unless valid_recurrence_selection?
+
       assign_new_recurrence_if_requested
       @event.save!
     end
@@ -127,11 +131,11 @@ class EventsController < ApplicationController
   end
 
   def assign_new_recurrence_if_requested
-    return unless recurrence_enabled?
+    return unless creating_new_recurrence?
 
     series = Current.venue.event_series.create!(
       name: @event.name,
-      recurrence_rule: recurrence_params[:recurrence_rule],
+      recurrence_rule: selected_recurrence_rule,
       starts_at: @event.starts_at,
       ends_at: recurrence_params[:ends_at],
       time_zone: Current.venue.time_zone,
@@ -144,8 +148,44 @@ class EventsController < ApplicationController
     recurrence_params[:enabled] == '1'
   end
 
+  def creating_new_recurrence?
+    recurrence_enabled? && recurrence_params[:mode] != 'existing'
+  end
+
+  def valid_recurrence_selection?
+    return true unless recurrence_enabled?
+    return true if creating_new_recurrence?
+    return true if @event.event_series.present?
+
+    @event.errors.add(:event_series, 'select an existing series or create a new one')
+    false
+  end
+
   def recurrence_params
-    params.fetch(:recurrence, {}).permit(:enabled, :recurrence_rule, :ends_at)
+    params.fetch(:recurrence, {}).permit(:enabled, :mode, :frequency, :custom_rule, :ends_at)
+  end
+
+  def selected_recurrence_rule
+    return recurrence_params[:custom_rule] if recurrence_params[:frequency] == 'custom'
+
+    recurrence_params[:frequency]
+  end
+
+  def recurrence_frequency_for(series)
+    return 'FREQ=WEEKLY' unless series
+
+    recurrence_frequency_options.include?(series.recurrence_rule) ? series.recurrence_rule : 'custom'
+  end
+
+  def recurrence_custom_rule_for(series)
+    return unless series
+    return if recurrence_frequency_options.include?(series.recurrence_rule)
+
+    series.recurrence_rule
+  end
+
+  def recurrence_frequency_options
+    %w[FREQ=DAILY FREQ=WEEKLY FREQ=MONTHLY FREQ=YEARLY]
   end
 
   def copy_recurrence_errors(series)

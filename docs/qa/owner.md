@@ -38,6 +38,9 @@ during the shared journey before continuing here.
    - Events has one Create Event action. Verify its form creates either a
      one-off event or the first occurrence of a recurring series without
      leaving the event-management flow.
+   - The Repeats toggle keeps recurrence controls hidden until enabled. Verify
+     its readable frequency menu creates the selected schedule; use Custom
+     only when entering an RRULE intentionally.
 2. Open the recurring-series page.
    - Create/edit recurrence intent, schedule, time zone, and active state.
    - Generate the next eight weeks twice; occurrences are not duplicated.

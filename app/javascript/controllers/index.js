@@ -2,6 +2,7 @@ import { application } from "controllers/application"
 import CtaSizeController from "controllers/cta_size_controller"
 import CtaStateController from "controllers/cta_state_controller"
 import DialogController from "controllers/dialog_controller"
+import EventRecurrenceController from "controllers/event_recurrence_controller"
 import DelegationWindowController from "controllers/delegation_window_controller"
 import DisclosureController from "controllers/disclosure_controller"
 import FlashController from "controllers/flash_controller"
@@ -19,6 +20,7 @@ import YoutubeSearchController from "controllers/youtube_search_controller"
 application.register("cta-size", CtaSizeController)
 application.register("cta-state", CtaStateController)
 application.register("dialog", DialogController)
+application.register("event-recurrence", EventRecurrenceController)
 application.register("delegation-window", DelegationWindowController)
 application.register("disclosure", DisclosureController)
 application.register("flash", FlashController)
