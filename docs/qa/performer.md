@@ -46,7 +46,8 @@ Start: `/523-franklin-ave/songs`
    host-only queue actions.
    - Access is rejected or redirected.
 2. Inspect the queue.
-   - You can manage your own song where supported.
+   - Your own queued song exposes direct Edit and Remove actions.
+   - Pause and skip remain host-only because they change the shared queue.
    - Host-only controls and Fair Queue audit information are hidden.
 3. Re-enter the event while your presence session remains active.
    - Re-entry works until expiry, revocation, or code rotation.

@@ -114,6 +114,17 @@ RSpec.describe 'Songs', type: :request do
       expect(page.at_css('.song-action--open')['target']).to eq('_blank')
     end
 
+    it 'shows performers direct edit and remove actions for their own queued song' do
+      song = create(:performance, venue: venue, user: user)
+
+      get "/#{venue.slug}/songs"
+
+      page = Nokogiri::HTML(response.body)
+      card = page.css('.song-queue-card').find { |queue_card| queue_card.at_css("a[href$='/songs/#{song.id}/edit']") }
+      expect(card.css('.song-action--edit, .song-action--remove').count).to eq(2)
+      expect(card.css('.song-action--more, .song-action--pause, .song-action--skip')).to be_empty
+    end
+
     it 'shows the song title to queue managers' do
       sign_out user
       sign_in venue.owner

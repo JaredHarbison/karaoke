@@ -70,21 +70,6 @@
             = button_to skip_song_venue_song_path(Current.venue.slug, song), method: :patch, class: "song-action song-action--skip", title: (song.skipped? ? "Return song" : "Skip song"), form: { data: { turbo: false } } do
               %span.song-action__icon= song.skipped? ? "↩" : "Ⅱ"
               %span= song.skipped? ? "Return" : "Skip"
-            = link_to edit_venue_song_path(Current.venue.slug, song), class: "song-action song-action--edit", title: "Edit song" do
-              %span.song-action__icon ✎
-              %span Edit
-            = button_to venue_song_path(Current.venue.slug, song), method: :delete, class: "song-action song-action--remove", title: "Remove song", data: { turbo_confirm: "Remove #{song.performer}'s song from the queue?" }, form: { data: { turbo: false } } do
-              %span.song-action__icon ×
-              %span Remove
+            = render "self_service_song_actions", song: song
       - else
-        %details.song-actions-secondary{ data: { controller: "disclosure", action: "click@window->disclosure#closeOnOutside keydown@window->disclosure#closeOnEscape" } }
-          %summary.song-action.song-action--more
-            %span.song-action__icon ⋯
-            %span More
-          .song-actions-menu
-            = link_to edit_venue_song_path(Current.venue.slug, song), class: "song-action song-action--edit", title: "Edit song" do
-              %span.song-action__icon ✎
-              %span Edit
-            = button_to venue_song_path(Current.venue.slug, song), method: :delete, class: "song-action song-action--remove", title: "Remove song", data: { turbo_confirm: "Remove #{song.performer}'s song from the queue?" }, form: { data: { turbo: false } } do
-              %span.song-action__icon ×
-              %span Remove
+        = render "self_service_song_actions", song: song

@@ -1,0 +1,6 @@
+= link_to edit_venue_song_path(Current.venue.slug, song), class: "song-action song-action--edit", title: "Edit song" do
+  %span.song-action__icon ✎
+  %span Edit
+= button_to venue_song_path(Current.venue.slug, song), method: :delete, class: "song-action song-action--remove", title: "Remove song", data: { turbo_confirm: "Remove #{song.performer}'s song from the queue?" }, form: { data: { turbo: false } } do
+  %span.song-action__icon ×
+  %span Remove
