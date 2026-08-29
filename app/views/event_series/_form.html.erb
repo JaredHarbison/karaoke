@@ -10,28 +10,28 @@
     </div>
   <% end %>
   <div class="backoffice-form__field">
-    <%= form.label :name, "Series name" %>
+    <%= form.label :name, "Series Name" %>
     <%= form.text_field :name, required: true %>
   </div>
   <div class="backoffice-form__field">
-    <%= form.label :recurrence_rule, "Recurrence rule" %>
+    <%= form.label :recurrence_rule, "Recurrence Rule" %>
     <%= form.text_field :recurrence_rule, required: true, placeholder: "FREQ=WEEKLY;BYDAY=FR" %>
   </div>
   <div class="backoffice-form__field">
-    <%= form.label :starts_at, "First occurrence starts" %>
+    <%= form.label :starts_at, "First Occurrence Starts" %>
     <%= form.datetime_local_field :starts_at, value: datetime_local_value(@event_series.starts_at), required: true %>
   </div>
   <div class="backoffice-form__field">
-    <%= form.label :ends_at, "Series window ends" %>
+    <%= form.label :ends_at, "Series Window Ends" %>
     <%= form.datetime_local_field :ends_at, value: datetime_local_value(@event_series.ends_at) %>
   </div>
   <div class="backoffice-form__field">
-    <%= form.label :time_zone, "Time zone" %>
+    <%= form.label :time_zone, "Time Zone" %>
     <%= form.text_field :time_zone, required: true %>
   </div>
   <div class="backoffice-form__check">
     <%= form.check_box :active %>
-    <%= form.label :active, "Active series" %>
+    <%= form.label :active, "Active Series" %>
   </div>
   <div class="backoffice-form__actions"><%= form.submit class: 'btn btn--primary' %></div>
 <% end %>

@@ -165,6 +165,30 @@ RSpec.describe 'Events', type: :request do
     end
   end
 
+  describe 'DELETE /:venue_slug/events/:slug' do
+    it 'allows an owner to delete an inactive event' do
+      event = create(:event, venue: venue, status: :completed)
+      sign_in owner
+
+      expect do
+        delete venue_event_path(venue.slug, event)
+      end.to change(Event, :count).by(-1)
+
+      expect(response).to redirect_to(venue_events_path(venue.slug))
+    end
+
+    it 'does not delete a scheduled or live event' do
+      event = create(:event, venue: venue, status: :scheduled)
+      sign_in owner
+
+      expect do
+        delete venue_event_path(venue.slug, event)
+      end.not_to change(Event, :count)
+
+      expect(response).to redirect_to(edit_venue_event_path(venue.slug, event))
+    end
+  end
+
   describe 'event occurrence editing' do
     it 'allows an occurrence to change without changing its series', :critical do
       series = create(:event_series, venue: venue)

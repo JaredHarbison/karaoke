@@ -4,8 +4,8 @@
 class EventsController < ApplicationController
   before_action :authenticate_user!
   before_action :require_current_venue!
-  before_action :require_admin!, only: %i[new create edit update]
-  before_action :set_event, only: %i[show edit update start complete]
+  before_action :require_admin!, only: %i[new create edit update destroy]
+  before_action :set_event, only: %i[show edit update destroy start complete]
   before_action :require_event_host!, only: %i[start complete]
 
   def index
@@ -46,6 +46,16 @@ class EventsController < ApplicationController
       load_event_form
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    unless @event.completed? || @event.cancelled?
+      redirect_to edit_venue_event_path(Current.venue.slug, @event), alert: 'Only inactive events can be deleted.'
+      return
+    end
+
+    @event.destroy!
+    redirect_to venue_events_path(Current.venue.slug), notice: 'Event deleted.'
   end
 
   def start

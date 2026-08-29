@@ -26,28 +26,6 @@ input, .btn {
   }
 }
 
-.discreet {
-  background-color: unset;
-  border: 1px solid $magenta;
-  color: $magenta; 
-  svg {
-    path {
-      fill: $magenta; 
-    }
-  }
-  &:hover, &:focus, &:focus-visible {
-    background-color: $magenta;
-    border: 1px solid $beige;
-    box-shadow: 2px 2px 4px $beige-light;
-    color: $beige; 
-    svg {
-      path {
-        fill: $beige; 
-      }
-    }
-  }
-}
-
 input[ type = submit ] {
   background-color: $magenta;
   border: 1px solid $magenta;

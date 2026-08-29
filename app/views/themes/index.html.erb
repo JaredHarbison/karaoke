@@ -1,25 +1,20 @@
-<main class="management-page" aria-labelledby="themes-heading">
-  <%= render 'shared/management_page_header',
-             heading_id: 'themes-heading',
-             title: 'Themes',
-             description: 'Themes are reusable definitions with optional deterministic song admission rules.',
-             back_label: 'Back to Events', back_path: venue_events_path(Current.venue.slug),
-             actions: [{ label: 'Create Theme', path: new_venue_theme_path(Current.venue.slug), style: :primary }] %>
-  <section class="management-card" aria-label="Reusable themes">
+<div class="songs-page songs-page--manager"><main class="songs-main" aria-labelledby="themes-heading">
+  <div class="event-operations__section-heading"><div><p><%= link_to 'Back to Events', venue_events_path(Current.venue.slug) %></p><h2 id="themes-heading">Themes</h2><p>Themes are reusable definitions with optional deterministic song admission rules.</p></div><%= link_to 'Create Theme', new_venue_theme_path(Current.venue.slug), class: 'song-action song-action--play' %></div>
+  <section class="event-operations__card" aria-label="Reusable Themes">
   <% if @themes.any? %>
-    <ul class="management-list">
+    <ul class="event-operations__list">
       <% @themes.each do |theme| %>
-        <li class="management-list__item">
-          <div class="management-list__identity">
+        <li class="event-operations__list-row">
+          <div>
             <%= link_to theme.name, edit_venue_theme_path(Current.venue.slug, theme) %>
             <% if theme.description.present? %><span><%= theme.description %></span><% end %>
           </div>
-          <span class="management-list__badge <%= 'management-list__badge--muted' unless theme.active? %>"><%= theme.active? ? 'Available' : 'Inactive' %></span>
+          <span><%= theme.active? ? 'Available' : 'Inactive' %></span>
         </li>
       <% end %>
     </ul>
   <% else %>
-    <p class="management-empty">No themes have been created yet.</p>
+    <p class="event-operations__empty">No themes have been created yet.</p>
   <% end %>
   </section>
-</main>
+</main></div>

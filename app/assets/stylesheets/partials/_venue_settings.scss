@@ -321,13 +321,13 @@
   }
 
   &--secondary {
-    color: $midnight;
-    border-color: $cyan;
-    background: rgba($cyan, 0.16);
+    color: $cyan;
+    border-color: rgba($cyan, .7);
+    background: transparent;
 
     &:hover,
     &:focus-visible {
-      background: rgba($cyan, 0.3);
+      background: rgba($cyan, 0.16);
     }
   }
 

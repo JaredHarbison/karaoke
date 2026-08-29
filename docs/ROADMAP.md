@@ -153,6 +153,11 @@ reviewable, manually testable, and documented in the same commit.
   consistent semantic colors, placement, persistence, and non-jumping layout.
 - [Planned] Preserve the existing palette and semantic color mapping while
   consolidating it into concise design tokens and reusable SCSS primitives.
+- [Initial slice complete] Standardize interactive color semantics across shared
+  button primitives: magenta-filled for the single primary action, cyan-outline
+  for secondary/navigation actions, magenta-outline for destructive actions,
+  and green/yellow reserved for status and headings. Do not introduce
+  page-specific button variants.
 - [Planned] Use a compact mobile/tablet layout tier and a wider desktop tier.
 - [Planned] Keep performers mobile-first, support hosts and owners from mobile
   through desktop, and make display mode desktop-oriented.
@@ -201,9 +206,10 @@ reviewable, manually testable, and documented in the same commit.
   Queue-specific behavior and the remaining mobile interaction polish are
   still planned.
 - [In progress] Use one queue-card hierarchy: performer first name plus
-  last-name initial and song title in ivory, with no redundant category pill; map operational actions to
-  the shared cyan, magenta, and yellow semantics. Secondary actions share one
-  Sass interaction rule across hover, focus, and disclosure-open states.
+  last-name initial and song title in ivory, with no redundant category pill;
+  apply the shared primary, secondary, and destructive action semantics.
+  Secondary actions share one Sass interaction rule across hover, focus, and
+  disclosure-open states.
 - [Planned] Paginate long queues without nested mobile scrolling; reveal more
   entries through a consistent pink outlined control while preserving fair order.
 - [Initial slice complete] Normalize provider-style song titles for queue

@@ -22,7 +22,7 @@
     = render "event_operations_empty_card", heading: "Active themes", message: "No themes are scheduled for this event."
   - if can_configure_event
     %section.event-operations__card.event-operations__form-card
-      %h3 Use or create a theme
+      %h3 Use Or Create A Theme
       = form_with url: venue_event_theme_applications_path(Current.venue.slug), scope: :event_theme_application, local: true, class: "event-operations__form", data: { controller: "theme-picker", theme_picker_existing_names_value: @themes.map(&:name) } do |form|
         = form.hidden_field :event_id, value: @current_event.id
         = form.label :theme_name, "Theme"
@@ -32,15 +32,15 @@
             %option{ value: theme.name }
         .event-operations__new-theme-fields{ hidden: true, data: { theme_picker_target: "newThemeFields" } }
           %p Give performers a clear cue. Hosts can still decide any uncertain song in one tap.
-          = form.label :description, "What belongs? (optional)"
+          = form.label :description, "What Belongs? (Optional)"
           = form.text_field :description, placeholder: "Heartbreak ballads and melancholy anthems"
-          = form.label :match_examples_text, "Songs or artists that fit (optional)"
+          = form.label :match_examples_text, "Songs Or Artists That Fit (Optional)"
           = form.text_field :match_examples_text, placeholder: "Adele, Someone Like You, Celine Dion"
-          = form.label :blocked_keywords_text, "Avoid (optional)"
+          = form.label :blocked_keywords_text, "Avoid (Optional)"
           = form.text_field :blocked_keywords_text, placeholder: "upbeat, dance remix"
-        = form.label :starts_at, "Starts (optional)"
+        = form.label :starts_at, "Starts (Optional)"
         = form.datetime_local_field :starts_at
-        = form.label :ends_at, "Ends (optional)"
+        = form.label :ends_at, "Ends (Optional)"
         = form.datetime_local_field :ends_at
         = form.submit "Apply Theme", class: "event-operations__primary-action"
   - if @theme_review.any?
@@ -71,10 +71,10 @@
   %section.songs-tab-panel.event-operations__panel{ id: "hosts-panel", role: "tabpanel", tabindex: "-1", aria: { labelledby: "hosts-tab" }, data: { responsive_tabs_target: "panel", tab_name: "hosts" }, hidden: true }
     .event-operations__grid
       .event-operations__card.event-operations__form-card
-        %h3 Delegate host authority
+        %h3 Delegate Host Authority
         = form_with url: venue_event_host_delegations_path(Current.venue.slug), scope: :event_host_delegation, local: true, class: "event-operations__form", data: { controller: "delegation-window", delegation_window_event_starts_at_value: datetime_local_value(@current_event.starts_at), delegation_window_event_ends_at_value: datetime_local_value(@current_event.ends_at), action: "submit->delegation-window#validate" } do |form|
           = hidden_field_tag :event_id, @current_event.id
-          = form.label :delegated_user_id, "Checked-in performer or venue member"
+          = form.label :delegated_user_id, "Checked-In Performer Or Venue Member"
           = form.collection_select :delegated_user_id, @delegation_candidates, :id, :display_name, { include_blank: "Choose a checked-in performer or venue member" }, required: true
           = form.label :starts_at, "Starts"
           = form.datetime_local_field :starts_at, value: datetime_local_value(@current_event.starts_at), min: datetime_local_value(@current_event.starts_at), max: datetime_local_value(@current_event.ends_at), required: true, data: { delegation_window_target: "startsAt", action: "input->delegation-window#update change->delegation-window#update" }
@@ -82,7 +82,7 @@
           = form.datetime_local_field :ends_at, value: datetime_local_value(@current_event.ends_at || @current_event.starts_at + 4.hours), min: datetime_local_value(@current_event.starts_at), max: datetime_local_value(@current_event.ends_at), required: true, data: { delegation_window_target: "endsAt", action: "input->delegation-window#update change->delegation-window#update" }
           = form.submit "Delegate Host", class: "event-operations__primary-action"
       %section.event-operations__card
-        %h3 Temporary hosts
+        %h3 Temporary Hosts
         - if @event_host_delegations.any?
           %ul.event-operations__list
             - @event_host_delegations.each do |delegation|
@@ -114,7 +114,7 @@
     = render "event_operations_status_card", **status_card
   - if can_configure_event
     %section.event-operations__card.event-operations__form-card
-      %h3 Performer access
+      %h3 Performer Access
       - if @active_presence_session
         %p Event access code: #{@active_presence_session.short_code} · expires #{l(@active_presence_session.expires_at, format: :short)}
         = button_to "Revoke Code", venue_event_presence_session_path(Current.venue.slug, @active_presence_session), method: :delete, class: "song-action song-action--remove", form: { class: "event-operations__revoke-code" }
@@ -122,7 +122,7 @@
         %p.event-operations__empty No active access code.
       = form_with url: venue_event_presence_sessions_path(Current.venue.slug), scope: :event_presence_session, local: true, class: "event-operations__form" do |form|
         = hidden_field_tag :event_id, @current_event.id
-        = form.label :expires_at, "Expires (optional)"
+        = form.label :expires_at, "Expires (Optional)"
         = form.datetime_local_field :expires_at, value: datetime_local_value(@current_event.ends_at && (@current_event.ends_at + EventPresenceSession::GRACE_PERIOD))
         = form.submit(@current_event.live? ? "Rotate Access Code" : "Generate Access Code", class: "event-operations__primary-action")
   %section.event-operations__card

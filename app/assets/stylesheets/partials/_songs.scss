@@ -25,6 +25,7 @@
 .event-operations__card > h3 { color: $yellow; margin-bottom: $space-md; }
 .event-operations__form-card > h3,
 .event-operations__form-card > p { margin-left: auto; margin-right: auto; max-width: 36rem; }
+.event-operations__form-card .backoffice-form { margin-left: auto; margin-right: auto; }
 .event-operations__form { display: grid; gap: $space-sm; margin: 0 auto; max-width: 36rem; }
 .event-operations__form label { color: $beige; font-size: .85rem; }
 .event-operations__form input, .event-operations__form select { box-sizing: border-box; max-width: 100%; min-height: 42px; }
@@ -32,7 +33,7 @@
 .event-operations__primary-action, .event-operations__text-action { cursor: pointer; font: inherit; padding: $space-xs $space-md; }
 .event-operations__form input.event-operations__primary-action,
 .event-operations__primary-action { background: $magenta; border: 1px solid $magenta; color: $midnight; justify-self: end; max-width: 100%; width: 16rem; }
-.event-operations__text-action { background: transparent; border: 1px solid $yellow; color: $yellow; }
+.event-operations__text-action { background: transparent; border: 1px solid rgba($cyan, .7); color: $cyan; }
 .event-operations__card > .button_to { display: flex; justify-content: flex-end; }
 .event-operations__card > .button_to .song-action, .event-operations__status-action .song-action { max-width: 100%; width: 16rem; }
 .event-operations__revoke-code { display: flex; flex-direction: row; justify-content: flex-end; width: 100%; max-width: 36rem; margin: $space-md auto $space-lg; }
@@ -1017,7 +1018,14 @@
 
   > :not(.song-action__icon) { color: $beige; }
 
-  &--play { @include song-action-tone($magenta); }
+  &--play {
+    border-color: $magenta;
+    color: $beige;
+    background: $magenta;
+
+    &:hover,
+    &:focus-visible { background: darken($magenta, 8%); }
+  }
   &--open,
   &--pause,
   &--unpause,
@@ -1026,7 +1034,7 @@
   &--skip,
   &--edit,
   &--more { @include song-action-tone($cyan); }
-  &--remove { @include song-action-tone($yellow); }
+  &--remove { @include song-action-tone($magenta); }
 
   &:hover,
   &:focus-visible { text-decoration: none; }

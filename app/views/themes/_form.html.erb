@@ -10,7 +10,7 @@
     </div>
   <% end %>
   <div class="backoffice-form__field">
-    <%= form.label :name, "Theme name" %>
+    <%= form.label :name, "Theme Name" %>
     <%= form.text_field :name, required: true %>
   </div>
   <div class="backoffice-form__field">
@@ -19,13 +19,13 @@
   </div>
   <div class="backoffice-form__check">
     <%= form.check_box :active %>
-    <%= form.label :active, "Available for event hosts" %>
+    <%= form.label :active, "Available For Event Hosts" %>
   </div>
   <fieldset class="backoffice-form__fieldset">
-    <legend>Help the queue recognize the theme</legend>
+    <legend>Help The Queue Recognize The Theme</legend>
     <p>Use familiar songs or artists as examples. A clear match joins the queue; uncertain songs go to a host for a quick decision.</p>
     <div class="backoffice-form__field">
-      <%= form.label :match_examples_text, "Songs or artists that fit" %>
+      <%= form.label :match_examples_text, "Songs Or Artists That Fit" %>
       <%= form.text_field :match_examples_text, placeholder: "Adele, Someone Like You, Celine Dion" %>
     </div>
     <div class="backoffice-form__field">

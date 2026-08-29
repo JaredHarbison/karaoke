@@ -10,7 +10,7 @@
     </div>
   <% end %>
   <div class="backoffice-form__field">
-    <%= form.label :name, "Event name" %>
+    <%= form.label :name, "Event Name" %>
     <%= form.text_field :name, required: true %>
   </div>
   <div class="backoffice-form__field">
@@ -39,7 +39,7 @@
         </div>
         <div class="backoffice-form__inline-fields" data-event-recurrence-target="customSchedule">
           <div class="backoffice-form__field">
-            <%= label_tag 'recurrence_interval', 'Repeat every' %>
+            <%= label_tag 'recurrence_interval', 'Repeat Every' %>
             <%= number_field_tag 'recurrence[interval]', @recurrence[:interval], min: 1, max: 99, id: 'recurrence_interval', autocomplete: 'off' %>
           </div>
           <div class="backoffice-form__field">
@@ -48,7 +48,7 @@
           </div>
         </div>
         <div class="backoffice-form__field">
-          <%= label_tag 'recurrence_ends_at', 'Ends (optional)' %>
+          <%= label_tag 'recurrence_ends_at', 'Ends (Optional)' %>
           <%= datetime_local_field_tag 'recurrence[ends_at]', datetime_local_value(@recurrence[:ends_at]), id: 'recurrence_ends_at' %>
         </div>
       </div>
@@ -58,12 +58,12 @@
   <% end %>
   <div class="backoffice-form__check">
     <%= form.check_box :fair_queue_enabled %>
-    <%= form.label :fair_queue_enabled, "Use Fair Queue for this event" %>
+    <%= form.label :fair_queue_enabled, "Use Fair Queue For This Event" %>
     <small>Favor performers with fewer completed turns before repeat turns.</small>
   </div>
   <div class="backoffice-form__check">
     <%= form.check_box :allow_queue_overrun %>
-    <%= form.label :allow_queue_overrun, "Allow queue beyond event end" %>
+    <%= form.label :allow_queue_overrun, "Allow Queue Beyond Event End" %>
     <small>Keep accepting songs after the planned end. This change is audited.</small>
   </div>
   <div class="backoffice-form__actions"><%= form.submit class: 'btn btn--primary' %></div>

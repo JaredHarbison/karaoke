@@ -55,7 +55,7 @@ Rails.application.routes.draw do
     post '/admins', to: 'venues#create_admin', as: 'admins'
     delete '/admins/:id', to: 'venues#destroy_admin', as: 'admin'
 
-    resources :events, param: :slug, except: :destroy do
+    resources :events, param: :slug do
       member do
         patch :start
         patch :complete

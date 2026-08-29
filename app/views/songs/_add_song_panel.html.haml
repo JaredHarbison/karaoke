@@ -37,7 +37,7 @@
             %h2#event-access-heading Enter event access code
           %p Enter the six-character code shown on the venue display to join this event queue.
           = form_with url: event_presence_code_path(venue_slug: Current.venue.slug, event_slug: @current_event.slug), method: :get, local: true, class: "songs-access__form" do |form|
-            = form.label :short_code, "Event access code"
+            = form.label :short_code, "Event Access Code"
             = form.text_field :short_code, maxlength: 6, autocomplete: "one-time-code", autocapitalize: "characters", spellcheck: false, autofocus: true
-            = form.submit "Join Event", class: "btn btn-primary"
+            = form.submit "Join Event", class: "btn btn--primary"
   = render "form", song: song, index_page: true

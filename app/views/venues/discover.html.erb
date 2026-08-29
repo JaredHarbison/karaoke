@@ -6,7 +6,7 @@
       <form method="get" class="mb-4">
         <div class="input-group">
           <input type="text" name="search" class="form-control" placeholder="Search venues..." autocomplete="off" value="<%= params[:search] %>">
-          <button type="submit" class="btn btn-primary">Search</button>
+          <button type="submit" class="btn btn--primary">Search</button>
         </div>
       </form>
 
@@ -18,7 +18,7 @@
                 <div class="card-body">
                   <h5 class="card-title"><%= venue.name %></h5>
                   <p class="card-text text-muted"><%= venue.slug %></p>
-                  <%= button_to "Join Venue", join_venue_path(slug: venue.slug), method: :post, class: "btn btn-sm btn-primary" %>
+                  <%= button_to "Join Venue", join_venue_path(slug: venue.slug), method: :post, class: "btn btn--primary" %>
                 </div>
               </div>
             </div>

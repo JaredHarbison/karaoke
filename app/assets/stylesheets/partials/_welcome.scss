@@ -149,15 +149,14 @@
   }
 
   &--secondary {
-    color: $magenta;
-    border-color: $magenta;
-    background: rgba($magenta, 0.1);
-    @include pink-interaction($radius-md);
+    color: $cyan;
+    border-color: rgba($cyan, .7);
+    background: transparent;
 
     &:hover,
     &:focus-visible {
-      color: $magenta;
-      background: rgba($magenta, 0.2);
+      color: $cyan;
+      background: rgba($cyan, 0.16);
       text-decoration: none;
     }
   }

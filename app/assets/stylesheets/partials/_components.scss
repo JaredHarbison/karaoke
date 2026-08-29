@@ -100,31 +100,31 @@
   }
   
   &--primary {
-    background-color: $cyan;
-    color: $bg-dark;
+    background-color: $magenta;
+    color: $beige;
     
     &:hover:not(:disabled) {
-      background-color: darken($cyan, 10%);
+      background-color: darken($magenta, 8%);
       box-shadow: $shadow-lg;
     }
   }
   
   &--secondary {
-    background-color: $bg-light;
-    color: $text-primary;
-    border: 1px solid $ink;
+    background-color: transparent;
+    color: $cyan;
+    border: 1px solid rgba($cyan, .7);
     
     &:hover:not(:disabled) {
-      background-color: darken($bg-light, 5%);
+      background-color: rgba($cyan, .16);
     }
   }
   
   &--success {
-    background-color: $cyan;
-    color: $bg-dark;
+    background-color: $magenta;
+    color: $beige;
     
     &:hover:not(:disabled) {
-      background-color: darken($cyan, 10%);
+      background-color: darken($magenta, 8%);
     }
   }
   
@@ -728,20 +728,6 @@
       height: 100%;
       border: none;
       border-radius: $radius-md;
-    }
-  }
-}
-
-.form-actions {
-  margin-top: $space-lg;
-  padding-top: $space-md;
-  border-top: 1px solid $ink-light;
-
-  .btn-primary {
-    &.btn-large {
-      width: 100%;
-      padding: $space-md $space-lg;
-      font-size: 1.1rem;
     }
   }
 }

@@ -1,6 +1,11 @@
-<main class="management-page" aria-labelledby="edit-event-heading">
-  <%= render 'shared/management_page_header', heading_id: 'edit-event-heading', title: 'Edit Event', back_label: 'Back to Event', back_path: venue_event_path(Current.venue.slug, @event) %>
-  <section class="management-card management-form-card">
-    <%= render "form", form_url: venue_event_path(Current.venue.slug, @event), form_method: :patch %>
-  </section>
-</main>
+<div class="songs-page songs-page--manager"><main class="songs-main" aria-labelledby="edit-event-heading">
+  <div class="event-operations__section-heading"><div><p><%= link_to 'Back to Event', venue_event_path(Current.venue.slug, @event) %></p><h2 id="edit-event-heading">Edit Event</h2></div></div>
+  <section class="event-operations__card event-operations__form-card"><%= render 'form', form_url: venue_event_path(Current.venue.slug, @event), form_method: :patch %></section>
+  <% if @event.completed? || @event.cancelled? %>
+    <section class="event-operations__card event-operations__form-card" aria-labelledby="delete-event-heading">
+      <h3 id="delete-event-heading">Delete Event</h3>
+      <p>This permanently removes the inactive event from this venue.</p>
+      <%= button_to 'Delete Event', venue_event_path(Current.venue.slug, @event), method: :delete, class: 'song-action song-action--remove', data: { turbo_confirm: "Delete #{@event.name}? This cannot be undone." } %>
+    </section>
+  <% end %>
+</main></div>
