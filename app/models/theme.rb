@@ -2,7 +2,7 @@
 
 # Reusable theme definition owned by one venue.
 class Theme < ApplicationRecord
-  RULE_KEYS = %w[required_keywords blocked_keywords].freeze
+  RULE_KEYS = %w[match_any_keywords required_keywords blocked_keywords].freeze
 
   belongs_to :venue
   has_many :event_theme_applications, dependent: :destroy
@@ -16,12 +16,21 @@ class Theme < ApplicationRecord
     @required_keywords_text ||= keywords_text_for('required_keywords')
   end
 
+  def match_examples_text
+    @match_examples_text ||= keywords_text_for('match_any_keywords').presence || required_keywords_text
+  end
+
   def blocked_keywords_text
     @blocked_keywords_text ||= keywords_text_for('blocked_keywords')
   end
 
   def required_keywords_text=(value)
     @required_keywords_text = value
+    @rule_fields_touched = true
+  end
+
+  def match_examples_text=(value)
+    @match_examples_text = value
     @rule_fields_touched = true
   end
 
@@ -44,10 +53,14 @@ class Theme < ApplicationRecord
   def sync_rules_from_form
     return unless @rule_fields_touched
 
-    self.rules = {
-      'required_keywords' => parse_keywords(@required_keywords_text),
+    match_rules = if @match_examples_text.nil?
+                    { 'required_keywords' => parse_keywords(@required_keywords_text) }
+                  else
+                    { 'match_any_keywords' => parse_keywords(@match_examples_text) }
+                  end
+    self.rules = match_rules.merge(
       'blocked_keywords' => parse_keywords(@blocked_keywords_text)
-    }.reject { |_key, keywords| keywords.empty? }
+    ).reject { |_key, keywords| keywords.empty? }
   end
 
   def parse_keywords(value)

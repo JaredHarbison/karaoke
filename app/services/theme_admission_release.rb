@@ -13,7 +13,9 @@ class ThemeAdmissionRelease
 
   def call
     songs_released = 0
-    Performance.unscoped.where(event_id: @event.id, theme_admission_status: 'review').find_each do |performance|
+    Performance.unscoped.where(
+      event_id: @event.id, theme_admission_status: %w[review deferred]
+    ).find_each do |performance|
       songs_released += 1 if performance.release_theme!(at: @at)
     end
     songs_released

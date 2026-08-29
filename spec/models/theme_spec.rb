@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# rubocop:disable Metrics/BlockLength
 RSpec.describe Theme, type: :model do
   it { is_expected.to belong_to(:venue) }
   it { is_expected.to have_many(:event_theme_applications).dependent(:destroy) }
@@ -25,6 +26,13 @@ RSpec.describe Theme, type: :model do
     )
   end
 
+  it 'stores host-facing examples as an any-match rule' do
+    theme = build(:theme, match_examples_text: 'Adele, Someone Like You, Adele')
+
+    expect(theme).to be_valid
+    expect(theme.rules).to eq('match_any_keywords' => ['adele', 'someone like you'])
+  end
+
   it 'rejects unsupported rule keys' do
     theme = build(:theme, rules: { 'artist_allowlist' => ['Dua Lipa'] })
 
@@ -32,3 +40,4 @@ RSpec.describe Theme, type: :model do
     expect(theme.errors[:rules]).to include(/unsupported keys/)
   end
 end
+# rubocop:enable Metrics/BlockLength

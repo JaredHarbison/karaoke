@@ -43,8 +43,8 @@ during the shared journey before continuing here.
 ## Theme and queue setup
 
 1. From the event queue, open the **Themes** toggle.
-   - Create a reusable theme with required and blocked comma-separated words,
-     apply it to the event, and edit it from the managed-theme list.
+   - Create a reusable theme with familiar song or artist examples and optional
+     avoid terms, apply it to the event, and edit it from the managed-theme list.
    - Confirm the values persist normalized and the theme controls stay within
      the event workflow.
    - Bounded theme windows must stay inside the event start/end window.

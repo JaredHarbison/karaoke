@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_08_23_143000) do
+ActiveRecord::Schema[7.2].define(version: 2026_08_24_205000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "event_check_ins", force: :cascade do |t|
+    t.bigint "event_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "checked_in_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id", "user_id"], name: "index_event_check_ins_on_event_id_and_user_id", unique: true
+    t.index ["event_id"], name: "index_event_check_ins_on_event_id"
+    t.index ["user_id"], name: "index_event_check_ins_on_user_id"
+  end
 
   create_table "event_host_delegations", force: :cascade do |t|
     t.bigint "event_id", null: false
@@ -91,7 +102,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_23_143000) do
     t.datetime "ends_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["event_id", "theme_id"], name: "index_event_theme_applications_on_event_id_and_theme_id", unique: true
+    t.index ["event_id", "theme_id"], name: "index_event_theme_applications_on_event_id_and_theme_id"
     t.index ["event_id"], name: "index_event_theme_applications_on_event_id"
     t.index ["theme_id"], name: "index_event_theme_applications_on_theme_id"
   end
@@ -267,6 +278,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_23_143000) do
     t.index ["slug"], name: "index_venues_on_slug", unique: true
   end
 
+  add_foreign_key "event_check_ins", "events"
+  add_foreign_key "event_check_ins", "users"
   add_foreign_key "event_host_delegations", "events"
   add_foreign_key "event_host_delegations", "users", column: "delegated_by_user_id"
   add_foreign_key "event_host_delegations", "users", column: "delegated_user_id"

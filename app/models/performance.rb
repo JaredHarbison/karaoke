@@ -6,7 +6,7 @@ class Performance < ApplicationRecord
 
   DEFAULT_DURATION_SECONDS = 180
   QUEUE_ELIGIBLE_THEME_STATUSES = %w[not_applicable eligible released].freeze
-  THEME_ADMISSION_STATUSES = (QUEUE_ELIGIBLE_THEME_STATUSES + %w[review rejected]).freeze
+  THEME_ADMISSION_STATUSES = (QUEUE_ELIGIBLE_THEME_STATUSES + %w[review deferred rejected]).freeze
 
   belongs_to :venue, optional: true
   belongs_to :user, optional: true
@@ -58,8 +58,17 @@ class Performance < ApplicationRecord
     )
   end
 
+  def defer_theme!(reviewer:, release_at:)
+    update!(
+      theme_admission_status: 'deferred',
+      theme_admission_reason: "host deferred until #{release_at.to_fs(:short)}",
+      theme_reviewed_by: reviewer,
+      theme_reviewed_at: Time.current
+    )
+  end
+
   def release_theme!(at: Time.current)
-    return false unless theme_admission_status == 'review'
+    return false unless %w[review deferred].include?(theme_admission_status)
     return false if theme_admission_reason.to_s.start_with?('content policy:')
     return false if theme_application&.active_at?(at)
 

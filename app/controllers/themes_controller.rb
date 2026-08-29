@@ -19,7 +19,7 @@ class ThemesController < ApplicationController
     @theme = Current.venue.themes.new(theme_params)
 
     if @theme.save
-      redirect_to venue_themes_path(Current.venue.slug), notice: 'Theme created.'
+      redirect_to theme_return_path, notice: 'Theme created.'
     else
       render :new, status: :unprocessable_entity
     end
@@ -47,6 +47,15 @@ class ThemesController < ApplicationController
   end
 
   def theme_params
-    params.require(:theme).permit(:name, :description, :active, :required_keywords_text, :blocked_keywords_text)
+    params.require(:theme).permit(
+      :name, :description, :active, :match_examples_text, :required_keywords_text, :blocked_keywords_text
+    )
+  end
+
+  def theme_return_path
+    event = Current.venue.events.find_by(slug: params[:event_slug])
+    return venue_themes_path(Current.venue.slug) unless event
+
+    venue_event_queue_path(Current.venue.slug, event_slug: event.slug)
   end
 end

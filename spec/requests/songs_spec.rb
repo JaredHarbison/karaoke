@@ -52,12 +52,32 @@ RSpec.describe 'Songs', type: :request do
     end
 
     it 'opens the event access-code step for an event queue' do
-      event = create(:event, venue: venue, status: :live)
+      event = create(
+        :event, venue: venue, status: :live, starts_at: 1.hour.ago, ends_at: 2.hours.from_now
+      )
 
-      get "/#{venue.slug}/songs", params: { event_id: event.id }
+      get venue_event_queue_path(venue.slug, event_slug: event.slug)
 
       dialog = Nokogiri::HTML(response.body).at_css('dialog.songs-access-dialog')
       expect(dialog).to have_attribute('open')
+    end
+
+    it 'shows active event themes above the add-song controls' do
+      event = create(
+        :event, venue: venue, status: :live, starts_at: 1.hour.ago, ends_at: 2.hours.from_now
+      )
+      theme = create(:theme, venue: venue, name: 'Disco Hour')
+      create(:event_theme_application, event: event, theme: theme)
+
+      sign_out user
+      sign_in venue.owner
+      get venue_event_queue_path(venue.slug, event_slug: event.slug)
+
+      page = Nokogiri::HTML(response.body)
+      theme_notice = page.at_css('.songs-active-theme')
+      expect(theme_notice.text).to include('Disco Hour')
+      expect(theme_notice.at_css('span').text).to include('–')
+      expect(response.body.index('songs-active-themes')).to be < response.body.index('youtube-search')
     end
 
     it 'shows Play only for the next queued song' do
@@ -201,7 +221,9 @@ RSpec.describe 'Songs', type: :request do
         { video_id: 'event-video', verified_karaoke: true, explicit_lyrics: false, duration_seconds: 180 }
       )
 
-      post "/#{venue.slug}/songs", params: { song: { performer: 'Event Singer', url: 'https://youtube.com/event', event_id: event.id } }
+      post venue_event_queue_path(venue.slug, event_slug: event.slug), params: {
+        song: { performer: 'Event Singer', url: 'https://youtube.com/event' }
+      }
 
       expect(response).to redirect_to(venue_event_queue_path(venue.slug, event_slug: event.slug))
       expect(Performance.last.event).to eq(event)
@@ -215,10 +237,10 @@ RSpec.describe 'Songs', type: :request do
       allow(YoutubeService).to receive(:validate_karaoke_video).and_return(
         { video_id: 'retry-video', verified_karaoke: true, explicit_lyrics: false, duration_seconds: 180 }
       )
-      params = { song: { performer: 'Retry Singer', url: 'https://youtube.com/retry', event_id: event.id, submission_token: SecureRandom.uuid } }
+      params = { song: { performer: 'Retry Singer', url: 'https://youtube.com/retry', submission_token: SecureRandom.uuid } }
 
-      expect { post "/#{venue.slug}/songs", params: params }.to change(Performance, :count).by(1)
-      expect { post "/#{venue.slug}/songs", params: params }.not_to change(Performance, :count)
+      expect { post venue_event_queue_path(venue.slug, event_slug: event.slug), params: params }.to change(Performance, :count).by(1)
+      expect { post venue_event_queue_path(venue.slug, event_slug: event.slug), params: params }.not_to change(Performance, :count)
       expect(response).to redirect_to(venue_event_queue_path(venue.slug, event_slug: event.slug))
       expect(flash[:notice]).to include('already queued')
     end
@@ -234,16 +256,41 @@ RSpec.describe 'Songs', type: :request do
       )
 
       expect do
-        post "/#{venue.slug}/songs", params: { song: { event_id: event.id, performer: 'Theme Singer', url: 'https://youtube.com/theme' } }
+        post venue_event_queue_path(venue.slug, event_slug: event.slug), params: { song: { performer: 'Theme Singer', url: 'https://youtube.com/theme' } }
       end.to change(Performance, :count).by(1)
       song = Performance.last
       expect(song.theme_admission_status).to eq('review')
+      expect(flash[:notice]).to include('needs theme review')
 
       sign_out user
       sign_in venue.owner
       patch review_theme_venue_song_path(venue.slug, song), params: { decision: 'approve' }
 
       expect(song.reload).to have_attributes(theme_admission_status: 'eligible', theme_reviewed_by: venue.owner)
+    end
+
+    it 'lets a host schedule a theme-mismatched song after the theme window' do
+      event = create(:event, venue: venue, status: :live, starts_at: 1.hour.ago, ends_at: 2.hours.from_now)
+      theme = create(:theme, venue: venue)
+      application = create(
+        :event_theme_application, event: event, theme: theme, starts_at: 30.minutes.ago, ends_at: 30.minutes.from_now
+      )
+      song = create(
+        :performance,
+        venue: venue,
+        event: event,
+        theme_application: application,
+        theme_admission_status: 'review',
+        theme_admission_reason: 'metadata does not satisfy required theme keywords'
+      )
+      sign_out user
+      sign_in venue.owner
+
+      patch review_theme_venue_song_path(venue.slug, song), params: { decision: 'defer' }
+
+      expect(song.reload).to have_attributes(theme_admission_status: 'deferred', theme_reviewed_by: venue.owner)
+      ThemeAdmissionRelease.call(event: event, at: application.ends_at + 1.second)
+      expect(song.reload.theme_admission_status).to eq('released')
     end
 
     it 'holds explicit lyrics for reject-only content-policy review during a theme' do
@@ -257,7 +304,7 @@ RSpec.describe 'Songs', type: :request do
       )
 
       expect do
-        post "/#{venue.slug}/songs", params: { song: { event_id: event.id, performer: 'Policy Singer', url: 'https://youtube.com/explicit-theme' } }
+        post venue_event_queue_path(venue.slug, event_slug: event.slug), params: { song: { performer: 'Policy Singer', url: 'https://youtube.com/explicit-theme' } }
       end.to change(Performance, :count).by(1)
       song = Performance.last
       expect(song).to have_attributes(theme_admission_status: 'review')
@@ -277,7 +324,7 @@ RSpec.describe 'Songs', type: :request do
       event = create(:event, venue: venue)
 
       expect do
-        post "/#{venue.slug}/songs", params: { song: { performer: 'Early Singer', url: 'https://youtube.com/early', event_id: event.id } }
+        post venue_event_queue_path(venue.slug, event_slug: event.slug), params: { song: { performer: 'Early Singer', url: 'https://youtube.com/early' } }
       end.not_to change(Performance, :count)
 
       expect(response).to have_http_status(422)
@@ -288,7 +335,7 @@ RSpec.describe 'Songs', type: :request do
       event = create(:event, venue: venue, status: :live)
 
       expect do
-        post "/#{venue.slug}/songs", params: { song: { performer: 'Remote Singer', url: 'https://youtube.com/remote', event_id: event.id } }
+        post venue_event_queue_path(venue.slug, event_slug: event.slug), params: { song: { performer: 'Remote Singer', url: 'https://youtube.com/remote' } }
       end.not_to change(Performance, :count)
 
       expect(response).to have_http_status(422)
@@ -318,7 +365,7 @@ RSpec.describe 'Songs', type: :request do
       )
 
       expect do
-        post "/#{venue.slug}/songs", params: { song: { performer: 'Host Singer', url: 'https://youtube.com/owner', event_id: event.id } }
+        post venue_event_queue_path(venue.slug, event_slug: event.slug), params: { song: { performer: 'Host Singer', url: 'https://youtube.com/owner' } }
       end.to change(Performance, :count).by(1)
 
       expect(response).to redirect_to(venue_event_queue_path(venue.slug, event_slug: event.slug))
@@ -330,7 +377,7 @@ RSpec.describe 'Songs', type: :request do
       get event_presence_path(presence.token)
 
       expect do
-        post "/#{venue.slug}/songs", params: { song: { performer: 'Late Singer', url: 'https://youtube.com/late', event_id: event.id } }
+        post venue_event_queue_path(venue.slug, event_slug: event.slug), params: { song: { performer: 'Late Singer', url: 'https://youtube.com/late' } }
       end.not_to change(Performance, :count)
 
       expect(response).to have_http_status(422)
@@ -348,7 +395,7 @@ RSpec.describe 'Songs', type: :request do
       )
 
       expect do
-        post "/#{venue.slug}/songs", params: { song: { performer: 'Overrun Singer', url: 'https://youtube.com/long', event_id: event.id } }
+        post venue_event_queue_path(venue.slug, event_slug: event.slug), params: { song: { performer: 'Overrun Singer', url: 'https://youtube.com/long' } }
       end.not_to change(Performance, :count)
 
       expect(response).to have_http_status(422)
@@ -364,18 +411,8 @@ RSpec.describe 'Songs', type: :request do
       )
 
       expect do
-        post "/#{venue.slug}/songs", params: { song: { performer: 'Override Singer', url: 'https://youtube.com/override', event_id: event.id } }
+        post venue_event_queue_path(venue.slug, event_slug: event.slug), params: { song: { performer: 'Override Singer', url: 'https://youtube.com/override' } }
       end.to change(Performance, :count).by(1)
-    end
-
-    it 'does not associate a song with an event from another venue' do
-      other_event = create(:event)
-
-      expect {
-        post "/#{venue.slug}/songs", params: { song: { performer: 'Unsafe Singer', url: 'https://youtube.com/unsafe', event_id: other_event.id } }
-      }.not_to change(Performance, :count)
-
-      expect(response).to have_http_status(422)
     end
   end
 
@@ -385,7 +422,7 @@ RSpec.describe 'Songs', type: :request do
       included = create(:performance, venue: venue, user: user, performer: 'Included Singer', event: event)
       create(:performance, venue: venue, user: user, performer: 'Venue Singer')
 
-      get "/#{venue.slug}/songs", params: { event_id: event.id }
+      get venue_event_queue_path(venue.slug, event_slug: event.slug)
 
       expect(response).to be_successful
       expect(response.body).to include(included.performer)

@@ -23,7 +23,7 @@ RSpec.describe 'Event theme applications', type: :request do
     {
       event_theme_application: {
         event_id: event.id,
-        theme_id: theme.id,
+        theme_name: theme.name,
         starts_at: event.starts_at + 1.hour,
         ends_at: event.ends_at - 1.hour
       }

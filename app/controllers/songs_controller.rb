@@ -23,7 +23,7 @@ class SongsController < ApplicationController
     
     respond_to do |format|
       if save_song
-        format.html { redirect_to queue_path, notice: "A song was created for #{ @song.performer }." }
+        format.html { redirect_to queue_path, notice: song_creation_notice }
         format.turbo_stream
         format.json { render :show, status: :created, location: @song }
       else
@@ -41,7 +41,7 @@ class SongsController < ApplicationController
     @performer = @song.performer
     @song.destroy
     respond_to do |format|
-      format.html { redirect_to venue_songs_path(Current.venue.slug), notice: "#{@performer}'s song was removed." }
+      format.html { redirect_to queue_path, notice: "#{@performer}'s song was removed." }
       format.turbo_stream
       format.json { head :no_content }
     end
@@ -55,13 +55,13 @@ class SongsController < ApplicationController
   def finish_song 
     if @song.update( finished: true ) 
       respond_to do |format|
-        format.html { redirect_to venue_songs_path(Current.venue.slug), notice: "#{ @song.performer } just finished a song." }
+        format.html { redirect_to queue_path, notice: "#{ @song.performer } just finished a song." }
         format.turbo_stream
         format.json { head :no_content }
       end
     else 
       respond_to do |format|
-        format.html { redirect_to venue_songs_path(Current.venue.slug), alert: "#{ @song.performer }'s song was not finished." }
+        format.html { redirect_to queue_path, alert: "#{ @song.performer }'s song was not finished." }
         format.turbo_stream
         format.json { render json: @song.errors, status: :unprocessable_entity }
       end
@@ -79,14 +79,14 @@ class SongsController < ApplicationController
     spots_back = Integer(params[:spots_back], exception: false)
 
     if spots_back.blank? || spots_back < 1
-      redirect_to venue_songs_path(Current.venue.slug), alert: "Choose at least one spot to move the song back."
+      redirect_to queue_path, alert: "Choose at least one spot to move the song back."
       return
     end
 
     SongQueue::Reorder.pause!(@song, spots_back, actor: current_user)
-    redirect_to venue_songs_path(Current.venue.slug), notice: "#{@song.performer}'s song was paused."
+    redirect_to queue_path, notice: "#{@song.performer}'s song was paused."
   rescue ActiveRecord::RecordInvalid, ArgumentError
-    redirect_to venue_songs_path(Current.venue.slug), alert: "#{@song.performer}'s song could not be paused."
+    redirect_to queue_path, alert: "#{@song.performer}'s song could not be paused."
   end
 
   # GET /:venue_slug/songs/presentation
@@ -105,40 +105,63 @@ class SongsController < ApplicationController
   # PATCH /:venue_slug/songs/1/requeue_song
   def requeue_song
     if @song.update(finished: false, skipped: false, postponed: false)
-      redirect_to venue_songs_path(Current.venue.slug), notice: "#{@song.performer} was returned to the queue."
+      redirect_to queue_path, notice: "#{@song.performer} was returned to the queue."
     else
-      redirect_to venue_songs_path(Current.venue.slug), alert: "#{@song.performer}'s song could not be requeued."
+      redirect_to queue_path, alert: "#{@song.performer}'s song could not be requeued."
     end
   end
 
   def review_theme
-    unless @song.theme_admission_status == 'review'
-      return redirect_to venue_songs_path(Current.venue.slug, event_id: @song.event_id), alert: 'That song is not awaiting theme review.'
+    unless awaiting_theme_review?
+      return redirect_to theme_review_return_path, alert: 'That song is not awaiting theme review.'
     end
-
-    content_policy_review = @song.theme_admission_reason.to_s.start_with?('content policy:')
-    rejection_reason = params[:rejection_reason].to_s
-    if content_policy_review && params[:decision].to_s != 'reject'
-      return redirect_to venue_songs_path(Current.venue.slug, event_id: @song.event_id), alert: 'Content-policy review can only be rejected.'
+    if invalid_content_policy_decision?
+      return redirect_to theme_review_return_path, alert: 'Content-policy review can only be rejected.'
     end
+    return defer_until_theme_end if deferring_until_theme_end?
 
+    complete_theme_review
+  end
+
+  def awaiting_theme_review?
+    @song.theme_admission_status == 'review'
+  end
+
+  def invalid_content_policy_decision?
+    content_policy_review? && params[:decision].to_s != 'reject'
+  end
+
+  def deferring_until_theme_end?
+    params[:decision].to_s == 'defer' && @song.theme_application&.ends_at
+  end
+
+  def defer_until_theme_end
+    @song.defer_theme!(reviewer: current_user, release_at: @song.theme_application.ends_at)
+    redirect_to theme_review_return_path, notice: 'Song scheduled after the theme ends.'
+  end
+
+  def complete_theme_review
     status = params[:decision].to_s == 'approve' ? 'eligible' : 'rejected'
     decision_label = status == 'eligible' ? 'approved' : 'rejected'
-    reason_label = rejection_reason == 'content_policy' ? 'content policy' : 'theme'
+    reason_label = content_policy_review? ? 'content policy' : 'theme'
     @song.review_theme!(
       status: status,
       reason: "host #{decision_label} #{reason_label} admission",
       reviewer: current_user
     )
-    redirect_to venue_songs_path(Current.venue.slug, event_id: @song.event_id), notice: "Theme review #{decision_label}."
+    redirect_to theme_review_return_path, notice: "Theme review #{decision_label}."
+  end
+
+  def content_policy_review?
+    @song.theme_admission_reason.to_s.start_with?('content policy:')
   end
 
   # PATCH /:venue_slug/songs/1/unpause_song
   def unpause_song
     SongQueue::Reorder.unpause!(@song, actor: current_user)
-    redirect_to venue_songs_path(Current.venue.slug), notice: "#{@song.performer}'s song is next in line."
+    redirect_to queue_path, notice: "#{@song.performer}'s song is next in line."
   rescue ActiveRecord::RecordInvalid, ArgumentError
-    redirect_to venue_songs_path(Current.venue.slug), alert: "#{@song.performer}'s song could not be unpaused."
+    redirect_to queue_path, alert: "#{@song.performer}'s song could not be unpaused."
   end
 
   # PATCH /:venue_slug/songs/1/skip_song
@@ -146,12 +169,12 @@ class SongsController < ApplicationController
     skipped = !@song.skipped 
     if @song.update( skipped: skipped ) 
       respond_to do |format|
-        format.html { redirect_to venue_songs_path(Current.venue.slug), notice: "#{ @song.performer } was #{ skipped ? 'skipped' : 'returned to' } the queue." }
+        format.html { redirect_to queue_path, notice: "#{ @song.performer } was #{ skipped ? 'skipped' : 'returned to' } the queue." }
         format.turbo_stream
       end
     else 
       respond_to do |format|
-        format.html { redirect_to venue_songs_path(Current.venue.slug), alert: "#{ @song.performer }'s song could not be skipped." }
+        format.html { redirect_to queue_path, alert: "#{ @song.performer }'s song could not be skipped." }
         format.turbo_stream
       end
     end
@@ -205,10 +228,12 @@ class SongsController < ApplicationController
 
   def load_queue
     ThemeAdmissionRelease.call(event: @current_event) if @current_event
+    @active_theme_applications = active_theme_applications
     queue = @current_event ? Performance.where(event: @current_event) : Performance.all
     @finished = queue.finished.order(updated_at: :desc)
     @skipped = queue.skipped
     @theme_review = queue.theme_review.order(:created_at)
+    @post_theme = queue.where(theme_admission_status: 'deferred').order(:created_at)
     @songs = queue
     ordered_upcoming = if @current_event&.fair_queue_enabled?
                          SongQueue::FairOrder.new(queue.upcoming, event: @current_event).call
@@ -220,15 +245,11 @@ class SongsController < ApplicationController
     @upcoming = ordered_upcoming.first(@upcoming_page * 10)
     @upcoming_has_more = @upcoming.length < @upcoming_total
     set_queue_access
+    load_manager_event_data if @can_manage_queue && @current_event
   end
 
   def set_queue_event
-    event_id = params[:event_id].presence || params.dig(:song, :event_id).presence
-    @current_event = if params[:event_slug].present?
-                       Current.venue.events.find_by(slug: params[:event_slug])
-                     elsif event_id.present?
-                       Current.venue.events.find_by(id: event_id)
-                     end
+    @current_event = Current.venue.events.find_by(slug: params[:event_slug]) if params[:event_slug].present?
     return if @current_event.blank?
 
     @current_event
@@ -240,14 +261,15 @@ class SongsController < ApplicationController
     @event_presence_active = @current_event && active_event_presence_for?(@current_event)
   end
 
-  def assign_song_event
-    attributes = song_params
-    event_id = attributes.delete(:event_id)
-    @song.assign_attributes(attributes)
-    @song.event = @current_event if event_id.blank? && @current_event
-    return if event_id.blank? || @song.event.present?
+  def active_theme_applications
+    return [] unless @current_event
 
-    @song.event = Event.find_by(id: event_id)
+    @current_event.event_theme_applications.includes(:theme).select(&:active_at?)
+  end
+
+  def assign_song_event
+    @song.assign_attributes(song_params)
+    @song.event = @current_event if @current_event
   end
 
   def queue_path
@@ -257,6 +279,39 @@ class SongsController < ApplicationController
     venue_songs_path(Current.venue.slug)
   end
 
+  def theme_review_return_path
+    queue_path
+  end
+
+  def load_manager_event_data
+    @themes = Current.venue.themes.where(active: true).order(:name)
+    @theme_applications = @current_event.event_theme_applications.includes(:theme).order(:starts_at)
+    @event_host_delegations = @current_event.event_host_delegations.includes(:delegated_user).order(starts_at: :desc)
+    @delegation_candidates = @current_event.temporary_host_candidates.order(:first_name, :last_name, :email)
+    ensure_live_event_access_code
+    @presence_sessions = @current_event.event_presence_sessions.order(created_at: :desc)
+    @active_presence_session = @presence_sessions.find { |presence| @current_event.live? && presence.active_at? }
+    @queue_overrides = @current_event.song_queue_overrides.includes(:performance, :user).order(created_at: :desc).limit(10)
+    @queue_setting_changes = @current_event.event_setting_changes.includes(:user).order(created_at: :desc).limit(10)
+    load_queue_projection
+  end
+
+  def ensure_live_event_access_code
+    return unless @current_event.live? && Current.venue.admin?(current_user)
+
+    @current_event.ensure_active_presence_session!(created_by_user: current_user)
+  end
+
+  def load_queue_projection
+    playable = Performance.unscoped.where(
+      event_id: @current_event.id, finished: false, skipped: false, postponed: false,
+      theme_admission_status: Performance::QUEUE_ELIGIBLE_THEME_STATUSES
+    ).to_a
+    projected_seconds = playable.sum { |performance| performance.effective_duration_seconds || Performance::DEFAULT_DURATION_SECONDS }
+    projected_seconds += playable.length * EventQueueRuntimePolicy::TRANSITION_BUFFER_SECONDS
+    @queue_projected_completion_at = Time.current + projected_seconds
+  end
+
   def set_song
     @song = Current.venue.performances.find(params[:id])
   end
@@ -264,7 +319,6 @@ class SongsController < ApplicationController
   def song_params
     params.require(:song).permit(
       :category, 
-      :event_id,
       :finished, 
       :performer, 
       :postponed, 
@@ -277,6 +331,14 @@ class SongsController < ApplicationController
 
   def save_song
     @song.event ? save_event_song : save_venue_song
+  end
+
+  def song_creation_notice
+    if @song.theme_admission_status == 'review'
+      return "#{@song.performer}'s song needs theme review before it can enter the queue."
+    end
+
+    "A song was created for #{@song.performer}."
   end
 
   def save_event_song
@@ -329,7 +391,7 @@ class SongsController < ApplicationController
   
   def authorize_admin_for_queue_actions
     unless Current.venue.is_admin?(current_user) || @song.event&.temporary_host?(current_user)
-      redirect_to venue_songs_path(Current.venue.slug), alert: "Only admins can manage the queue."
+      redirect_to queue_path, alert: "Only admins can manage the queue."
     end
   end
 
@@ -337,7 +399,7 @@ class SongsController < ApplicationController
     return if Current.venue.is_admin?(current_user)
     return if manageable_by_current_user?(@song)
 
-    redirect_to venue_songs_path(Current.venue.slug), alert: "You can only manage songs you added or songs added for you."
+    redirect_to queue_path, alert: "You can only manage songs you added or songs added for you."
   end
   
   def determine_user_role

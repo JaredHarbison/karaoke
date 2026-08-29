@@ -63,6 +63,7 @@ over `523 Franklin Ave`.
 2. Approve or reject a theme review entry.
    - The Themes toggle shows the number of performances awaiting reconciliation.
    - Approval makes it queue-eligible.
+   - A non-matching song may instead be held until the theme window ends.
    - Rejection records the reason and keeps it out.
 3. Leave a non-policy review unresolved until the theme window ends.
    - It releases to normal/Fair Queue eligibility.
