@@ -32,9 +32,9 @@ during the shared journey before continuing here.
    - Verify the event start/end values remain the values entered; queue cutoff is a separate policy and must not rewrite event times.
    - The event belongs to this venue.
    - Performers cannot access owner event-management actions.
-   - Event, recurring-series, and theme forms use the same labeled-control,
-     validation, checkbox, and primary-action treatment as the event queue’s
-     host controls.
+   - Event, recurring-series, and theme forms use the shared primary-button
+     component alongside the same labeled-control, validation, and checkbox
+     treatment as the event queue’s host controls.
    - Events has one Create Event action. Verify its form creates either a
      one-off event or the first occurrence of a recurring series without
      leaving the event-management flow.

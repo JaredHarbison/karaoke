@@ -58,7 +58,7 @@
         <%= datetime_local_field_tag 'event_theme_application[starts_at]' %>
         <%= label_tag 'event_theme_application_ends_at', 'Window ends (optional)' %>
         <%= datetime_local_field_tag 'event_theme_application[ends_at]' %>
-        <div class="backoffice-form__actions"><%= form.submit 'Apply Theme', class: 'event-operations__primary-action' %></div>
+        <div class="backoffice-form__actions"><%= form.submit 'Apply Theme', class: 'btn btn--primary' %></div>
       <% end %>
     <% end %>
   </section>
@@ -102,7 +102,7 @@
         <%= hidden_field_tag :event_id, @event.id %>
         <%= form.label :expires_at, 'Expires (optional)' %>
         <%= form.datetime_local_field :expires_at, value: datetime_local_value(@event.ends_at && (@event.ends_at + EventPresenceSession::GRACE_PERIOD)) %>
-        <div class="backoffice-form__actions"><%= form.submit(@event.live? ? 'Rotate Event Access Code' : 'Generate Event Access Code', class: 'event-operations__primary-action') %></div>
+        <div class="backoffice-form__actions"><%= form.submit(@event.live? ? 'Rotate Event Access Code' : 'Generate Event Access Code', class: 'btn btn--primary') %></div>
       <% end %>
     </section>
   <% end %>
@@ -132,7 +132,7 @@
         <%= form.datetime_local_field :starts_at, value: datetime_local_value(@event.starts_at) %>
         <%= form.label :ends_at, 'Ends' %>
         <%= form.datetime_local_field :ends_at, value: datetime_local_value(@event.ends_at || @event.starts_at + 4.hours) %>
-        <div class="backoffice-form__actions"><%= form.submit 'Delegate Host', class: 'event-operations__primary-action' %></div>
+        <div class="backoffice-form__actions"><%= form.submit 'Delegate Host', class: 'btn btn--primary' %></div>
       <% end %>
     </section>
   <% end %>
