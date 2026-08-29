@@ -29,7 +29,7 @@ module ApplicationHelper
     path = auth_return_to
     return 'Sign in to continue.' unless path.present?
 
-    venue_slug = path.match(%r{\A/([^/]+)/songs})&.captures&.first
+    venue_slug = path.match(%r{\A/([^/]+)/(?:songs|events/[^/]+(?:/(?:queue|presentation))?)})&.captures&.first
     venue = Venue.find_by(slug: venue_slug) if venue_slug.present?
 
     if venue

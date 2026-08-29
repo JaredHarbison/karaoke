@@ -1,6 +1,6 @@
-<%= form_with model: @theme, url: form_url, method: form_method, local: true do |form| %>
+<%= form_with model: @theme, url: form_url, method: form_method, local: true, class: 'backoffice-form' do |form| %>
   <% if @theme.errors.any? %>
-    <div role="alert">
+    <div class="backoffice-form__errors" role="alert">
       <h2><%= pluralize(@theme.errors.count, "error") %> prevented saving:</h2>
       <ul>
         <% @theme.errors.full_messages.each do |message| %>
@@ -9,30 +9,30 @@
       </ul>
     </div>
   <% end %>
-  <div>
+  <div class="backoffice-form__field">
     <%= form.label :name, "Theme name" %>
     <%= form.text_field :name, required: true %>
   </div>
-  <div>
+  <div class="backoffice-form__field">
     <%= form.label :description, "Description" %>
     <%= form.text_area :description %>
   </div>
-  <div>
-    <%= form.label :active, "Available for event hosts" %>
+  <div class="backoffice-form__check">
     <%= form.check_box :active %>
+    <%= form.label :active, "Available for event hosts" %>
   </div>
-  <fieldset>
+  <fieldset class="backoffice-form__fieldset">
     <legend>Help the queue recognize the theme</legend>
     <p>Use familiar songs or artists as examples. A clear match joins the queue; uncertain songs go to a host for a quick decision.</p>
-    <div>
+    <div class="backoffice-form__field">
       <%= form.label :match_examples_text, "Songs or artists that fit" %>
       <%= form.text_field :match_examples_text, placeholder: "Adele, Someone Like You, Celine Dion" %>
     </div>
-    <div>
+    <div class="backoffice-form__field">
       <%= form.label :blocked_keywords_text, "Avoid" %>
       <%= form.text_field :blocked_keywords_text, placeholder: "upbeat, dance remix" %>
     </div>
   </fieldset>
-  <p>Nothing is rejected automatically for theme fit. Hosts can approve, place it after the theme, or reject it completely.</p>
-  <%= form.submit %>
+  <p class="backoffice-form__note">Nothing is rejected automatically for theme fit. Hosts can approve, place it after the theme, or reject it completely.</p>
+  <div class="backoffice-form__actions"><%= form.submit %></div>
 <% end %>

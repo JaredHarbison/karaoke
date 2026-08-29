@@ -88,6 +88,81 @@ input[ type = text ], input[ type = email ], input[ type = password ] {
   }
 }
 
+// Shared owner/host management form surface. Individual pages only provide
+// semantic field and action classes; this keeps the same controls consistent.
+.backoffice-form {
+  display: grid;
+  gap: $space-md;
+  max-width: 36rem;
+
+  &__field {
+    display: grid;
+    gap: $space-xs;
+  }
+
+  &__field label,
+  &__fieldset legend {
+    color: $beige;
+    font-size: .85rem;
+    font-weight: 700;
+  }
+
+  &__field input:not([type='checkbox']),
+  &__field select,
+  &__field textarea {
+    box-sizing: border-box;
+    min-height: 42px;
+    width: 100%;
+    max-width: 100%;
+    padding: $space-sm;
+    border: 1px solid $beige;
+    border-radius: $radius-sm;
+    color: $ink;
+    background: $beige;
+    font: inherit;
+  }
+
+  &__field textarea { min-height: 7rem; resize: vertical; }
+  &__field small,
+  &__fieldset p,
+  &__note { color: rgba($beige, .72); font-size: .85rem; line-height: 1.45; }
+
+  &__check {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-items: flex-start;
+    gap: $space-sm;
+  }
+
+  &__check input { grid-row: 1 / span 2; margin-top: .25rem; }
+  &__check label,
+  &__check small { grid-column: 2; }
+
+  &__fieldset {
+    display: grid;
+    gap: $space-md;
+    margin: 0;
+    padding: $space-md;
+    border: 1px solid rgba($cyan, .32);
+    border-radius: $radius-lg;
+  }
+
+  &__errors {
+    padding: $space-md;
+    border: 1px solid rgba($magenta, .7);
+    border-radius: $radius-lg;
+    color: $beige;
+    background: rgba($magenta, .1);
+  }
+
+  &__errors h2,
+  &__errors ul { margin: 0; }
+  &__errors ul { padding-left: $space-lg; }
+
+  &__actions { display: flex; justify-content: flex-end; }
+}
+
 .container-home {
   display:flex; 
   flex-direction:row; 

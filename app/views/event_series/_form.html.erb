@@ -1,6 +1,6 @@
-<%= form_with model: @event_series, url: form_url, method: form_method, local: true do |form| %>
+<%= form_with model: @event_series, url: form_url, method: form_method, local: true, class: 'backoffice-form' do |form| %>
   <% if @event_series.errors.any? %>
-    <div role="alert">
+    <div class="backoffice-form__errors" role="alert">
       <h2><%= pluralize(@event_series.errors.count, "error") %> prevented saving:</h2>
       <ul>
         <% @event_series.errors.full_messages.each do |message| %>
@@ -9,29 +9,29 @@
       </ul>
     </div>
   <% end %>
-  <div>
+  <div class="backoffice-form__field">
     <%= form.label :name, "Series name" %>
     <%= form.text_field :name, required: true %>
   </div>
-  <div>
+  <div class="backoffice-form__field">
     <%= form.label :recurrence_rule, "Recurrence rule" %>
     <%= form.text_field :recurrence_rule, required: true, placeholder: "FREQ=WEEKLY;BYDAY=FR" %>
   </div>
-  <div>
+  <div class="backoffice-form__field">
     <%= form.label :starts_at, "First occurrence starts" %>
     <%= form.datetime_local_field :starts_at, value: datetime_local_value(@event_series.starts_at), required: true %>
   </div>
-  <div>
+  <div class="backoffice-form__field">
     <%= form.label :ends_at, "Series window ends" %>
     <%= form.datetime_local_field :ends_at, value: datetime_local_value(@event_series.ends_at) %>
   </div>
-  <div>
+  <div class="backoffice-form__field">
     <%= form.label :time_zone, "Time zone" %>
     <%= form.text_field :time_zone, required: true %>
   </div>
-  <div>
-    <%= form.label :active, "Active series" %>
+  <div class="backoffice-form__check">
     <%= form.check_box :active %>
+    <%= form.label :active, "Active series" %>
   </div>
-  <%= form.submit %>
+  <div class="backoffice-form__actions"><%= form.submit %></div>
 <% end %>

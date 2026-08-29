@@ -87,7 +87,7 @@ RSpec.describe 'Events', type: :request do
       expect(response.body).to include('1 performance needs theme review')
       expect(page.at_css('#event-panel > section.event-operations__card > h3').text).to eq('Status')
       revoke_code_form = page.at_css('form.event-operations__revoke-code')
-      expect(revoke_code_form.at_css('.song-action--remove').text).to include('Revoke code')
+      expect(revoke_code_form.at_css('.song-action--remove').text).to include('Revoke Code')
       delegation_form = Nokogiri::HTML(response.body).at_css('form[data-controller~="delegation-window"]')
       expect(delegation_form['data-action']).to include('submit->delegation-window#validate')
       expect(delegation_form.at_css('#event_host_delegation_starts_at')['min']).to be_present

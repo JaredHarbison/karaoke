@@ -32,6 +32,9 @@ during the shared journey before continuing here.
    - Verify the event start/end values remain the values entered; queue cutoff is a separate policy and must not rewrite event times.
    - The event belongs to this venue.
    - Performers cannot access owner event-management actions.
+   - Event, recurring-series, and theme forms use the same labeled-control,
+     validation, checkbox, and action treatment as the event queue’s host
+     controls.
 2. Open the recurring-series page.
    - Create/edit recurrence intent, schedule, time zone, and active state.
    - Generate the next eight weeks twice; occurrences are not duplicated.
