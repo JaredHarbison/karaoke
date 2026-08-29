@@ -130,6 +130,19 @@ RSpec.describe 'Events', type: :request do
       expect(response).to redirect_to(venue_event_path(venue.slug, Event.last))
     end
 
+    it 'creates the first occurrence and its recurring series from the unified event form' do
+      sign_in host
+
+      expect do
+        post venue_events_path(venue.slug), params: {
+          event: event_attributes,
+          recurrence: { enabled: '1', recurrence_rule: 'FREQ=WEEKLY;BYDAY=FR', ends_at: 2.months.from_now }
+        }
+      end.to change(EventSeries, :count).by(1)
+
+      expect(Event.last.event_series).to have_attributes(name: 'Saturday Karaoke', recurrence_rule: 'FREQ=WEEKLY;BYDAY=FR')
+    end
+
     it 'denies event creation to performers' do
       sign_in performer
 

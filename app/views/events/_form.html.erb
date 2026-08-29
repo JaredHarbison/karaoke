@@ -22,9 +22,27 @@
     <%= form.datetime_local_field :ends_at, value: datetime_local_value(@event.ends_at) %>
   </div>
   <div class="backoffice-form__field">
-    <%= form.label :event_series_id, "Recurring series" %>
-    <%= form.collection_select :event_series_id, @event_series, :id, :name, { include_blank: "One-off event" } %>
+    <%= form.label :event_series_id, "Existing recurring series" %>
+    <%= form.collection_select :event_series_id, @event_series, :id, :name, { include_blank: "No existing series" } %>
   </div>
+  <% unless @event.persisted? %>
+    <fieldset class="backoffice-form__fieldset">
+      <legend>Repeat This Event</legend>
+      <div class="backoffice-form__check">
+        <%= check_box_tag 'recurrence[enabled]', '1', @recurrence[:enabled], id: 'recurrence_enabled' %>
+        <%= label_tag 'recurrence_enabled', 'Create a recurring series from this event' %>
+        <small>Leave this unchecked for a one-off event. This event becomes the first occurrence when enabled.</small>
+      </div>
+      <div class="backoffice-form__field">
+        <%= label_tag 'recurrence_recurrence_rule', 'Repeat rule' %>
+        <%= text_field_tag 'recurrence[recurrence_rule]', @recurrence[:recurrence_rule], id: 'recurrence_recurrence_rule', placeholder: 'FREQ=WEEKLY;BYDAY=FR', autocomplete: 'off' %>
+      </div>
+      <div class="backoffice-form__field">
+        <%= label_tag 'recurrence_ends_at', 'Series window ends' %>
+        <%= datetime_local_field_tag 'recurrence[ends_at]', datetime_local_value(@recurrence[:ends_at]), id: 'recurrence_ends_at' %>
+      </div>
+    </fieldset>
+  <% end %>
   <div class="backoffice-form__check">
     <%= form.check_box :fair_queue_enabled %>
     <%= form.label :fair_queue_enabled, "Use Fair Queue for this event" %>

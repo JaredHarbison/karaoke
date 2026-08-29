@@ -18,23 +18,22 @@ class EventsController < ApplicationController
 
   def new
     @event = Current.venue.events.new(starts_at: 1.day.from_now.change(min: 0))
-    load_event_series
+    load_event_form
   end
 
   def create
     @event = Current.venue.events.new
-    assign_event_attributes
 
-    if @event.save
+    if save_event_with_optional_recurrence
       redirect_to venue_event_path(Current.venue.slug, @event), notice: 'Event created.'
     else
-      load_event_series
+      load_event_form
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
-    load_event_series
+    load_event_form
   end
 
   def update
@@ -44,7 +43,7 @@ class EventsController < ApplicationController
       @event.record_queue_overrun_change!(current_user)
       redirect_to venue_event_path(Current.venue.slug, @event), notice: 'Event updated.'
     else
-      load_event_series
+      load_event_form
       render :edit, status: :unprocessable_entity
     end
   end
@@ -105,8 +104,52 @@ class EventsController < ApplicationController
     @event = Current.venue.events.find_by!(slug: params[:slug])
   end
 
-  def load_event_series
+  def load_event_form
     @event_series = Current.venue.event_series.where(active: true).order(:name)
+    series = @event.event_series
+    @recurrence = {
+      enabled: params.dig(:recurrence, :enabled) == '1',
+      recurrence_rule: params.dig(:recurrence, :recurrence_rule).presence || series&.recurrence_rule || 'FREQ=WEEKLY',
+      ends_at: params.dig(:recurrence, :ends_at).presence || series&.ends_at
+    }
+  end
+
+  def save_event_with_optional_recurrence
+    Event.transaction do
+      assign_event_attributes
+      assign_new_recurrence_if_requested
+      @event.save!
+    end
+    true
+  rescue ActiveRecord::RecordInvalid => e
+    copy_recurrence_errors(e.record) if e.record.is_a?(EventSeries)
+    false
+  end
+
+  def assign_new_recurrence_if_requested
+    return unless recurrence_enabled?
+
+    series = Current.venue.event_series.create!(
+      name: @event.name,
+      recurrence_rule: recurrence_params[:recurrence_rule],
+      starts_at: @event.starts_at,
+      ends_at: recurrence_params[:ends_at],
+      time_zone: Current.venue.time_zone,
+      active: true
+    )
+    @event.event_series = series
+  end
+
+  def recurrence_enabled?
+    recurrence_params[:enabled] == '1'
+  end
+
+  def recurrence_params
+    params.fetch(:recurrence, {}).permit(:enabled, :recurrence_rule, :ends_at)
+  end
+
+  def copy_recurrence_errors(series)
+    series.errors.full_messages.each { |message| @event.errors.add(:base, "Recurring event #{message.downcase}") }
   end
 
   def assign_event_attributes

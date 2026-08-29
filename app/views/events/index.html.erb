@@ -4,8 +4,7 @@
              title: 'Events',
              description: "Review upcoming karaoke nights for #{Current.venue.name}.",
              actions: (Current.venue.is_admin?(current_user) ? [
-               { label: 'Create Event', path: new_venue_event_path(Current.venue.slug), style: :primary },
-               { label: 'Recurring Series', path: venue_event_series_index_path(Current.venue.slug) }
+               { label: 'Create Event', path: new_venue_event_path(Current.venue.slug), style: :primary }
              ] : []) %>
 
   <section class="management-card" aria-label="Venue events">

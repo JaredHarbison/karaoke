@@ -35,6 +35,9 @@ during the shared journey before continuing here.
    - Event, recurring-series, and theme forms use the same labeled-control,
      validation, checkbox, and action treatment as the event queue’s host
      controls.
+   - Events has one Create Event action. Verify its form creates either a
+     one-off event or the first occurrence of a recurring series without
+     leaving the event-management flow.
 2. Open the recurring-series page.
    - Create/edit recurrence intent, schedule, time zone, and active state.
    - Generate the next eight weeks twice; occurrences are not duplicated.
