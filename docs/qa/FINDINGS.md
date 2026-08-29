@@ -1,5 +1,9 @@
 # QA findings log
 
+This is a historical manual-QA ledger, not a statement of current defects.
+Reproduce an entry before treating it as open; move verified current work into
+the roadmap or a focused issue rather than relying on an old observation.
+
 Add findings here during the manual pass. Keep one entry per issue or notable
 result. Do not include real user passwords, private tokens, or personal data.
 

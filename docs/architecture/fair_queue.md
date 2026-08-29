@@ -8,7 +8,7 @@ night, while rigid fairness can make host operations frustrating.
 ## Decision
 
 The first implementation orders an event queue by completed turns recorded in
-the existing event-scoped `Song` history, then uses stable queue position and ID
+event-scoped `Performance` history, then uses stable queue position and ID
 tie-breaking. A performer’s additional queued songs count as later turns in the
 same ordering pass. Venue-level queues retain their existing FIFO ordering.
 Performers with no completed history are treated as having zero completed
@@ -21,7 +21,7 @@ recorded as event-scoped overrides.
 Queue order reflects participation history without exposing unnecessary personal
 history. The event queue explains its active mode, and recent host overrides are
 visible to authorized venue users. The ordering service remains isolated from
-the canonical Song model and can evolve without a queue-domain migration.
+canonical `Song` identity model and can evolve without a queue-domain migration.
 
 ## Deferred details
 

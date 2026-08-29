@@ -1,161 +1,36 @@
-# API Endpoints
+# HTTP surface
 
-## Songs Controller
+Karaoke Queue is primarily an HTML and Turbo application. The queue resource
+is still exposed through legacy `songs` routes while its records are
+`Performance` instances; the roadmap tracks that naming migration.
 
-### Search YouTube
+## Venue and event entry points
 
-```http
-GET /songs/youtube_search
-```
+| Method | Route | Purpose |
+| --- | --- | --- |
+| `GET` | `/` | Public venue discovery |
+| `GET` | `/:venue_slug/events` | Venue event index |
+| `GET` | `/:venue_slug/events/:event_slug/queue` | Event queue workspace |
+| `GET` | `/:venue_slug/events/:event_slug/presentation` | Host presentation surface |
+| `GET` | `/venues/presence/:token` | Permanent venue QR entry |
+| `GET` | `/event-presence/:token` | Event-presence URL exchange |
+| `GET` | `/event-presence/code` | Event-code entry |
 
-Query Parameters:
+## Queue routes
 
-- `query` (required) - Search term for karaoke videos
+| Method | Route | Purpose |
+| --- | --- | --- |
+| `GET` | `/:venue_slug/songs` | Legacy venue queue surface |
+| `POST` | `/:venue_slug/songs` | Submit a queue performance |
+| `POST` | `/:venue_slug/events/:event_slug/queue` | Submit in an event context |
+| `GET` | `/:venue_slug/songs/youtube_search?query=` | Search YouTube metadata |
+| `GET` | `/:venue_slug/songs/validate_video?url=` | Validate a selected video |
+| `PATCH` | `/:venue_slug/songs/:id` | Update the submitter's performance |
+| `DELETE` | `/:venue_slug/songs/:id` | Remove the submitter's performance |
+| `PATCH` | `/:venue_slug/songs/:id/{start,stop,finish,pause,unpause,requeue,skip}_song` | Authorized queue action |
+| `PATCH` | `/:venue_slug/songs/:id/review_theme` | Authorized theme decision |
 
-Response:
-
-```json
-{
-  "items": [
-    {
-      "video_id": "dGw8w3tiWow",
-      "title": "Song Name - Artist Karaoke",
-      "description": "...",
-      "thumbnail": "https://i.ytimg.com/vi/...",
-      "channel": "Channel Name",
-      "url": "https://www.youtube.com/watch?v=dGw8w3tiWow"
-    }
-  ]
-}
-```
-
-Errors:
-
-- `{ "error": "YouTube API key not configured" }`
-- `{ "error": "Failed to fetch YouTube results" }`
-
----
-
-### Validate Video
-
-```http
-GET /songs/validate_video
-```
-
-Query Parameters:
-
-- `url` (required) - YouTube URL or video ID
-
-Response (Valid):
-
-```json
-{
-  "valid": true,
-  "video_id": "dGw8w3tiWow",
-  "title": "Song Name - Karaoke (Lyrics)",
-  "has_karaoke": true,
-  "has_lyrics": true,
-  "thumbnail": "https://i.ytimg.com/vi/..."
-}
-```
-
-Response (Invalid):
-
-```json
-{
-  "valid": false,
-  "video_id": "dGw8w3tiWow",
-  "title": "Something...",
-  "has_karaoke": false,
-  "has_lyrics": false,
-  "thumbnail": "..."
-}
-```
-
----
-
-### Index Songs
-
-```http
-GET /songs
-```
-
-Renders: `songs/index.html.haml`
-
-Queries songs scoped to current venue and organizes by status.
-
----
-
-### Create Song
-
-```http
-POST /songs
-```
-
-Parameters:
-
-```ruby
-{
-  song: {
-    performer: "String",
-    category: "String",
-    url: "String",
-    finished: "Boolean (optional)",
-    skipped: "Boolean (optional)",
-    postponed: "Boolean (optional)"
-  }
-}
-```
-
-Auto-set:
-
-- `user_id` - Current user
-- `venue_id` - Current venue
-
----
-
-### Finish Song
-
-```http
-GET /finish_song
-```
-
-Query Parameters:
-
-- `id` - Song ID
-
-Sets `finished: true` on song and redirects to songs index.
-
----
-
-### Skip Song
-
-```http
-GET /skip_song
-```
-
-Query Parameters:
-
-- `id` - Song ID
-
-Toggles `skipped` boolean and redirects to songs index.
-
----
-
-### Update Song
-
-```http
-PATCH/PUT /songs/:id
-```
-
-Authorization: User must own the song
-
----
-
-### Delete Song
-
-```http
-DELETE /songs/:id
-```
-
-Authorization: User must own the song
+Queue routes require authentication. Submission additionally requires a live
+event and active event presence for performers; venue owners and authorized
+hosts bypass the performer presence gate. Queue-action routes require the
+appropriate venue or temporary event-host authority.

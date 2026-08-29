@@ -10,7 +10,7 @@ The Karaoke Queue app supports multiple venues (karaoke locations), each with th
 
 - Represents a physical karaoke location
 - Has unique slug for URL routing
-- Contains many songs and users
+- Contains many performances, events, memberships, and users
 
 ### 2. Current Context
 
@@ -36,10 +36,10 @@ before_action :set_current_user   # Set current_user via Devise
 
 ## Flow
 
-1. **User visits**: `http://localhost:3000/joes-bar/songs`
+1. **User visits**: `http://localhost:3000/joes-bar/events`
 2. **Controller sets**: `Current.venue = Venue.find_by(slug: "joes-bar")`
-3. **Song queries**: Scope through `Current.venue` before loading records
-4. **On create**: New songs auto-assigned to `Current.venue`
+3. **Performance queries**: Scope through `Current.venue` before loading records
+4. **On create**: New performances are assigned to `Current.venue`
 
 ## Session Persistence
 

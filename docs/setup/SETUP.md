@@ -2,10 +2,9 @@
 
 ## Prerequisites
 
-1. Ruby 3.2.2
+1. Ruby 3.3.0
 2. PostgreSQL
-3. Node.js
-4. Google Cloud Platform account
+3. A Google Cloud project only if Google sign-in or YouTube search is needed
 
 ## Initial Setup
 
@@ -15,7 +14,7 @@
 git clone <your-repo-url>
 cd karaoke
 bundle install
-rails db:create db:migrate
+bin/rails db:prepare
 ```
 
 1. Create a `.env` file in the root directory (copy from `.env.example`):
@@ -33,11 +32,11 @@ cp .env.example .env
 3. Name your project (e.g., "Karaoke Queue")
 4. Click "Create"
 
-### Step 2: Enable Google+ API
+### Step 2: Configure Google Identity Services
 
 1. In your project, go to "APIs & Services" → "Library"
-2. Search for "Google+ API"
-3. Click on it and click "Enable"
+2. Google+ API is retired; no separate Google+ API enablement is required for
+   OpenID Connect sign-in.
 
 ### Step 3: Configure OAuth Consent Screen
 
@@ -103,8 +102,8 @@ YOUTUBE_API_KEY=your_youtube_api_key_here
 Create your first user via Rails console:
 
 ```bash
-rails console
-User.create!(email: "your@email.com", password: "your_password", password_confirmation: "your_password")
+bin/rails console
+User.create!(email: "your@email.com", first_name: "Your", last_name: "Name", password: "SecurePassword123!", password_confirmation: "SecurePassword123!")
 ```
 
 Or use Google OAuth to sign in directly.
@@ -114,27 +113,17 @@ Or use Google OAuth to sign in directly.
 ### Development
 
 ```bash
-rails server
+bin/dev
 ```
 
 Visit `http://localhost:3000` and sign in.
 
-### Production (Heroku)
+### Production
 
-1. Add environment variables to Heroku:
-
-```bash
-heroku config:set GOOGLE_OAUTH_CLIENT_ID=your_client_id
-heroku config:set GOOGLE_OAUTH_CLIENT_SECRET=your_client_secret
-heroku config:set YOUTUBE_API_KEY=your_youtube_api_key
-```
-
-1. Deploy:
-
-```bash
-git push heroku main
-heroku run rails db:migrate
-```
+The GitHub Actions workflow deploys successful pushes to `main` to Heroku when
+its deployment credentials are configured. Set OAuth and YouTube credentials in
+the deployment platform's secret/configuration store; do not place values in
+repository files or command history.
 
 ## Multi-Tenancy / Venue Setup
 
@@ -142,15 +131,14 @@ To create a venue for your karaoke location:
 
 ```bash
 rails console
-Venue.create!(name: "Joe's Bar", slug: "joes-bar", location: "123 Main St")
+owner = User.first
+Venue.create!(name: "Joe's Bar", owner: owner, location: "123 Main St")
 ```
 
 Access the venue by visiting:
 
-- Development: `http://localhost:3000?venue_slug=joes-bar`
-- Production: `https://yourdomain.com?venue_slug=joes-bar`
-
-Or implement subdomain routing (see application_controller.rb for customization).
+- Development: `http://localhost:3000/joes-bar/events`
+- Production: `https://yourdomain.com/joes-bar/events`
 
 ## Troubleshooting
 

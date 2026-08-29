@@ -4,9 +4,9 @@ Karaoke Queue is a multi-venue Rails application for running a collaborative
 karaoke night. Performers join a venue and add songs from their phones, while a
 venue owner or host manages the shared queue.
 
-The project started as a small single-host queue and is being expanded into a
-venue-scoped product. That evolution is visible in the domain model, slug-based
-routes, role-aware authorization, and the migration notes under `docs/`.
+The app is venue-scoped, event-aware, and role-aware. Its technical boundary
+separates a canonical provider-backed `Song` from each event queue
+`Performance`.
 
 ## What it does
 
@@ -22,14 +22,12 @@ routes, role-aware authorization, and the migration notes under `docs/`.
 ## Roles
 
 - **Owner** creates and configures a venue and can appoint hosts.
-- **Host** runs the karaoke queue for a venue.
+- **Host** runs the karaoke queue for a venue; temporary hosts can be delegated
+  authority for one event.
 - **Performer** joins a venue and submits or updates their own songs.
 
-The current implementation still contains the legacy `admin` role and
-`VenueAdmin` join model. They are compatibility-era foundations, not the final
-permission architecture. The next domain phase will move venue permissions to
-contextual venue membership; this Phase 0 change does not perform that
-migration.
+Venue authorization uses contextual `VenueMembership` records: owner, host,
+and performer. Platform authority is separate and does not grant venue access.
 
 ## Tech stack
 
@@ -123,10 +121,8 @@ checks. See [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`docs/TESTING.md`](docs/TE
 
 ## Current direction
 
-Phase 0 established documentation, engineering guardrails, and internal help.
-Phase 1 established contextual `VenueMembership` authorization and
-`PlatformMembership` identity. Phase 2 event/series and reusable-theme
-foundations are now in progress; Fair Queue and later event operations follow.
+See [the roadmap](docs/ROADMAP.md) for completed foundations and the remaining
+product work. It is the source of truth for future iterations.
 
 ## License
 

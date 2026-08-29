@@ -1,104 +1,13 @@
-# Song Model
+# Song and performance models
 
-## Schema
+`Song` is the canonical provider identity stored in `song_identities`. It
+deduplicates provider/video IDs and holds title, karaoke eligibility,
+explicit-lyrics status, duration, and metadata-check information.
 
-```ruby
-create_table :songs do |t|
-  t.string :category
-  t.string :performer
-  t.string :url
-  t.boolean :postponed, default: false
-  t.boolean :finished, default: false
-  t.boolean :skipped, default: false
-  
-  # Multi-tenancy
-  t.references :venue, foreign_key: true, null: true
-  
-  # Ownership
-  t.references :user, foreign_key: true, null: true
+`Performance` is an event-specific queue entry backed by the legacy `songs`
+table. It belongs to a venue, user, optional event, and optional canonical
+`Song`. It owns queue state, idempotency, effective duration, and
+theme-admission/review state.
 
-  # Transitional provider admission metadata
-  t.string :provider, null: false, default: 'youtube'
-  t.string :provider_video_id
-  t.string :metadata_status, null: false, default: 'legacy'
-  t.boolean :explicit_lyrics
-  t.integer :duration_seconds
-  t.integer :effective_duration_seconds
-  t.string :duration_source
-  t.datetime :metadata_checked_at
-  t.string :submission_token
-
-  # Transitional live theme admission state
-  t.references :theme_application, foreign_key: { to_table: :event_theme_applications }
-  t.string :theme_admission_status, null: false, default: 'not_applicable'
-  t.string :theme_admission_reason
-  t.references :theme_reviewed_by, foreign_key: { to_table: :users }
-  t.datetime :theme_reviewed_at
-  
-  t.timestamps
-end
-
-add_index :songs, [:venue_id, :created_at]
-add_index :songs, [:user_id, :created_at]
-```
-
-## Associations
-
-```ruby
-belongs_to :venue, optional: true
-belongs_to :user, optional: true
-belongs_to :event, optional: true
-belongs_to :theme_application, class_name: 'EventThemeApplication', optional: true
-belongs_to :theme_reviewed_by, class_name: 'User', optional: true
-```
-
-## Scopes
-
-```ruby
-scope :finished, -> { where(finished: true) }
-scope :upcoming, -> { where(finished: false, skipped: false) }
-scope :postponed, -> { where(finished: false, postponed: true) }
-scope :skipped, -> { where(finished: false, skipped: true) }
-```
-
-## Validations
-
-```ruby
-validates :performer, presence: true
-validates :url, presence: true, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]) }
-```
-
-Live event queue entries pass provider metadata through `SongAdmissionPolicy`.
-Unknown or unverified metadata is held for review. Known duration is preferred;
-missing duration uses the event queue's average of known durations, with a safe
-fallback when none are available. These fields are transitional until the
-canonical `Song`/`Performance` boundary is migrated.
-
-New submissions also receive a unique `submission_token`. Retrying the same
-token resolves to the existing entry rather than creating a duplicate.
-
-When an active event theme applies, `theme_admission_status` is `eligible`,
-`review`, or `rejected`; entries without an active theme use
-`not_applicable`. Unresolved review entries become `released` after the theme
-window ends. These fields are transitional and will move to the planned
-event-specific `Performance` boundary.
-
-## Multi-tenancy
-
-- Scoped to `Current.venue_id` by default
-- `default_scope { where(venue_id: Current.venue_id) if Current.venue_id.present? }`
-
-## Status Flags
-
-| Flag        | Meaning                      | Usage                            |
-| ----------- | ---------------------------- | -------------------------------- |
-| `finished`  | Song has been performed      | Set when "Finish" button clicked |
-| `skipped`   | Song temporarily postponed   | Toggled by "Skip" button         |
-| `postponed` | User unavailable to perform  | Not actively used yet            |
-
-## States
-
-- **Upcoming**: not finished, not skipped
-- **Skipped**: not finished, skipped
-- **Postponed**: not finished, postponed
-- **Finished**: finished
+Use `Performance#song` for the canonical association. `song_identity` remains
+a compatibility alias, as do the external `songs` routes and view directory.

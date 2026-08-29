@@ -1,7 +1,7 @@
 # Performer journey
 
 Account: `jared.harbison+performer@gmail.com`  
-Start: `/523-franklin-ave/songs`
+Start: `/523-franklin-ave/events`
 
 ## Discovery and event access
 

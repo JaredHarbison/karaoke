@@ -17,7 +17,7 @@ devise :database_authenticatable, :registerable,
 | Module                   | Purpose                                      |
 |--------------------------|----------------------------------------------|
 | database_authenticatable | Password-based authentication                |
-| registerable             | User signup (currently disabled via routes)  |
+| registerable             | Password sign-up and account update           |
 | recoverable              | Password reset                               |
 | rememberable             | "Remember me" functionality                  |
 | validatable              | Email/password validation                    |
@@ -90,7 +90,7 @@ without signing the user out of the application.
 
 Protected routes require authentication:
 
-- `/songs` - Songs index
+- `/:venue_slug/events/:event_slug/queue` - Event queue workspace
 - `/welcome` - Welcome page
 
 Both have `before_action :authenticate_user!`

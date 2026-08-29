@@ -1,7 +1,7 @@
-# Status
+# Theme approval
 
-This workflow is planned. Event themes and host review are not available yet.
-
-- Future guide: apply a reusable theme to an event or event-time window.
-- Future guide: review uncertain or ineligible songs.
-- Future guide: understand release behavior when a theme ends.
+Venue hosts can create reusable themes and apply one to an event for an optional
+time window. Matching songs enter the queue; songs requiring judgment are held
+for host review. A host can approve, reject, or defer a held entry. When the
+theme window ends, unresolved temporary holds return to normal queue eligibility;
+explicit rejections remain out of the queue.

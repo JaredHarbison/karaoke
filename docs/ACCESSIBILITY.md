@@ -78,7 +78,7 @@ All interactive elements must be keyboard accessible:
 ```javascript
 // ✅ Good: Keyboard support built-in
 <button>Click me</button>
-<a href="/songs">Navigate</a>
+<a href="/events">Navigate</a>
 <input type="text">
 
 // ✅ Use tabindex sparingly (only when necessary)

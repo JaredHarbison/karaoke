@@ -36,7 +36,7 @@ Use the same password for:
 | --- | --- | --- |
 | Owner | `jared.harbison@gmail.com` | `/523-franklin-ave/events` |
 | Host | `jared.harbison+host@gmail.com` | `/523-franklin-ave/events` |
-| Performer | `jared.harbison+performer@gmail.com` | `/523-franklin-ave/songs` |
+| Performer | `jared.harbison+performer@gmail.com` | `/523-franklin-ave/events` |
 
 The fixture is development-only and safe to rerun. Do not use these accounts
 or the local password in production.
