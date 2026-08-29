@@ -1,13 +1,12 @@
 # Documentation
 
-This directory contains current-state guidance and explicitly labeled planned
-architecture for Karaoke Queue. The roadmap is product-oriented; architecture
-docs explain decisions without claiming future work is implemented.
+This directory contains current application, operations, and architecture
+guidance. The roadmap is the only source for planned work; guides and model
+references describe behavior that exists today.
 
 ## Start here
 
 - [Product roadmap](ROADMAP.md)
-- [Phase 0 completion record](PHASE_0_COMPLETION.md)
 - [Definition of Done](../CONTRIBUTING.md#definition-of-done)
 - [Testing and quality](TESTING.md)
 - [Human QA journeys](qa/README.md)
@@ -22,12 +21,11 @@ docs explain decisions without claiming future work is implemented.
 - [Multi-tenancy](architecture/multi_tenancy.md)
 - [Current request context](models/current.md)
 - [Current models](models/)
-- [Planned presentation surfaces and routes](architecture/presentation_surfaces_and_routes.md)
+- [Presentation surfaces and routes](architecture/presentation_surfaces_and_routes.md)
 
-The current code uses one `User`, venue-scoped routes, and contextual
-`VenueMembership` authorization. The completed Phase 1 decision and its
-remaining UI follow-ups, including PlatformMembership, are in [identity and
-venue permissions](architecture/identity_and_venue_permissions.md).
+The current code uses one `User`, venue-scoped routes, contextual
+`VenueMembership` authorization, event-scoped `Performance` queue entries, and
+canonical provider-backed `Song` identities.
 
 ## Quality tools
 

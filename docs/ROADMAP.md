@@ -349,13 +349,10 @@ project-source and Rake-aware RuboCop, Brakeman, dependency audit, template
 lint, migration checks, and schema cleanliness verification; vendored
 dependency sources are not treated as application code.
 
-## Finished
+## Finished foundations
 
-- [Phase 0: roadmap, architecture records, engineering guardrails, and
-  application help](PHASE_0_COMPLETION.md)
-- [Historical venue foundation](PHASE_1_COMPLETION.md), including venue-scoped
-  routes, queue authorization, and the initial UI organization
-- Phase 1 contextual membership and platform-membership foundation.
+- Venue-scoped routes, queue authorization, and the initial UI organization.
+- Contextual membership and platform-membership foundation.
 - Phase 2 event/theme foundation: venue-scoped events, recurring occurrence
   materialization, event-scoped queue association, reusable themes, bounded
   applications, and deterministic evaluator outcomes.
