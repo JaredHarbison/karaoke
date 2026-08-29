@@ -69,6 +69,8 @@ over `523 Franklin Ave`.
    - It releases to normal/Fair Queue eligibility.
 4. Use a temporary host delegation if the owner created one.
    - Authority works only during the event-specific delegation window.
+   - The Event tab shows that scope and its end time, without venue setup or
+     performer-access controls.
 
 Finish with the [shared checks](shared.md), then verify the same event as the
 performer.

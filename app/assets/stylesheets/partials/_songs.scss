@@ -16,8 +16,11 @@
 .event-operations__section-heading h2, .event-operations__card h3 { margin: 0; }
 .event-operations__section-heading p, .event-operations__empty, .event-operations__list-row span, .event-operations__review-item span, .event-operations__review-item small { color: rgba($beige, .7); }
 .event-operations__section-heading p { margin: $space-xs 0 0; }
+.event-operations__host-scope { background: rgba($cyan, .08); }
+.event-operations__host-scope > p { color: rgba($beige, .78); line-height: 1.45; margin: 0 0 $space-lg; }
 .event-operations__review-summary { color: $yellow; font-size: .85rem; }
 .event-operations__grid { display: grid; gap: $space-lg; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: $space-lg 0; }
+.event-operations__grid--host { margin-top: 0; }
 .event-operations__card, .event-operations__reconciliation { background: rgba($beige, .05); border: 1px solid rgba($cyan, .32); border-radius: $radius-lg; margin: $space-lg 0; padding: $space-lg; }
 .event-operations__card > h3 { color: $yellow; margin-bottom: $space-md; }
 .event-operations__form-card > h3,
@@ -31,10 +34,10 @@
 .event-operations__primary-action { background: $magenta; border: 1px solid $magenta; color: $midnight; justify-self: end; max-width: 100%; width: 16rem; }
 .event-operations__text-action { background: transparent; border: 1px solid $yellow; color: $yellow; }
 .event-operations__card > .button_to { display: flex; justify-content: flex-end; }
-.event-operations__card > .button_to .song-action { max-width: 100%; width: 16rem; }
-.event-operations__revoke-code { margin: $space-md 0 $space-lg auto; }
+.event-operations__card > .button_to .song-action, .event-operations__status-action .song-action { max-width: 100%; width: 16rem; }
+.event-operations__revoke-code { display: flex; flex-direction: row; justify-content: flex-end; width: 100%; max-width: 36rem; margin: $space-md auto $space-lg; }
+.event-operations__revoke-code .song-action { max-width: 100%; width: 16rem; }
 .event-operations__status-action { display: flex; justify-content: flex-end; }
-.event-operations__status-action .song-action { max-width: 100%; width: 16rem; }
 .event-operations__list, .event-operations__review-list { list-style: none; margin: 0; padding: 0; }
 .event-operations__list-row, .event-operations__review-item { border-top: 1px solid rgba($beige, .16); padding: $space-md 0; }
 .event-operations__list-row > div, .event-operations__review-item > div { display: grid; gap: $space-xs; }

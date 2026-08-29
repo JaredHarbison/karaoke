@@ -287,6 +287,9 @@ class SongsController < ApplicationController
     @themes = Current.venue.themes.where(active: true).order(:name)
     @theme_applications = @current_event.event_theme_applications.includes(:theme).order(:starts_at)
     @event_host_delegations = @current_event.event_host_delegations.includes(:delegated_user).order(starts_at: :desc)
+    @temporary_host_delegation = @event_host_delegations.find do |delegation|
+      delegation.delegated_user_id == current_user&.id && delegation.active_at?
+    end
     @delegation_candidates = @current_event.temporary_host_candidates.order(:first_name, :last_name, :email)
     ensure_live_event_access_code
     @presence_sessions = @current_event.event_presence_sessions.order(created_at: :desc)
