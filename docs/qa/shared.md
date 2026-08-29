@@ -16,6 +16,8 @@ Apply these checks while completing each role journey.
 
 - Reload after adding, changing, or reviewing a queue entry; state persists.
 - Retry stale or double-submitted actions; no duplicate queue entries appear.
+- Confirm visible action labels use Title Case consistently, including Sign In
+  on the authentication surfaces.
 - Perform two host reorder actions close together; one consistent queue order
   remains and both authorized actions are audited.
 - Try expired presence, unavailable metadata, event cutoff, and completed-event
