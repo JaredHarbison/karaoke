@@ -32,32 +32,24 @@
           <small>Turn this on to make this event part of a recurring schedule.</small>
         </span>
       </label>
-      <div data-event-recurrence-target="details">
-        <div class="backoffice-form__check">
-          <%= radio_button_tag 'recurrence[mode]', 'new', @recurrence[:mode] == 'new', id: 'recurrence_mode_new', data: { action: 'event-recurrence#update' } %>
-          <%= label_tag 'recurrence_mode_new', 'Create a new recurring series' %>
+      <div class="backoffice-form__stack" data-event-recurrence-target="details">
+        <div class="backoffice-form__field">
+          <%= label_tag 'recurrence_frequency', 'Repeats' %>
+          <%= select_tag 'recurrence[frequency]', options_for_select([['Every day', 'FREQ=DAILY'], ['Every week', 'FREQ=WEEKLY'], ['Every month', 'FREQ=MONTHLY'], ['Every year', 'FREQ=YEARLY'], ['Custom schedule…', 'custom']], @recurrence[:frequency]), id: 'recurrence_frequency', data: { event_recurrence_target: 'frequency', action: 'event-recurrence#updateFrequency' } %>
         </div>
-        <div class="backoffice-form__check">
-          <%= radio_button_tag 'recurrence[mode]', 'existing', @recurrence[:mode] == 'existing', id: 'recurrence_mode_existing', data: { action: 'event-recurrence#update' } %>
-          <%= label_tag 'recurrence_mode_existing', 'Add to an existing recurring series' %>
-        </div>
-        <div data-event-recurrence-target="newSeries">
+        <div class="backoffice-form__inline-fields" data-event-recurrence-target="customSchedule">
           <div class="backoffice-form__field">
-            <%= label_tag 'recurrence_frequency', 'Repeats' %>
-            <%= select_tag 'recurrence[frequency]', options_for_select([['Every day', 'FREQ=DAILY'], ['Every week', 'FREQ=WEEKLY'], ['Every month', 'FREQ=MONTHLY'], ['Every year', 'FREQ=YEARLY'], ['Custom…', 'custom']], @recurrence[:frequency]), id: 'recurrence_frequency', data: { event_recurrence_target: 'frequency', action: 'event-recurrence#updateFrequency' } %>
-          </div>
-          <div class="backoffice-form__field" data-event-recurrence-target="customRule">
-            <%= label_tag 'recurrence_custom_rule', 'Custom repeat rule' %>
-            <%= text_field_tag 'recurrence[custom_rule]', @recurrence[:custom_rule], id: 'recurrence_custom_rule', placeholder: 'FREQ=WEEKLY;BYDAY=FR', autocomplete: 'off' %>
+            <%= label_tag 'recurrence_interval', 'Repeat every' %>
+            <%= number_field_tag 'recurrence[interval]', @recurrence[:interval], min: 1, max: 99, id: 'recurrence_interval', autocomplete: 'off' %>
           </div>
           <div class="backoffice-form__field">
-            <%= label_tag 'recurrence_ends_at', 'Ends (optional)' %>
-            <%= datetime_local_field_tag 'recurrence[ends_at]', datetime_local_value(@recurrence[:ends_at]), id: 'recurrence_ends_at' %>
+            <%= label_tag 'recurrence_unit', 'Interval' %>
+            <%= select_tag 'recurrence[unit]', options_for_select([['Days', 'days'], ['Weeks', 'weeks'], ['Months', 'months'], ['Years', 'years']], @recurrence[:unit]), id: 'recurrence_unit' %>
           </div>
         </div>
-        <div class="backoffice-form__field" data-event-recurrence-target="existingSeries">
-          <%= form.label :event_series_id, 'Recurring series' %>
-          <%= form.collection_select :event_series_id, @event_series, :id, :name, { include_blank: 'Choose a recurring series' } %>
+        <div class="backoffice-form__field">
+          <%= label_tag 'recurrence_ends_at', 'Ends (optional)' %>
+          <%= datetime_local_field_tag 'recurrence[ends_at]', datetime_local_value(@recurrence[:ends_at]), id: 'recurrence_ends_at' %>
         </div>
       </div>
     </fieldset>

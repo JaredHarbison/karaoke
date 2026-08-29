@@ -109,9 +109,9 @@ class EventsController < ApplicationController
     series = @event.event_series
     @recurrence = {
       enabled: params.dig(:recurrence, :enabled) == '1',
-      mode: params.dig(:recurrence, :mode).presence || (series ? 'existing' : 'new'),
       frequency: params.dig(:recurrence, :frequency).presence || recurrence_frequency_for(series),
-      custom_rule: params.dig(:recurrence, :custom_rule).presence || recurrence_custom_rule_for(series),
+      interval: params.dig(:recurrence, :interval).presence || 1,
+      unit: params.dig(:recurrence, :unit).presence || 'weeks',
       ends_at: params.dig(:recurrence, :ends_at).presence || series&.ends_at
     }
   end
@@ -119,8 +119,6 @@ class EventsController < ApplicationController
   def save_event_with_optional_recurrence
     Event.transaction do
       assign_event_attributes
-      return false unless valid_recurrence_selection?
-
       assign_new_recurrence_if_requested
       @event.save!
     end
@@ -131,7 +129,7 @@ class EventsController < ApplicationController
   end
 
   def assign_new_recurrence_if_requested
-    return unless creating_new_recurrence?
+    return unless recurrence_enabled?
 
     series = Current.venue.event_series.create!(
       name: @event.name,
@@ -148,25 +146,12 @@ class EventsController < ApplicationController
     recurrence_params[:enabled] == '1'
   end
 
-  def creating_new_recurrence?
-    recurrence_enabled? && recurrence_params[:mode] != 'existing'
-  end
-
-  def valid_recurrence_selection?
-    return true unless recurrence_enabled?
-    return true if creating_new_recurrence?
-    return true if @event.event_series.present?
-
-    @event.errors.add(:event_series, 'select an existing series or create a new one')
-    false
-  end
-
   def recurrence_params
-    params.fetch(:recurrence, {}).permit(:enabled, :mode, :frequency, :custom_rule, :ends_at)
+    params.fetch(:recurrence, {}).permit(:enabled, :frequency, :interval, :unit, :ends_at)
   end
 
   def selected_recurrence_rule
-    return recurrence_params[:custom_rule] if recurrence_params[:frequency] == 'custom'
+    return "FREQ=#{recurrence_frequency_for_unit};INTERVAL=#{recurrence_params[:interval]}" if recurrence_params[:frequency] == 'custom'
 
     recurrence_params[:frequency]
   end
@@ -177,15 +162,12 @@ class EventsController < ApplicationController
     recurrence_frequency_options.include?(series.recurrence_rule) ? series.recurrence_rule : 'custom'
   end
 
-  def recurrence_custom_rule_for(series)
-    return unless series
-    return if recurrence_frequency_options.include?(series.recurrence_rule)
-
-    series.recurrence_rule
-  end
-
   def recurrence_frequency_options
     %w[FREQ=DAILY FREQ=WEEKLY FREQ=MONTHLY FREQ=YEARLY]
+  end
+
+  def recurrence_frequency_for_unit
+    { 'days' => 'DAILY', 'weeks' => 'WEEKLY', 'months' => 'MONTHLY', 'years' => 'YEARLY' }.fetch(recurrence_params[:unit], 'WEEKLY')
   end
 
   def copy_recurrence_errors(series)

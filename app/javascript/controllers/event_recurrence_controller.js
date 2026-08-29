@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["toggle", "details", "newSeries", "existingSeries", "frequency", "customRule"]
+  static targets = ["toggle", "details", "frequency", "customSchedule"]
 
   connect() {
     this.update()
@@ -14,18 +14,13 @@ export default class extends Controller {
 
     if (!repeats) return
 
-    const mode = this.element.querySelector('input[name="recurrence[mode]"]:checked')?.value
-    this.newSeriesTarget.hidden = mode !== "new"
-    this.existingSeriesTarget.hidden = mode !== "existing"
-    this.setDisabled(this.newSeriesTarget, mode !== "new")
-    this.setDisabled(this.existingSeriesTarget, mode !== "existing")
     this.updateFrequency()
   }
 
   updateFrequency() {
     const custom = this.frequencyTarget.value === "custom"
-    this.customRuleTarget.hidden = !custom
-    this.setDisabled(this.customRuleTarget, !custom)
+    this.customScheduleTarget.hidden = !custom
+    this.setDisabled(this.customScheduleTarget, !custom)
   }
 
   setDisabled(container, disabled) {

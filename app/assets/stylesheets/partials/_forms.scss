@@ -92,12 +92,12 @@ input[ type = text ], input[ type = email ], input[ type = password ] {
 // semantic field and action classes; this keeps the same controls consistent.
 .backoffice-form {
   display: grid;
-  gap: $space-md;
+  gap: $space-xl;
   max-width: 36rem;
 
   &__field {
     display: grid;
-    gap: $space-xs;
+    gap: $space-sm;
   }
 
   &__field label,
@@ -146,7 +146,7 @@ input[ type = text ], input[ type = email ], input[ type = password ] {
 
   &__fieldset {
     display: grid;
-    gap: $space-md;
+    gap: $space-lg;
     margin: 0;
     padding: $space-md;
     border: 1px solid rgba($cyan, .32);
@@ -166,6 +166,14 @@ input[ type = text ], input[ type = email ], input[ type = password ] {
   &__errors ul { padding-left: $space-lg; }
 
   &__actions { display: flex; justify-content: flex-end; }
+
+  &__inline-fields {
+    display: grid;
+    grid-template-columns: minmax(7rem, .45fr) minmax(0, 1fr);
+    gap: $space-md;
+  }
+
+  &__stack { display: grid; gap: $space-lg; }
 }
 
 .backoffice-form [hidden] { display: none !important; }
@@ -217,6 +225,10 @@ input[ type = text ], input[ type = email ], input[ type = password ] {
 .recurrence-toggle__copy { display: grid; gap: 2px; }
 .recurrence-toggle__copy strong { color: $beige; font-size: 1rem; }
 .recurrence-toggle__copy small { color: rgba($beige, .72); line-height: 1.4; }
+
+@media (max-width: $breakpoint-sm) {
+  .backoffice-form__inline-fields { grid-template-columns: 1fr; }
+}
 
 .container-home {
   display:flex; 

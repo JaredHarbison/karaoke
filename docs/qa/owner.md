@@ -39,8 +39,8 @@ during the shared journey before continuing here.
      one-off event or the first occurrence of a recurring series without
      leaving the event-management flow.
    - The Repeats switch keeps recurrence controls hidden until enabled. Verify
-     its readable frequency menu creates the selected schedule; use Custom
-     only when entering an RRULE intentionally.
+     its readable frequency menu creates the selected schedule; Custom uses a
+     repeat-every number and unit, never a raw RRULE field.
 2. Open the recurring-series page.
    - Create/edit recurrence intent, schedule, time zone, and active state.
    - Generate the next eight weeks twice; occurrences are not duplicated.

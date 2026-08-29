@@ -143,6 +143,17 @@ RSpec.describe 'Events', type: :request do
       expect(Event.last.event_series).to have_attributes(name: 'Saturday Karaoke', recurrence_rule: 'FREQ=WEEKLY')
     end
 
+    it 'builds a custom recurrence rule from the host-facing interval controls' do
+      sign_in host
+
+      post venue_events_path(venue.slug), params: {
+        event: event_attributes,
+        recurrence: { enabled: '1', frequency: 'custom', interval: 2, unit: 'months' }
+      }
+
+      expect(Event.last.event_series.recurrence_rule).to eq('FREQ=MONTHLY;INTERVAL=2')
+    end
+
     it 'denies event creation to performers' do
       sign_in performer
 
