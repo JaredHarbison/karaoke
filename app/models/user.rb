@@ -62,6 +62,12 @@ class User < ApplicationRecord
     end
   end
 
+  def management_name
+    return "#{first_name} #{last_name}" if first_name.present? && last_name.present?
+
+    display_name
+  end
+
   def last_name_initial
     (last_name.presence || display_name.split.last).to_s.first.to_s.upcase
   end

@@ -67,6 +67,12 @@ during the shared journey before continuing here.
    - Queue cutoff and overrun settings are visible and audited.
    - Verify both settings on the event detail/edit pages, not only on the queue page.
    - Select a YouTube result and confirm the queue form receives its URL/title before submitting.
+   - The event workspace orders Status, Event Details, Performer Access, Themes,
+     Apply Theme, Delegate Host Authority, and Temporary Hosts before the queue
+     audit sections.
+   - Owner and host management surfaces show full names so similarly named
+     performers can be distinguished; performer-facing queue identity remains
+     abbreviated.
 
 ## Presence and delegation
 

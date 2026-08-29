@@ -75,7 +75,7 @@
         = form_with url: venue_event_host_delegations_path(Current.venue.slug), scope: :event_host_delegation, local: true, class: "event-operations__form", data: { controller: "delegation-window", delegation_window_event_starts_at_value: datetime_local_value(@current_event.starts_at), delegation_window_event_ends_at_value: datetime_local_value(@current_event.ends_at), action: "submit->delegation-window#validate" } do |form|
           = hidden_field_tag :event_id, @current_event.id
           = form.label :delegated_user_id, "Checked-In Performer Or Venue Member"
-          = form.collection_select :delegated_user_id, @delegation_candidates, :id, :display_name, { include_blank: "Choose a Checked-In Performer or Venue Member" }, required: true
+          = form.collection_select :delegated_user_id, @delegation_candidates, :id, :management_name, { include_blank: "Choose a Checked-In Performer or Venue Member" }, required: true
           = form.label :starts_at, "Starts"
           = form.datetime_local_field :starts_at, value: datetime_local_value(@current_event.starts_at), min: datetime_local_value(@current_event.starts_at), max: datetime_local_value(@current_event.ends_at), required: true, data: { delegation_window_target: "startsAt", action: "input->delegation-window#update change->delegation-window#update" }
           = form.label :ends_at, "Ends"
@@ -88,7 +88,7 @@
             - @event_host_delegations.each do |delegation|
               %li.event-operations__list-row
                 %div
-                  %strong= delegation.delegated_user.display_name
+                  %strong= delegation.delegated_user.management_name
                   %span #{l(delegation.starts_at, format: :short)}–#{l(delegation.ends_at, format: :short)}#{" · revoked" if delegation.revoked_at?}
                 - unless delegation.revoked_at?
                   = button_to "Revoke", venue_event_host_delegation_path(Current.venue.slug, delegation), method: :delete, class: "song-action song-action--remove"
@@ -134,11 +134,11 @@
           %li.event-operations__list-row
             %div
               %strong= override.action.humanize
-              %span #{override.performance.performer} · #{override.user.display_name} · #{l(override.created_at, format: :short)}
+              %span #{override.performance.performer} · #{override.user.management_name} · #{l(override.created_at, format: :short)}
         - @queue_setting_changes.each do |change|
           %li.event-operations__list-row
             %div
               %strong= change.setting.humanize
-              %span #{change.previous_value ? "allowed" : "blocked"} → #{change.new_value ? "allowed" : "blocked"} · #{change.user.display_name} · #{l(change.created_at, format: :short)}
+              %span #{change.previous_value ? "allowed" : "blocked"} → #{change.new_value ? "allowed" : "blocked"} · #{change.user.management_name} · #{l(change.created_at, format: :short)}
     - else
       %p.event-operations__empty No queue activity has been recorded yet.

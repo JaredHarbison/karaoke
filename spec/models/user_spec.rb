@@ -97,6 +97,14 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#management_name' do
+    it 'uses the full name on owner and host management surfaces' do
+      user = build(:user, first_name: 'Jared', last_name: 'Harbison')
+
+      expect(user.management_name).to eq('Jared Harbison')
+    end
+  end
+
   describe '#platform_operator?' do
     it 'is false for ordinary users' do
       expect(create(:user).platform_operator?).to be false
