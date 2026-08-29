@@ -20,6 +20,7 @@ RSpec.describe 'Welcome page', type: :request do
     expect(response).to be_successful
     expect(response.body).to include('Franklin Karaoke', '523 Franklin Ave', 'open for signups')
     expect(response.body).to include('venue-card__status', 'venue-card__status-dot')
+    expect(response.body).to include('btn btn--primary welcome-button welcome-button--primary')
     expect(response.body).to include(venue_event_queue_path(venue.slug, event_slug: event.slug))
     expect(response.body).not_to include('Empty Karaoke')
     expect(response.body).not_to include(%(href="#{venue_songs_path(venue.slug)}"))
@@ -50,7 +51,7 @@ RSpec.describe 'Welcome page', type: :request do
     get new_user_session_path
 
     expect(response).to be_successful
-      expect(response.body).to include('Sign In', 'Performer Menu', 'Skip to main content')
+    expect(response.body).to include('Sign In', 'Performer Menu', 'Skip to main content')
     expect(response.body).not_to include('app-header')
   end
 end

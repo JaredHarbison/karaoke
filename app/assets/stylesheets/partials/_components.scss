@@ -100,13 +100,7 @@
   }
   
   &--primary {
-    background-color: $magenta;
-    color: $beige;
-    
-    &:hover:not(:disabled) {
-      background-color: darken($magenta, 8%);
-      box-shadow: $shadow-lg;
-    }
+    @include filled-magenta-cta;
   }
   
   &--secondary {
@@ -120,12 +114,7 @@
   }
   
   &--success {
-    background-color: $magenta;
-    color: $beige;
-    
-    &:hover:not(:disabled) {
-      background-color: darken($magenta, 8%);
-    }
+    @include filled-magenta-cta;
   }
   
   &--danger {
@@ -387,8 +376,7 @@
     .menu-label {
       margin: 0 0 $space-xs 0;
       color: $text-secondary;
-      font-size: 0.75rem;
-      text-transform: uppercase;
+      @include eyebrow;
     }
 
     .menu-value {

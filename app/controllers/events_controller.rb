@@ -157,7 +157,9 @@ class EventsController < ApplicationController
   end
 
   def selected_recurrence_rule
-    return "FREQ=#{recurrence_frequency_for_unit};INTERVAL=#{recurrence_params[:interval]}" if recurrence_params[:frequency] == 'custom'
+    if recurrence_params[:frequency] == 'custom'
+      return "FREQ=#{recurrence_frequency_for_unit};INTERVAL=#{recurrence_params[:interval]}"
+    end
 
     recurrence_params[:frequency]
   end
@@ -173,7 +175,9 @@ class EventsController < ApplicationController
   end
 
   def recurrence_frequency_for_unit
-    { 'days' => 'DAILY', 'weeks' => 'WEEKLY', 'months' => 'MONTHLY', 'years' => 'YEARLY' }.fetch(recurrence_params[:unit], 'WEEKLY')
+    { 'days' => 'DAILY', 'weeks' => 'WEEKLY', 'months' => 'MONTHLY', 'years' => 'YEARLY' }.fetch(
+      recurrence_params[:unit], 'WEEKLY'
+    )
   end
 
   def copy_recurrence_errors(series)

@@ -32,15 +32,18 @@
 .event-operations__form select { border: 1px solid $beige; border-radius: $radius-sm; padding: 0 $space-sm; }
 .event-operations__primary-action, .event-operations__text-action { cursor: pointer; font: inherit; padding: $space-xs $space-md; }
 .event-operations__form input.event-operations__primary-action,
-.event-operations__primary-action { background: $magenta; border: 1px solid $magenta; color: $beige; justify-self: end; max-width: 100%; width: 16rem; }
+.event-operations__primary-action { border: 1px solid $magenta; justify-self: end; max-width: 100%; width: 16rem; @include filled-magenta-cta; }
 .event-operations__text-action { background: transparent; border: 1px solid rgba($cyan, .7); color: $cyan; }
 .event-operations__card > .button_to { display: flex; justify-content: flex-end; }
 .event-operations__card > .button_to .song-action, .event-operations__status-action .song-action { max-width: 100%; width: 16rem; }
+.account-danger-zone { border-color: rgba($magenta, .68); }
+.account-danger-zone h3 { color: $yellow; margin: 0 0 $space-xs; }
+.account-danger-zone p { color: rgba($beige, .72); margin: 0 0 $space-md; }
 .event-operations__access-content { margin: 0 auto; max-width: 36rem; }
 .event-operations__access-content .event-operations__form { max-width: none; }
 .event-operations__access-content details { margin: $space-md 0; max-width: none; }
-.event-operations__access-content summary,
-.event-operations__access-content summary:hover { padding: $space-sm 0; border-radius: 0; color: $beige; background: transparent; }
+.event-operations__access-content summary { padding: $space-sm; border-radius: $radius-md; color: $beige; background: transparent; }
+.event-operations__access-content summary:hover { color: $beige; background: rgba($cyan, .12); }
 .event-operations__revoke-code { display: flex; flex-direction: row; justify-content: flex-end; width: 100%; max-width: none; margin: $space-md 0 $space-lg; }
 .event-operations__revoke-code .song-action { max-width: 100%; width: 16rem; }
 .event-operations__status-action, .event-operations__status-actions { display: flex; gap: $space-sm; justify-content: flex-end; }
@@ -54,7 +57,7 @@
 .event-operations__new-theme-fields p { font-size: .8rem; margin: 0; }
 .event-operations__status-list { display: grid; gap: $space-md; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); margin: 0 0 $space-lg; }
 .event-operations__status-list div { border-left: 2px solid rgba($cyan, .45); padding-left: $space-sm; }
-.event-operations__status-list dt { color: $yellow; font-size: .75rem; text-transform: uppercase; }
+.event-operations__status-list dt { color: $yellow; @include eyebrow; }
 .event-operations__status-list dd { color: $beige; margin: $space-xs 0 0; }
 
 @media (max-width: $breakpoint-sm) {
@@ -145,9 +148,7 @@
   align-items: center;
   gap: $space-xs;
   color: $cyan;
-  font-size: clamp(0.9rem, 2vw, 1.25rem);
-  font-weight: 800;
-  letter-spacing: 0.02em;
+  @include navigation-label;
   list-style: none;
   cursor: pointer;
   user-select: none;
@@ -196,10 +197,7 @@
 
 .songs-host-menu__eyebrow {
   color: $beige;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  @include eyebrow;
 }
 
 .songs-host-menu__nav {
@@ -214,8 +212,7 @@
   gap: $space-sm;
   padding: $space-sm 0;
   color: $cyan;
-  font-size: 0.9rem;
-  font-weight: 800;
+  @include navigation-label;
   text-decoration: none;
 
   &:hover,
@@ -623,10 +620,7 @@
   align-self: start;
   gap: $space-xs;
   color: $beige;
-  font-size: 0.72rem;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  @include eyebrow;
 }
 
 .songs-presentation__stage {
@@ -686,7 +680,7 @@
 .songs-presentation__footer-item strong { color: $beige; font-size: .95rem; }
 .songs-presentation__footer-item > span:last-child { color: rgba($beige, .68); font-size: .78rem; }
 .songs-presentation__footer-item--code strong { color: $yellow; font-size: 1.3rem; letter-spacing: .12em; }
-.songs-presentation__footer-label { color: $yellow; font-size: .68rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.songs-presentation__footer-label { color: $yellow; @include eyebrow; }
 
 .songs-presentation__screen-content {
   display: grid;
@@ -698,10 +692,7 @@
 
 .songs-presentation__screen-eyebrow {
   color: $beige;
-  font-size: 0.8rem;
-  font-weight: 900;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  @include eyebrow;
 }
 
 .songs-presentation__screen-content h1 {
@@ -764,9 +755,14 @@
     box-shadow: inset 0 0 0 1px $cyan;
   }
 
+  &:hover:not([aria-selected="true"]) {
+    color: $beige;
+    background: rgba($cyan, 0.16);
+  }
+
   &:focus-visible {
-    outline: 2px solid $yellow;
-    outline-offset: 2px;
+    outline: 3px solid $yellow;
+    outline-offset: 3px;
   }
 }
 
@@ -1024,12 +1020,7 @@
   > :not(.song-action__icon) { color: $beige; }
 
   &--play {
-    border-color: $magenta;
-    color: $beige;
-    background: $magenta;
-
-    &:hover,
-    &:focus-visible { background: darken($magenta, 8%); }
+    @include filled-magenta-cta;
   }
   &--open,
   &--pause,
@@ -1185,15 +1176,41 @@
     display: none;
   }
 
+  .youtube-results-rail {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: $space-sm;
+    margin-top: $space-lg;
+  }
+
   .youtube-results-container {
     display: flex;
     gap: $space-md;
-    margin: $space-lg 0 0;
+    margin: 0;
     overflow-x: auto;
     // Leave room for the scaled edge cards as well as cards within the rail.
     padding: $space-sm $space-sm $space-md;
     scroll-snap-type: x proximity;
     scrollbar-width: thin;
+  }
+
+  .youtube-results__control {
+    display: grid;
+    width: 2.75rem;
+    min-width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    place-items: center;
+    border: 1px solid rgba($cyan, .7);
+    border-radius: $radius-md;
+    color: $cyan;
+    background: $midnight;
+    font-size: 1.25rem;
+    cursor: pointer;
+
+    &:hover:not(:disabled) { color: $midnight; background: $cyan; }
+    &:disabled { cursor: not-allowed; opacity: .45; }
   }
 
   .youtube-result-item {

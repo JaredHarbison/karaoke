@@ -32,8 +32,7 @@
 .app-shell__venue,
 .app-menu__summary {
   color: $beige;
-  font-size: 1.1rem;
-  font-weight: 400;
+  @include navbar-label;
 }
 
 .app-menu { margin-left: auto; }
@@ -63,6 +62,7 @@
 .app-menu__drawer {
   background: $midnight;
   border: 2px solid $yellow;
+  border-radius: 0 0 $radius-lg $radius-lg;
   contain: layout paint;
   box-shadow: $shadow-lg;
   min-width: 16rem;
@@ -106,7 +106,7 @@
 .app-menu__link,
 .app-menu__sign-out {
   color: $cyan;
-  font-weight: 400;
+  @include navigation-label;
   text-align: left;
 }
 
@@ -114,7 +114,7 @@
   background: none;
   border: 0;
   cursor: pointer;
-  font: inherit;
+  font-family: inherit;
   padding: 0;
 }
 
@@ -192,6 +192,7 @@
     width: 100%;
     min-width: 0;
     min-height: calc(100vh - 4.5rem);
+    border-radius: 0;
     border-right: 0;
     border-left: 0;
   }

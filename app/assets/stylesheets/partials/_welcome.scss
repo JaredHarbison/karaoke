@@ -55,8 +55,7 @@
   display: block;
   margin-bottom: $space-sm;
   color: $beige;
-  font-size: 0.72rem;
-  font-weight: 700;
+  @include eyebrow;
 }
 
 .welcome-main {
@@ -117,8 +116,6 @@
   min-width: var(--welcome-cta-width);
 
   &--primary {
-    color: $beige;
-    background: $magenta;
     @include pink-interaction($radius-md);
 
     &:link,
@@ -128,11 +125,6 @@
     &:focus-visible {
       color: $beige;
       text-decoration: none;
-    }
-
-    &:hover,
-    &:focus-visible {
-      background: darken($magenta, 8%);
     }
 
     &:active {

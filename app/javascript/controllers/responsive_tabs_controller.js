@@ -50,13 +50,13 @@ export default class extends Controller {
     this.tabTargets.forEach(tab => {
       const active = tab.dataset.tabName === this.activeName
       tab.setAttribute("aria-selected", String(active))
-      tab.tabIndex = active ? 0 : -1
+      tab.tabIndex = 0
     })
 
     this.panelTargets.forEach(panel => {
       const active = panel.dataset.tabName === this.activeName
       panel.hidden = !active
-      panel.tabIndex = active ? 0 : -1
+      panel.tabIndex = -1
     })
   }
 

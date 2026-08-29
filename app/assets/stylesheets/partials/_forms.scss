@@ -27,18 +27,8 @@ input, .btn {
 }
 
 input[ type = submit ] {
-  background-color: $magenta;
   border: 1px solid $magenta;
-  color: $beige; 
-  &:hover, &:focus, &:focus-visible {
-      background-color: $cyan;
-      border: 1px solid $cyan;
-      border-radius: 5px;
-      box-shadow: 2px 2px 4px $cyan-light;
-      cursor: pointer;
-      color: $beige; 
-      outline: none;
-  }
+  @include filled-magenta-cta;
 }
 
 label {
@@ -102,6 +92,7 @@ input[ type = text ], input[ type = email ], input[ type = password ] {
     color: $ink;
     background: $beige;
     font: inherit;
+    @include pink-interaction($radius-sm);
   }
 
   &__field textarea,

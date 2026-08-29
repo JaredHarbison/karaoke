@@ -17,3 +17,28 @@ RSpec.describe 'Authentication pages', type: :request do
     expect(response.body).to include("class='auth-page'", "id='sign-up-heading'")
   end
 end
+
+RSpec.describe 'Account page', type: :request do
+  include Devise::Test::IntegrationHelpers
+
+  it 'uses the shared account form and permits a signed-in user to update their name' do
+    user = create(:user)
+    sign_in user
+
+    get edit_user_registration_path
+
+    expect(response).to be_successful
+    expect(response.body).to include("id='account-heading'", 'password-strength', 'user_first_name', 'user_last_name')
+
+    put user_registration_path, params: {
+      user: {
+        first_name: 'Updated',
+        last_name: 'Performer',
+        email: user.email,
+        current_password: 'SecurePassword123!'
+      }
+    }
+
+    expect(user.reload).to have_attributes(first_name: 'Updated', last_name: 'Performer')
+  end
+end

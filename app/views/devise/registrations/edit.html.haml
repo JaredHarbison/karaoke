@@ -1,36 +1,51 @@
-%h2
-  Edit #{resource_name.to_s.humanize}
-= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
-  = render "devise/shared/error_messages", resource: resource
-  .field
-    = f.label :email
-    %br/
-    = f.email_field :email, autofocus: true, autocomplete: "email"
-  - if devise_mapping.confirmable? && resource.pending_reconfirmation?
-    %div
-      Currently waiting confirmation for: #{resource.unconfirmed_email}
-  .field
-    = f.label :password, 'Password'
-    %i (leave blank if you don't want to change it)
-    %br/
-    = f.password_field :password, autocomplete: "new-password"
-    - if @minimum_password_length
-      %br/
-      %em
-        = @minimum_password_length
-        characters minimum
-  .field
-    = f.label :password_confirmation, 'Password Confirmation'
-    %br/
-    = f.password_field :password_confirmation, autocomplete: "new-password"
-  .field
-    = f.label :current_password, 'Current Password'
-    %i (we need your current password to confirm your changes)
-    %br/
-    = f.password_field :current_password, autocomplete: "current-password"
-  .actions
-    = f.submit "Update"
-%h3 Cancel My Account
-%div
-  Unhappy? #{button_to "Cancel My Account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete}
-= link_to "Back", :back, class: 'context-link'
+.songs-page
+  %main.songs-main{ aria: { labelledby: 'account-heading' } }
+    .event-operations__section-heading
+      %div
+        %p= link_to 'Back to karaoke', root_path, class: 'context-link'
+        %h2#account-heading Your Account
+        %p Update the name other performers and hosts see, your email, or your password.
+
+    %section.event-operations__card.event-operations__form-card
+      = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: 'backoffice-form', data: { controller: 'password-strength' } }) do |f|
+        - if resource.errors.any?
+          .backoffice-form__errors{ role: 'alert' }
+            %h2= pluralize(resource.errors.count, 'error') + ' prevented saving:'
+            %ul
+              - resource.errors.full_messages.each do |message|
+                %li= message
+        .backoffice-form__field
+          = f.label :first_name, 'First Name'
+          = f.text_field :first_name, autocomplete: 'given-name', required: true
+        .backoffice-form__field
+          = f.label :last_name, 'Last Name'
+          = f.text_field :last_name, autocomplete: 'family-name', required: true
+        .backoffice-form__field
+          = f.label :email, 'Email Address'
+          = f.email_field :email, autocomplete: 'email'
+        - if devise_mapping.confirmable? && resource.pending_reconfirmation?
+          %p.backoffice-form__note Currently waiting for confirmation of #{resource.unconfirmed_email}.
+        .backoffice-form__field
+          = f.label :password, 'New Password'
+          %small.backoffice-form__note Leave blank to keep your current password.
+          = f.password_field :password, autocomplete: 'new-password', data: { password_strength_target: 'password', action: 'input->password-strength#update' }
+          .password-strength{ aria: { live: 'polite' }, data: { password_strength_target: 'strength' } }
+            .password-strength__bars
+              - 4.times do
+                %span{ data: { password_strength_target: 'bar' } }
+            %small{ data: { password_strength_target: 'message' } } use 12+ characters with uppercase, lowercase, and a number
+        .backoffice-form__field
+          = f.label :password_confirmation, 'Confirm New Password'
+          = f.password_field :password_confirmation, autocomplete: 'new-password', data: { password_strength_target: 'confirmation', action: 'input->password-strength#update' }
+          %small.password-match{ data: { password_strength_target: 'match' }, aria: { live: 'polite' } }
+        .backoffice-form__field
+          = f.label :current_password, 'Current Password'
+          %small.backoffice-form__note Required to save changes.
+          = f.password_field :current_password, autocomplete: 'current-password', required: true
+        .backoffice-form__actions
+          = f.submit 'Save Changes', class: 'btn btn--primary'
+
+    %section.event-operations__card.account-danger-zone
+      %h3 Close account
+      %p This permanently removes your account and cannot be undone.
+      = button_to 'Cancel My Account', registration_path(resource_name), data: { turbo_confirm: 'Are you sure you want to cancel your account?' }, method: :delete, class: 'song-action song-action--remove'

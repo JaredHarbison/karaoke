@@ -1,5 +1,25 @@
 // Shared interaction patterns. Components can opt into the brand interaction
 // language without duplicating focus, hover, and transition rules.
+@mixin navigation-label {
+  font-size: $font-size-navigation;
+  font-weight: $font-weight-navigation;
+  line-height: 1.25;
+}
+
+@mixin navbar-label {
+  font-size: $font-size-navbar;
+  font-weight: $font-weight-navigation;
+  line-height: 1.25;
+}
+
+@mixin eyebrow {
+  font-size: $font-size-eyebrow;
+  font-weight: $font-weight-eyebrow;
+  letter-spacing: $letter-spacing-eyebrow;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
 @mixin pink-interaction($radius: $radius-md) {
   border-radius: $radius;
   transition: border-color $transition-fast, box-shadow $transition-fast, background-color $transition-fast;
@@ -13,12 +33,26 @@
   }
 }
 
+// The single visual/state contract for every filled primary CTA. Components
+// retain their own layout and sizing, but must not redefine this interaction.
+@mixin filled-magenta-cta {
+  border-color: $magenta;
+  color: $beige;
+  background-color: $magenta;
+  transition: background-color $transition-fast, border-color $transition-fast, box-shadow $transition-fast;
+
+  &:hover:not(:disabled) {
+    border-color: darken($magenta, 8%);
+    background-color: darken($magenta, 8%);
+    box-shadow: $shadow-lg;
+  }
+}
+
 @mixin song-action-tone($color) {
   border-color: rgba($color, 0.7);
   color: $color;
 
-  &:hover,
-  &:focus-visible {
+  &:hover {
     background: $color;
     color: $midnight;
   }

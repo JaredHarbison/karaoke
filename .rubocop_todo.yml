@@ -183,6 +183,7 @@ Lint/UselessAssignment:
 # Configuration parameters: AllowedMethods, AllowedPatterns, CountRepeatedAttributes, Max.
 Metrics/AbcSize:
   Exclude:
+    - 'app/controllers/events_controller.rb'
     - 'app/controllers/songs_controller.rb'
     - 'app/controllers/users/omniauth_callbacks_controller.rb'
     - 'app/controllers/venue_invitations_controller.rb'
@@ -219,6 +220,7 @@ Metrics/BlockLength:
 # Configuration parameters: CountComments, Max, CountAsOne.
 Metrics/ClassLength:
   Exclude:
+    - 'app/controllers/events_controller.rb'
     - 'app/controllers/songs_controller.rb'
     - 'app/services/youtube_service.rb'
 
@@ -226,6 +228,7 @@ Metrics/ClassLength:
 # Configuration parameters: AllowedMethods, AllowedPatterns, Max.
 Metrics/CyclomaticComplexity:
   Exclude:
+    - 'app/controllers/songs_controller.rb'
     - 'app/services/youtube_service.rb'
     - 'bin/bundle'
 
@@ -245,6 +248,7 @@ Metrics/MethodLength:
 # Configuration parameters: AllowedMethods, AllowedPatterns, Max.
 Metrics/PerceivedComplexity:
   Exclude:
+    - 'app/controllers/songs_controller.rb'
     - 'app/services/youtube_service.rb'
     - 'bin/bundle'
 

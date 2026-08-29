@@ -24,6 +24,7 @@
             = link_to 'Venue Settings', venue_settings_path(Current.venue.slug), class: 'app-menu__link'
           = link_to 'Help', help_path, class: 'app-menu__link'
           - if user_signed_in?
+            = link_to 'Account', edit_user_registration_path, class: 'app-menu__link'
             = button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'app-menu__sign-out'
           - else
             = link_to 'Sign In', new_user_session_path, class: 'app-menu__link'

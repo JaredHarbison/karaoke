@@ -257,7 +257,9 @@ class SongsController < ApplicationController
     @finished = queue.finished.order(updated_at: :desc)
     @performing_song = queue.performing.order(updated_at: :desc).first
     @queue_version = queue.maximum(:updated_at)&.iso8601(6)
-    @queue_state_url = venue_event_queue_state_path(Current.venue.slug, event_slug: @current_event.slug) if @current_event
+    if @current_event
+      @queue_state_url = venue_event_queue_state_path(Current.venue.slug, event_slug: @current_event.slug)
+    end
     @skipped = queue.skipped
     @theme_review = queue.theme_review.order(:created_at)
     @post_theme = queue.where(theme_admission_status: 'deferred').order(:created_at)

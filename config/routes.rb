@@ -11,9 +11,9 @@ Rails.application.routes.draw do
                        omniauth_callbacks: 'users/omniauth_callbacks'
                      }
   as :user do
-    get 'users/edit' => 'devise/registrations#edit', :as => 'edit_user_registration'
+    get 'users/edit' => 'users/registrations#edit', :as => 'edit_user_registration'
     post 'users' => 'users/registrations#create', :as => 'create_user_registration'
-    put 'users' => 'devise/registrations#update', :as => 'user_registration'
+    put 'users' => 'users/registrations#update', :as => 'user_registration'
   end
   
   root 'welcome#index'

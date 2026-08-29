@@ -135,7 +135,8 @@
 .auth-form label { color: $beige; font-weight: 700; justify-content: space-between; max-width: none; }
 .auth-honeypot { height: 1px !important; left: -10000px; opacity: 0; position: absolute; top: auto; width: 1px !important; }
 .auth-form input[type='email'],
-.auth-form input[type='password'] {
+.auth-form input[type='password'],
+.auth-form input[type='text'] {
   background-color: $beige;
   border: 1px solid rgba($beige, 0.7);
   box-sizing: border-box;
@@ -161,18 +162,15 @@
 .auth-form .checkbox-field label { color: $beige; font-size: 1rem; font-weight: 700; }
 .auth-form .actions { display: block; max-width: none; }
 .auth-submit {
-  background-color: $magenta;
   border: 1px solid $magenta;
-  color: $beige;
   display: block;
   font-weight: 700;
   letter-spacing: 0.04em;
   justify-content: center;
   padding: 0.75rem 1rem;
   width: 100%;
+  @include filled-magenta-cta;
 }
-.auth-submit:hover,
-.auth-submit:focus-visible { background-color: $cyan; border-color: $cyan; box-shadow: 0 0 0 3px $cyan-light; }
 .auth-form small { font-size: 0.8rem; font-weight: 400; }
 .password-strength { color: $beige-light; display: flex; flex-direction: column; gap: $space-xs; }
 .password-strength__bars { display: flex; gap: $space-xs; }

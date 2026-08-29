@@ -81,7 +81,7 @@ RSpec.describe 'Presence access', type: :request do
     end.to change(EventPresenceSession, :count).by(1)
 
     expect(EventPresenceSession.last.short_code).to match(/\A[A-Z0-9]{6}\z/)
-      expect(response).to redirect_to(venue_event_queue_path(venue.slug, event_slug: event.slug))
+    expect(response).to redirect_to(venue_event_queue_path(venue.slug, event_slug: event.slug))
   end
 
   it 'rotates the active event access session when a host generates a replacement' do

@@ -22,19 +22,17 @@
   }
 }
 
-// Focus visible styles for keyboard navigation
-:focus-visible {
-  outline: 2px solid $cyan;
-  outline-offset: 2px;
+// Shared keyboard-focus contract. This intentionally loads after component
+// styles and is important so no feature can accidentally hide a focus ring.
+// The zero-specificity selector gives otherwise unstyled native controls a
+// modest corner radius without flattening a component's deliberate radius.
+:where(a, button, input, select, summary, textarea):focus-visible {
+  border-radius: $radius-sm;
 }
 
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: 2px solid $cyan;
-  outline-offset: 2px;
+:focus-visible {
+  outline: 3px solid $yellow !important;
+  outline-offset: 3px !important;
 }
 
 // Reduce motion for users who prefer it

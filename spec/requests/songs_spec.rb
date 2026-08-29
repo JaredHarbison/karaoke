@@ -15,6 +15,7 @@ RSpec.describe 'Songs', type: :request do
       create(:performance, venue: venue, user: user)
       get "/#{venue.slug}/songs"
       expect(response).to be_successful
+      expect(response.body).to include(edit_user_registration_path)
     end
 
     it 'provides shared queue, add-song, and QR tabs for owners' do
@@ -31,6 +32,7 @@ RSpec.describe 'Songs', type: :request do
       expect(response.body).to include('songs-help-dialog')
       expect(response.body).to include('songs-panel--finished')
       expect(response.body).to include('app-shell__header', 'app-menu__summary')
+      expect(response.body).to include(edit_user_registration_path)
       expect(response.body).not_to include('Fair Queue favors performers')
       expect(page.at_css('.songs-page')['data-controller']).to eq('youtube-player')
       expect(response.body).to include('song-player__viewport')
@@ -49,6 +51,10 @@ RSpec.describe 'Songs', type: :request do
       expect(page.at_css('input#song_url')['name']).to eq('song[url]')
       expect(page.at_css('input#song_title')['name']).to eq('song[title]')
       expect(page.at_css('form[data-controller="youtube-search"]')['data-action']).to include('submit->youtube-search#submit')
+      expect(page.at_css('#song-results')['aria-label']).to eq('YouTube search results')
+      expect(page.at_css('#song-results')['tabindex']).to be_nil
+      expect(page.at_css('.youtube-results__control--previous')['aria-label']).to eq('Show previous YouTube results')
+      expect(page.at_css('.youtube-results__control--next')['aria-label']).to eq('Show more YouTube results')
     end
 
     it 'opens the event access-code step for an event queue' do

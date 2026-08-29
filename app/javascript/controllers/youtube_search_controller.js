@@ -1,11 +1,16 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["query", "results", "urlField", "titleField", "searchBtn"]
+  static targets = ["query", "results", "urlField", "titleField", "searchBtn", "previousButton", "nextButton"]
   
   connect() {
     // Initialize abort controller for fetch requests
     this._abortController = new AbortController()
+    this._handleResultsScroll = this.updateResultControls.bind(this)
+    this.resultsTarget.addEventListener('scroll', this._handleResultsScroll)
+    this._resultsResizeObserver = new ResizeObserver(this._handleResultsScroll)
+    this._resultsResizeObserver.observe(this.resultsTarget)
+    this.updateResultControls()
   }
   
   disconnect() {
@@ -17,6 +22,8 @@ export default class extends Controller {
     
     // Clean up the listener when the controller is removed
     this.removeResultsListener()
+    this.resultsTarget?.removeEventListener('scroll', this._handleResultsScroll)
+    this._resultsResizeObserver?.disconnect()
   }
   
   removeResultsListener() {
@@ -58,6 +65,39 @@ export default class extends Controller {
     event.preventDefault()
     this.search(event)
   }
+
+  previousResults() {
+    this.scrollResults(-1)
+  }
+
+  nextResults() {
+    this.scrollResults(1)
+  }
+
+  scrollResults(direction) {
+    if (!this.hasResultsTarget) return
+
+    const distance = Math.max(this.resultsTarget.clientWidth * 0.8, 240)
+    this.resultsTarget.scrollBy({ left: direction * distance, behavior: 'smooth' })
+  }
+
+  updateResultControls() {
+    if (!this.hasResultsTarget || !this.hasPreviousButtonTarget || !this.hasNextButtonTarget) return
+
+    const maximumScroll = Math.max(0, this.resultsTarget.scrollWidth - this.resultsTarget.clientWidth)
+    const canScroll = maximumScroll > 1
+    const position = this.resultsTarget.scrollLeft
+
+    this.previousButtonTarget.hidden = !canScroll
+    this.nextButtonTarget.hidden = !canScroll
+    this.previousButtonTarget.disabled = !canScroll || position <= 1
+    this.nextButtonTarget.disabled = !canScroll || position >= maximumScroll - 1
+  }
+
+  hideResultControls() {
+    if (this.hasPreviousButtonTarget) this.previousButtonTarget.hidden = true
+    if (this.hasNextButtonTarget) this.nextButtonTarget.hidden = true
+  }
   
   async search(event) {
     event.preventDefault()
@@ -72,12 +112,14 @@ export default class extends Controller {
     const query = this.queryTarget.value.trim()
     if (!query) {
       this.resultsTarget.innerHTML = '<p class="text-muted">Please enter a search term</p>'
+      this.hideResultControls()
       return
     }
     
     const venueSlug = this.getVenueSlug()
     if (!venueSlug) {
       this.resultsTarget.innerHTML = '<p class="error-message">❌ Venue not found</p>'
+      this.hideResultControls()
       return
     }
     
@@ -88,6 +130,7 @@ export default class extends Controller {
     }
     
     this.resultsTarget.innerHTML = '<p class="text-muted">🔍 Searching YouTube...</p>'
+    this.hideResultControls()
     
     try {
       const response = await fetch(`/${venueSlug}/songs/youtube_search?query=${encodeURIComponent(query)}`, {
@@ -106,6 +149,7 @@ export default class extends Controller {
       
       if (data.error) {
         this.resultsTarget.innerHTML = `<p class="error-message">❌ Error: ${data.error}</p>`
+        this.hideResultControls()
         return
       }
       
@@ -115,6 +159,7 @@ export default class extends Controller {
       if (error.name !== 'AbortError') {
         console.error('Search error:', error)
         this.resultsTarget.innerHTML = `<p class="error-message">❌ Failed to search YouTube</p>`
+        this.hideResultControls()
       }
     } finally {
       // Re-enable search button
@@ -128,6 +173,7 @@ export default class extends Controller {
   displayResults(items) {
     if (!items || items.length === 0) {
       this.resultsTarget.innerHTML = '<p class="text-muted">📭 No results found. Try a different search.</p>'
+      this.hideResultControls()
       return
     }
     
@@ -157,10 +203,13 @@ export default class extends Controller {
       if (this.hasResultsTarget) {
         this.resultsTarget.innerHTML = html
         this.attachResultsListener()
+        this.resultsTarget.scrollLeft = 0
+        requestAnimationFrame(() => this.updateResultControls())
       }
     } catch (error) {
       console.error('Error displaying results:', error)
       this.resultsTarget.innerHTML = '<p class="error-message">Error displaying results</p>'
+      this.hideResultControls()
     }
   }
   

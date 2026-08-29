@@ -4,10 +4,10 @@ body {
   a {
     color: $cyan;
     text-decoration: none;
-    &:hover, &:focus, &:active {
+    &:not([class]):hover,
+    &:not([class]):active {
       color: $magenta;
       cursor: pointer;
-      outline: none;
       text-decoration: none;
     }
   }

@@ -18,6 +18,15 @@ $radius-lg: 8px;
 $radius-xl: 12px;
 $radius-full: 9999px;
 
+// Shared type roles. Use these for repeated interface patterns rather than
+// reintroducing page-specific sizes for navigation and eyebrow labels.
+$font-size-navigation: 1rem;
+$font-weight-navigation: 700;
+$font-size-navbar: 1.3rem;
+$font-size-eyebrow: 0.75rem;
+$font-weight-eyebrow: 800;
+$letter-spacing-eyebrow: 0.1em;
+
 // Shadows
 $shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 $shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);

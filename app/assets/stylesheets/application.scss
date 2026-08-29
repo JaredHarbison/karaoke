@@ -23,9 +23,11 @@
 
 // 4. Features
 @import 'partials/animations';
-@import 'partials/accessibility';
 @import 'partials/roles';
 @import 'partials/queue';
 
 // 5. Utilities (lowest specificity)
 @import 'partials/utilities';
+
+// 6. Accessibility must load last so component styling cannot suppress focus.
+@import 'partials/accessibility';

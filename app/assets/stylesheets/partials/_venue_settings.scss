@@ -128,10 +128,7 @@
 
 .settings-stat__label {
   color: $yellow;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  @include eyebrow;
 }
 
 .settings-grid {
@@ -311,13 +308,7 @@
   text-decoration: none;
 
   &--primary {
-    color: white;
-    background: $magenta;
-
-    &:hover,
-    &:focus-visible {
-      background: darken($magenta, 8%);
-    }
+    @include filled-magenta-cta;
   }
 
   &--secondary {

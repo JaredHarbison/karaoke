@@ -136,6 +136,11 @@ reviewable, manually testable, and documented in the same commit.
 - [Planned] Remove `/songs` after queue links, forms, redirects, tests, and QA
   journeys move to the canonical event surface; do not preserve dead route
   compatibility indefinitely.
+- [Planned] Complete the legacy `SongsController`/`app/views/songs` rename to
+  a performance or queue-entry boundary. `Song` remains the canonical provider
+  identity and “Add Song” remains user-facing copy; this migration must update
+  controllers, templates, Turbo/JSON surfaces, routes, JavaScript URLs, and
+  compatibility coverage without changing verified queue behavior.
 - [Planned] Keep `/settings` venue-scoped and separate from event operations.
 
 #### 6.2 Presentation reset and shared shell

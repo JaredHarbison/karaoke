@@ -9,7 +9,7 @@
     = csp_meta_tag
     = stylesheet_link_tag "application", "data-turbo-track": "reload"
     = javascript_importmap_tags
-  - auth_surface = controller_path.match?(/\A(devise|users\/(sessions|registrations))/)
+  - auth_surface = controller_path.match?(/\A(devise|users\/sessions)\z/) || (controller_path == 'users/registrations' && action_name != 'edit')
   - presentation_surface = controller_path == 'songs' && action_name == 'presentation'
   %body{ class: [auth_surface ? 'auth-screen' : nil, presentation_surface ? 'presentation-screen' : nil] }
     %a.skip-link{ href: '#main-content' } Skip to main content

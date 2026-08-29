@@ -24,13 +24,13 @@
             %span.venue-card__status-dot{ aria: { hidden: "true" } }
             %span= resume_status
           - resume_cta = last_event.nil? ? "View Events" : (last_event.accepting_signups? ? "Go To Queue" : "Go To Event")
-          = link_to resume_cta, event_entry_path(@last_venue, last_event), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
+          = link_to resume_cta, event_entry_path(@last_venue, last_event), class: "btn btn--primary welcome-button welcome-button--primary", data: { cta_size_target: "button" }
 
   .welcome-main
     .welcome-toolbar
       = form_with url: root_path, method: :get, local: true, class: "venue-search" do |form|
         = form.search_field :search, value: params[:search], placeholder: "search venues or locations", aria: { label: "Search public venues" }
-        %button.welcome-button.welcome-button--primary.venue-search__submit{ type: "submit", aria: { label: "Search venues" }, data: { cta_size_target: "button" } }
+        %button.btn.btn--primary.welcome-button.welcome-button--primary.venue-search__submit{ type: "submit", aria: { label: "Search venues" }, data: { cta_size_target: "button" } }
           %svg.search-icon{ viewBox: "0 0 24 24", aria: { hidden: "true" } }
             %circle{ cx: "11", cy: "11", r: "6.5" }
             %path{ d: "m16 16 5 5" }
@@ -57,7 +57,7 @@
                 %span.venue-card__status-dot{ aria: { hidden: "true" } }
                 %span= event_status
               - event_cta = event.nil? ? "View Events" : (event.accepting_signups? ? "Go To Queue" : "View Event")
-              = link_to event_cta, event_entry_path(venue, event), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
+              = link_to event_cta, event_entry_path(venue, event), class: "btn btn--primary welcome-button welcome-button--primary", data: { cta_size_target: "button" }
     - else
       .venue-empty
         %span.venue-empty__icon 🎤

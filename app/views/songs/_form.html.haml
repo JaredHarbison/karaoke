@@ -24,7 +24,12 @@
           %input#song-search{ type: "text", data: { youtube_search_target: "query" }, placeholder: "Enter song name or artist", autocomplete: "off" }
         %button.search-btn{ type: "button", data: { action: "click->youtube-search#search", youtube_search_target: "searchBtn" } } Search
     
-    %div#song-results{ data: { youtube_search_target: "results" }, class: "youtube-results-container" }
+    .youtube-results-rail
+      %button.youtube-results__control.youtube-results__control--previous{ type: "button", hidden: true, aria: { label: "Show previous YouTube results", controls: "song-results" }, data: { youtube_search_target: "previousButton", action: "click->youtube-search#previousResults" } }
+        %span{ aria: { hidden: "true" } } ←
+      %div#song-results.youtube-results-container{ role: "region", aria: { label: "YouTube search results" }, data: { youtube_search_target: "results" } }
+      %button.youtube-results__control.youtube-results__control--next{ type: "button", hidden: true, aria: { label: "Show more YouTube results", controls: "song-results" }, data: { youtube_search_target: "nextButton", action: "click->youtube-search#nextResults" } }
+        %span{ aria: { hidden: "true" } } →
     
   - unless index_page
     .form-actions
