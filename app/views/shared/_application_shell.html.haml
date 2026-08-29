@@ -5,9 +5,10 @@
       = link_to Current.venue.name, venue_events_path(Current.venue.slug), class: 'app-shell__venue'
     - if controller_path == 'songs' && action_name == 'presentation'
       = render 'songs/presentation_queue_menu'
+    - event_host = @current_event&.host_authorized?(current_user)
     - menu_label = if Current.venue&.owner?(current_user)
       - 'Owner Menu'
-    - elsif Current.venue&.admin?(current_user)
+    - elsif Current.venue&.admin?(current_user) || event_host
       - 'Host Menu'
     - else
       - 'Performer Menu'
@@ -17,7 +18,7 @@
         %button.app-menu__close{ type: 'button', aria: { label: 'Close menu' }, data: { action: 'disclosure#close' } } ×
         %nav.app-menu__nav{ aria: { label: menu_label } }
           = link_to 'Events', (Current.venue ? venue_events_path(Current.venue.slug) : discover_venues_path), class: 'app-menu__link'
-          - if Current.venue && Current.venue.admin?(current_user) && @current_event
+          - if Current.venue && event_host && @current_event
             = link_to 'Presentation Mode', venue_event_presentation_path(Current.venue.slug, event_slug: @current_event.slug), class: 'app-menu__link', target: '_blank', rel: 'noopener noreferrer'
           - if Current.venue&.owner?(current_user)
             = link_to 'Venue Settings', venue_settings_path(Current.venue.slug), class: 'app-menu__link'

@@ -29,6 +29,10 @@ over `523 Franklin Ave`.
      performance; the latter restores the waiting state without a delayed
      automatic advance.
    - Owner settings are not exposed.
+5. Use an active temporary-host delegation.
+   - The event queue identifies the user as a Host and exposes Presentation
+     Mode for that delegated event only.
+   - Venue Settings and owner-only Temporary Hosts configuration remain hidden.
 
 ## Queue management
 

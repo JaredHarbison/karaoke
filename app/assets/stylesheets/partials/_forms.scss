@@ -101,6 +101,7 @@ input[ type = text ], input[ type = email ], input[ type = password ] {
   }
 
   &__field label,
+  > label,
   &__fieldset legend {
     color: $beige;
     font-size: .85rem;
@@ -109,7 +110,10 @@ input[ type = text ], input[ type = email ], input[ type = password ] {
 
   &__field input:not([type='checkbox']),
   &__field select,
-  &__field textarea {
+  &__field textarea,
+  > input:not([type='checkbox']):not([type='hidden']),
+  > select,
+  > textarea {
     box-sizing: border-box;
     min-height: 42px;
     width: 100%;
@@ -122,7 +126,8 @@ input[ type = text ], input[ type = email ], input[ type = password ] {
     font: inherit;
   }
 
-  &__field textarea { min-height: 7rem; resize: vertical; }
+  &__field textarea,
+  > textarea { min-height: 7rem; resize: vertical; }
   &__field small,
   &__fieldset p,
   &__note { color: rgba($beige, .72); font-size: .85rem; line-height: 1.45; }

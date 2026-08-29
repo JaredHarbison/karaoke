@@ -1,0 +1,18 @@
+<header class="management-page__header">
+  <% if local_assigns[:back_path] %>
+    <%= link_to back_label, back_path, class: 'management-page__back-link' %>
+  <% end %>
+  <div class="management-page__heading">
+    <h1 id="<%= heading_id %>"><%= title %></h1>
+    <% if local_assigns[:description].present? %>
+      <p><%= description %></p>
+    <% end %>
+  </div>
+  <% if local_assigns[:actions].present? %>
+    <div class="management-page__actions">
+      <% actions.each do |action| %>
+        <%= link_to action.fetch(:label), action.fetch(:path), class: "management-button management-button--#{action.fetch(:style, :secondary)}" %>
+      <% end %>
+    </div>
+  <% end %>
+</header>

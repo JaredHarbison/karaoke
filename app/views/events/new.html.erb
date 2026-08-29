@@ -1,5 +1,6 @@
-<main class="container" aria-labelledby="new-event-heading">
-  <p><%= link_to "Back to Events", venue_events_path(Current.venue.slug) %></p>
-  <h1 id="new-event-heading">Create event</h1>
-  <%= render "form", form_url: venue_events_path(Current.venue.slug), form_method: :post %>
+<main class="management-page" aria-labelledby="new-event-heading">
+  <%= render 'shared/management_page_header', heading_id: 'new-event-heading', title: 'Create Event', back_label: 'Back to Events', back_path: venue_events_path(Current.venue.slug) %>
+  <section class="management-card management-form-card">
+    <%= render "form", form_url: venue_events_path(Current.venue.slug), form_method: :post %>
+  </section>
 </main>

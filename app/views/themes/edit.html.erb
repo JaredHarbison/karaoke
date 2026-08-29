@@ -1,5 +1,6 @@
-<main class="container" aria-labelledby="edit-theme-heading">
-  <p><%= link_to "Back to Themes", venue_themes_path(Current.venue.slug) %></p>
-  <h1 id="edit-theme-heading">Edit theme</h1>
-  <%= render "form", form_url: venue_theme_path(Current.venue.slug, @theme), form_method: :patch %>
+<main class="management-page" aria-labelledby="edit-theme-heading">
+  <%= render 'shared/management_page_header', heading_id: 'edit-theme-heading', title: 'Edit Theme', back_label: 'Back to Themes', back_path: venue_themes_path(Current.venue.slug) %>
+  <section class="management-card management-form-card">
+    <%= render "form", form_url: venue_theme_path(Current.venue.slug, @theme), form_method: :patch %>
+  </section>
 </main>

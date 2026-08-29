@@ -1,19 +1,27 @@
-<main class="container" aria-labelledby="event-series-heading">
-  <p><%= link_to "Back to Events", venue_events_path(Current.venue.slug) %></p>
-  <h1 id="event-series-heading">Recurring event series</h1>
-  <p>Series define recurring intent. Individual occurrences can be edited independently.</p>
-  <p><%= link_to "Create Recurring Series", new_venue_event_series_path(Current.venue.slug) %></p>
+<main class="management-page" aria-labelledby="event-series-heading">
+  <%= render 'shared/management_page_header',
+             heading_id: 'event-series-heading',
+             title: 'Recurring Series',
+             description: 'Series define recurring intent. Individual occurrences can be edited independently.',
+             back_label: 'Back to Events', back_path: venue_events_path(Current.venue.slug),
+             actions: [{ label: 'Create Recurring Series', path: new_venue_event_series_path(Current.venue.slug), style: :primary }] %>
+  <section class="management-card" aria-label="Recurring event series">
   <% if @event_series.any? %>
-    <ul>
+    <ul class="management-list">
       <% @event_series.each do |series| %>
-        <li>
-          <%= link_to series.name, edit_venue_event_series_path(Current.venue.slug, series) %>
-          — <%= series.recurrence_rule %>
-          <%= button_to "Generate Next 8 Weeks", generate_occurrences_venue_event_series_path(Current.venue.slug, series), method: :post %>
+        <li class="management-list__item">
+          <div class="management-list__identity">
+            <%= link_to series.name, edit_venue_event_series_path(Current.venue.slug, series) %>
+            <span><%= series.recurrence_rule %></span>
+          </div>
+          <div class="management-action-group">
+            <%= button_to "Generate Next 8 Weeks", generate_occurrences_venue_event_series_path(Current.venue.slug, series), method: :post, class: 'management-button management-button--secondary' %>
+          </div>
         </li>
       <% end %>
     </ul>
   <% else %>
-    <p>No recurring series have been created yet.</p>
+    <p class="management-empty">No recurring series have been created yet.</p>
   <% end %>
+  </section>
 </main>

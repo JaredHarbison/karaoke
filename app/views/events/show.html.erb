@@ -1,7 +1,11 @@
-<main class="container" aria-labelledby="event-heading">
-  <p><%= link_to "Back to Events", venue_events_path(Current.venue.slug) %></p>
-  <h1 id="event-heading"><%= @event.name %></h1>
-  <dl>
+<main class="management-page" aria-labelledby="event-heading">
+  <%= render 'shared/management_page_header',
+             heading_id: 'event-heading', title: @event.name,
+             description: 'Manage this event’s schedule, queue settings, access, and host authority.',
+             back_label: 'Back to Events', back_path: venue_events_path(Current.venue.slug),
+             actions: [{ label: 'View Event Queue', path: venue_event_queue_path(Current.venue.slug, event_slug: @event.slug), style: :primary }] %>
+  <section class="management-card" aria-label="Event details">
+  <dl class="management-detail-grid">
     <dt>Starts</dt>
     <dd><%= l(@event.starts_at, format: :long) %></dd>
     <% if @event.ends_at %>
@@ -20,25 +24,25 @@
     <% end %>
   </dl>
   <% if @event.scheduled? && Current.venue.is_admin?(current_user) %>
-    <%= button_to 'Start Event', start_venue_event_path(Current.venue.slug, @event), method: :patch %>
+    <div class="management-action-group"><%= button_to 'Start Event', start_venue_event_path(Current.venue.slug, @event), method: :patch, class: 'management-button management-button--primary' %></div>
   <% elsif @event.live? && @event.host_authorized?(current_user) %>
-    <%= button_to 'Complete Event', complete_venue_event_path(Current.venue.slug, @event), method: :patch %>
+    <div class="management-action-group"><%= button_to 'Complete Event', complete_venue_event_path(Current.venue.slug, @event), method: :patch, class: 'management-button management-button--danger' %></div>
   <% end %>
-  <section aria-labelledby="themes-heading">
+  </section>
+  <section class="management-card" aria-labelledby="themes-heading">
     <h2 id="themes-heading">Themes</h2>
     <% if @theme_applications.any? %>
-      <ul>
+      <ul class="management-list">
         <% @theme_applications.each do |application| %>
-          <li>
-            <%= application.theme.name %>
+          <li class="management-list__item">
+            <div class="management-list__identity"><strong><%= application.theme.name %></strong>
             <% if application.starts_at && application.ends_at %>
               (<%= l(application.starts_at, format: :short) %>–<%= l(application.ends_at, format: :short) %>)
             <% else %>
               (entire event)
             <% end %>
-            <% if Current.venue.is_admin?(current_user) %>
-              <%= button_to "Remove", venue_event_theme_application_path(Current.venue.slug, application), method: :delete %>
-            <% end %>
+            </div>
+            <% if Current.venue.is_admin?(current_user) %><div class="management-action-group"><%= button_to "Remove", venue_event_theme_application_path(Current.venue.slug, application), method: :delete, class: 'management-button management-button--danger' %></div><% end %>
           </li>
         <% end %>
       </ul>
@@ -46,7 +50,7 @@
       <p>No themes are applied to this event.</p>
     <% end %>
     <% if Current.venue.is_admin?(current_user) && @themes.any? %>
-      <%= form_with url: venue_event_theme_applications_path(Current.venue.slug), method: :post, local: true do |form| %>
+      <%= form_with url: venue_event_theme_applications_path(Current.venue.slug), method: :post, local: true, class: 'backoffice-form' do |form| %>
         <%= hidden_field_tag 'event_theme_application[event_id]', @event.id %>
         <%= label_tag 'event_theme_application_theme_id', 'Apply theme' %>
         <%= select_tag 'event_theme_application[theme_id]', options_from_collection_for_select(@themes, :id, :name), include_blank: 'Choose a theme' %>
@@ -54,12 +58,12 @@
         <%= datetime_local_field_tag 'event_theme_application[starts_at]' %>
         <%= label_tag 'event_theme_application_ends_at', 'Window ends (optional)' %>
         <%= datetime_local_field_tag 'event_theme_application[ends_at]' %>
-        <%= form.submit 'Apply Theme' %>
+        <div class="backoffice-form__actions"><%= form.submit 'Apply Theme' %></div>
       <% end %>
     <% end %>
   </section>
   <% if Current.venue.is_admin?(current_user) && @queue_setting_changes.any? %>
-    <section aria-labelledby="queue-setting-audit-heading">
+    <section class="management-card" aria-labelledby="queue-setting-audit-heading">
       <h2 id="queue-setting-audit-heading">Queue setting audit</h2>
       <ul>
         <% @queue_setting_changes.each do |change| %>
@@ -68,15 +72,14 @@
       </ul>
     </section>
   <% end %>
-  <p><%= link_to "View Event Queue", venue_event_queue_path(Current.venue.slug, event_slug: @event.slug) %></p>
   <% if Current.venue.is_admin?(current_user) %>
-    <section aria-labelledby="presence-heading">
+    <section class="management-card" aria-labelledby="presence-heading">
       <h2 id="presence-heading">Event access</h2>
       <% if @active_presence_session %>
         <p><strong>Event access code: <%= @active_presence_session.short_code %></strong></p>
         <p>Share this code with performers at the venue. It expires <%= l(@active_presence_session.expires_at, format: :short) %>.</p>
         <p><%= link_to 'Open Access Link', event_presence_url(@active_presence_session.token) %></p>
-        <%= button_to 'Revoke Active Code', venue_event_presence_session_path(Current.venue.slug, @active_presence_session), method: :delete %>
+        <div class="management-action-group"><%= button_to 'Revoke Active Code', venue_event_presence_session_path(Current.venue.slug, @active_presence_session), method: :delete, class: 'management-button management-button--danger' %></div>
       <% elsif @presence_sessions.any? %>
         <p>No event access code is currently active. Generate a new code below.</p>
       <% else %>
@@ -95,16 +98,16 @@
           </ul>
         </details>
       <% end %>
-      <%= form_with url: venue_event_presence_sessions_path(Current.venue.slug), scope: :event_presence_session, method: :post, local: true do |form| %>
+      <%= form_with url: venue_event_presence_sessions_path(Current.venue.slug), scope: :event_presence_session, method: :post, local: true, class: 'backoffice-form' do |form| %>
         <%= hidden_field_tag :event_id, @event.id %>
         <%= form.label :expires_at, 'Expires (optional)' %>
         <%= form.datetime_local_field :expires_at, value: datetime_local_value(@event.ends_at && (@event.ends_at + EventPresenceSession::GRACE_PERIOD)) %>
-        <%= form.submit(@event.live? ? 'Rotate Event Access Code' : 'Generate Event Access Code') %>
+        <div class="backoffice-form__actions"><%= form.submit(@event.live? ? 'Rotate Event Access Code' : 'Generate Event Access Code') %></div>
       <% end %>
     </section>
   <% end %>
   <% if Current.venue.is_admin?(current_user) %>
-    <section aria-labelledby="delegations-heading">
+    <section class="management-card" aria-labelledby="delegations-heading">
       <h2 id="delegations-heading">Temporary event hosts</h2>
       <% if @event_host_delegations.any? %>
         <ul>
@@ -121,7 +124,7 @@
       <% else %>
         <p>No temporary hosts are scheduled.</p>
       <% end %>
-      <%= form_with url: venue_event_host_delegations_path(Current.venue.slug), scope: :event_host_delegation, method: :post, local: true do |form| %>
+      <%= form_with url: venue_event_host_delegations_path(Current.venue.slug), scope: :event_host_delegation, method: :post, local: true, class: 'backoffice-form' do |form| %>
         <%= hidden_field_tag :event_id, @event.id %>
         <%= form.label :delegated_user_id, 'Delegate host' %>
         <%= form.collection_select :delegated_user_id, @delegation_candidates, :id, :display_name, include_blank: 'Choose a venue member' %>
@@ -129,12 +132,12 @@
         <%= form.datetime_local_field :starts_at, value: datetime_local_value(@event.starts_at) %>
         <%= form.label :ends_at, 'Ends' %>
         <%= form.datetime_local_field :ends_at, value: datetime_local_value(@event.ends_at || @event.starts_at + 4.hours) %>
-        <%= form.submit 'Delegate Host' %>
+        <div class="backoffice-form__actions"><%= form.submit 'Delegate Host' %></div>
       <% end %>
     </section>
   <% end %>
   <% if Current.venue.is_admin?(current_user) %>
-    <section aria-labelledby="queue-overrides-heading">
+    <section class="management-card" aria-labelledby="queue-overrides-heading">
       <h2 id="queue-overrides-heading">Recent Fair Queue overrides</h2>
       <% if @queue_overrides.any? %>
         <ul>
@@ -148,6 +151,6 @@
     </section>
   <% end %>
   <% if Current.venue.is_admin?(current_user) %>
-    <%= link_to "Edit Event", edit_venue_event_path(Current.venue.slug, @event) %>
+    <div class="management-action-group"><%= link_to "Edit Event", edit_venue_event_path(Current.venue.slug, @event), class: 'management-button management-button--secondary' %></div>
   <% end %>
 </main>

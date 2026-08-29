@@ -1,18 +1,25 @@
-<main class="container" aria-labelledby="themes-heading">
-  <p><%= link_to "Back to Queue", venue_songs_path(Current.venue.slug) %></p>
-  <h1 id="themes-heading">Themes</h1>
-  <p>Themes are reusable definitions with optional deterministic song admission rules.</p>
-  <p><%= link_to "Create Theme", new_venue_theme_path(Current.venue.slug) %></p>
+<main class="management-page" aria-labelledby="themes-heading">
+  <%= render 'shared/management_page_header',
+             heading_id: 'themes-heading',
+             title: 'Themes',
+             description: 'Themes are reusable definitions with optional deterministic song admission rules.',
+             back_label: 'Back to Events', back_path: venue_events_path(Current.venue.slug),
+             actions: [{ label: 'Create Theme', path: new_venue_theme_path(Current.venue.slug), style: :primary }] %>
+  <section class="management-card" aria-label="Reusable themes">
   <% if @themes.any? %>
-    <ul>
+    <ul class="management-list">
       <% @themes.each do |theme| %>
-        <li>
-          <%= link_to theme.name, edit_venue_theme_path(Current.venue.slug, theme) %>
-          <% unless theme.active? %><span>(inactive)</span><% end %>
+        <li class="management-list__item">
+          <div class="management-list__identity">
+            <%= link_to theme.name, edit_venue_theme_path(Current.venue.slug, theme) %>
+            <% if theme.description.present? %><span><%= theme.description %></span><% end %>
+          </div>
+          <span class="management-list__badge <%= 'management-list__badge--muted' unless theme.active? %>"><%= theme.active? ? 'Available' : 'Inactive' %></span>
         </li>
       <% end %>
     </ul>
   <% else %>
-    <p>No themes have been created yet.</p>
+    <p class="management-empty">No themes have been created yet.</p>
   <% end %>
+  </section>
 </main>

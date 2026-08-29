@@ -1,5 +1,6 @@
-<main class="container" aria-labelledby="new-event-series-heading">
-  <p><%= link_to "Back to Series", venue_event_series_index_path(Current.venue.slug) %></p>
-  <h1 id="new-event-series-heading">Create recurring series</h1>
-  <%= render "form", form_url: venue_event_series_index_path(Current.venue.slug), form_method: :post %>
+<main class="management-page" aria-labelledby="new-event-series-heading">
+  <%= render 'shared/management_page_header', heading_id: 'new-event-series-heading', title: 'Create Recurring Series', back_label: 'Back to Recurring Series', back_path: venue_event_series_index_path(Current.venue.slug) %>
+  <section class="management-card management-form-card">
+    <%= render "form", form_url: venue_event_series_index_path(Current.venue.slug), form_method: :post %>
+  </section>
 </main>

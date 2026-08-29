@@ -105,7 +105,7 @@ RSpec.describe 'Events', type: :request do
       get venue_event_queue_path(venue.slug, event_slug: event.slug)
 
       expect(response).to be_successful
-      expect(response.body).to include('Themes', 'Theme decisions', 'Your host authority', 'This event only')
+      expect(response.body).to include('Host Menu', 'Presentation Mode', 'Themes', 'Theme decisions', 'Your host authority', 'This event only')
       expect(response.body).to include('No themes are scheduled for this event.', 'No songs are waiting for a theme decision.')
       expect(response.body).not_to include('Use or create a theme', 'Temporary Hosts', 'Performer access')
     end

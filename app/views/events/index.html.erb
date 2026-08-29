@@ -1,29 +1,33 @@
-<main class="container" aria-labelledby="events-heading">
-  <header>
-    <p><%= link_to "Back to Queue", venue_songs_path(Current.venue.slug) %></p>
-    <h1 id="events-heading">Events</h1>
-    <p>Review upcoming karaoke nights for <%= Current.venue.name %>.</p>
-    <% if Current.venue.is_admin?(current_user) %>
-      <p>
-        <%= link_to "Create Event", new_venue_event_path(Current.venue.slug) %>
-        · <%= link_to "Manage Recurring Series", venue_event_series_index_path(Current.venue.slug) %>
-      </p>
-    <% end %>
-  </header>
+<main class="management-page" aria-labelledby="events-heading">
+  <%= render 'shared/management_page_header',
+             heading_id: 'events-heading',
+             title: 'Events',
+             description: "Review upcoming karaoke nights for #{Current.venue.name}.",
+             actions: (Current.venue.is_admin?(current_user) ? [
+               { label: 'Create Event', path: new_venue_event_path(Current.venue.slug), style: :primary },
+               { label: 'Recurring Series', path: venue_event_series_index_path(Current.venue.slug) }
+             ] : []) %>
 
-  <% if @events.any? %>
-    <ul>
+  <section class="management-card" aria-label="Venue events">
+    <% if @events.any? %>
+    <ul class="management-list">
       <% @events.each do |event| %>
-        <li>
-          <%= link_to event.name, venue_event_path(Current.venue.slug, event) %>
-          — <%= l(event.starts_at, format: :long) %> (<%= event.status.humanize %>)
+        <li class="management-list__item">
+          <div class="management-list__identity">
+            <%= link_to event.name, venue_event_path(Current.venue.slug, event) %>
+            <span><%= l(event.starts_at, format: :long) %></span>
+          </div>
+          <div class="management-action-group">
+            <span class="management-list__badge"><%= event.status.humanize %></span>
           <% if event.event_series %>
-            <span>(<%= event.event_series.name %>)</span>
+            <span class="management-list__badge management-list__badge--muted"><%= event.event_series.name %></span>
           <% end %>
+          </div>
         </li>
       <% end %>
     </ul>
-  <% else %>
-    <p>No events have been scheduled yet.</p>
-  <% end %>
+    <% else %>
+      <p class="management-empty">No events have been scheduled yet.</p>
+    <% end %>
+  </section>
 </main>

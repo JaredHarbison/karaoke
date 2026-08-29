@@ -39,6 +39,8 @@ during the shared journey before continuing here.
    - Create/edit recurrence intent, schedule, time zone, and active state.
    - Generate the next eight weeks twice; occurrences are not duplicated.
    - Confirm a saved series appears in the event form’s recurring-series selector.
+   - Events, recurring series, and themes use the shared management header,
+     card/list, form, and action treatments at desktop and narrow widths.
 3. Edit one generated occurrence.
    - The occurrence changes without changing its series or sibling occurrences.
 4. Confirm the venue, event, recurring-series, theme, and queue-management pages have reachable navigation links.
