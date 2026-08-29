@@ -33,8 +33,8 @@ during the shared journey before continuing here.
    - The event belongs to this venue.
    - Performers cannot access owner event-management actions.
    - Event, recurring-series, and theme forms use the same labeled-control,
-     validation, checkbox, and action treatment as the event queue’s host
-     controls.
+     validation, checkbox, and primary-action treatment as the event queue’s
+     host controls.
    - Events has one Create Event action. Verify its form creates either a
      one-off event or the first occurrence of a recurring series without
      leaving the event-management flow.
