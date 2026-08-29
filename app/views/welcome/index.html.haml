@@ -23,7 +23,7 @@
           .venue-card__status{ class: ("venue-card__status--neutral" unless resume_status_active) }
             %span.venue-card__status-dot{ aria: { hidden: "true" } }
             %span= resume_status
-          - resume_cta = last_event.nil? ? "View events" : (last_event.accepting_signups? ? "Go to queue" : "Go to event")
+          - resume_cta = last_event.nil? ? "View Events" : (last_event.accepting_signups? ? "Go To Queue" : "Go To Event")
           = link_to resume_cta, event_entry_path(@last_venue, last_event), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
 
   .welcome-main
@@ -56,12 +56,12 @@
               .venue-card__status{ class: ("venue-card__status--neutral" unless event_status_active) }
                 %span.venue-card__status-dot{ aria: { hidden: "true" } }
                 %span= event_status
-              - event_cta = event.nil? ? "View events" : (event.accepting_signups? ? "Go to queue" : "View event")
+              - event_cta = event.nil? ? "View Events" : (event.accepting_signups? ? "Go To Queue" : "View Event")
               = link_to event_cta, event_entry_path(venue, event), class: "welcome-button welcome-button--primary", data: { cta_size_target: "button" }
     - else
       .venue-empty
         %span.venue-empty__icon 🎤
-        %h3 No public venues found
+        %h3 No Public Venues Found
         %p Try a different search, or ask the venue owner for a direct link.
         = link_to "Clear Search", root_path, class: "welcome-button welcome-button--secondary" if params[:search].present?
 

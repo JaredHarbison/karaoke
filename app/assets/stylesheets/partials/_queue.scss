@@ -12,7 +12,7 @@
 .event-operations__panel { padding-top: $space-lg; }
 .event-operations__section-heading, .event-operations__list-row, .event-operations__review-item, .event-operations__review-actions { align-items: center; display: flex; gap: $space-md; justify-content: space-between; }
 .event-operations__section-heading { align-items: flex-start; margin-bottom: $space-lg; }
-.event-operations__section-heading h2, .event-operations__card h2 { color: $beige; }
+.event-operations__section-heading h2, .event-operations__card h2 { color: $yellow; }
 .event-operations__section-heading h2, .event-operations__card h3 { margin: 0; }
 .event-operations__section-heading p, .event-operations__empty, .event-operations__list-row span, .event-operations__review-item span, .event-operations__review-item small { color: rgba($beige, .7); }
 .event-operations__section-heading p { margin: $space-xs 0 0; }
@@ -32,13 +32,18 @@
 .event-operations__form select { border: 1px solid $beige; border-radius: $radius-sm; padding: 0 $space-sm; }
 .event-operations__primary-action, .event-operations__text-action { cursor: pointer; font: inherit; padding: $space-xs $space-md; }
 .event-operations__form input.event-operations__primary-action,
-.event-operations__primary-action { background: $magenta; border: 1px solid $magenta; color: $midnight; justify-self: end; max-width: 100%; width: 16rem; }
+.event-operations__primary-action { background: $magenta; border: 1px solid $magenta; color: $beige; justify-self: end; max-width: 100%; width: 16rem; }
 .event-operations__text-action { background: transparent; border: 1px solid rgba($cyan, .7); color: $cyan; }
 .event-operations__card > .button_to { display: flex; justify-content: flex-end; }
 .event-operations__card > .button_to .song-action, .event-operations__status-action .song-action { max-width: 100%; width: 16rem; }
-.event-operations__revoke-code { display: flex; flex-direction: row; justify-content: flex-end; width: 100%; max-width: 36rem; margin: $space-md auto $space-lg; }
+.event-operations__access-content { margin: 0 auto; max-width: 36rem; }
+.event-operations__access-content .event-operations__form { max-width: none; }
+.event-operations__access-content details { margin: $space-md 0; max-width: none; }
+.event-operations__access-content summary,
+.event-operations__access-content summary:hover { padding: $space-sm 0; border-radius: 0; color: $beige; background: transparent; }
+.event-operations__revoke-code { display: flex; flex-direction: row; justify-content: flex-end; width: 100%; max-width: none; margin: $space-md 0 $space-lg; }
 .event-operations__revoke-code .song-action { max-width: 100%; width: 16rem; }
-.event-operations__status-action { display: flex; justify-content: flex-end; }
+.event-operations__status-action, .event-operations__status-actions { display: flex; gap: $space-sm; justify-content: flex-end; }
 .event-operations__list, .event-operations__review-list { list-style: none; margin: 0; padding: 0; }
 .event-operations__list-row, .event-operations__review-item { border-top: 1px solid rgba($beige, .16); padding: $space-md 0; }
 .event-operations__list-row > div, .event-operations__review-item > div { display: grid; gap: $space-xs; }
@@ -49,7 +54,7 @@
 .event-operations__new-theme-fields p { font-size: .8rem; margin: 0; }
 .event-operations__status-list { display: grid; gap: $space-md; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); margin: 0 0 $space-lg; }
 .event-operations__status-list div { border-left: 2px solid rgba($cyan, .45); padding-left: $space-sm; }
-.event-operations__status-list dt { color: rgba($beige, .66); font-size: .75rem; text-transform: uppercase; }
+.event-operations__status-list dt { color: $yellow; font-size: .75rem; text-transform: uppercase; }
 .event-operations__status-list dd { color: $beige; margin: $space-xs 0 0; }
 
 @media (max-width: $breakpoint-sm) {
@@ -109,7 +114,7 @@
   h1 {
     overflow: hidden;
     margin: 0;
-    color: $beige;
+    color: $yellow;
     font-size: clamp(1.5rem, 3.6vw, 2.7rem);
     line-height: 1;
     letter-spacing: -0.04em;
@@ -190,7 +195,7 @@
 }
 
 .songs-host-menu__eyebrow {
-  color: rgba($beige, 0.62);
+  color: $beige;
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -257,7 +262,7 @@
 
   h2 {
     margin: 0;
-    color: $beige;
+    color: $yellow;
     font-size: 1.35rem;
     text-align: left;
   }
@@ -312,7 +317,7 @@
   gap: $space-md;
 
   label {
-    color: $beige;
+    color: $yellow;
     font-weight: 800;
   }
 }
@@ -418,7 +423,7 @@
 
 .songs-header h1 {
   margin: 0;
-  color: $beige;
+  color: $yellow;
   font-size: clamp(2rem, 5vw, 3.8rem);
   line-height: 0.98;
   text-align: left;
@@ -584,7 +589,7 @@
 }
 
 .songs-presentation__drawer-heading { display: grid; gap: $space-xs; margin-bottom: $space-lg; }
-.songs-presentation__drawer-heading h2 { color: $beige; font-size: 1.25rem; margin: 0; }
+.songs-presentation__drawer-heading h2 { color: $yellow; font-size: 1.25rem; margin: 0; }
 .songs-presentation__drawer-heading p { color: rgba($beige, .72); font-size: .82rem; margin: 0; }
 .songs-presentation__queue-pill {
   background: $green;
@@ -617,7 +622,7 @@
   align-items: center;
   align-self: start;
   gap: $space-xs;
-  color: $cyan;
+  color: $beige;
   font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 0.12em;
@@ -656,7 +661,7 @@
 
   h1 {
     margin: 0;
-    color: $beige;
+    color: $yellow;
     font-size: clamp(2rem, 5vw, 4.8rem);
     line-height: 0.95;
     letter-spacing: -0.05em;
@@ -681,7 +686,7 @@
 .songs-presentation__footer-item strong { color: $beige; font-size: .95rem; }
 .songs-presentation__footer-item > span:last-child { color: rgba($beige, .68); font-size: .78rem; }
 .songs-presentation__footer-item--code strong { color: $yellow; font-size: 1.3rem; letter-spacing: .12em; }
-.songs-presentation__footer-label { color: $cyan; font-size: .68rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.songs-presentation__footer-label { color: $yellow; font-size: .68rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
 
 .songs-presentation__screen-content {
   display: grid;
@@ -692,7 +697,7 @@
 }
 
 .songs-presentation__screen-eyebrow {
-  color: $yellow;
+  color: $beige;
   font-size: 0.8rem;
   font-weight: 900;
   letter-spacing: 0.14em;
@@ -815,7 +820,7 @@
 
   &:hover,
   &:focus-visible {
-    color: $beige;
+    color: $yellow;
   }
 }
 
@@ -965,7 +970,7 @@
 
     h3 {
       margin: 0;
-      color: $beige;
+      color: $yellow;
       font-size: 1rem;
       text-align: left;
   }
@@ -1107,7 +1112,7 @@
 
   h3 {
     margin: 0;
-    color: $beige;
+    color: $yellow;
     font-size: 0.95rem;
   }
 }
@@ -1359,7 +1364,7 @@
   h2 {
     grid-column: 1;
     margin: 0;
-    color: $beige;
+    color: $yellow;
     font-size: 1.35rem;
     text-align: left;
     text-transform: uppercase;
@@ -1459,7 +1464,7 @@
 
   h2 {
     margin: $space-xs 0 0;
-    color: $beige;
+    color: $yellow;
     font-size: 1.2rem;
     text-align: left;
   }

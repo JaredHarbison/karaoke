@@ -98,7 +98,7 @@ RSpec.describe 'Songs', type: :request do
       get "/#{venue.slug}/songs"
 
       expect(response.body).to include("Pause Jared Harbison's song")
-      expect(response.body).to include('Move back by')
+      expect(response.body).to include('Move Back By')
       expect(response.body).not_to include('>spots<')
     end
 

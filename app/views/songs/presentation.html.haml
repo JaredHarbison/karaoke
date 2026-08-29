@@ -13,7 +13,7 @@
         - else
           .songs-presentation__screen-content
             %span.songs-presentation__screen-eyebrow Ready
-            %h1 Ready for the first song
+            %h1 Ready for the First Song
             %p.songs-presentation__screen-copy Use the performer view to add a song, then return here to launch it on the presentation stage.
 
       .song-player{ hidden: true, role: "dialog", aria: { modal: "true", label: "Now playing" }, data: { youtube_player_target: "overlay", action: "fullscreenchange@document->youtube-player#fullscreenChanged" } }
@@ -32,13 +32,13 @@
 
     %footer.songs-presentation__footer
       %div.songs-presentation__footer-item.songs-presentation__footer-item--code
-        %span.songs-presentation__footer-label Event access code
-        %strong{ aria: { label: "Event access code" } }= @presentation_event_code.presence || "—"
+        %span.songs-presentation__footer-label Event Access Code
+        %strong{ aria: { label: "Event Access Code" } }= @presentation_event_code.presence || "—"
       %div.songs-presentation__footer-item
-        %span.songs-presentation__footer-label{ data: { youtube_player_target: "presentationNextLabel" } } Up next
+        %span.songs-presentation__footer-label{ data: { youtube_player_target: "presentationNextLabel" } } Up Next
         %strong{ data: { youtube_player_target: "presentationNextPerformer" } }= @presentation_next_song&.performer || "Nothing queued"
         %span{ data: { youtube_player_target: "presentationNextTitle" } }= @presentation_next_song ? display_song_title(@presentation_next_song) : "Add a song to begin"
       %div.songs-presentation__footer-item
-        %span.songs-presentation__footer-label Up second
+        %span.songs-presentation__footer-label Up Second
         %strong{ data: { youtube_player_target: "presentationSecondPerformer" } }= @presentation_second_song&.performer || "—"
         %span{ data: { youtube_player_target: "presentationSecondTitle" } }= @presentation_second_song ? display_song_title(@presentation_second_song) : ""

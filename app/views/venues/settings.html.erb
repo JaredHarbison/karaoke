@@ -1,13 +1,13 @@
 <div class="venue-settings">
   <header class="settings-header">
     <div>
-      <%= link_to "← Back to Events", venue_events_path(@venue.slug), class: "settings-back-link" %>
+      <%= link_to "Back to Events", venue_events_path(@venue.slug), class: "settings-back-link" %>
       <h1>Manage <%= @venue.name %></h1>
       <p class="settings-header__copy">Keep your venue details current and decide who can run the queue with you.</p>
     </div>
     <div class="settings-header__badge">
       <span class="settings-header__badge-dot"></span>
-      Owner access
+      Owner Access
     </div>
   </header>
 
@@ -24,7 +24,7 @@
         <span><%= @hosts.size == 1 ? "person" : "people" %> can manage the queue</span>
       </div>
       <div class="settings-stat settings-stat--highlight">
-        <span class="settings-stat__label">Venue link</span>
+        <span class="settings-stat__label">Venue Link</span>
         <strong>/<%= @venue.slug %></strong>
         <span>Share this with performers</span>
       </div>
@@ -66,7 +66,7 @@
               <span class="visibility-toggle__track"></span>
             </span>
             <span>
-              <strong>Public venue</strong>
+              <strong>Public Venue</strong>
               <small>Allow people to find this venue on the Discover page.</small>
             </span>
           </label>
@@ -77,7 +77,7 @@
               <span class="visibility-toggle__track"></span>
             </span>
             <span>
-              <strong>Allow explicit lyrics</strong>
+              <strong>Allow Explicit Lyrics</strong>
               <small>Permit event queue selections identified as explicit by provider metadata.</small>
             </span>
           </label>
@@ -104,7 +104,7 @@
                 <span class="host-avatar"><%= host.last_name_initial %></span>
                 <span class="host-row__identity">
                   <strong><%= host.display_name %></strong>
-                  <small>Queue host</small>
+                  <small>Queue Host</small>
                 </span>
                 <%= button_to "Remove", venue_admin_path(@venue.slug, host.id), method: :delete, class: "settings-button settings-button--quiet-danger", data: { turbo_confirm: "Remove #{host.display_name} as a host?" } %>
               </div>

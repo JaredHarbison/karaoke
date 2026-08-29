@@ -32,6 +32,16 @@ RSpec.describe 'Events', type: :request do
 
       expect(response).to redirect_to(new_user_session_path)
     end
+
+    it 'takes an owner to the full event workspace from Edit Event' do
+      event = create(:event, venue: venue)
+      sign_in owner
+
+      get venue_events_path(venue.slug)
+
+      page = Nokogiri::HTML(response.body)
+      expect(page.at_css('.song-action--edit')['href']).to eq(venue_event_path(venue.slug, event))
+    end
   end
 
   describe 'GET /:venue_slug/events/:id' do
@@ -43,7 +53,7 @@ RSpec.describe 'Events', type: :request do
         get venue_event_path(venue.slug, event)
       end.to change { event.event_presence_sessions.active_at.count }.from(0).to(1)
 
-      expect(response.body).to include('Event access code:')
+      expect(response.body).to include('Event Access Code:')
     end
 
     it 'shows the active performer access code without exposing stale codes' do
@@ -56,7 +66,7 @@ RSpec.describe 'Events', type: :request do
       get venue_event_path(venue.slug, event)
 
       expect(response).to be_successful
-      expect(response.body).to include("Event access code: #{active_session.short_code}", 'Access-code history')
+      expect(response.body).to include("Event Access Code: #{active_session.short_code}", 'Access-Code History')
       expect(response.body).not_to include(event_presence_url(stale_session.token))
     end
   end
@@ -82,7 +92,7 @@ RSpec.describe 'Events', type: :request do
       expect(response).to be_successful
       page = Nokogiri::HTML(response.body)
       expect(response.body).to include(
-        'Queue', 'Themes', 'Temporary Hosts', 'Event', 'Theme reconciliation', 'Theme Singer'
+        'Queue', 'Themes', 'Temporary Hosts', 'Event', 'Theme Reconciliation', 'Theme Singer', 'Edit Event'
       )
       expect(response.body).to include('1 performance needs theme review')
       expect(page.at_css('#event-panel > section.event-operations__card > h3').text).to eq('Status')
@@ -105,7 +115,7 @@ RSpec.describe 'Events', type: :request do
       get venue_event_queue_path(venue.slug, event_slug: event.slug)
 
       expect(response).to be_successful
-      expect(response.body).to include('Host Menu', 'Presentation Mode', 'Themes', 'Theme decisions', 'Your host authority', 'This event only')
+      expect(response.body).to include('Host Menu', 'Presentation Mode', 'Themes', 'Theme Decisions', 'Your Host Authority', 'This event only')
       expect(response.body).to include('No themes are scheduled for this event.', 'No songs are waiting for a theme decision.')
       expect(response.body).not_to include('Use or create a theme', 'Temporary Hosts', 'Performer access')
     end
@@ -185,7 +195,7 @@ RSpec.describe 'Events', type: :request do
         delete venue_event_path(venue.slug, event)
       end.not_to change(Event, :count)
 
-      expect(response).to redirect_to(edit_venue_event_path(venue.slug, event))
+      expect(response).to redirect_to(venue_event_path(venue.slug, event))
     end
   end
 

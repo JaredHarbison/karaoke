@@ -1,16 +1,15 @@
-.help
-  %header.help__header
-    %p.help__eyebrow Karaoke Queue help
-    %h1 Help
-    %p Guides are organized by the workflows available to your role.
-
-  %main.help__guides
+.songs-page.songs-page--manager
+  %main.songs-main{ aria: { labelledby: "help-heading" } }
+    .event-operations__section-heading
+      %div
+        %h2#help-heading Help
+        %p Guides are organized by the workflows available to your role.
     - @guides.each do |guide|
-      %article.help__guide
-        %h2= guide[:title]
-        %p.help__summary= guide[:summary]
+      %article.event-operations__card
+        %h3= guide[:title]
+        %p.event-operations__empty= guide[:summary]
         - if guide[:status] == :planned
-          .help__status Planned / forthcoming
-        .help__content= render_help_markdown(guide[:body])
+          %p.event-operations__review-summary Planned / Forthcoming
+        .event-operations__guide= render_help_markdown(guide[:body])
     - if @guides.empty?
-      %p No help guides are available for your role yet.
+      %p.event-operations__empty No help guides are available for your role yet.

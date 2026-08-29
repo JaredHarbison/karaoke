@@ -39,7 +39,7 @@
 
               - if @theme_review.any?
                 %section.songs-panel.songs-panel--theme-review{ aria: { labelledby: "theme-review-heading" } }
-                  %h2#theme-review-heading Theme review
+                  %h2#theme-review-heading Theme Review
                   %p.songs-muted These songs need a host decision before they enter the playable queue.
                   %ul
                     - @theme_review.each do |song|

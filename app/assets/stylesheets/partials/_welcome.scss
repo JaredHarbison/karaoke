@@ -54,10 +54,9 @@
 .resume-card__label {
   display: block;
   margin-bottom: $space-sm;
-  color: rgba(242, 238, 226, 0.68);
+  color: $beige;
   font-size: 0.72rem;
   font-weight: 700;
-  text-transform: uppercase;
 }
 
 .welcome-main {
@@ -116,7 +115,6 @@
   text-decoration: none;
   cursor: pointer;
   min-width: var(--welcome-cta-width);
-  text-transform: uppercase;
 
   &--primary {
     color: $beige;

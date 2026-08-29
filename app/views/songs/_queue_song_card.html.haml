@@ -18,7 +18,7 @@
           %dialog.pause-dialog{ aria: { labelledby: "post-theme-#{song.id}-heading" }, data: { dialog_target: "dialog", action: "click->dialog#closeOnBackdrop" } }
             .pause-dialog__content
               .pause-dialog__heading
-                %h2{ id: "post-theme-#{song.id}-heading" } Scheduled after theme
+                %h2{ id: "post-theme-#{song.id}-heading" } Scheduled After Theme
                 %button.pause-dialog__close{ type: "button", aria: { label: "Close" }, data: { action: "dialog#close" } } ×
               %p This song did not fit the active theme and will return to the playable queue when that theme window ends.
               %p= song.theme_admission_reason
@@ -52,12 +52,12 @@
       %dialog.pause-dialog{ data: { dialog_target: "dialog", action: "click->dialog#closeOnBackdrop" } }
         .pause-dialog__content
           .pause-dialog__heading
-            %h2 Pause this song?
+            %h2 Pause This Song?
             %button.pause-dialog__close{ type: "button", aria: { label: "Close pause dialog" }, data: { action: "dialog#close" } } ×
           %p Pause #{song.performer}'s song and choose how many queue positions to move it back.
           = form_with url: pause_song_venue_song_path(Current.venue.slug, song), method: :patch, class: "pause-dialog__form", data: { turbo: false } do |form|
             .pause-dialog__field
-              = form.label :spots_back, "Move back by"
+              = form.label :spots_back, "Move Back By"
               .pause-dialog__input
                 = form.number_field :spots_back, value: 1, min: 1, max: [@upcoming.length - 1, 1].max, required: true
             .pause-dialog__actions

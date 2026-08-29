@@ -10,7 +10,7 @@
           <% @events.each do |event| %>
             <li class="event-operations__list-row">
               <div><strong><%= link_to event.name, venue_event_path(Current.venue.slug, event) %></strong><span><%= l(event.starts_at, format: :long) %> · <%= event.status.humanize %><%= " · #{event.event_series.name}" if event.event_series %></span></div>
-              <% if Current.venue.is_admin?(current_user) %><%= link_to 'Edit Event', edit_venue_event_path(Current.venue.slug, event), class: 'song-action song-action--edit' %><% end %>
+              <% if Current.venue.is_admin?(current_user) %><%= link_to 'Edit Event', venue_event_path(Current.venue.slug, event), class: 'song-action song-action--edit' %><% end %>
             </li>
           <% end %>
         </ul>

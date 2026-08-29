@@ -8,18 +8,22 @@
       %dt Queue
       %dd #{pluralize(upcoming_total, "playable performance")} · #{pluralize(theme_review.count, "awaiting theme review")}
     %div
-      %dt Projected queue end
+      %dt Projected Queue End
       %dd= l(queue_projected_completion_at, format: :short)
     - if current_event.ends_at
       %div
-        %dt Scheduled end
+        %dt Scheduled End
         %dd= l(current_event.ends_at, format: :short)
     %div
-      %dt Queue policy
+      %dt Queue Policy
       %dd= current_event.allow_queue_overrun? ? "Overrun allowed" : "Stops at scheduled end"
-  - if current_event.scheduled? && can_configure_event
-    .event-operations__status-action
-      = button_to "Start Event", start_venue_event_path(Current.venue.slug, current_event), method: :patch, class: "song-action song-action--play"
+  - if can_configure_event
+    .event-operations__status-actions
+      = link_to "Edit Event", venue_event_path(Current.venue.slug, current_event), class: "song-action song-action--edit"
+      - if current_event.scheduled?
+        = button_to "Start Event", start_venue_event_path(Current.venue.slug, current_event), method: :patch, class: "song-action song-action--play"
+      - elsif current_event.live?
+        = button_to "Complete Event", complete_venue_event_path(Current.venue.slug, current_event), method: :patch, class: "song-action song-action--remove"
   - elsif current_event.live?
     .event-operations__status-action
       = button_to "Complete Event", complete_venue_event_path(Current.venue.slug, current_event), method: :patch, class: "song-action song-action--remove"

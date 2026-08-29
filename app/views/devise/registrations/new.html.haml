@@ -1,6 +1,6 @@
 %main.auth-page{ aria: { labelledby: 'sign-up-heading' } }
   .auth-card
-    %h1#sign-up-heading create your account
+    %h1#sign-up-heading Create Your Account
     %p.auth-support Continue as a performer, venue owner, or invited host.
 
     = render 'devise/shared/google_button'
@@ -13,17 +13,17 @@
       = hidden_field_tag :return_to, auth_return_to if auth_return_to.present?
       = text_field_tag :website, nil, class: 'auth-honeypot', autocomplete: 'off', tabindex: -1, aria: { hidden: true }
       .field
-        = f.label :first_name, 'first name'
+        = f.label :first_name, 'First Name'
         = f.text_field :first_name, autocomplete: 'given-name', required: true
       .field
-        = f.label :last_name, 'last name'
+        = f.label :last_name, 'Last Name'
         = f.text_field :last_name, autocomplete: 'family-name', required: true
       .field
-        = f.label :email, 'email address'
+        = f.label :email, 'Email Address'
         = f.email_field :email, autofocus: true, autocomplete: 'email'
       .field
         = f.label :password do
-          password
+          Password
           %small (#{Devise.password_length.min} characters minimum)
         = f.password_field :password, autocomplete: 'new-password', data: { password_strength_target: 'password', action: 'input->password-strength#update' }
         .password-strength{ aria: { live: 'polite' }, data: { password_strength_target: 'strength' } }
@@ -32,7 +32,7 @@
               %span{ data: { password_strength_target: 'bar' } }
           %small{ data: { password_strength_target: 'message' } } use 12+ characters with uppercase, lowercase, and a number
       .field
-        = f.label :password_confirmation, 'confirm password'
+        = f.label :password_confirmation, 'Confirm Password'
         = f.password_field :password_confirmation, autocomplete: 'new-password', data: { password_strength_target: 'confirmation', action: 'input->password-strength#update' }
         %small.password-match{ data: { password_strength_target: 'match' }, aria: { live: 'polite' } }
       .actions

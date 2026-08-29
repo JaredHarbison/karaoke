@@ -158,6 +158,9 @@ reviewable, manually testable, and documented in the same commit.
   for secondary/navigation actions, magenta-outline for destructive actions,
   and green/yellow reserved for status and headings. Do not introduce
   page-specific button variants.
+- [Initial slice complete] Use yellow for every heading and eyebrow, and Title
+  Case for every visible heading and form/control label. Cyan remains limited
+  to secondary and navigation affordances.
 - [Planned] Use a compact mobile/tablet layout tier and a wider desktop tier.
 - [Planned] Keep performers mobile-first, support hosts and owners from mobile
   through desktop, and make display mode desktop-oriented.

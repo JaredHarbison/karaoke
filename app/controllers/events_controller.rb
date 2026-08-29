@@ -4,8 +4,8 @@
 class EventsController < ApplicationController
   before_action :authenticate_user!
   before_action :require_current_venue!
-  before_action :require_admin!, only: %i[new create edit update destroy]
-  before_action :set_event, only: %i[show edit update destroy start complete]
+  before_action :require_admin!, only: %i[new create update destroy]
+  before_action :set_event, only: %i[show update destroy start complete]
   before_action :require_event_host!, only: %i[start complete]
 
   def index
@@ -32,10 +32,6 @@ class EventsController < ApplicationController
     end
   end
 
-  def edit
-    load_event_form
-  end
-
   def update
     assign_event_attributes
 
@@ -43,14 +39,14 @@ class EventsController < ApplicationController
       @event.record_queue_overrun_change!(current_user)
       redirect_to venue_event_path(Current.venue.slug, @event), notice: 'Event updated.'
     else
-      load_event_form
-      render :edit, status: :unprocessable_entity
+      load_show_data
+      render :show, status: :unprocessable_entity
     end
   end
 
   def destroy
     unless @event.completed? || @event.cancelled?
-      redirect_to edit_venue_event_path(Current.venue.slug, @event), alert: 'Only inactive events can be deleted.'
+      redirect_to venue_event_path(Current.venue.slug, @event), alert: 'Only inactive events can be deleted.'
       return
     end
 

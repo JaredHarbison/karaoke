@@ -11,8 +11,11 @@ body {
       text-decoration: none;
     }
   }
+  h1, h2, h3, h4, h5, h6 {
+    color: $yellow;
+  }
+
   h1 {
-    color: $magenta; 
     text-align: center;
   }
   p {
@@ -32,4 +35,13 @@ body {
     color: $magenta;
     text-decoration: none;
   }
+}
+
+.context-link::before,
+.settings-back-link::before {
+  content: '‹';
+  display: inline-block;
+  font-size: 1.35em;
+  line-height: 0;
+  margin-right: $space-xs;
 }

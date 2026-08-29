@@ -2,4 +2,4 @@
 = render 'form', song: @song, index_page: false
 = link_to 'Show', venue_song_path(Current.venue.slug, @song)
 |
-= link_to 'Back', venue_songs_path(Current.venue.slug)
+= link_to 'Back', venue_songs_path(Current.venue.slug), class: 'context-link'

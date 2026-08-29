@@ -1,4 +1,4 @@
 <div class="songs-page songs-page--manager"><main class="songs-main" aria-labelledby="new-event-heading">
-  <div class="event-operations__section-heading"><div><p><%= link_to 'Back to Events', venue_events_path(Current.venue.slug) %></p><h2 id="new-event-heading">Create Event</h2></div></div>
+  <div class="event-operations__section-heading"><div><p><%= link_to 'Back to Events', venue_events_path(Current.venue.slug), class: 'context-link' %></p><h2 id="new-event-heading">Create Event</h2></div></div>
   <section class="event-operations__card event-operations__form-card"><%= render 'form', form_url: venue_events_path(Current.venue.slug), form_method: :post %></section>
 </main></div>

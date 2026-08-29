@@ -5,11 +5,11 @@
   - if temporary_host
     .event-operations__section-heading
       %div
-        %h2 Theme decisions
+        %h2 Theme Decisions
         %p Review songs that need a host decision. Theme setup stays with the venue team.
   - if @theme_applications.any?
     %section.event-operations__card
-      %h3 Applied themes
+      %h3 Applied Themes
       %ul.event-operations__list
         - @theme_applications.each do |application|
           %li.event-operations__list-row
@@ -19,7 +19,7 @@
             - if can_configure_event
               = button_to "Remove", venue_event_theme_application_path(Current.venue.slug, application), method: :delete, class: "song-action song-action--remove"
   - elsif temporary_host
-    = render "event_operations_empty_card", heading: "Active themes", message: "No themes are scheduled for this event."
+    = render "event_operations_empty_card", heading: "Active Themes", message: "No themes are scheduled for this event."
   - if can_configure_event
     %section.event-operations__card.event-operations__form-card
       %h3 Use Or Create A Theme
@@ -46,7 +46,7 @@
   - if @theme_review.any?
     %section.event-operations__reconciliation
       .songs-panel__heading
-        %h2 Theme reconciliation
+        %h2 Theme Reconciliation
         %span.songs-count= @theme_review.count
       %ul.event-operations__review-list
         - @theme_review.each do |performance|
@@ -65,7 +65,7 @@
                   = button_to "Queue After Theme", review_theme_venue_song_path(Current.venue.slug, performance), method: :patch, params: { decision: "defer" }, class: "song-action song-action--requeue"
                 = button_to "Reject Completely", review_theme_venue_song_path(Current.venue.slug, performance), method: :patch, params: { decision: "reject", rejection_reason: "theme" }, class: "song-action song-action--remove"
   - elsif temporary_host
-    = render "event_operations_empty_card", heading: "Theme reconciliation", message: "No songs are waiting for a theme decision."
+    = render "event_operations_empty_card", heading: "Theme Reconciliation", message: "No songs are waiting for a theme decision."
 
 - if can_configure_event
   %section.songs-tab-panel.event-operations__panel{ id: "hosts-panel", role: "tabpanel", tabindex: "-1", aria: { labelledby: "hosts-tab" }, data: { responsive_tabs_target: "panel", tab_name: "hosts" }, hidden: true }
@@ -75,7 +75,7 @@
         = form_with url: venue_event_host_delegations_path(Current.venue.slug), scope: :event_host_delegation, local: true, class: "event-operations__form", data: { controller: "delegation-window", delegation_window_event_starts_at_value: datetime_local_value(@current_event.starts_at), delegation_window_event_ends_at_value: datetime_local_value(@current_event.ends_at), action: "submit->delegation-window#validate" } do |form|
           = hidden_field_tag :event_id, @current_event.id
           = form.label :delegated_user_id, "Checked-In Performer Or Venue Member"
-          = form.collection_select :delegated_user_id, @delegation_candidates, :id, :display_name, { include_blank: "Choose a checked-in performer or venue member" }, required: true
+          = form.collection_select :delegated_user_id, @delegation_candidates, :id, :display_name, { include_blank: "Choose a Checked-In Performer or Venue Member" }, required: true
           = form.label :starts_at, "Starts"
           = form.datetime_local_field :starts_at, value: datetime_local_value(@current_event.starts_at), min: datetime_local_value(@current_event.starts_at), max: datetime_local_value(@current_event.ends_at), required: true, data: { delegation_window_target: "startsAt", action: "input->delegation-window#update change->delegation-window#update" }
           = form.label :ends_at, "Ends"
@@ -101,7 +101,7 @@
     .event-operations__grid.event-operations__grid--host
       = render "event_operations_status_card", **status_card
       %section.event-operations__card.event-operations__host-scope
-        %h3 Your host authority
+        %h3 Your Host Authority
         %p You can manage this event’s queue and resolve theme decisions during your assigned window.
         %dl.event-operations__status-list
           %div
@@ -115,16 +115,17 @@
   - if can_configure_event
     %section.event-operations__card.event-operations__form-card
       %h3 Performer Access
-      - if @active_presence_session
-        %p Event access code: #{@active_presence_session.short_code} · expires #{l(@active_presence_session.expires_at, format: :short)}
-        = button_to "Revoke Code", venue_event_presence_session_path(Current.venue.slug, @active_presence_session), method: :delete, class: "song-action song-action--remove", form: { class: "event-operations__revoke-code" }
-      - else
-        %p.event-operations__empty No active access code.
-      = form_with url: venue_event_presence_sessions_path(Current.venue.slug), scope: :event_presence_session, local: true, class: "event-operations__form" do |form|
-        = hidden_field_tag :event_id, @current_event.id
-        = form.label :expires_at, "Expires (Optional)"
-        = form.datetime_local_field :expires_at, value: datetime_local_value(@current_event.ends_at && (@current_event.ends_at + EventPresenceSession::GRACE_PERIOD))
-        = form.submit(@current_event.live? ? "Rotate Access Code" : "Generate Access Code", class: "event-operations__primary-action")
+      .event-operations__access-content
+        - if @active_presence_session
+          %p Event Access Code: #{@active_presence_session.short_code} · expires #{l(@active_presence_session.expires_at, format: :short)}
+          = button_to "Revoke Code", venue_event_presence_session_path(Current.venue.slug, @active_presence_session), method: :delete, class: "song-action song-action--remove", form: { class: "event-operations__revoke-code" }
+        - else
+          %p.event-operations__empty No active access code.
+        = form_with url: venue_event_presence_sessions_path(Current.venue.slug), scope: :event_presence_session, local: true, class: "event-operations__form" do |form|
+          = hidden_field_tag :event_id, @current_event.id
+          = form.label :expires_at, "Expires (Optional)"
+          = form.datetime_local_field :expires_at, value: datetime_local_value(@current_event.ends_at && (@current_event.ends_at + EventPresenceSession::GRACE_PERIOD))
+          = form.submit(@current_event.live? ? "Rotate Access Code" : "Generate Access Code", class: "event-operations__primary-action")
   %section.event-operations__card
     %h3 Activity
     - if @queue_overrides.any? || @queue_setting_changes.any?

@@ -33,7 +33,7 @@ RSpec.describe 'Welcome page', type: :request do
     get venue_event_path(venue.slug, event)
     get root_path
 
-    expect(response.body).to include('Go to queue')
+    expect(response.body).to include('Go To Queue')
     expect(response.body).to include(venue_event_queue_path(venue.slug, event_slug: event.slug))
   end
 

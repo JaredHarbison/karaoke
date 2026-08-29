@@ -1,5 +1,5 @@
 <div class="songs-page songs-page--manager"><main class="songs-main" aria-labelledby="themes-heading">
-  <div class="event-operations__section-heading"><div><p><%= link_to 'Back to Events', venue_events_path(Current.venue.slug) %></p><h2 id="themes-heading">Themes</h2><p>Themes are reusable definitions with optional deterministic song admission rules.</p></div><%= link_to 'Create Theme', new_venue_theme_path(Current.venue.slug), class: 'song-action song-action--play' %></div>
+  <div class="event-operations__section-heading"><div><p><%= link_to 'Back to Events', venue_events_path(Current.venue.slug), class: 'context-link' %></p><h2 id="themes-heading">Themes</h2><p>Themes are reusable definitions with optional deterministic song admission rules.</p></div><%= link_to 'Create Theme', new_venue_theme_path(Current.venue.slug), class: 'song-action song-action--play' %></div>
   <section class="event-operations__card" aria-label="Reusable Themes">
   <% if @themes.any? %>
     <ul class="event-operations__list">

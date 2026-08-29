@@ -35,7 +35,7 @@
       <div class="backoffice-form__stack" data-event-recurrence-target="details">
         <div class="backoffice-form__field">
           <%= label_tag 'recurrence_frequency', 'Repeats' %>
-          <%= select_tag 'recurrence[frequency]', options_for_select([['Every day', 'FREQ=DAILY'], ['Every week', 'FREQ=WEEKLY'], ['Every month', 'FREQ=MONTHLY'], ['Every year', 'FREQ=YEARLY'], ['Custom schedule…', 'custom']], @recurrence[:frequency]), id: 'recurrence_frequency', data: { event_recurrence_target: 'frequency', action: 'event-recurrence#updateFrequency' } %>
+          <%= select_tag 'recurrence[frequency]', options_for_select([['Every Day', 'FREQ=DAILY'], ['Every Week', 'FREQ=WEEKLY'], ['Every Month', 'FREQ=MONTHLY'], ['Every Year', 'FREQ=YEARLY'], ['Custom Schedule…', 'custom']], @recurrence[:frequency]), id: 'recurrence_frequency', data: { event_recurrence_target: 'frequency', action: 'event-recurrence#updateFrequency' } %>
         </div>
         <div class="backoffice-form__inline-fields" data-event-recurrence-target="customSchedule">
           <div class="backoffice-form__field">

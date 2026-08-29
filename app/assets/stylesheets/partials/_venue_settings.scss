@@ -127,7 +127,7 @@
 }
 
 .settings-stat__label {
-  color: $cyan;
+  color: $yellow;
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -218,7 +218,7 @@
 }
 
 .settings-field__label-with-hint span:last-child {
-  color: rgba(242, 238, 226, 0.58);
+  color: $yellow;
   font-size: 0.72rem;
   font-weight: 500;
 }

@@ -2,7 +2,7 @@
   <main class="songs-main" aria-labelledby="event-heading">
     <div class="event-operations__section-heading">
       <div>
-        <p><%= link_to 'Back to Events', venue_events_path(Current.venue.slug) %></p>
+        <p><%= link_to 'Back to Events', venue_events_path(Current.venue.slug), class: 'context-link' %></p>
         <h2 id="event-heading"><%= @event.name %></h2>
       </div>
       <%= link_to 'View Event Queue', venue_event_queue_path(Current.venue.slug, event_slug: @event.slug), class: 'song-action song-action--open' %>
@@ -65,15 +65,16 @@
     <% if Current.venue.is_admin?(current_user) %>
       <section class="event-operations__card event-operations__form-card" aria-labelledby="access-heading">
         <h3 id="access-heading">Performer Access</h3>
-        <div class="event-operations__form">
+        <div class="event-operations__access-content">
+          <div class="event-operations__form">
           <% if @active_presence_session %>
-            <p>Event access code: <%= @active_presence_session.short_code %> · Expires <%= l(@active_presence_session.expires_at, format: :short) %></p>
+            <p>Event Access Code: <%= @active_presence_session.short_code %> · Expires <%= l(@active_presence_session.expires_at, format: :short) %></p>
             <p><%= link_to 'Open Access Link', event_presence_url(@active_presence_session.token) %></p>
             <%= button_to 'Revoke Code', venue_event_presence_session_path(Current.venue.slug, @active_presence_session), method: :delete, class: 'song-action song-action--remove', form: { class: 'event-operations__revoke-code' } %>
           <% else %><p class="event-operations__empty">No active access code.</p><% end %>
           <% if @presence_sessions.any? %>
             <details>
-              <summary>Access-code history</summary>
+              <summary>Access-Code History</summary>
               <ul class="event-operations__list">
                 <% @presence_sessions.each do |presence_session| %>
                   <li class="event-operations__list-row"><div><strong><%= presence_session.short_code %></strong><span>Expires <%= l(presence_session.expires_at, format: :short) %><%= ' · Revoked' if presence_session.revoked_at %></span></div></li>
@@ -81,13 +82,14 @@
               </ul>
             </details>
           <% end %>
+          </div>
+          <%= form_with url: venue_event_presence_sessions_path(Current.venue.slug), scope: :event_presence_session, method: :post, local: true, class: 'event-operations__form' do |form| %>
+            <%= hidden_field_tag :event_id, @event.id %>
+            <%= form.label :expires_at, 'Expires (Optional)' %>
+            <%= form.datetime_local_field :expires_at, value: datetime_local_value(@event.ends_at && (@event.ends_at + EventPresenceSession::GRACE_PERIOD)) %>
+            <%= form.submit(@event.live? ? 'Rotate Access Code' : 'Generate Access Code', class: 'event-operations__primary-action') %>
+          <% end %>
         </div>
-        <%= form_with url: venue_event_presence_sessions_path(Current.venue.slug), scope: :event_presence_session, method: :post, local: true, class: 'event-operations__form' do |form| %>
-          <%= hidden_field_tag :event_id, @event.id %>
-          <%= form.label :expires_at, 'Expires (Optional)' %>
-          <%= form.datetime_local_field :expires_at, value: datetime_local_value(@event.ends_at && (@event.ends_at + EventPresenceSession::GRACE_PERIOD)) %>
-          <%= form.submit(@event.live? ? 'Rotate Access Code' : 'Generate Access Code', class: 'event-operations__primary-action') %>
-        <% end %>
       </section>
 
       <section class="event-operations__card event-operations__form-card" aria-labelledby="hosts-heading">
@@ -131,6 +133,14 @@
         <h3 id="queue-overrides-heading">Recent Fair Queue Overrides</h3>
         <% if @queue_overrides.any? %><ul class="event-operations__list"><% @queue_overrides.each do |override| %><li class="event-operations__list-row"><div><strong><%= override.action.humanize %></strong><span><%= override.song.performer %> · <%= override.user.display_name %> · <%= l(override.created_at, format: :short) %></span></div></li><% end %></ul><% else %><p class="event-operations__empty">No host overrides have been recorded.</p><% end %>
       </section>
+
+      <% if @event.completed? || @event.cancelled? %>
+        <section class="event-operations__card event-operations__form-card" aria-labelledby="delete-event-heading">
+          <h3 id="delete-event-heading">Delete Event</h3>
+          <p>This permanently removes the inactive event from this venue.</p>
+          <%= button_to 'Delete Event', venue_event_path(Current.venue.slug, @event), method: :delete, class: 'song-action song-action--remove', data: { turbo_confirm: "Delete #{@event.name}? This cannot be undone." } %>
+        </section>
+      <% end %>
     <% end %>
   </main>
 </div>

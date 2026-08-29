@@ -1,6 +1,6 @@
 %main.auth-page{ aria: { labelledby: 'sign-in-heading' } }
   .auth-card
-    %h1#sign-in-heading sign in to continue
+    %h1#sign-in-heading Sign In to Continue
 
     = render 'devise/shared/google_button', autofocus: true
 
@@ -10,16 +10,16 @@
     = form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'auth-form' }) do |f|
       = text_field_tag :website, nil, class: 'auth-honeypot', autocomplete: 'off', tabindex: -1, aria: { hidden: true }
       .field
-        = f.label :email, 'email address'
+        = f.label :email, 'Email Address'
         = f.email_field :email, autocomplete: 'email'
       .field
-        = f.label :password, 'password'
+        = f.label :password, 'Password'
         = f.password_field :password, autocomplete: 'current-password'
         = link_to 'Forgot Password?', new_password_path(resource_name), class: 'auth-inline-link'
       - if devise_mapping.rememberable?
         .checkbox-field
           = f.check_box :remember_me
-          = f.label :remember_me, 'remember me'
+          = f.label :remember_me, 'Remember Me'
       .actions
         = f.submit 'Sign In', class: 'auth-submit'
 

@@ -16,6 +16,7 @@ RSpec.describe 'Help', type: :request do
 
     expect(response).to have_http_status(:ok)
     expect(response.body).to include('Help', 'Using the karaoke queue', 'Creating and editing recurring events')
+    expect(response.body).to include('event-operations__section-heading', 'event-operations__card')
   end
 
   it 'renders venue-operator guides for an assigned host' do

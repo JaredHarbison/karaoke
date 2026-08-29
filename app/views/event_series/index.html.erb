@@ -1,5 +1,5 @@
 <div class="songs-page songs-page--manager"><main class="songs-main" aria-labelledby="event-series-heading">
-  <div class="event-operations__section-heading"><div><p><%= link_to 'Back to Events', venue_events_path(Current.venue.slug) %></p><h2 id="event-series-heading">Recurring Series</h2><p>Series define recurring intent. Individual occurrences can be edited independently.</p></div><%= link_to 'Create Recurring Series', new_venue_event_series_path(Current.venue.slug), class: 'song-action song-action--play' %></div>
+  <div class="event-operations__section-heading"><div><p><%= link_to 'Back to Events', venue_events_path(Current.venue.slug), class: 'context-link' %></p><h2 id="event-series-heading">Recurring Series</h2><p>Series define recurring intent. Individual occurrences can be edited independently.</p></div><%= link_to 'Create Recurring Series', new_venue_event_series_path(Current.venue.slug), class: 'song-action song-action--play' %></div>
   <section class="event-operations__card" aria-label="Recurring Event Series">
   <% if @event_series.any? %>
     <ul class="event-operations__list">
