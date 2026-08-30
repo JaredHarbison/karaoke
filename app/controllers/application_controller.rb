@@ -61,32 +61,32 @@ class ApplicationController < ActionController::Base
     return unless params[:controller].start_with?('songs')
     
     unless Current.venue.present?
-      redirect_to discover_venues_path, alert: 'Venue not found. Please select a venue to continue.'
+      redirect_to root_path, alert: 'Venue not found. Please select a venue to continue.'
     end
   end
 
   def require_current_venue!
     return if Current.venue.present?
 
-    redirect_to discover_venues_path, alert: 'Venue not found. Please select a venue to continue.'
+    redirect_to root_path, alert: 'Venue not found. Please select a venue to continue.'
   end
   
   def require_admin!
     unless Current.venue.present? && Current.venue.is_admin?(Current.user)
-      redirect_to (Current.venue ? venue_songs_path(Current.venue.slug) : discover_venues_path), alert: 'You do not have permission to access this page.'
+      redirect_to (Current.venue ? venue_songs_path(Current.venue.slug) : root_path), alert: 'You do not have permission to access this page.'
     end
   end
 
   def require_owner!
     unless Current.venue.present? && Current.venue.owner?(Current.user)
-      redirect_to (Current.venue ? venue_songs_path(Current.venue.slug) : discover_venues_path), alert: 'Only the venue owner can access this page.'
+      redirect_to (Current.venue ? venue_songs_path(Current.venue.slug) : root_path), alert: 'Only the venue owner can access this page.'
     end
   end
 
   def require_event_host!
     return if @event&.host_authorized?(current_user)
 
-    redirect_to (Current.venue ? venue_songs_path(Current.venue.slug) : discover_venues_path),
+    redirect_to (Current.venue ? venue_songs_path(Current.venue.slug) : root_path),
                 alert: 'You do not have permission to manage this event.'
   end
 

@@ -22,15 +22,3 @@ RSpec.describe 'Songs Endpoints', type: :request do
     end
   end
 end
-
-RSpec.describe 'Venue Endpoints', type: :request do
-  let(:venue) { create(:venue) }
-
-  describe 'GET /venues/discover' do
-    it 'returns a response', :critical do
-      get discover_venues_path
-      # Response depends on route configuration and content negotiation
-      expect([200, 302, 304, 404, 406]).to include(response.status)
-    end
-  end
-end

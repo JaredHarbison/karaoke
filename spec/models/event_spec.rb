@@ -92,5 +92,17 @@ RSpec.describe Event, type: :model do
       )
     end
   end
+
+  describe '#queue_state_version' do
+    it 'changes when an event access code is rotated' do
+      event = create(:event, status: :live)
+      create(:event_presence_session, event: event, created_by_user: event.venue.owner, expires_at: event.ends_at)
+      original_version = event.queue_state_version
+
+      EventPresenceSession.rotate_for!(event: event, created_by_user: event.venue.owner, expires_at: event.ends_at)
+
+      expect(event.queue_state_version).to be > original_version
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength

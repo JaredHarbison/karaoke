@@ -18,8 +18,6 @@ Rails.application.routes.draw do
   
   root 'welcome#index'
   
-  # Venue discovery
-  get '/discover', to: 'venues#discover', as: 'discover_venues'
   get '/help', to: 'help#index', as: :help
   get '/venues/presence/:token', to: 'presence#venue', as: :venue_presence
   get '/event-presence/code', to: 'presence#event_code', as: :event_presence_code

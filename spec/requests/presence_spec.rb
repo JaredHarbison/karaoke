@@ -49,7 +49,7 @@ RSpec.describe 'Presence access', type: :request do
 
     get event_presence_code_path(short_code: presence.short_code)
 
-    expect(response).to redirect_to(discover_venues_path)
+    expect(response).to redirect_to(root_path)
   end
 
   it 'rejects expired event presence URLs' do
@@ -58,7 +58,7 @@ RSpec.describe 'Presence access', type: :request do
 
     get event_presence_path(presence.token)
 
-    expect(response).to redirect_to(discover_venues_path)
+    expect(response).to redirect_to(root_path)
   end
 
   it 'limits repeated invalid event access-code attempts' do
@@ -68,7 +68,7 @@ RSpec.describe 'Presence access', type: :request do
 
     get event_presence_code_path(short_code: 'INVALID')
 
-    expect(response).to redirect_to(discover_venues_path)
+    expect(response).to redirect_to(root_path)
     expect(flash[:alert]).to include('Too many access-code attempts')
   end
 
@@ -96,7 +96,7 @@ RSpec.describe 'Presence access', type: :request do
     expect(replacement).to be_active_at
 
     get event_presence_path(previous.token)
-    expect(response).to redirect_to(discover_venues_path)
+    expect(response).to redirect_to(root_path)
   end
 end
 # rubocop:enable Metrics/BlockLength

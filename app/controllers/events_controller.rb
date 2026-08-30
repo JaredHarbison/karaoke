@@ -75,6 +75,8 @@ class EventsController < ApplicationController
   private
 
   def load_show_data
+    @queue_state_url = venue_event_queue_state_path(Current.venue.slug, event_slug: @event.slug)
+    @queue_version = @event.queue_state_version&.iso8601(6)
     load_theme_data
     load_queue_audit_data
     load_delegation_data

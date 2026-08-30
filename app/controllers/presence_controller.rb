@@ -6,7 +6,7 @@ class PresenceController < ApplicationController
 
   def venue
     venue = Venue.find_by(presence_token: params[:token])
-    return redirect_to discover_venues_path, alert: 'That venue access code is not valid.' unless venue
+    return redirect_to root_path, alert: 'That venue access code is not valid.' unless venue
 
     session[:venue_slug] = venue.slug
     redirect_to venue_songs_path(venue.slug)
@@ -15,7 +15,7 @@ class PresenceController < ApplicationController
   def event
     presence = active_event_presence
     if presence.nil?
-      return redirect_to discover_venues_path, alert: 'That event access code has expired or been revoked.'
+      return redirect_to root_path, alert: 'That event access code has expired or been revoked.'
     end
 
     remember_event_presence(presence)
@@ -23,11 +23,11 @@ class PresenceController < ApplicationController
   end
 
   def event_code
-    return redirect_to discover_venues_path, alert: rate_limit_message unless event_code_allowed?
+    return redirect_to root_path, alert: rate_limit_message unless event_code_allowed?
 
     presence = EventPresenceSession.active_at.find_by(short_code: normalized_event_code)
     if presence.nil?
-      return redirect_to discover_venues_path, alert: 'That event access code has expired or is not valid.'
+      return redirect_to root_path, alert: 'That event access code has expired or is not valid.'
     end
 
     remember_event_presence(presence)

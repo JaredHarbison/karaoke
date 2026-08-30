@@ -60,7 +60,7 @@ bin/rails runner 'venue = Venue.find_by!(slug: "523-franklin-ave"); puts({ venue
 1. Open `/`.
    - The welcome page loads.
    - Discovery and sign-in actions are reachable.
-2. Open `/discover` and search for `523 Franklin Ave`.
+2. Search for `523 Franklin Ave` on `/`.
    - The venue appears.
    - Empty and unsuccessful searches remain usable.
    - Record any discovery/navigation concerns in `FINDINGS.md`.

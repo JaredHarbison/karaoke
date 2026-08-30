@@ -11,7 +11,7 @@ result. Do not include real user passwords, private tokens, or personal data.
 
 | ID | Role/account | Page | Action | Expected | Actual | Browser/device | Evidence | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| QA-001 | Shared | `/` and `/discover` | Compare entry points | Discovery should have one clear purpose | The two entry points feel redundant for the current MVP |  |  | Product/UX question |
+| QA-001 | Shared | `/` | Compare entry points | Discovery should have one clear purpose | Discovery now lives on the root page; the duplicate route was removed. | 2026-08-29 | Implemented |
 | QA-002 | Shared | Venue entry point | Open a venue, then navigate elsewhere | Venue context should remain explicit and stable | The QA wording was unclear about what “does not select another venue” means |  |  | Clarified in guide |
 | QA-003 | Owner | Venue settings | Create an invitation | Invitation should remain findable until accepted or expired | The confirmation/link disappears quickly; an invitation index may be needed |  |  | Open |
 | QA-004 | Owner | Host invitation | Follow the link while signed out/in with the wrong email | The intended account can accept; another account is rejected | Acceptance flow still needs complete manual verification |  |  | Open |

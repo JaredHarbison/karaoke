@@ -62,6 +62,15 @@ class Event < ApplicationRecord
     )
   end
 
+  # Access-code rotations alter presence sessions rather than performances.
+  # Include both in the shared version used by connected event screens.
+  def queue_state_version
+    [
+      Performance.unscoped.where(event_id: id).maximum(:updated_at),
+      event_presence_sessions.maximum(:updated_at)
+    ].compact.max
+  end
+
   def start!
     transition_status(:scheduled, :live)
   end

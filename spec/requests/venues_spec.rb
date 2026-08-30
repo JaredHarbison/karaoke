@@ -7,14 +7,6 @@ RSpec.describe 'Venues', type: :request do
   let(:owner) { venue.owner }
   let(:admin) { create(:user) }
 
-  describe 'GET /discover' do
-    it 'displays venues for discovery', :critical do
-      venue
-      get '/discover'
-      expect(response).to be_successful
-    end
-  end
-
   describe 'POST /venues/join/:slug' do
     it 'returns a response when joining a public venue', :critical do
       post "/venues/join/#{venue.slug}"

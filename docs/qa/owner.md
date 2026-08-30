@@ -81,7 +81,7 @@ during the shared journey before continuing here.
    - The current short code is prominent and its expiry uses the venue's local time.
 2. Open the access link and confirm it reaches the event's queue context.
 3. Rotate the code.
-   - The prior code/session is revoked; the permanent venue entry point remains.
+   - The prior code/session is revoked; other open queue, presentation, and event-workspace clients refresh within three seconds.
 4. Open the **Temporary Hosts** toggle and delegate a
    venue member for a time inside the event.
    - The owner may delegate to another venue member; a delegator cannot delegate to themself.

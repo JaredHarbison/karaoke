@@ -93,7 +93,7 @@ class SongsController < ApplicationController
   # GET /:venue_slug/events/:event_slug/queue/state
   def queue_state
     queue = @current_event ? Performance.unscoped.where(event: @current_event) : Performance.unscoped.where(venue: Current.venue)
-    render json: { version: queue.maximum(:updated_at)&.iso8601(6) }
+    render json: { version: queue_state_version(queue) }
   end
 
   # PATCH /:venue_slug/songs/1/pause_song
@@ -250,13 +250,18 @@ class SongsController < ApplicationController
 
   private
 
+  def queue_state_version(queue)
+    version = @current_event&.queue_state_version || queue.maximum(:updated_at)
+    version&.iso8601(6)
+  end
+
   def load_queue
     ThemeAdmissionRelease.call(event: @current_event) if @current_event
     @active_theme_applications = active_theme_applications
     queue = @current_event ? Performance.where(event: @current_event) : Performance.all
     @finished = queue.finished.order(updated_at: :desc)
     @performing_song = queue.performing.order(updated_at: :desc).first
-    @queue_version = queue.maximum(:updated_at)&.iso8601(6)
+    @queue_version = queue_state_version(queue)
     if @current_event
       @queue_state_url = venue_event_queue_state_path(Current.venue.slug, event_slug: @current_event.slug)
     end

@@ -1,25 +1,14 @@
 class VenuesController < ApplicationController
-  before_action :authenticate_user!, except: [:discover, :join]
+  before_action :authenticate_user!, except: [:join]
   before_action :set_venue, only: [:settings, :update_settings, :create_admin, :destroy_admin]
   before_action :require_owner!, only: [:settings, :update_settings, :create_admin, :destroy_admin]
-  
-  # GET /discover - Browse and search venues
-  def discover
-    @venues = if params[:search].present?
-      Venue.where("name ILIKE ? OR slug ILIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
-            .where(public: true)
-            .order(:name)
-    else
-      Venue.where(public: true).order(:name)
-    end
-  end
   
   # POST /venues/join/:slug - Join a venue
   def join
     @venue = Venue.find_by(slug: params[:slug])
     
     unless @venue&.public?
-      redirect_to discover_venues_path, alert: 'Venue not found or is not accepting new users.'
+      redirect_to root_path, alert: 'Venue not found or is not accepting new users.'
       return
     end
 
@@ -100,7 +89,7 @@ class VenuesController < ApplicationController
   
   def set_venue
     @venue = Venue.find_by(slug: params[:venue_slug])
-    redirect_to discover_venues_path, alert: 'Venue not found.' unless @venue
+    redirect_to root_path, alert: 'Venue not found.' unless @venue
   end
   
   def venue_params

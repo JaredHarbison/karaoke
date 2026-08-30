@@ -17,7 +17,7 @@
       .app-menu__drawer
         %button.app-menu__close{ type: 'button', aria: { label: 'Close menu' }, data: { action: 'disclosure#close' } } ×
         %nav.app-menu__nav{ aria: { label: menu_label } }
-          = link_to 'Events', (Current.venue ? venue_events_path(Current.venue.slug) : discover_venues_path), class: 'app-menu__link'
+          = link_to 'Events', (Current.venue ? venue_events_path(Current.venue.slug) : root_path), class: 'app-menu__link'
           - if Current.venue && event_host && @current_event
             = link_to 'Presentation Mode', venue_event_presentation_path(Current.venue.slug, event_slug: @current_event.slug), class: 'app-menu__link', target: '_blank', rel: 'noopener noreferrer'
           - if Current.venue&.owner?(current_user)
