@@ -60,9 +60,7 @@ class ApplicationController < ActionController::Base
     # Only enforce for songs routes
     return unless params[:controller].start_with?('songs')
     
-    unless Current.venue.present?
-      redirect_to root_path, alert: 'Venue not found. Please select a venue to continue.'
-    end
+    redirect_to root_path, alert: 'Venue not found. Please select a venue to continue.' unless Current.venue.present?
   end
 
   def require_current_venue!

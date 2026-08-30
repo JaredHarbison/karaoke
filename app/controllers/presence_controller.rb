@@ -14,9 +14,7 @@ class PresenceController < ApplicationController
 
   def event
     presence = active_event_presence
-    if presence.nil?
-      return redirect_to root_path, alert: 'That event access code has expired or been revoked.'
-    end
+    return redirect_to root_path, alert: 'That event access code has expired or been revoked.' if presence.nil?
 
     remember_event_presence(presence)
     redirect_to_event_presence(presence.event)
@@ -26,9 +24,7 @@ class PresenceController < ApplicationController
     return redirect_to root_path, alert: rate_limit_message unless event_code_allowed?
 
     presence = EventPresenceSession.active_at.find_by(short_code: normalized_event_code)
-    if presence.nil?
-      return redirect_to root_path, alert: 'That event access code has expired or is not valid.'
-    end
+    return redirect_to root_path, alert: 'That event access code has expired or is not valid.' if presence.nil?
 
     remember_event_presence(presence)
     redirect_to_event_presence(presence.event)

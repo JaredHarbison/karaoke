@@ -30,6 +30,7 @@ Apply these checks while completing each role journey.
 
 - Venue settings, themes, delegations, event access generation, and queue
   overrides remain scoped to the current venue/event.
+- Invalid, expired, or revoked access codes return to the root discovery page.
 - A performer cannot use owner/host controls by directly opening their URLs.
 - The permanent venue entry point remains stable when an event code rotates.
 - Do not treat future geolocation, rotating QR profiles, RSVP, event sharing,
